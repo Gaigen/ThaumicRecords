@@ -1,4 +1,4 @@
-package team.torka.thaumicrecords.common.register;
+package team.torka.thaumicrecords.register;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;

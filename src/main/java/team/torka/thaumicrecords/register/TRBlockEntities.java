@@ -1,4 +1,4 @@
-package team.torka.thaumicrecords.common.register;
+package team.torka.thaumicrecords.register;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -11,8 +11,4 @@ public class TRBlockEntities {
             DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, ThaumicRecords.MOD_ID);
 
 
-//    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AuraNodeBlockEntity>> AURA_NODE =
-//            REGISTER.register("aura_node_blockentity",
-//                    () -> BlockEntityType.Builder.of(AuraNodeBlockEntity::new, TRBlocks.AURA_NODE.get())
-//                                                 .build(null));
 }

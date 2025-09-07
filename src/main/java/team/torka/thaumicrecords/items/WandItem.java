@@ -1,4 +1,4 @@
-package team.torka.thaumicrecords.common.item;
+package team.torka.thaumicrecords.items;
 
 import net.minecraft.world.item.Item;
 

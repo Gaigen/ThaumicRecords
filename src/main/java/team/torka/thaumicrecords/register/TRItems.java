@@ -1,4 +1,4 @@
-package team.torka.thaumicrecords.common.register;
+package team.torka.thaumicrecords.register;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -23,8 +23,6 @@ public class TRItems {
 
 
     // Block Items
-//    public static final DeferredItem<Item> AURA_NODE =
-//            REGISTER.register("aura_node", AuraNodeItem::new);
 
     public static void putInCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(AMBER);
@@ -36,6 +34,6 @@ public class TRItems {
     }
 
     public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
-//        output.accept(AURA_NODE);
+
     }
 }

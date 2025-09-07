@@ -2,7 +2,7 @@ package team.torka.thaumicrecords.datagen.generator;
 
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.model.ModelTemplates;
-import team.torka.thaumicrecords.common.register.TRItems;
+import team.torka.thaumicrecords.register.TRItems;
 
 public class ItemModelGenerator {
 
