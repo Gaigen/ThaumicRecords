@@ -5,10 +5,10 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import org.slf4j.Logger;
-import team.torka.thaumicrecords.register.TRBlockEntities;
-import team.torka.thaumicrecords.register.TRBlocks;
-import team.torka.thaumicrecords.register.TRCreativeTabs;
-import team.torka.thaumicrecords.register.TRItems;
+import team.torka.thaumicrecords.registry.BlockEntityRegistry;
+import team.torka.thaumicrecords.registry.BlockRegistry;
+import team.torka.thaumicrecords.registry.CreativeTabRegistry;
+import team.torka.thaumicrecords.registry.ItemRegistry;
 
 @Mod(ThaumicRecords.MOD_ID)
 public class ThaumicRecords {
@@ -16,10 +16,10 @@ public class ThaumicRecords {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public ThaumicRecords(IEventBus modEventBus, ModContainer modContainer) {
-        TRBlocks.REGISTER.register(modEventBus);
-        TRBlockEntities.REGISTER.register(modEventBus);
-        TRItems.REGISTER.register(modEventBus);
-        TRCreativeTabs.REGISTER.register(modEventBus);
+        BlockRegistry.REGISTER.register(modEventBus);
+        BlockEntityRegistry.REGISTER.register(modEventBus);
+        ItemRegistry.REGISTER.register(modEventBus);
+        CreativeTabRegistry.REGISTER.register(modEventBus);
     }
 
 }

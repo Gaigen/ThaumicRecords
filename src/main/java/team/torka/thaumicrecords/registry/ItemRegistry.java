@@ -1,12 +1,13 @@
-package team.torka.thaumicrecords.register;
+package team.torka.thaumicrecords.registry;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.api.items.WandCap;
 
-public class TRItems {
+public class ItemRegistry {
     public static final DeferredRegister.Items REGISTER = DeferredRegister.createItems(ThaumicRecords.MOD_ID);
 
     // Simple Items
@@ -20,7 +21,7 @@ public class TRItems {
     // @formatter:on
 
     // Advanced Items
-
+    public static final DeferredItem<Item> WAND_CAP_IRON = REGISTER.register("wand_cap_iron", WandCap::new);
 
     // Block Items
 
