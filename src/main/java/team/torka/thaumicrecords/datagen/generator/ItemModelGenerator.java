@@ -15,5 +15,6 @@ public class ItemModelGenerator {
         itemModels.generateFlatItem(ItemRegistry.SALIS_MUNDUS.get(), ModelTemplates.FLAT_ITEM);
 
         itemModels.generateFlatItem(ItemRegistry.WAND_CAP_IRON.get(),ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ItemRegistry.WAND_ROD_GREATWOOD.get(),ModelTemplates.FLAT_ITEM);
     }
 }

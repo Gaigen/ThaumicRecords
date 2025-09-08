@@ -5,7 +5,8 @@ import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
-import team.torka.thaumicrecords.api.items.WandCap;
+import team.torka.thaumicrecords.items.WandCapIron;
+import team.torka.thaumicrecords.items.WandRodGreatWood;
 
 public class ItemRegistry {
     public static final DeferredRegister.Items REGISTER = DeferredRegister.createItems(ThaumicRecords.MOD_ID);
@@ -20,8 +21,12 @@ public class ItemRegistry {
     public static final DeferredItem<Item> SALIS_MUNDUS = REGISTER.registerSimpleItem("salis_mundus");
     // @formatter:on
 
-    // Advanced Items
-    public static final DeferredItem<Item> WAND_CAP_IRON = REGISTER.register("wand_cap_iron", WandCap::new);
+    public static final DeferredItem<Item> WAND_CAP_IRON =
+            REGISTER.registerItem("wand_cap_iron", WandCapIron::new, itemProp());
+
+
+    public static final DeferredItem<Item> WAND_ROD_GREATWOOD =
+            REGISTER.registerItem("wand_rod_greatwood", WandRodGreatWood::new, itemProp());
 
     // Block Items
 
@@ -32,9 +37,19 @@ public class ItemRegistry {
         output.accept(ENCHANTED_FABRIC);
         output.accept(COIN);
         output.accept(SALIS_MUNDUS);
+        output.accept(WAND_CAP_IRON);
+        output.accept(WAND_ROD_GREATWOOD);
     }
 
     public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
 
+    }
+
+    private static Item.Properties itemProp() {
+        return new Item.Properties();
+    }
+
+    private static Item.Properties itemProp(int stackSize) {
+        return new Item.Properties().stacksTo(stackSize);
     }
 }
