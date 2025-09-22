@@ -4,59 +4,51 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.ThaumicRecords;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class Aspect {
-    public static final Map<String, Aspect> ASPECTS = new LinkedHashMap<>();
 
-    String tag;
+    private final String name;
 
-    @Nullable
-    Aspect[] components;
+    private final @Nullable Aspect[] components;
 
-    int color;
+    private final int color;
 
-    String textColor;
+    private String textColor;
 
-    ResourceLocation image;
+    private final ResourceLocation image;
 
-    boolean blend;
+    private final boolean blend;
 
-    public Aspect(String tag, int color, Aspect[] components, ResourceLocation image, boolean blend) {
-        if (ASPECTS.containsKey(tag)) {
-            throw new IllegalArgumentException("Aspect " + tag + " already registered!");
-        }
+    public Aspect(String name, int color, Aspect[] components, ResourceLocation image, boolean blend) {
         if (Objects.nonNull(components) && components.length != 2) {
             throw new IllegalArgumentException(
-                    "Component amount of aspect " + tag + " expected 2 but got " + components.length);
+                    "Component amount of aspect " + name + " expected 2 but got " + components.length);
         }
-        this.tag = tag;
+        this.name = name;
         this.color = color;
         this.components = components;
         this.image = image;
         this.blend = blend;
-        ASPECTS.put(tag, this);
     }
 
-    private Aspect(String tag, int color, Aspect[] components) {
-        this(tag, color, components, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
-                "textures/aspects/" + tag.toLowerCase() + ".png"), false);
+    private Aspect(String name, int color, Aspect[] components) {
+        this(name, color, components, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
+                "textures/aspects/" + name.toLowerCase() + ".png"), false);
     }
 
-    private Aspect(String tag, int color, Aspect[] components, boolean blend) {
-        this(tag, color, components, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
-                "textures/aspects/" + tag.toLowerCase() + ".png"), blend);
+    private Aspect(String name, int color, Aspect[] components, boolean blend) {
+        this(name, color, components, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
+                "textures/aspects/" + name.toLowerCase() + ".png"), blend);
     }
 
-    public Aspect(String tag, int color, String textColor) {
-        this(tag, color, (Aspect[]) null);
+    private Aspect(String name, int color, String textColor) {
+        this(name, color, (Aspect[]) null);
         this.textColor = textColor;
     }
 
-    public Aspect(String tag, int color, String textColor, boolean blend) {
-        this(tag, color, (Aspect[]) null, blend);
+    private Aspect(String name, int color, String textColor, boolean blend) {
+        this(name, color, (Aspect[]) null, blend);
         this.textColor = textColor;
     }
 
@@ -64,8 +56,8 @@ public class Aspect {
         return Objects.isNull(this.components);
     }
 
-    public String getTag() {
-        return this.tag;
+    public String getName() {
+        return this.name;
     }
 
     public String getTextColor() {
@@ -74,6 +66,10 @@ public class Aspect {
 
     public int getColor() {
         return color;
+    }
+
+    public int getARGBColor() {
+        return 0xFF000000 | color;
     }
 
     public ResourceLocation getImage() {
