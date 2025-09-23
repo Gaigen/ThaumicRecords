@@ -21,7 +21,7 @@ public class ClientAspectTooltipComponent implements ClientTooltipComponent {
 
     @Override
     public int getHeight(Font font) {
-        return 8;
+        return 8 * aspectTooltipComponent.aspectNum().size();
     }
 
     @Override
@@ -31,16 +31,16 @@ public class ClientAspectTooltipComponent implements ClientTooltipComponent {
 
     @Override
     public void renderImage(Font font, int x, int y, int width, int height, GuiGraphics guiGraphics) {
+        int offsetY = 0;
         for (Map.Entry<Aspect, Long> entry : aspectTooltipComponent.aspectNum().entrySet()) {
             Aspect aspect = entry.getKey();
-            String line = aspect.getName() + " x " + entry.getValue();
+            String line = entry.getValue().toString();
             ResourceLocation image = ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
                     "textures/aspects/" + aspect.getName() + ".png");
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, image, x, y, 0, 0, 8, 8, 8, 8, aspect.getARGBColor());
-            guiGraphics.pose().pushMatrix();
-            guiGraphics.drawCenteredString(Minecraft.getInstance().font, line, ((x + 8)), ((y + 15)),
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, image, x, y + offsetY * 8, 0, 0, 8, 8, 8, 8,
                     aspect.getARGBColor());
-            guiGraphics.pose().popMatrix();
+            guiGraphics.drawString(Minecraft.getInstance().font, line, x + 8, y + offsetY * 8, aspect.getARGBColor());
+            offsetY += 1;
         }
     }
 }

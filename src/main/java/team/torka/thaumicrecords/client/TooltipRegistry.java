@@ -11,8 +11,8 @@ import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactori
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
-import team.torka.thaumicrecords.client.tooltip.ClientAspectTooltipComponent;
 import team.torka.thaumicrecords.client.tooltip.AspectTooltipComponent;
+import team.torka.thaumicrecords.client.tooltip.ClientAspectTooltipComponent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,9 +20,11 @@ import java.util.Map;
 @EventBusSubscriber(modid = ThaumicRecords.MOD_ID, value = Dist.CLIENT)
 public class TooltipRegistry {
 
-    private static Map<Aspect,Long> DUMMY=new HashMap<>();
+    private static Map<Aspect, Long> DUMMY = new HashMap<>();
+
     static {
-        DUMMY.put(Aspect.TERRA,1L);
+        DUMMY.put(Aspect.VITREUS, 4L);
+        DUMMY.put(Aspect.LUCRUM, 4L);
     }
 
     @SubscribeEvent
@@ -31,12 +33,12 @@ public class TooltipRegistry {
     }
 
     @SubscribeEvent
-    public static void onPreRenderTooltipEvent(RenderTooltipEvent.GatherComponents event){
-        if (Minecraft.getInstance().level==null || event.getItemStack().isEmpty()){
+    public static void onPreRenderTooltipEvent(RenderTooltipEvent.GatherComponents event) {
+        if (Minecraft.getInstance().level == null || event.getItemStack().isEmpty()) {
             return;
         }
         Item item = event.getItemStack().getItem();
-        if (item== Items.DIRT){
+        if (item == Items.DIAMOND) {
             event.getTooltipElements().add(Either.right(new AspectTooltipComponent(DUMMY)));
         }
 
