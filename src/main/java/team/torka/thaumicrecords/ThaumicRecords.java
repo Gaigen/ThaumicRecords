@@ -14,7 +14,7 @@ public class ThaumicRecords {
 
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public ThaumicRecords(Dist dist, IEventBus modEventBus, ModContainer modContainer) {
+    public ThaumicRecords(IEventBus modEventBus) {
         BlockRegistry.REGISTER.register(modEventBus);
         BlockEntityRegistry.REGISTER.register(modEventBus);
         ItemRegistry.REGISTER.register(modEventBus);

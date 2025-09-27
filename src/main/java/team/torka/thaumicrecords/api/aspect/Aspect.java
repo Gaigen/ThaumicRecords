@@ -1,12 +1,15 @@
 package team.torka.thaumicrecords.api.aspect;
 
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.ThaumicRecords;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
-public class Aspect {
+public class Aspect implements Comparable<Aspect> {
 
     private final String name;
 
@@ -14,16 +17,19 @@ public class Aspect {
 
     private final int color;
 
-    private String textColor;
-
     private final ResourceLocation image;
 
     private final boolean blend;
 
+    @Override
+    public int compareTo(@NotNull Aspect o) {
+        return this.getName().compareTo(o.getName());
+    }
+
     public Aspect(String name, int color, Aspect[] components, ResourceLocation image, boolean blend) {
         if (Objects.nonNull(components) && components.length != 2) {
             throw new IllegalArgumentException(
-                    "Component amount of aspect " + name + " expected 2 but got " + components.length);
+                    "Component amount of aspect {" + name + "} expected 2 but got " + components.length);
         }
         this.name = name;
         this.color = color;
@@ -42,14 +48,12 @@ public class Aspect {
                 "textures/aspects/" + name.toLowerCase() + ".png"), blend);
     }
 
-    private Aspect(String name, int color, String textColor) {
-        this(name, color, (Aspect[]) null);
-        this.textColor = textColor;
+    private Aspect(String name, int color) {
+        this(name, color, null);
     }
 
-    private Aspect(String name, int color, String textColor, boolean blend) {
-        this(name, color, (Aspect[]) null, blend);
-        this.textColor = textColor;
+    private Aspect(String name, int color, boolean blend) {
+        this(name, color, null, blend);
     }
 
     public boolean isPrimal() {
@@ -58,14 +62,6 @@ public class Aspect {
 
     public String getName() {
         return this.name;
-    }
-
-    public String getTextColor() {
-        return textColor;
-    }
-
-    public int getColor() {
-        return color;
     }
 
     public int getARGBColor() {
@@ -84,13 +80,17 @@ public class Aspect {
         return components;
     }
 
+    public static List<Aspect> getPrimal() {
+        return Arrays.asList(AER, IGNIS, AQUA, TERRA, ORDO, PERDITIO);
+    }
+
     /*@formatter:off*/
-    public static final Aspect AER = new Aspect("aer",0xFFFF7E,"e");
-    public static final Aspect TERRA = new Aspect("terra",0x56C000,"2");
-    public static final Aspect IGNIS = new Aspect("ignis",0xFF5A01,"c");
-    public static final Aspect AQUA = new Aspect("aqua",0xD5D4EC,"3");
-    public static final Aspect ORDO = new Aspect("ordo",0xFFFF7E,"7");
-    public static final Aspect PERDITIO = new Aspect("perditio",0x404040,"8",true);
+    public static final Aspect AER = new Aspect("aer",0xFFFF7E);
+    public static final Aspect TERRA = new Aspect("terra",0x56C000);
+    public static final Aspect IGNIS = new Aspect("ignis",0xFF5A01);
+    public static final Aspect AQUA = new Aspect("aqua",0xD5D4EC);
+    public static final Aspect ORDO = new Aspect("ordo",0xFFFF7E);
+    public static final Aspect PERDITIO = new Aspect("perditio",0x404040,true);
     public static final Aspect VACUOS=new Aspect("vacuos",0x888888,new Aspect[]{AER,PERDITIO},true);
     public static final Aspect LUX=new Aspect("lux",0xFFF663,new Aspect[]{AER,IGNIS});
     public static final Aspect TEMPESTAS=new Aspect("tempestas",0xFFFFFF,new Aspect[]{AER,AQUA});
