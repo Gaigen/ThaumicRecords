@@ -6,7 +6,7 @@ import team.torka.thaumicrecords.registry.ItemRegistry;
 
 public class ItemModelGenerator {
 
-    public static void run(ItemModelGenerators itemModels){
+    public static void run(ItemModelGenerators itemModels) {
         itemModels.generateFlatItem(ItemRegistry.AMBER.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ItemRegistry.BATH_SALTS.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ItemRegistry.PRIMAL_CHARM.get(), ModelTemplates.FLAT_ITEM);
@@ -14,12 +14,12 @@ public class ItemModelGenerator {
         itemModels.generateFlatItem(ItemRegistry.COIN.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ItemRegistry.SALIS_MUNDUS.get(), ModelTemplates.FLAT_ITEM);
 
-        itemModels.generateFlatItem(ItemRegistry.WAND_CAP_IRON.get(),ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(ItemRegistry.WAND_CAP_GOLD.get(),ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(ItemRegistry.WAND_CAP_THAUMIUM.get(),ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(ItemRegistry.WAND_CAP_THAUMIUM_INERT.get(),ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(ItemRegistry.WAND_ROD_GREATWOOD.get(),ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(ItemRegistry.WAND_ROD_SILVERWOOD.get(),ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ItemRegistry.WAND_CAP_IRON.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ItemRegistry.WAND_CAP_GOLD.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ItemRegistry.WAND_CAP_THAUMIUM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ItemRegistry.WAND_CAP_THAUMIUM_INERT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ItemRegistry.WAND_ROD_GREATWOOD.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ItemRegistry.WAND_ROD_SILVERWOOD.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ItemRegistry.WAND.get(), ModelTemplates.FLAT_ITEM);
     }
 }

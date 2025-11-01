@@ -7,6 +7,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.item.Wand;
 
+import java.util.function.UnaryOperator;
+
 public class ItemRegistry {
     public static final DeferredRegister.Items REGISTER = DeferredRegister.createItems(ThaumicRecords.MOD_ID);
 
@@ -18,7 +20,7 @@ public class ItemRegistry {
     public static final DeferredItem<Item> ENCHANTED_FABRIC = REGISTER.registerSimpleItem("enchanted_fabric");
     public static final DeferredItem<Item> COIN = REGISTER.registerSimpleItem("coin");
     public static final DeferredItem<Item> SALIS_MUNDUS = REGISTER.registerSimpleItem("salis_mundus");
-    // @formatter:on
+
 
     public static final DeferredItem<Item> WAND_CAP_IRON = REGISTER.registerSimpleItem("wand_cap_iron");
     public static final DeferredItem<Item> WAND_CAP_GOLD = REGISTER.registerSimpleItem("wand_cap_gold");
@@ -30,7 +32,7 @@ public class ItemRegistry {
     public static final DeferredItem<Wand> WAND = REGISTER.registerItem("wand", Wand::new, itemProp(1));
 
     // Block Items
-
+    // @formatter:on
     public static void putInCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(AMBER);
         output.accept(BATH_SALTS);
@@ -50,11 +52,10 @@ public class ItemRegistry {
         output.accept(WAND);
     }
 
-    private static Item.Properties itemProp() {
-        return new Item.Properties();
-    }
-
-    private static Item.Properties itemProp(int stackSize) {
-        return new Item.Properties().stacksTo(stackSize);
+    private static UnaryOperator<Item.Properties> itemProp(int stackSize) {
+        return properties -> {
+            properties.stacksTo(stackSize);
+            return properties;
+        };
     }
 }
