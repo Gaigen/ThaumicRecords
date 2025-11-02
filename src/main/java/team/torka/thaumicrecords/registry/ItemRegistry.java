@@ -52,10 +52,11 @@ public class ItemRegistry {
         output.accept(WAND);
     }
 
-    private static UnaryOperator<Item.Properties> itemProp(int stackSize) {
-        return properties -> {
-            properties.stacksTo(stackSize);
-            return properties;
-        };
+    private static Item.Properties itemProp() {
+        return new Item.Properties();
+    }
+
+    private static Item.Properties itemProp(int stackSize) {
+        return new Item.Properties().stacksTo(stackSize);
     }
 }

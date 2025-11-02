@@ -4,8 +4,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.Matrix4f;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 
@@ -20,7 +21,7 @@ public class ClientAspectTooltipComponent implements ClientTooltipComponent {
     }
 
     @Override
-    public int getHeight(Font font) {
+    public int getHeight() {
         return 8 * aspectTooltipComponent.aspectNum().size();
     }
 
@@ -30,15 +31,20 @@ public class ClientAspectTooltipComponent implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderImage(Font font, int x, int y, int width, int height, GuiGraphics guiGraphics) {
+    public void renderText(Font font, int mouseX, int mouseY, Matrix4f matrix,
+                           MultiBufferSource.BufferSource bufferSource) {
+        ClientTooltipComponent.super.renderText(font, mouseX, mouseY, matrix, bufferSource);
+    }
+
+    @Override
+    public void renderImage(Font font, int x, int y, GuiGraphics guiGraphics) {
         int offsetY = 0;
         for (Map.Entry<Aspect, Long> entry : aspectTooltipComponent.aspectNum().entrySet()) {
             Aspect aspect = entry.getKey();
             String line = entry.getValue().toString();
             ResourceLocation image = ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
                     "textures/aspects/" + aspect.getName() + ".png");
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, image, x, y + offsetY * 8, 0, 0, 8, 8, 8, 8,
-                    aspect.getARGBColor());
+            guiGraphics.blit(image, x, y + offsetY * 8, 0, 0, 8, 8, 8, 8, aspect.getARGBColor());
             guiGraphics.drawString(Minecraft.getInstance().font, line, x + 8, y + offsetY * 8, aspect.getARGBColor());
             offsetY += 1;
         }
