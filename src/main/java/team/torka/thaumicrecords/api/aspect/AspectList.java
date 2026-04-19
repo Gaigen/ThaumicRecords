@@ -1,9 +1,38 @@
 package team.torka.thaumicrecords.api.aspect;
 
+import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
+
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 
-public class AspectList extends LinkedHashMap<Aspect, Integer> {
+public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
+    public static final Codec<AspectList> CODEC = Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).xmap(AspectList::fromMap, aspectList -> aspectList);
 
+    public static final StreamCodec<ByteBuf, AspectList> STREAM_CODEC = ByteBufCodecs
+            .map(LinkedHashMap::new, ResourceLocation.STREAM_CODEC, ByteBufCodecs.VAR_INT)
+            .map(AspectList::fromMap, aspectList -> aspectList);
+
+    public static AspectList fromMap(Map<ResourceLocation, Integer> map) {
+        AspectList aspectList = new AspectList();
+        aspectList.putAll(map);
+        return aspectList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Map<?, ?> that)) return false;
+        return this.size() == that.size() && this.entrySet().equals(that.entrySet());
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
 

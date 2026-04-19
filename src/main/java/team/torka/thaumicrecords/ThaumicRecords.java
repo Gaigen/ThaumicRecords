@@ -1,9 +1,7 @@
 package team.torka.thaumicrecords;
 
 import com.mojang.logging.LogUtils;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import org.slf4j.Logger;
 import team.torka.thaumicrecords.registry.*;
@@ -15,11 +13,12 @@ public class ThaumicRecords {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public ThaumicRecords(IEventBus modEventBus) {
-        BlockRegistry.REGISTER.register(modEventBus);
-        BlockEntityRegistry.REGISTER.register(modEventBus);
-        ItemRegistry.REGISTER.register(modEventBus);
-        CreativeTabRegistry.REGISTER.register(modEventBus);
-        AspectRegistry.ASPECTS.register(modEventBus);
+        BlockRegistry.REGISTRAR.register(modEventBus);
+        BlockEntityRegistry.REGISTRAR.register(modEventBus);
+        DataComponentRegistry.REGISTRAR.register(modEventBus);
+        ItemRegistry.REGISTRAR.register(modEventBus);
+        CreativeTabRegistry.REGISTRAR.register(modEventBus);
+        AspectRegistry.REGISTRAR.register(modEventBus);
     }
 
 }

@@ -1,10 +1,14 @@
 package team.torka.thaumicrecords.registry;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.item.PrimordialPearl;
 import team.torka.thaumicrecords.item.Wand;
 
@@ -50,8 +54,21 @@ public class ItemRegistry {
     }
 
     public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
-        output.accept(WAND);
+        output.accept(ironCappedWoodWand());
         output.accept(PRIMORDIAL_PEARL);
+    }
+
+    private static ItemStack ironCappedWoodWand() {
+        ItemStack initialWand = new ItemStack(WAND.get());
+        AspectList initialAspects = new AspectList();
+        initialAspects.put(ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "aer"), 10);
+        WandItemComponent initialData = new WandItemComponent(
+                "iron",
+                "wood",
+                initialAspects
+        );
+        initialWand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
+        return initialWand;
     }
 
     private static Item.Properties itemProp() {
