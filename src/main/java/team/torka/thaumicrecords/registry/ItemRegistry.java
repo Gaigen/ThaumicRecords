@@ -9,28 +9,28 @@ import team.torka.thaumicrecords.item.PrimordialPearl;
 import team.torka.thaumicrecords.item.Wand;
 
 public class ItemRegistry {
-    public static final DeferredRegister.Items REGISTER = DeferredRegister.createItems(ThaumicRecords.MOD_ID);
+    public static final DeferredRegister.Items REGISTRAR = DeferredRegister.createItems(ThaumicRecords.MOD_ID);
 
     // Simple Items
     // @formatter:off
-    public static final DeferredItem<Item> AMBER = REGISTER.registerSimpleItem("amber");
-    public static final DeferredItem<Item> BATH_SALTS = REGISTER.registerSimpleItem("bath_salts");
-    public static final DeferredItem<Item> PRIMAL_CHARM = REGISTER.registerSimpleItem("primal_charm");
-    public static final DeferredItem<Item> ENCHANTED_FABRIC = REGISTER.registerSimpleItem("enchanted_fabric");
-    public static final DeferredItem<Item> COIN = REGISTER.registerSimpleItem("coin");
-    public static final DeferredItem<Item> SALIS_MUNDUS = REGISTER.registerSimpleItem("salis_mundus");
+    public static final DeferredItem<Item> AMBER = REGISTRAR.registerSimpleItem("amber");
+    public static final DeferredItem<Item> BATH_SALTS = REGISTRAR.registerSimpleItem("bath_salts");
+    public static final DeferredItem<Item> PRIMAL_CHARM = REGISTRAR.registerSimpleItem("primal_charm");
+    public static final DeferredItem<Item> ENCHANTED_FABRIC = REGISTRAR.registerSimpleItem("enchanted_fabric");
+    public static final DeferredItem<Item> COIN = REGISTRAR.registerSimpleItem("coin");
+    public static final DeferredItem<Item> SALIS_MUNDUS = REGISTRAR.registerSimpleItem("salis_mundus");
 
-    public static final DeferredItem<Item> PRIMORDIAL_PEARL=REGISTER.registerItem("primordial_pearl", PrimordialPearl::new, itemProp(1));
+    public static final DeferredItem<Item> PRIMORDIAL_PEARL=REGISTRAR.registerItem("primordial_pearl", PrimordialPearl::new, itemProp(1));
 
 
-    public static final DeferredItem<Item> WAND_CAP_IRON = REGISTER.registerSimpleItem("wand_cap_iron");
-    public static final DeferredItem<Item> WAND_CAP_GOLD = REGISTER.registerSimpleItem("wand_cap_gold");
-    public static final DeferredItem<Item> WAND_CAP_THAUMIUM = REGISTER.registerSimpleItem("wand_cap_thaumium");
-    public static final DeferredItem<Item> WAND_CAP_THAUMIUM_INERT = REGISTER.registerSimpleItem("wand_cap_thaumium_inert");
-    public static final DeferredItem<Item> WAND_ROD_GREATWOOD = REGISTER.registerSimpleItem("wand_rod_greatwood");
-    public static final DeferredItem<Item> WAND_ROD_SILVERWOOD = REGISTER.registerSimpleItem("wand_rod_silverwood");
+    public static final DeferredItem<Item> WAND_CAP_IRON = REGISTRAR.registerSimpleItem("wand_cap_iron");
+    public static final DeferredItem<Item> WAND_CAP_GOLD = REGISTRAR.registerSimpleItem("wand_cap_gold");
+    public static final DeferredItem<Item> WAND_CAP_THAUMIUM = REGISTRAR.registerSimpleItem("wand_cap_thaumium");
+    public static final DeferredItem<Item> WAND_CAP_THAUMIUM_INERT = REGISTRAR.registerSimpleItem("wand_cap_thaumium_inert");
+    public static final DeferredItem<Item> WAND_ROD_GREATWOOD = REGISTRAR.registerSimpleItem("wand_rod_greatwood");
+    public static final DeferredItem<Item> WAND_ROD_SILVERWOOD = REGISTRAR.registerSimpleItem("wand_rod_silverwood");
 
-    public static final DeferredItem<Wand> WAND = REGISTER.registerItem("wand", Wand::new, itemProp(1));
+    public static final DeferredItem<Wand> WAND = REGISTRAR.registerItem("wand", Wand::new, itemProp(1));
 
     // Block Items
     // @formatter:on

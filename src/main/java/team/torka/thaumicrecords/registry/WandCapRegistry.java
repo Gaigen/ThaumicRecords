@@ -13,23 +13,23 @@ import team.torka.thaumicrecords.api.item.WandCap;
 
 @EventBusSubscriber(modid = ThaumicRecords.MOD_ID)
 public class WandCapRegistry {
-    public static final DeferredRegister<WandCap> WAND_CAPS =
+    public static final DeferredRegister<WandCap> REGISTRAR =
             DeferredRegister.create(RegistryKeys.WAND_CAPS, ThaumicRecords.MOD_ID);
 
-    public static Registry<WandCap> WAND_ROD_REGISTRY = null;
+    public static Registry<WandCap> WAND_CAP_REGISTRY = null;
 
     @SubscribeEvent
     public static void onNewRegistryEvent(NewRegistryEvent event) {
-        WAND_ROD_REGISTRY = event.create(new RegistryBuilder<>(RegistryKeys.WAND_CAPS));
+        WAND_CAP_REGISTRY = event.create(new RegistryBuilder<>(RegistryKeys.WAND_CAPS));
     }
 
     /*@formatter:off*/
     public static final DeferredHolder<WandCap, WandCap> WAND_CAP_IRON =
-            WAND_CAPS.register("iron", () -> new WandCap("iron", WandCap.getAllAspectModifierWithAmount(1.1), 1,ItemRegistry.WAND_CAP_IRON.get()));
+            REGISTRAR.register("iron", () -> new WandCap("iron", WandCap.getAllAspectModifierWithAmount(1.1), 1,ItemRegistry.WAND_CAP_IRON.get()));
     public static final DeferredHolder<WandCap, WandCap> WAND_CAP_GOLD =
-            WAND_CAPS.register("gold", () -> new WandCap("gold", WandCap.getAllAspectModifierWithAmount(1.0), 3,ItemRegistry.WAND_CAP_GOLD.get()));
+            REGISTRAR.register("gold", () -> new WandCap("gold", WandCap.getAllAspectModifierWithAmount(1.0), 3,ItemRegistry.WAND_CAP_GOLD.get()));
     public static final DeferredHolder<WandCap, WandCap> WAND_CAP_THAUMIUM =
-            WAND_CAPS.register("thaumium", () -> new WandCap("gold", WandCap.getAllAspectModifierWithAmount(0.9), 6,ItemRegistry.WAND_CAP_THAUMIUM.get()));
+            REGISTRAR.register("thaumium", () -> new WandCap("gold", WandCap.getAllAspectModifierWithAmount(0.9), 6,ItemRegistry.WAND_CAP_THAUMIUM.get()));
 
     /*@formatter:on*/
 }

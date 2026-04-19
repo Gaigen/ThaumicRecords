@@ -11,10 +11,10 @@ import team.torka.thaumicrecords.ThaumicRecords;
 
 public class CreativeTabRegistry {
 
-    public static final DeferredRegister<CreativeModeTab> REGISTER =
+    public static final DeferredRegister<CreativeModeTab> REGISTRAR =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ThaumicRecords.MOD_ID);
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = REGISTER.register("tab",
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = REGISTRAR.register("tab",
             () -> CreativeModeTab.builder()
                                  .title(Component.translatable("itemGroup." + ThaumicRecords.MOD_ID + ".tab"))
                                  .withTabsBefore(CreativeModeTabs.COMBAT)
@@ -22,7 +22,7 @@ public class CreativeTabRegistry {
                                  .displayItems(ItemRegistry::putInCreativeTab)
                                  .build());
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> WIP = REGISTER.register("wip_tab",
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> WIP = REGISTRAR.register("wip_tab",
             () -> CreativeModeTab.builder()
                                  .title(Component.translatable("itemGroup." + ThaumicRecords.MOD_ID + ".wip_tab"))
                                  .withTabsBefore(CreativeModeTabs.COMBAT)

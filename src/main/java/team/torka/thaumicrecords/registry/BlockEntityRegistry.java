@@ -7,7 +7,7 @@ import team.torka.thaumicrecords.ThaumicRecords;
 
 public class BlockEntityRegistry {
 
-    public static final DeferredRegister<BlockEntityType<?>> REGISTER =
+    public static final DeferredRegister<BlockEntityType<?>> REGISTRAR =
             DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, ThaumicRecords.MOD_ID);
 
 
