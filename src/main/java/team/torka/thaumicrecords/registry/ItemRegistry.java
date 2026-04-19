@@ -5,9 +5,8 @@ import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.item.PrimordialPearl;
 import team.torka.thaumicrecords.item.Wand;
-
-import java.util.function.UnaryOperator;
 
 public class ItemRegistry {
     public static final DeferredRegister.Items REGISTER = DeferredRegister.createItems(ThaumicRecords.MOD_ID);
