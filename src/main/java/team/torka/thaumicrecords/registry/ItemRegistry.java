@@ -21,6 +21,8 @@ public class ItemRegistry {
     public static final DeferredItem<Item> COIN = REGISTER.registerSimpleItem("coin");
     public static final DeferredItem<Item> SALIS_MUNDUS = REGISTER.registerSimpleItem("salis_mundus");
 
+    public static final DeferredItem<Item> PRIMORDIAL_PEARL=REGISTER.registerItem("primordial_pearl", PrimordialPearl::new, itemProp(1));
+
 
     public static final DeferredItem<Item> WAND_CAP_IRON = REGISTER.registerSimpleItem("wand_cap_iron");
     public static final DeferredItem<Item> WAND_CAP_GOLD = REGISTER.registerSimpleItem("wand_cap_gold");
@@ -50,6 +52,7 @@ public class ItemRegistry {
 
     public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(WAND);
+        output.accept(PRIMORDIAL_PEARL);
     }
 
     private static Item.Properties itemProp() {
