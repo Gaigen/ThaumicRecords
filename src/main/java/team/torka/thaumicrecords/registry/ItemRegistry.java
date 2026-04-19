@@ -55,6 +55,8 @@ public class ItemRegistry {
 
     public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(ironCappedWoodWand());
+        output.accept(goldCappedGreatwoodWand());
+        output.accept(thaumiumCappedSilverwoodWand());
         output.accept(PRIMORDIAL_PEARL);
     }
 
@@ -63,8 +65,32 @@ public class ItemRegistry {
         AspectList initialAspects = new AspectList();
         initialAspects.put(ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "aer"), 10);
         WandItemComponent initialData = new WandItemComponent(
-                "iron",
-                "wood",
+                ThaumicRecords.MOD_ID+":wood",
+                ThaumicRecords.MOD_ID+":iron",
+                initialAspects
+        );
+        initialWand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
+        return initialWand;
+    }
+    private static ItemStack goldCappedGreatwoodWand() {
+        ItemStack initialWand = new ItemStack(WAND.get());
+        AspectList initialAspects = new AspectList();
+        initialAspects.put(ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "aer"), 10);
+        WandItemComponent initialData = new WandItemComponent(
+                ThaumicRecords.MOD_ID+":greatwood",
+                ThaumicRecords.MOD_ID+":gold",
+                initialAspects
+        );
+        initialWand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
+        return initialWand;
+    }
+    private static ItemStack thaumiumCappedSilverwoodWand() {
+        ItemStack initialWand = new ItemStack(WAND.get());
+        AspectList initialAspects = new AspectList();
+        initialAspects.put(ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "aer"), 10);
+        WandItemComponent initialData = new WandItemComponent(
+                ThaumicRecords.MOD_ID+":silverwood",
+                ThaumicRecords.MOD_ID+":thaumium",
                 initialAspects
         );
         initialWand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);

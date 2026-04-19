@@ -19,6 +19,8 @@ public class ThaumicRecords {
         ItemRegistry.REGISTRAR.register(modEventBus);
         CreativeTabRegistry.REGISTRAR.register(modEventBus);
         AspectRegistry.REGISTRAR.register(modEventBus);
+        WandCapRegistry.REGISTRAR.register(modEventBus);
+        WandRodRegistry.REGISTRAR.register(modEventBus);
     }
 
 }

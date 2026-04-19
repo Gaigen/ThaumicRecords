@@ -8,13 +8,9 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
-import team.torka.thaumicrecords.api.item.WandCap;
-import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
-import team.torka.thaumicrecords.registry.WandCapRegistry;
-import team.torka.thaumicrecords.registry.WandRodRegistry;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,14 +19,6 @@ public class Wand extends Item {
 
     public Wand(Properties properties) {
         super(properties.rarity(Rarity.UNCOMMON));
-    }
-
-    public WandRod getRod(ItemStack stack) {
-        return WandRodRegistry.WAND_ROD_WOOD.get();
-    }
-
-    public WandCap getCap(ItemStack stack) {
-        return WandCapRegistry.WAND_CAP_IRON.get();
     }
 
     @Override
@@ -58,6 +46,7 @@ public class Wand extends Item {
     }
 
     private boolean checkComponent(WandItemComponent component) {
+        // TODO NBT炸了咋整
         return true;
     }
 }

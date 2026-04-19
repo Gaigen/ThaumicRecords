@@ -29,7 +29,7 @@ public class WandCapRegistry {
     public static final DeferredHolder<WandCap, WandCap> WAND_CAP_GOLD =
             REGISTRAR.register("gold", () -> new WandCap("gold", WandCap.getAllAspectModifierWithAmount(1.0), 3,ItemRegistry.WAND_CAP_GOLD.get()));
     public static final DeferredHolder<WandCap, WandCap> WAND_CAP_THAUMIUM =
-            REGISTRAR.register("thaumium", () -> new WandCap("gold", WandCap.getAllAspectModifierWithAmount(0.9), 6,ItemRegistry.WAND_CAP_THAUMIUM.get()));
+            REGISTRAR.register("thaumium", () -> new WandCap("thaumium", WandCap.getAllAspectModifierWithAmount(0.9), 6,ItemRegistry.WAND_CAP_THAUMIUM.get()));
 
     /*@formatter:on*/
 }

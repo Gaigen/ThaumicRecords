@@ -44,7 +44,7 @@ public class WandCap {
 
     public WandCap(String name, Map<Aspect, Double> aspectCostModifier, int craftCost, Item item) {
         this(name, aspectCostModifier, craftCost, item, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
-                "textures/model/" + name.toLowerCase() + ".png"));
+                "textures/model/cap/" + name.toLowerCase() + ".png"));
     }
 
     public String getName() {
