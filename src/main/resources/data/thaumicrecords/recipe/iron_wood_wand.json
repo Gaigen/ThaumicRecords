@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  C",
+    " R ",
+    "C  "
+  ],
+  "key": {
+    "C": {
+      "item": "thaumicrecords:wand_cap_iron"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "thaumicrecords:wand",
+    "components": {
+      "thaumicrecords:wand_item_data": {
+        "cap": "thaumicrecords:iron",
+        "rod": "thaumicrecords:wood"
+      }
+    }
+  }
+}
