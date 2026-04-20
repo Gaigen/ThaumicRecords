@@ -1,5 +1,6 @@
 package team.torka.thaumicrecords.api.aspect;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,39 +22,53 @@ public class Aspect implements Comparable<Aspect> {
 
     private final boolean blend;
 
+    private final ChatFormatting textColor;
+
+    private final String nameTranslationKey;
+
+    private final String loreTranslationKey;
+
     @Override
     public int compareTo(@NotNull Aspect o) {
         return this.getName().compareTo(o.getName());
     }
 
-    public Aspect(String name, int color, Aspect[] components, ResourceLocation image, boolean blend) {
+    public Aspect(String name, int color, Aspect[] components, ResourceLocation image, boolean blend, ChatFormatting textColor, String nameTranslationKey,
+                  String loreTranslationKey) {
         if (Objects.nonNull(components) && components.length != 2) {
-            throw new IllegalArgumentException(
-                    "Component amount of aspect {" + name + "} expected 2 but got " + components.length);
+            throw new IllegalArgumentException("Component amount of aspect {" + name + "} expected 2 but got " + components.length);
         }
         this.name = name;
         this.color = color;
         this.components = components;
         this.image = image;
         this.blend = blend;
+        this.textColor = textColor;
+        this.nameTranslationKey = nameTranslationKey;
+        this.loreTranslationKey = loreTranslationKey;
     }
 
     private Aspect(String name, int color, Aspect[] components) {
-        this(name, color, components, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
-                "textures/aspects/" + name.toLowerCase() + ".png"), false);
+        this(name, color, components, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "textures/aspects/" + name.toLowerCase() + ".png"), false,
+                ChatFormatting.WHITE, "aspect.thaumicrecords.name." + name, "aspect.thaumicrecords.lore." + name);
     }
 
     private Aspect(String name, int color, Aspect[] components, boolean blend) {
-        this(name, color, components, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
-                "textures/aspects/" + name.toLowerCase() + ".png"), blend);
+        this(name, color, components, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "textures/aspects/" + name.toLowerCase() + ".png"), blend,
+                ChatFormatting.WHITE, "aspect.thaumicrecords.name." + name, "aspect.thaumicrecords.lore." + name);
     }
 
-    private Aspect(String name, int color) {
-        this(name, color, null);
+    private Aspect(String name, int color, Aspect[] components, boolean blend, ChatFormatting textColor) {
+        this(name, color, components, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "textures/aspects/" + name.toLowerCase() + ".png"), blend,
+                textColor, "aspect.thaumicrecords.name." + name, "aspect.thaumicrecords.lore." + name);
     }
 
-    private Aspect(String name, int color, boolean blend) {
-        this(name, color, null, blend);
+    private Aspect(String name, int color, ChatFormatting textColor) {
+        this(name, color, null, false, textColor);
+    }
+
+    private Aspect(String name, int color, boolean blend, ChatFormatting textColor) {
+        this(name, color, null, blend, textColor);
     }
 
     public boolean isPrimal() {
@@ -85,12 +100,12 @@ public class Aspect implements Comparable<Aspect> {
     }
 
     /*@formatter:off*/
-    public static final Aspect AER = new Aspect("aer",0xFFFF7E);
-    public static final Aspect TERRA = new Aspect("terra",0x56C000);
-    public static final Aspect IGNIS = new Aspect("ignis",0xFF5A01);
-    public static final Aspect AQUA = new Aspect("aqua",0xD5D4EC);
-    public static final Aspect ORDO = new Aspect("ordo",0xFFFF7E);
-    public static final Aspect PERDITIO = new Aspect("perditio",0x404040,true);
+    public static final Aspect AER = new Aspect("aer",0xFFFF7E,ChatFormatting.YELLOW);
+    public static final Aspect TERRA = new Aspect("terra",0x56C000,ChatFormatting.DARK_GREEN);
+    public static final Aspect IGNIS = new Aspect("ignis",0xFF5A01,ChatFormatting.RED);
+    public static final Aspect AQUA = new Aspect("aqua",0xD5D4EC,ChatFormatting.DARK_AQUA);
+    public static final Aspect ORDO = new Aspect("ordo",0xFFFF7E,ChatFormatting.GRAY);
+    public static final Aspect PERDITIO = new Aspect("perditio",0x404040,true,ChatFormatting.DARK_GRAY);
     public static final Aspect VACUOS=new Aspect("vacuos",0x888888,new Aspect[]{AER,PERDITIO},true);
     public static final Aspect LUX=new Aspect("lux",0xFFF663,new Aspect[]{AER,IGNIS});
     public static final Aspect TEMPESTAS=new Aspect("tempestas",0xFFFFFF,new Aspect[]{AER,AQUA});
@@ -133,4 +148,10 @@ public class Aspect implements Comparable<Aspect> {
     public static final Aspect PANNUS = new Aspect("pannus", 0xEAEAC2, new Aspect[]{INSTRUMENTUM, BESTIA});
     public static final Aspect MACHINA = new Aspect("machina", 0x8080A0, new Aspect[]{MOTUS, INSTRUMENTUM});
     public static final Aspect VINCULUM = new Aspect("vinculum", 0x9A8080, new Aspect[]{MOTUS, PERDITIO});
-}
+public ChatFormatting getTextColor() {
+    return textColor;
+}public String getNameTranslationKey() {
+    return nameTranslationKey;
+}public String getLoreTranslationKey() {
+    return loreTranslationKey;
+}}

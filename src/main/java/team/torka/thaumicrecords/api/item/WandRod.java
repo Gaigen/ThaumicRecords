@@ -6,10 +6,16 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import team.torka.thaumicrecords.ThaumicRecords;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class WandRod {
 
     private final String name;
 
+    /**
+     * 两位小数，实际显示是1/100，比如传入2500，那么显示是200
+     */
     private final int capacity;
 
     private final int craftCost;
@@ -33,8 +39,8 @@ public class WandRod {
      * 内部使用
      */
     public WandRod(String name, int capacity, int craftCost, Item item) {
-        this(name, capacity, craftCost, item, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
-                "textures/model/rod/" + name.toLowerCase() + ".png"), "wand_rod.thaumicrecords."+name);
+        this(name, capacity, craftCost, item, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "textures/model/rod/" + name.toLowerCase() + ".png"),
+                "wand_rod.thaumicrecords." + name);
     }
 
     public String getName() {
@@ -47,6 +53,14 @@ public class WandRod {
 
     public int getCapacity() {
         return capacity;
+    }
+
+    public String getCapacityScaled() {
+        return BigDecimal.valueOf(capacity)
+                .divide(new BigDecimal(100), RoundingMode.HALF_UP)
+                .setScale(2, RoundingMode.HALF_UP)
+                .stripTrailingZeros()
+                .toPlainString();
     }
 
     public Item getItem() {

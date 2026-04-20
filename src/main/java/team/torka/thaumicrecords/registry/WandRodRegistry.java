@@ -14,8 +14,7 @@ import team.torka.thaumicrecords.api.item.WandRod;
 
 @EventBusSubscriber(modid = ThaumicRecords.MOD_ID)
 public class WandRodRegistry {
-    public static final DeferredRegister<WandRod> REGISTRAR =
-            DeferredRegister.create(RegistryKeys.WAND_RODS, ThaumicRecords.MOD_ID);
+    public static final DeferredRegister<WandRod> REGISTRAR = DeferredRegister.create(RegistryKeys.WAND_RODS, ThaumicRecords.MOD_ID);
 
     public static Registry<WandRod> WAND_ROD_REGISTRY = null;
 
@@ -26,10 +25,10 @@ public class WandRodRegistry {
 
     /*@formatter:off*/
     public static final DeferredHolder<WandRod, WandRod> WAND_ROD_WOOD =
-            REGISTRAR.register("wood", () -> new WandRod("wood", 25, 1, Items.STICK));
+            REGISTRAR.register("wood", () -> new WandRod("wood", 2500, 1, Items.STICK));
     public static final DeferredHolder<WandRod, WandRod> WAND_ROD_GREATWOOD =
-            REGISTRAR.register("greatwood", () -> new WandRod("greatwood", 50, 3, ItemRegistry.WAND_ROD_GREATWOOD.get()));
+            REGISTRAR.register("greatwood", () -> new WandRod("greatwood", 5000, 3, ItemRegistry.WAND_ROD_GREATWOOD.get()));
     public static final DeferredHolder<WandRod, WandRod> WAND_ROD_SILVERWOOD =
-            REGISTRAR.register("silverwood", () -> new WandRod("silverwood", 100, 9, ItemRegistry.WAND_ROD_SILVERWOOD.get()));
+            REGISTRAR.register("silverwood", () -> new WandRod("silverwood", 10000, 9, ItemRegistry.WAND_ROD_SILVERWOOD.get()));
     /*@formatter:on*/
 }
