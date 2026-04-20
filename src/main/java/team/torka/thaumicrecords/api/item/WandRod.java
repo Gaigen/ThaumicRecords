@@ -18,17 +18,23 @@ public class WandRod {
 
     private final ResourceLocation modelTexture;
 
-    public WandRod(String name, int capacity, int craftCost, Item item, ResourceLocation modelTexture) {
+    private final String translationKey;
+
+    public WandRod(String name, int capacity, int craftCost, Item item, ResourceLocation modelTexture, String translationKey) {
         this.name = name;
         this.capacity = capacity;
         this.craftCost = craftCost;
         this.item = item;
         this.modelTexture = modelTexture;
+        this.translationKey = translationKey;
     }
 
+    /**
+     * 内部使用
+     */
     public WandRod(String name, int capacity, int craftCost, Item item) {
         this(name, capacity, craftCost, item, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
-                "textures/model/rod/" + name.toLowerCase() + ".png"));
+                "textures/model/rod/" + name.toLowerCase() + ".png"), "wand_rod.thaumicrecords."+name);
     }
 
     public String getName() {
@@ -54,4 +60,7 @@ public class WandRod {
     public void onUpdate(ItemStack itemstack, ServerPlayer player) {
     }
 
+    public String getTranslationKey() {
+        return translationKey;
+    }
 }

@@ -22,8 +22,10 @@ public class WandCap {
 
     private final ResourceLocation modelTexture;
 
+    private final String translationKey;
+
     public WandCap(String name, Map<Aspect, Double> aspectCostModifier, int craftCost, Item item,
-                   ResourceLocation modelTexture) {
+                   ResourceLocation modelTexture,String translationKey) {
         this.name = name;
         if (Objects.isNull(aspectCostModifier)) {
             this.aspectCostModifier = Collections.emptyMap();
@@ -40,11 +42,15 @@ public class WandCap {
         this.craftCost = craftCost;
         this.item = item;
         this.modelTexture = modelTexture;
+        this.translationKey=translationKey;
     }
 
+    /**
+     * 内部使用
+     */
     public WandCap(String name, Map<Aspect, Double> aspectCostModifier, int craftCost, Item item) {
         this(name, aspectCostModifier, craftCost, item, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
-                "textures/model/cap/" + name.toLowerCase() + ".png"));
+                "textures/model/cap/" + name.toLowerCase() + ".png"),"wand_cap.thaumicrecords."+name);
     }
 
     public String getName() {
@@ -73,5 +79,9 @@ public class WandCap {
             modifierMap.put(aspect, modifier);
         }
         return modifierMap;
+    }
+
+    public String getTranslationKey() {
+        return translationKey;
     }
 }

@@ -35,10 +35,10 @@ public class WandRenderer extends BlockEntityWithoutLevelRenderer {
     public void renderByItem(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
         WandItemComponent data = stack.get(DataComponentRegistry.WAND_ITEM_DATA.get());
         if (data == null) return;
-        WandRod wandRod = Optional.ofNullable(WandRodRegistry.WAND_ROD_REGISTRY.get(ResourceLocation.parse(data.getRodKey()))).orElse
+        WandRod wandRod = Optional.ofNullable(WandRodRegistry.WAND_ROD_REGISTRY.get(data.getRod())).orElse
                 (WandRodRegistry.WAND_ROD_REGISTRY.get(ResourceLocation.fromNamespaceAndPath(
                 ThaumicRecords.MOD_ID,"wood")));
-        WandCap wandCap = Optional.ofNullable(WandCapRegistry.WAND_CAP_REGISTRY.get(ResourceLocation.parse(data.getCapKey()))).orElse
+        WandCap wandCap = Optional.ofNullable(WandCapRegistry.WAND_CAP_REGISTRY.get(data.getCap())).orElse
                 (WandCapRegistry.WAND_CAP_REGISTRY.get(ResourceLocation.fromNamespaceAndPath(
                         ThaumicRecords.MOD_ID,"iron")));
 

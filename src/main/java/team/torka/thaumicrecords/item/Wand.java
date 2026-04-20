@@ -6,11 +6,16 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.api.item.WandCap;
+import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
+import team.torka.thaumicrecords.registry.WandCapRegistry;
+import team.torka.thaumicrecords.registry.WandRodRegistry;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,9 +33,6 @@ public class Wand extends Item {
             tooltip.add(Component.translatable("tooltip.thaumicrecords.wand.badComponent").withStyle(ChatFormatting.GRAY));
             return;
         }
-        tooltip.add(Component.translatable("tooltip.thaumicrecords.rod", data.getRodKey()).withStyle(ChatFormatting.GOLD));
-        tooltip.add(Component.translatable("tooltip.thaumicrecords.cap", data.getCapKey()).withStyle(ChatFormatting.GOLD));
-
         AspectList aspects = data.getAspects();
         tooltip.add(Component.literal("aspects:").withStyle(ChatFormatting.DARK_PURPLE));
         aspects.forEach((resourceLocation, amount) -> {
@@ -45,8 +47,19 @@ public class Wand extends Item {
 
     }
 
-    private boolean checkComponent(WandItemComponent component) {
-        // TODO NBT炸了咋整
-        return true;
+    @Override
+    @NotNull
+    public Component getName(ItemStack stack) {
+        WandItemComponent data = stack.get(DataComponentRegistry.WAND_ITEM_DATA.get());
+        if (data != null) {
+            WandRod wandRod = WandRodRegistry.WAND_ROD_REGISTRY.get(data.getRod());
+            WandCap wandCap = WandCapRegistry.WAND_CAP_REGISTRY.get(data.getCap());
+            if (Objects.nonNull(wandRod) && Objects.nonNull(wandCap)) {
+                Component capPart = Component.translatable(wandCap.getTranslationKey());
+                Component rodPart = Component.translatable(wandRod.getTranslationKey());
+                return Component.translatable("item.thaumicrecords.wand", capPart, rodPart);
+            }
+        }
+        return Component.translatable("item.thaumicrecords.wand.default");
     }
 }

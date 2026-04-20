@@ -7,7 +7,9 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.item.PrimordialPearl;
 import team.torka.thaumicrecords.item.Wand;
@@ -63,34 +65,45 @@ public class ItemRegistry {
     private static ItemStack ironCappedWoodWand() {
         ItemStack initialWand = new ItemStack(WAND.get());
         AspectList initialAspects = new AspectList();
-        initialAspects.put(ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "aer"), 10);
+        WandRod wandRod = WandRodRegistry.WAND_ROD_WOOD.get();
+        for (Aspect aspect : Aspect.getPrimal()) {
+            initialAspects.put(ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, aspect.getName()), wandRod.getCapacity());
+        }
         WandItemComponent initialData = new WandItemComponent(
-                ThaumicRecords.MOD_ID+":wood",
-                ThaumicRecords.MOD_ID+":iron",
+                WandRodRegistry.WAND_ROD_WOOD.getId(),
+                WandCapRegistry.WAND_CAP_IRON.getId(),
                 initialAspects
         );
         initialWand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
         return initialWand;
     }
+
     private static ItemStack goldCappedGreatwoodWand() {
         ItemStack initialWand = new ItemStack(WAND.get());
         AspectList initialAspects = new AspectList();
-        initialAspects.put(ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "aer"), 10);
+        WandRod wandRod = WandRodRegistry.WAND_ROD_GREATWOOD.get();
+        for (Aspect aspect : Aspect.getPrimal()) {
+            initialAspects.put(ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, aspect.getName()), wandRod.getCapacity());
+        }
         WandItemComponent initialData = new WandItemComponent(
-                ThaumicRecords.MOD_ID+":greatwood",
-                ThaumicRecords.MOD_ID+":gold",
+                WandRodRegistry.WAND_ROD_GREATWOOD.getId(),
+                WandCapRegistry.WAND_CAP_GOLD.getId(),
                 initialAspects
         );
         initialWand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
         return initialWand;
     }
+
     private static ItemStack thaumiumCappedSilverwoodWand() {
         ItemStack initialWand = new ItemStack(WAND.get());
         AspectList initialAspects = new AspectList();
-        initialAspects.put(ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "aer"), 10);
+        WandRod wandRod = WandRodRegistry.WAND_ROD_SILVERWOOD.get();
+        for (Aspect aspect : Aspect.getPrimal()) {
+            initialAspects.put(ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, aspect.getName()), wandRod.getCapacity());
+        }
         WandItemComponent initialData = new WandItemComponent(
-                ThaumicRecords.MOD_ID+":silverwood",
-                ThaumicRecords.MOD_ID+":thaumium",
+                WandRodRegistry.WAND_ROD_SILVERWOOD.getId(),
+                WandCapRegistry.WAND_CAP_THAUMIUM.getId(),
                 initialAspects
         );
         initialWand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
