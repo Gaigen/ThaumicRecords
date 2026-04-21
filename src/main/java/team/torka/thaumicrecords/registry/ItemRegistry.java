@@ -10,8 +10,8 @@ import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
-import team.torka.thaumicrecords.item.PrimordialPearl;
-import team.torka.thaumicrecords.item.Wand;
+import team.torka.thaumicrecords.item.PrimordialPearltem;
+import team.torka.thaumicrecords.item.WandItem;
 
 public class ItemRegistry {
     public static final DeferredRegister.Items REGISTRAR = DeferredRegister.createItems(ThaumicRecords.MOD_ID);
@@ -25,7 +25,7 @@ public class ItemRegistry {
     public static final DeferredItem<Item> COIN = REGISTRAR.registerSimpleItem("coin");
     public static final DeferredItem<Item> SALIS_MUNDUS = REGISTRAR.registerSimpleItem("salis_mundus");
 
-    public static final DeferredItem<Item> PRIMORDIAL_PEARL=REGISTRAR.registerItem("primordial_pearl", PrimordialPearl::new, itemProp(1));
+    public static final DeferredItem<Item> PRIMORDIAL_PEARL=REGISTRAR.registerItem("primordial_pearl", PrimordialPearltem::new, itemProp(1));
 
 
     public static final DeferredItem<Item> WAND_CAP_IRON = REGISTRAR.registerSimpleItem("wand_cap_iron");
@@ -35,7 +35,7 @@ public class ItemRegistry {
     public static final DeferredItem<Item> WAND_ROD_GREATWOOD = REGISTRAR.registerSimpleItem("wand_rod_greatwood");
     public static final DeferredItem<Item> WAND_ROD_SILVERWOOD = REGISTRAR.registerSimpleItem("wand_rod_silverwood");
 
-    public static final DeferredItem<Wand> WAND = REGISTRAR.registerItem("wand", Wand::new, itemProp(1));
+    public static final DeferredItem<WandItem> WAND = REGISTRAR.registerItem("wand", WandItem::new, itemProp(1));
 
     // Block Items
     // @formatter:on

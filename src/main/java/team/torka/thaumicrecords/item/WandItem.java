@@ -25,9 +25,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public class Wand extends Item {
+public class WandItem extends Item {
 
-    public Wand(Properties properties) {
+    public WandItem(Properties properties) {
         super(properties.rarity(Rarity.UNCOMMON));
     }
 
