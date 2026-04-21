@@ -35,12 +35,10 @@ public class WandRenderer extends BlockEntityWithoutLevelRenderer {
     public void renderByItem(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
         WandItemComponent data = stack.get(DataComponentRegistry.WAND_ITEM_DATA.get());
         if (data == null) return;
-        WandRod wandRod = Optional.ofNullable(WandRodRegistry.WAND_ROD_REGISTRY.get(data.getRod())).orElse
-                (WandRodRegistry.WAND_ROD_REGISTRY.get(ResourceLocation.fromNamespaceAndPath(
-                ThaumicRecords.MOD_ID,"wood")));
-        WandCap wandCap = Optional.ofNullable(WandCapRegistry.WAND_CAP_REGISTRY.get(data.getCap())).orElse
-                (WandCapRegistry.WAND_CAP_REGISTRY.get(ResourceLocation.fromNamespaceAndPath(
-                        ThaumicRecords.MOD_ID,"iron")));
+        WandRod wandRod = Optional.ofNullable(WandRodRegistry.WAND_ROD_REGISTRY.get(data.getRod())).orElse(
+                WandRodRegistry.WAND_ROD_REGISTRY.get(ThaumicRecords.createRl("wood")));
+        WandCap wandCap = Optional.ofNullable(WandCapRegistry.WAND_CAP_REGISTRY.get(data.getCap())).orElse(
+                WandCapRegistry.WAND_CAP_REGISTRY.get(ThaumicRecords.createRl("iron")));
 
         poseStack.translate(0.5, 0.5, 0.5);
         poseStack.mulPose(Axis.ZP.rotationDegrees(180)); // 翻转 Y 轴
@@ -57,10 +55,10 @@ public class WandRenderer extends BlockEntityWithoutLevelRenderer {
 
         poseStack.pushPose();
         poseStack.scale(1.2f, 1.0f, 1.2f);
-        model.cap.render(poseStack, capBuf, LightTexture.FULL_BRIGHT, packedOverlay );
+        model.cap.render(poseStack, capBuf, LightTexture.FULL_BRIGHT, packedOverlay);
 
         poseStack.pushPose();
-        model.capBottom.render(poseStack, capBuf, LightTexture.FULL_BRIGHT, packedOverlay );
+        model.capBottom.render(poseStack, capBuf, LightTexture.FULL_BRIGHT, packedOverlay);
         poseStack.popPose();
 
         poseStack.popPose();

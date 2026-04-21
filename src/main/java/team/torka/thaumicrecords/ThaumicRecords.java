@@ -1,6 +1,7 @@
 package team.torka.thaumicrecords;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import org.slf4j.Logger;
@@ -23,4 +24,11 @@ public class ThaumicRecords {
         WandRodRegistry.REGISTRAR.register(modEventBus);
     }
 
+    public static String createTranslationKey(String prefix, String path) {
+        return prefix + "." + MOD_ID + "." + path;
+    }
+
+    public static ResourceLocation createRl(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    }
 }

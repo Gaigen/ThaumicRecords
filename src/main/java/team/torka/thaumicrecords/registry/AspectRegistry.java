@@ -14,8 +14,7 @@ import team.torka.thaumicrecords.api.aspect.Aspect;
 @EventBusSubscriber(modid = ThaumicRecords.MOD_ID)
 public class AspectRegistry {
 
-    public static final DeferredRegister<Aspect> REGISTRAR =
-            DeferredRegister.create(RegistryKeys.ASPECTS, ThaumicRecords.MOD_ID);
+    public static final DeferredRegister<Aspect> REGISTRAR = DeferredRegister.create(RegistryKeys.ASPECTS, ThaumicRecords.MOD_ID);
 
     public static Registry<Aspect> ASPECT_REGISTRY = null;
 

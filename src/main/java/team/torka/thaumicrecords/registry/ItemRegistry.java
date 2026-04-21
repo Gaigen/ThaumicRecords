@@ -1,6 +1,5 @@
 package team.torka.thaumicrecords.registry;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -67,13 +66,9 @@ public class ItemRegistry {
         AspectList initialAspects = new AspectList();
         WandRod wandRod = WandRodRegistry.WAND_ROD_WOOD.get();
         for (Aspect aspect : Aspect.getPrimal()) {
-            initialAspects.put(ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, aspect.getName()), wandRod.getCapacity());
+            initialAspects.put(ThaumicRecords.createRl(aspect.getName()), wandRod.getCapacity());
         }
-        WandItemComponent initialData = new WandItemComponent(
-                WandRodRegistry.WAND_ROD_WOOD.getId(),
-                WandCapRegistry.WAND_CAP_IRON.getId(),
-                initialAspects
-        );
+        WandItemComponent initialData = new WandItemComponent(WandRodRegistry.WAND_ROD_WOOD.getId(), WandCapRegistry.WAND_CAP_IRON.getId(), initialAspects);
         initialWand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
         return initialWand;
     }
@@ -83,13 +78,10 @@ public class ItemRegistry {
         AspectList initialAspects = new AspectList();
         WandRod wandRod = WandRodRegistry.WAND_ROD_GREATWOOD.get();
         for (Aspect aspect : Aspect.getPrimal()) {
-            initialAspects.put(ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, aspect.getName()), wandRod.getCapacity());
+            initialAspects.put(ThaumicRecords.createRl(aspect.getName()), wandRod.getCapacity());
         }
-        WandItemComponent initialData = new WandItemComponent(
-                WandRodRegistry.WAND_ROD_GREATWOOD.getId(),
-                WandCapRegistry.WAND_CAP_GOLD.getId(),
-                initialAspects
-        );
+        WandItemComponent initialData = new WandItemComponent(WandRodRegistry.WAND_ROD_GREATWOOD.getId(), WandCapRegistry.WAND_CAP_GOLD.getId(),
+                initialAspects);
         initialWand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
         return initialWand;
     }
@@ -99,13 +91,10 @@ public class ItemRegistry {
         AspectList initialAspects = new AspectList();
         WandRod wandRod = WandRodRegistry.WAND_ROD_SILVERWOOD.get();
         for (Aspect aspect : Aspect.getPrimal()) {
-            initialAspects.put(ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, aspect.getName()), wandRod.getCapacity());
+            initialAspects.put(ThaumicRecords.createRl(aspect.getName()), wandRod.getCapacity());
         }
-        WandItemComponent initialData = new WandItemComponent(
-                WandRodRegistry.WAND_ROD_SILVERWOOD.getId(),
-                WandCapRegistry.WAND_CAP_THAUMIUM.getId(),
-                initialAspects
-        );
+        WandItemComponent initialData = new WandItemComponent(WandRodRegistry.WAND_ROD_SILVERWOOD.getId(), WandCapRegistry.WAND_CAP_THAUMIUM.getId(),
+                initialAspects);
         initialWand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
         return initialWand;
     }

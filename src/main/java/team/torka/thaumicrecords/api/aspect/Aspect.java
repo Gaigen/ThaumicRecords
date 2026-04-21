@@ -49,18 +49,18 @@ public class Aspect implements Comparable<Aspect> {
     }
 
     private Aspect(String name, int color, Aspect[] components) {
-        this(name, color, components, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "textures/aspects/" + name.toLowerCase() + ".png"), false,
-                ChatFormatting.WHITE, "aspect.thaumicrecords.name." + name, "aspect.thaumicrecords.lore." + name);
+        this(name, color, components, ThaumicRecords.createRl("textures/aspects/" + name.toLowerCase() + ".png"), false, ChatFormatting.WHITE,
+                ThaumicRecords.createTranslationKey("aspect", "name." + name), ThaumicRecords.createTranslationKey("aspect", "lore." + name));
     }
 
     private Aspect(String name, int color, Aspect[] components, boolean blend) {
-        this(name, color, components, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "textures/aspects/" + name.toLowerCase() + ".png"), blend,
-                ChatFormatting.WHITE, "aspect.thaumicrecords.name." + name, "aspect.thaumicrecords.lore." + name);
+        this(name, color, components, ThaumicRecords.createRl("textures/aspects/" + name.toLowerCase() + ".png"), blend, ChatFormatting.WHITE,
+                ThaumicRecords.createTranslationKey("aspect", "name." + name), ThaumicRecords.createTranslationKey("aspect", "lore." + name));
     }
 
     private Aspect(String name, int color, Aspect[] components, boolean blend, ChatFormatting textColor) {
-        this(name, color, components, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "textures/aspects/" + name.toLowerCase() + ".png"), blend,
-                textColor, "aspect.thaumicrecords.name." + name, "aspect.thaumicrecords.lore." + name);
+        this(name, color, components, ThaumicRecords.createRl("textures/aspects/" + name.toLowerCase() + ".png"), blend, textColor,
+                ThaumicRecords.createTranslationKey("aspect", "name." + name), ThaumicRecords.createTranslationKey("aspect", "lore." + name));
     }
 
     private Aspect(String name, int color, ChatFormatting textColor) {

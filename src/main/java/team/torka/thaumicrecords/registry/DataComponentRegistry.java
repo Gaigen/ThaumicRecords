@@ -12,9 +12,9 @@ public class DataComponentRegistry {
             ThaumicRecords.MOD_ID);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<WandItemComponent>> WAND_ITEM_DATA = REGISTRAR.register("wand_item_data",
             () -> DataComponentType.<WandItemComponent>builder()
-            .persistent(WandItemComponent.CODEC)
-            .networkSynchronized(WandItemComponent.STREAM_CODEC)
-            .build());
+                    .persistent(WandItemComponent.CODEC)
+                    .networkSynchronized(WandItemComponent.STREAM_CODEC)
+                    .build());
 
 
 }

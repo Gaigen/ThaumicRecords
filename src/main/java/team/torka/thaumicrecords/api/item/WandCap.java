@@ -24,8 +24,7 @@ public class WandCap {
 
     private final String translationKey;
 
-    public WandCap(String name, Map<Aspect, Double> aspectCostModifier, int craftCost, Item item,
-                   ResourceLocation modelTexture,String translationKey) {
+    public WandCap(String name, Map<Aspect, Double> aspectCostModifier, int craftCost, Item item, ResourceLocation modelTexture, String translationKey) {
         this.name = name;
         if (Objects.isNull(aspectCostModifier)) {
             this.aspectCostModifier = Collections.emptyMap();
@@ -33,8 +32,7 @@ public class WandCap {
             for (var key : aspectCostModifier.keySet()) {
                 if (!Aspect.getPrimal().contains(key)) {
                     throw new IllegalArgumentException(
-                            "WandCap {" + name + "} aspectCostModifier should only apply to primal aspect but got {" +
-                                    key.getName() + "}");
+                            "WandCap {" + name + "} aspectCostModifier should only apply to primal aspect but got {" + key.getName() + "}");
                 }
             }
             this.aspectCostModifier = aspectCostModifier;
@@ -42,15 +40,15 @@ public class WandCap {
         this.craftCost = craftCost;
         this.item = item;
         this.modelTexture = modelTexture;
-        this.translationKey=translationKey;
+        this.translationKey = translationKey;
     }
 
     /**
      * 内部使用
      */
     public WandCap(String name, Map<Aspect, Double> aspectCostModifier, int craftCost, Item item) {
-        this(name, aspectCostModifier, craftCost, item, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
-                "textures/model/cap/" + name.toLowerCase() + ".png"),"wand_cap.thaumicrecords."+name);
+        this(name, aspectCostModifier, craftCost, item, ThaumicRecords.createRl("textures/model/cap/" + name.toLowerCase() + ".png"),
+                ThaumicRecords.createTranslationKey("wand_cap", name));
     }
 
     public String getName() {

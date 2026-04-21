@@ -39,8 +39,8 @@ public class WandRod {
      * 内部使用
      */
     public WandRod(String name, int capacity, int craftCost, Item item) {
-        this(name, capacity, craftCost, item, ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "textures/model/rod/" + name.toLowerCase() + ".png"),
-                "wand_rod.thaumicrecords." + name);
+        this(name, capacity, craftCost, item, ThaumicRecords.createRl("textures/model/rod/" + name.toLowerCase() + ".png"),
+                ThaumicRecords.createTranslationKey("wand_rod", name));
     }
 
     public String getName() {

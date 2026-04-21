@@ -31,8 +31,7 @@ public class ClientAspectTooltipComponent implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderText(Font font, int mouseX, int mouseY, Matrix4f matrix,
-                           MultiBufferSource.BufferSource bufferSource) {
+    public void renderText(Font font, int mouseX, int mouseY, Matrix4f matrix, MultiBufferSource.BufferSource bufferSource) {
         ClientTooltipComponent.super.renderText(font, mouseX, mouseY, matrix, bufferSource);
     }
 
@@ -42,8 +41,7 @@ public class ClientAspectTooltipComponent implements ClientTooltipComponent {
         for (Map.Entry<Aspect, Long> entry : aspectTooltipComponent.aspectNum().entrySet()) {
             Aspect aspect = entry.getKey();
             String line = entry.getValue().toString();
-            ResourceLocation image = ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
-                    "textures/aspects/" + aspect.getName() + ".png");
+            ResourceLocation image = ThaumicRecords.createRl("textures/aspects/" + aspect.getName() + ".png");
             guiGraphics.blit(image, x, y + offsetY * 8, 0, 0, 8, 8, 8, 8, aspect.getARGBColor());
             guiGraphics.drawString(Minecraft.getInstance().font, line, x + 8, y + offsetY * 8, aspect.getARGBColor());
             offsetY += 1;

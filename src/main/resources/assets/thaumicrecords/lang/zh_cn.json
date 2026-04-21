@@ -1,6 +1,6 @@
 {
-  "itemGroup.thaumicrecords.tab": "神秘记录",
-  "itemGroup.thaumicrecords.wip_tab": "[WIP]神秘记录",
+  "creative_mode_tab.thaumicrecords.tab": "神秘记录",
+  "creative_mode_tab.thaumicrecords.wip_tab": "[WIP]神秘记录",
   "tooltip.thaumicrecords.wand.bad_component": "未知数据",
   "tooltip.thaumicrecords.wand.capacity": "容量 %1$s",
   "tooltip.thaumicrecords.wand.average_modifier": "(%1$s%% 平均魔力消耗)",
