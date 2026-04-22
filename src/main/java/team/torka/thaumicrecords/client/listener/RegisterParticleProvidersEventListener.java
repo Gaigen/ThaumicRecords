@@ -1,0 +1,17 @@
+package team.torka.thaumicrecords.client.listener;
+
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import team.torka.thaumicrecords.client.particle.AuraNodeBreakParticle;
+import team.torka.thaumicrecords.registry.ParticleRegistry;
+
+@EventBusSubscriber(Dist.CLIENT)
+public class RegisterParticleProvidersEventListener {
+
+    @SubscribeEvent
+    public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(ParticleRegistry.NODE_BREAK.get(), AuraNodeBreakParticle.Provider::new);
+    }
+}

@@ -5,20 +5,24 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 public class AuraNodeBlock extends BaseEntityBlock {
+    private static final VoxelShape NODE_SHAPE = Block.box(4.8, 4.8, 4.8, 11.2, 11.2, 11.2);
+
     public AuraNodeBlock(Properties properties) {
         super(properties);
     }
@@ -30,29 +34,35 @@ public class AuraNodeBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+    @ParametersAreNonnullByDefault
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new AuraNodeBlockEntity(pos, state);
     }
 
     @NotNull
     @Override
-    public RenderShape getRenderShape(@NotNull BlockState state) {
+    @ParametersAreNonnullByDefault
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
+    @ParametersAreNonnullByDefault
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return createTickerHelper(type, BlockEntityRegistry.AURA_NODE.get(), AuraNodeBlockEntity::tick);
     }
 
     @Override
-    public int getLightEmission(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos) {
-        return 10;
+    @ParametersAreNonnullByDefault
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+        return 15;
     }
 
+    @NotNull
     @Override
+    @ParametersAreNonnullByDefault
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return Shapes.empty();
+        return NODE_SHAPE;
     }
 }

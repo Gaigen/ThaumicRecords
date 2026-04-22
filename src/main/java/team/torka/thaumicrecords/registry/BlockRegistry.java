@@ -1,5 +1,6 @@
 package team.torka.thaumicrecords.registry;
 
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -14,9 +15,12 @@ public class BlockRegistry {
 
     public static final DeferredBlock<AuraNodeBlock> AURA_NODE = REGISTRAR.register("aura_node", () -> new AuraNodeBlock(BlockBehaviour.Properties.of()
             .mapColor(MapColor.NONE)
-            .strength(5.0F, Float.MAX_VALUE)
+            .strength(2.0F, 200.0F)
             .noOcclusion()
             .noCollission()
             .noLootTable()
+            .randomTicks()
+            .dynamicShape()
+            .sound(SoundType.WOOL)
             .pushReaction(PushReaction.BLOCK)));
 }

@@ -1,0 +1,16 @@
+{
+  "craft_fail": {
+    "category": "block",
+    "subtitle": "sound.thaumicrecords.craft_fail",
+    "sounds": [
+      "thaumicrecords:craft_fail"
+    ]
+  },
+  "node_break": {
+    "category": "block",
+    "subtitle": "sound.thaumicrecords.node_break",
+    "sounds": [
+      "thaumicrecords:node_break"
+    ]
+  }
+}

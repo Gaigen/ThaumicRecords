@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
@@ -19,6 +18,7 @@ import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.client.renderer.CustomRenderType;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
 public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity> {
@@ -31,8 +31,9 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
 
 
     @Override
-    public void render(@NotNull AuraNodeBlockEntity blockEntity, float partialTicks, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource,
-                       int combinedLight, int combinedOverlay) {
+    @ParametersAreNonnullByDefault
+    public void render(AuraNodeBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight,
+                       int combinedOverlay) {
         NodeType nodeType = blockEntity.getNodeType().isBound() ? blockEntity.getNodeType().value() : null;
         if (nodeType == null) {
             return;
@@ -46,8 +47,9 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
         poseStack.popPose();
     }
 
-    private void renderFullAuraNode(@NotNull AuraNodeBlockEntity blockEntity, float partialTicks, @NotNull PoseStack poseStack,
-                                    @NotNull MultiBufferSource bufferSource, NodeType nodeType) {
+    @ParametersAreNonnullByDefault
+    private void renderFullAuraNode(AuraNodeBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
+                                    NodeType nodeType) {
         if (Objects.isNull(Minecraft.getInstance().player)) {
             return;
         }
