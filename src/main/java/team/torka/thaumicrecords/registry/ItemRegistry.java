@@ -1,5 +1,6 @@
 package team.torka.thaumicrecords.registry;
 
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -38,6 +39,8 @@ public class ItemRegistry {
     public static final DeferredItem<WandItem> WAND = REGISTRAR.registerItem("wand", WandItem::new, itemProp(1));
 
     // Block Items
+    public static final DeferredItem<BlockItem> AURA_NODE = REGISTRAR.register("aura_node",
+            () -> new BlockItem(BlockRegistry.AURA_NODE.get(), new Item.Properties()));
     // @formatter:on
     public static void putInCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(AMBER);

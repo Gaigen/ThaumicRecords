@@ -50,7 +50,7 @@ public class WandItem extends Item {
             while (iterator.hasNext()) {
                 Aspect aspect = iterator.next();
                 ResourceLocation rl = AspectRegistry.ASPECT_REGISTRY.getKey(aspect);
-                String scaled = data.getAspects().getScaledOrDefault(rl, 0);
+                String scaled = data.getAspects().getScaled(rl);
                 BigDecimal modifier = BigDecimal.valueOf(wandCap.getAspectCostModifier(aspect)).multiply(BigDecimal.valueOf(100)).setScale(0,
                         RoundingMode.HALF_UP);
                 MutableComponent line = Component.literal(" ")
@@ -76,7 +76,7 @@ public class WandItem extends Item {
             while (iterator.hasNext()) {
                 Aspect aspect = iterator.next();
                 ResourceLocation rl = AspectRegistry.ASPECT_REGISTRY.getKey(aspect);
-                line.append(Component.literal(String.valueOf(data.getAspects().getScaledOrDefault(rl, 0))).withStyle(aspect.getTextColor()));
+                line.append(Component.literal(String.valueOf(data.getAspects().getScaled(rl))).withStyle(aspect.getTextColor()));
                 if (iterator.hasNext()) {
                     line.append(" | ");
                 }

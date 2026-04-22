@@ -22,6 +22,8 @@ public class ThaumicRecords {
         AspectRegistry.REGISTRAR.register(modEventBus);
         WandCapRegistry.REGISTRAR.register(modEventBus);
         WandRodRegistry.REGISTRAR.register(modEventBus);
+        NodeTypeRegistry.REGISTRAR.register(modEventBus);
+        NodeModifierRegistry.REGISTRAR.register(modEventBus);
     }
 
     public static String createTranslationKey(String prefix, String path) {

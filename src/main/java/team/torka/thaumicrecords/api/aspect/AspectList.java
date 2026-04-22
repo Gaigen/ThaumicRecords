@@ -2,6 +2,8 @@ package team.torka.thaumicrecords.api.aspect;
 
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -25,19 +27,21 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
     }
 
     public String getScaled(ResourceLocation aspectRl) {
-        return BigDecimal.valueOf(get(aspectRl))
+        return BigDecimal.valueOf(getOrDefault(aspectRl, 0))
                 .divide(new BigDecimal(100), RoundingMode.HALF_UP)
                 .setScale(2, RoundingMode.HALF_UP)
                 .stripTrailingZeros()
                 .toPlainString();
     }
 
-    public String getScaledOrDefault(ResourceLocation aspectRl, Integer defaultValue) {
-        return BigDecimal.valueOf(getOrDefault(aspectRl, defaultValue))
-                .divide(new BigDecimal(100), RoundingMode.HALF_UP)
-                .setScale(2, RoundingMode.HALF_UP)
-                .stripTrailingZeros()
-                .toPlainString();
+    public Tag writeToNBT() {
+        return CODEC.encodeStart(NbtOps.INSTANCE, this).getOrThrow();
+    }
+
+    public void readFromNBT(Tag tag) {
+        if (tag == null) return;
+        this.clear();
+        CODEC.parse(NbtOps.INSTANCE, tag).resultOrPartial(s -> {}).ifPresent(this::putAll);
     }
 
     @Override
