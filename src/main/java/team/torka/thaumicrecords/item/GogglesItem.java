@@ -8,6 +8,6 @@ import team.torka.thaumicrecords.registry.ArmorMaterialRegistry;
 public class GogglesItem extends ArmorItem {
 
     public GogglesItem() {
-        super(ArmorMaterialRegistry.SPECIAL, Type.HELMET, new Item.Properties().rarity(Rarity.RARE).stacksTo(1));
+        super(ArmorMaterialRegistry.GOGGLES, Type.HELMET, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(350));
     }
 }

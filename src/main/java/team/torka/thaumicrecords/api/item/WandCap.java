@@ -47,7 +47,7 @@ public class WandCap {
      * 内部使用
      */
     public WandCap(String name, Map<Aspect, Double> aspectCostModifier, int craftCost, Item item) {
-        this(name, aspectCostModifier, craftCost, item, ThaumicRecords.createRl("textures/model/cap/" + name.toLowerCase() + ".png"),
+        this(name, aspectCostModifier, craftCost, item, ThaumicRecords.createRl("textures/item/cap/" + name.toLowerCase() + ".png"),
                 ThaumicRecords.createTranslationKey("wand_cap", name));
     }
 
