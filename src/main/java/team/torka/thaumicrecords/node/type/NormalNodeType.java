@@ -9,6 +9,6 @@ public class NormalNodeType extends NodeType {
 
     public NormalNodeType() {
         super(ThaumicRecords.createTranslationKey("node_type", KEY), ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png"), 1.0f, 1.0f,
-                CustomRenderType.additiveTransparency(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")));
+                CustomRenderType.additiveTransparencyNoDepth(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")));
     }
 }

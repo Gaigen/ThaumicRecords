@@ -33,7 +33,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.WAND_CAP_THAUMIUM_INERT.get());
         basicItem(ItemRegistry.WAND_ROD_GREATWOOD.get());
         basicItem(ItemRegistry.WAND_ROD_SILVERWOOD.get());
-//        handheldItem(ItemRegistry.WAND.get());
+        basicItem(ItemRegistry.GOGGLES.get());
 
     }
 

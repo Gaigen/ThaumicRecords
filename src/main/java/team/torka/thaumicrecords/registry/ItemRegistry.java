@@ -11,6 +11,7 @@ import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
+import team.torka.thaumicrecords.item.GogglesItem;
 import team.torka.thaumicrecords.item.PrimordialPearltem;
 import team.torka.thaumicrecords.item.WandItem;
 
@@ -38,6 +39,8 @@ public class ItemRegistry {
 
     public static final DeferredItem<WandItem> WAND = REGISTRAR.registerItem("wand", WandItem::new, itemProp(1));
 
+    public static final DeferredItem<GogglesItem> GOGGLES=REGISTRAR.register("goggles",GogglesItem::new);
+
     // Block Items
     public static final DeferredItem<BlockItem> AURA_NODE = REGISTRAR.register("aura_node",
             () -> new BlockItem(BlockRegistry.AURA_NODE.get(), new Item.Properties()));
@@ -55,6 +58,7 @@ public class ItemRegistry {
         output.accept(WAND_CAP_THAUMIUM_INERT);
         output.accept(WAND_ROD_GREATWOOD);
         output.accept(WAND_ROD_SILVERWOOD);
+        output.accept(GOGGLES);
     }
 
     public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
