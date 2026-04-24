@@ -5,6 +5,10 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -19,6 +23,8 @@ import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 import team.torka.thaumicrecords.registry.NodeModifierRegistry;
 import team.torka.thaumicrecords.registry.NodeTypeRegistry;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 public class AuraNodeBlockEntity extends BlockEntity {
     private Holder<NodeType> type = NodeTypeRegistry.NORMAL;
@@ -37,14 +43,16 @@ public class AuraNodeBlockEntity extends BlockEntity {
 
     @NotNull
     @Override
-    public CompoundTag getUpdateTag(HolderLookup.@NotNull Provider registries) {
+    @ParametersAreNonnullByDefault
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
         saveAdditional(tag, registries);
         return tag;
     }
 
     @Override
-    protected void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+    @ParametersAreNonnullByDefault
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         if (tag.contains("nodeType", Tag.TAG_STRING)) {
             ResourceLocation typeId = ResourceLocation.parse(tag.getString("nodeType"));
@@ -64,12 +72,27 @@ public class AuraNodeBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+    @ParametersAreNonnullByDefault
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         this.type.unwrapKey().ifPresent(key -> tag.putString("nodeType", key.location().toString()));
         this.modifier.unwrapKey().ifPresent(key -> tag.putString("nodeModifier", key.location().toString()));
         tag.put("aspectsLimit", this.limit.writeToNBT());
         tag.put("aspectsCurrent", this.current.writeToNBT());
+    }
+
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public void onDataPacket(@NotNull Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.@NotNull Provider lookupProvider) {
+        CompoundTag tag = pkt.getTag();
+        this.loadAdditional(tag, lookupProvider);
+        if (this.level != null && this.level.isClientSide) {
+            this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), 3);
+        }
     }
 
     public Holder<NodeType> getNodeType() {

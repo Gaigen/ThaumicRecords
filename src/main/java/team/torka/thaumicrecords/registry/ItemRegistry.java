@@ -10,10 +10,12 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandRod;
+import team.torka.thaumicrecords.data.component.AspectListComponent;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.item.GogglesItem;
-import team.torka.thaumicrecords.item.PrimordialPearltem;
+import team.torka.thaumicrecords.item.PrimordialPearItem;
 import team.torka.thaumicrecords.item.WandItem;
+import team.torka.thaumicrecords.item.WispEssenceItem;
 
 public class ItemRegistry {
     public static final DeferredRegister.Items REGISTRAR = DeferredRegister.createItems(ThaumicRecords.MOD_ID);
@@ -27,7 +29,7 @@ public class ItemRegistry {
     public static final DeferredItem<Item> COIN = REGISTRAR.registerSimpleItem("coin");
     public static final DeferredItem<Item> SALIS_MUNDUS = REGISTRAR.registerSimpleItem("salis_mundus");
 
-    public static final DeferredItem<Item> PRIMORDIAL_PEARL=REGISTRAR.registerItem("primordial_pearl", PrimordialPearltem::new, itemProp(1));
+    public static final DeferredItem<Item> PRIMORDIAL_PEARL=REGISTRAR.registerItem("primordial_pearl", PrimordialPearItem::new, itemProp(1));
 
 
     public static final DeferredItem<Item> WAND_CAP_IRON = REGISTRAR.registerSimpleItem("wand_cap_iron");
@@ -40,6 +42,8 @@ public class ItemRegistry {
     public static final DeferredItem<WandItem> WAND = REGISTRAR.registerItem("wand", WandItem::new, itemProp(1));
 
     public static final DeferredItem<GogglesItem> GOGGLES=REGISTRAR.register("goggles",GogglesItem::new);
+
+    public static final DeferredItem<WispEssenceItem> WISP_ESSENCE=REGISTRAR.register("wisp_essence",WispEssenceItem::new);
 
     // Block Items
     public static final DeferredItem<BlockItem> AURA_NODE = REGISTRAR.register("aura_node",
@@ -66,6 +70,16 @@ public class ItemRegistry {
         output.accept(goldCappedGreatwoodWand());
         output.accept(thaumiumCappedSilverwoodWand());
         output.accept(PRIMORDIAL_PEARL);
+    }
+
+    public static void putInWispEssenceCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
+        AspectRegistry.ASPECT_REGISTRY.forEach(aspect -> {
+            ItemStack stack = new ItemStack(ItemRegistry.WISP_ESSENCE.get());
+            AspectList list = new AspectList();
+            list.put(AspectRegistry.ASPECT_REGISTRY.getKey(aspect), 2);
+            stack.set(DataComponentRegistry.ASPECT_LIST.get(), new AspectListComponent(list));
+            output.accept(stack);
+        });
     }
 
     private static ItemStack ironCappedWoodWand() {

@@ -2,9 +2,9 @@ package team.torka.thaumicrecords.item;
 
 import net.minecraft.world.item.Item;
 
-public class PrimordialPearltem extends Item {
+public class PrimordialPearItem extends Item {
 
-    public PrimordialPearltem(Properties properties) {
+    public PrimordialPearItem(Properties properties) {
         super(properties);
     }
 }

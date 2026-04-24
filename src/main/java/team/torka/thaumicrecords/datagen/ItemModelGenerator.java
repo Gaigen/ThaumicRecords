@@ -34,6 +34,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.WAND_ROD_GREATWOOD.get());
         basicItem(ItemRegistry.WAND_ROD_SILVERWOOD.get());
         basicItem(ItemRegistry.GOGGLES.get());
+        basicItem(ItemRegistry.WISP_ESSENCE.get());
 
     }
 

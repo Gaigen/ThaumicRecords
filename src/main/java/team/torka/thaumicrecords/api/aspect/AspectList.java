@@ -39,21 +39,32 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
     }
 
     public void readFromNBT(Tag tag) {
-        if (tag == null) return;
+        if (tag == null) {
+            return;
+        }
         this.clear();
-        CODEC.parse(NbtOps.INSTANCE, tag).resultOrPartial(s -> {}).ifPresent(this::putAll);
+        CODEC.parse(NbtOps.INSTANCE, tag).resultOrPartial(s -> {
+        }).ifPresent(this::putAll);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Map<?, ?> that)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Map<?, ?> that)) {
+            return false;
+        }
         return this.size() == that.size() && this.entrySet().equals(that.entrySet());
     }
 
     @Override
     public int hashCode() {
         return super.hashCode();
+    }
+
+    public static AspectList empty() {
+        return new AspectList();
     }
 }
 

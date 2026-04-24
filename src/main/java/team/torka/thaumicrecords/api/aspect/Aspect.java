@@ -103,8 +103,8 @@ public class Aspect implements Comparable<Aspect> {
     public static final Aspect AER = new Aspect("aer",0xFFFF7E,ChatFormatting.YELLOW);
     public static final Aspect TERRA = new Aspect("terra",0x56C000,ChatFormatting.DARK_GREEN);
     public static final Aspect IGNIS = new Aspect("ignis",0xFF5A01,ChatFormatting.RED);
-    public static final Aspect AQUA = new Aspect("aqua",0xD5D4EC,ChatFormatting.DARK_AQUA);
-    public static final Aspect ORDO = new Aspect("ordo",0xFFFF7E,ChatFormatting.GRAY);
+    public static final Aspect AQUA = new Aspect("aqua",0x3CD4FC,ChatFormatting.DARK_AQUA);
+    public static final Aspect ORDO = new Aspect("ordo",0xD5D4EC,ChatFormatting.GRAY);
     public static final Aspect PERDITIO = new Aspect("perditio",0x404040,true,ChatFormatting.DARK_GRAY);
     public static final Aspect VACUOS=new Aspect("vacuos",0x888888,new Aspect[]{AER,PERDITIO},true);
     public static final Aspect LUX=new Aspect("lux",0xFFF663,new Aspect[]{AER,IGNIS});
@@ -148,10 +148,16 @@ public class Aspect implements Comparable<Aspect> {
     public static final Aspect PANNUS = new Aspect("pannus", 0xEAEAC2, new Aspect[]{INSTRUMENTUM, BESTIA});
     public static final Aspect MACHINA = new Aspect("machina", 0x8080A0, new Aspect[]{MOTUS, INSTRUMENTUM});
     public static final Aspect VINCULUM = new Aspect("vinculum", 0x9A8080, new Aspect[]{MOTUS, PERDITIO});
-public ChatFormatting getTextColor() {
-    return textColor;
-}public String getNameTranslationKey() {
-    return nameTranslationKey;
-}public String getLoreTranslationKey() {
-    return loreTranslationKey;
-}}
+    /*@formatter:on*/
+    public ChatFormatting getTextColor() {
+        return textColor;
+    }
+
+    public String getNameTranslationKey() {
+        return nameTranslationKey;
+    }
+
+    public String getLoreTranslationKey() {
+        return loreTranslationKey;
+    }
+}

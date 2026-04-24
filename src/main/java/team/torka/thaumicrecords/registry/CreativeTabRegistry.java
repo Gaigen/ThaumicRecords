@@ -17,6 +17,13 @@ public class CreativeTabRegistry {
             Component.translatable(ThaumicRecords.createTranslationKey("creative_mode_tab", "tab"))).withTabsBefore(CreativeModeTabs.COMBAT).icon(
             () -> new ItemStack(ItemRegistry.SALIS_MUNDUS.get())).displayItems(ItemRegistry::putInCreativeTab).build());
 
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> WISP_ESSENCE = REGISTRAR.register("wisp_essence", () -> CreativeModeTab.builder()
+            .title(Component.translatable(ThaumicRecords.createTranslationKey("creative_mode_tab", "wisp_essence")))
+            .withTabsBefore(CreativeModeTabs.COMBAT)
+            .icon(() -> new ItemStack(ItemRegistry.WISP_ESSENCE.get()))
+            .displayItems(ItemRegistry::putInWispEssenceCreativeTab)
+            .build());
+
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> WIP = REGISTRAR.register("wip_tab", () -> CreativeModeTab.builder().title(
             Component.translatable(ThaumicRecords.createTranslationKey("creative_mode_tab", "wip_tab"))).withTabsBefore(CreativeModeTabs.COMBAT).icon(
             () -> new ItemStack(ItemRegistry.PRIMAL_CHARM.get())).displayItems(ItemRegistry::putInWipCreativeTab).build());
