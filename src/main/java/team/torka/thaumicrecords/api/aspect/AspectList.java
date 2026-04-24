@@ -47,6 +47,15 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
         }).ifPresent(this::putAll);
     }
 
+    public AspectList add(ResourceLocation aspect, int amount) {
+        if (this.containsKey(aspect)) {
+            this.put(aspect, this.get(aspect) + amount);
+        } else {
+            this.put(aspect, amount);
+        }
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

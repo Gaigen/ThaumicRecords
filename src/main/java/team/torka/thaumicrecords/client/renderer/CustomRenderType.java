@@ -20,18 +20,25 @@ public class CustomRenderType {
     });
 
     public static RenderType additiveTransparency(ResourceLocation resourceLocation) {
-        RenderType.CompositeState compositeState = RenderType.CompositeState.builder().setShaderState(
-                RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER).setTextureState(
-                new RenderStateShard.TextureStateShard(resourceLocation, true, false)).setTransparencyState(ADDITIVE_TRANSPARENCY).setWriteMaskState(
-                RenderStateShard.COLOR_WRITE).createCompositeState(false);
+        RenderType.CompositeState compositeState = RenderType.CompositeState.builder()
+                .setShaderState(RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER)
+                .setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, true, false))
+                .setCullState(RenderStateShard.CullStateShard.NO_CULL)
+                .setTransparencyState(ADDITIVE_TRANSPARENCY)
+                .setWriteMaskState(RenderStateShard.COLOR_WRITE)
+                .createCompositeState(false);
         return RenderType.create("additive_transparency", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 1536, false, true, compositeState);
     }
 
     public static RenderType additiveTransparencyNoDepth(ResourceLocation resourceLocation) {
-        RenderType.CompositeState compositeState = RenderType.CompositeState.builder().setShaderState(
-                RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER).setTextureState(
-                new RenderStateShard.TextureStateShard(resourceLocation, true, false)).setTransparencyState(ADDITIVE_TRANSPARENCY).setDepthTestState(
-                RenderStateShard.DepthTestStateShard.NO_DEPTH_TEST).setWriteMaskState(RenderStateShard.COLOR_WRITE).createCompositeState(false);
+        RenderType.CompositeState compositeState = RenderType.CompositeState.builder()
+                .setShaderState(RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER)
+                .setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, true, false))
+                .setCullState(RenderStateShard.CullStateShard.NO_CULL)
+                .setTransparencyState(ADDITIVE_TRANSPARENCY)
+                .setDepthTestState(RenderStateShard.DepthTestStateShard.NO_DEPTH_TEST)
+                .setWriteMaskState(RenderStateShard.COLOR_WRITE)
+                .createCompositeState(false);
         return RenderType.create("additive_transparency_no_depth", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 1536, false, true, compositeState);
     }
 }

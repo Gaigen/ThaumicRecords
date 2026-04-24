@@ -1,7 +1,6 @@
 package team.torka.thaumicrecords.client.listener;
 
 import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
@@ -12,11 +11,10 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import org.jetbrains.annotations.NotNull;
-import team.torka.thaumicrecords.client.renderer.WandRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.AuraNodeRenderer;
+import team.torka.thaumicrecords.client.renderer.item.AuraNodeItemRenderer;
+import team.torka.thaumicrecords.client.renderer.item.WandItemRenderer;
 import team.torka.thaumicrecords.registry.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -31,13 +29,8 @@ public class RegisterClientExtensionsEventListener {
     }
 
     private static void registerItemExtensions(RegisterClientExtensionsEvent event) {
-        event.registerItem(new IClientItemExtensions() {
-            @NotNull
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return WandRenderer.INSTANCE;
-            }
-        }, ItemRegistry.WAND.get());
+        event.registerItem(WandItemRenderer.INSTANCE.getExtensions(), ItemRegistry.WAND.get());
+        event.registerItem(AuraNodeItemRenderer.INSTANCE.getExtensions(), ItemRegistry.AURA_NODE.get());
     }
 
     private static void registerBlockExtensions(RegisterClientExtensionsEvent event) {

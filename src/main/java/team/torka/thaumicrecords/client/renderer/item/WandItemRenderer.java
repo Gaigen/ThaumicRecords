@@ -1,4 +1,4 @@
-package team.torka.thaumicrecords.client.renderer;
+package team.torka.thaumicrecords.client.renderer.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -11,6 +11,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.client.model.WandModel;
@@ -19,21 +21,25 @@ import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.WandCapRegistry;
 import team.torka.thaumicrecords.registry.WandRodRegistry;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
-public class WandRenderer extends BlockEntityWithoutLevelRenderer {
-    public static final WandRenderer INSTANCE = new WandRenderer();
+public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
+    public static final WandItemRenderer INSTANCE = new WandItemRenderer();
 
     private static final WandModel model = new WandModel();
 
-    public WandRenderer() {
+    public WandItemRenderer() {
         super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void renderByItem(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
         WandItemComponent data = stack.get(DataComponentRegistry.WAND_ITEM_DATA.get());
-        if (data == null) return;
+        if (data == null) {
+            return;
+        }
         WandRod wandRod = Optional.ofNullable(WandRodRegistry.WAND_ROD_REGISTRY.get(data.getRod())).orElse(WandRodRegistry.WAND_ROD_WOOD.get());
         WandCap wandCap = Optional.ofNullable(WandCapRegistry.WAND_CAP_REGISTRY.get(data.getCap())).orElse(WandCapRegistry.WAND_CAP_IRON.get());
 
@@ -59,5 +65,15 @@ public class WandRenderer extends BlockEntityWithoutLevelRenderer {
         poseStack.popPose();
 
         poseStack.popPose();
+    }
+
+    public IClientItemExtensions getExtensions() {
+        return new IClientItemExtensions() {
+            @NotNull
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return WandItemRenderer.this;
+            }
+        };
     }
 }
