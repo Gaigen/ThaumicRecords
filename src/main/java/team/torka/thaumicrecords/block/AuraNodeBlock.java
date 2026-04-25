@@ -28,6 +28,7 @@ import team.torka.thaumicrecords.registry.ItemRegistry;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class AuraNodeBlock extends BaseEntityBlock {
+    public static final MapCodec<AuraNodeBlock> CODEC = simpleCodec(AuraNodeBlock::new);
     private static final VoxelShape NODE_SHAPE = Block.box(4.8, 4.8, 4.8, 11.2, 11.2, 11.2);
 
     public AuraNodeBlock(Properties properties) {
@@ -37,7 +38,7 @@ public class AuraNodeBlock extends BaseEntityBlock {
     @NotNull
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
-        return simpleCodec(AuraNodeBlock::new);
+        return CODEC;
     }
 
     @Override
