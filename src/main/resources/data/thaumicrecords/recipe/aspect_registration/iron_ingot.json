@@ -1,0 +1,9 @@
+{
+  "type": "thaumicrecords:aspect_registration",
+  "ingredient": {
+    "tag": "c:ingots/iron"
+  },
+  "aspects": {
+    "thaumicrecords:metallum": 2
+  }
+}

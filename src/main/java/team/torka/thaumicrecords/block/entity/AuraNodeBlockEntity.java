@@ -34,8 +34,18 @@ public class AuraNodeBlockEntity extends BlockEntity {
 
     public AuraNodeBlockEntity(BlockPos pos, BlockState blockState) {
         super(BlockEntityRegistry.AURA_NODE.get(), pos, blockState);
-        limit.put(AspectRegistry.VITIUM.getId(), 10);
-        current.put(AspectRegistry.VITIUM.getId(), 10);
+        limit.put(AspectRegistry.AER.getId(), 20);
+        limit.put(AspectRegistry.IGNIS.getId(), 20);
+        limit.put(AspectRegistry.AQUA.getId(), 20);
+        limit.put(AspectRegistry.TERRA.getId(), 20);
+        limit.put(AspectRegistry.ORDO.getId(), 20);
+        limit.put(AspectRegistry.PERDITIO.getId(), 20);
+        current.put(AspectRegistry.AER.getId(), 20);
+        current.put(AspectRegistry.IGNIS.getId(), 20);
+        current.put(AspectRegistry.AQUA.getId(), 20);
+        current.put(AspectRegistry.TERRA.getId(), 20);
+        current.put(AspectRegistry.ORDO.getId(), 20);
+        current.put(AspectRegistry.PERDITIO.getId(), 20);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, AuraNodeBlockEntity be) {

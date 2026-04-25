@@ -75,5 +75,15 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
     public static AspectList empty() {
         return new AspectList();
     }
+
+    public AspectList copy() {
+        return AspectList.fromMap(this);
+    }
+
+    public void merge(AspectList aspectList) {
+        aspectList.forEach((aspect, amount) -> {
+            this.merge(aspect, amount, Integer::sum);
+        });
+    }
 }
 

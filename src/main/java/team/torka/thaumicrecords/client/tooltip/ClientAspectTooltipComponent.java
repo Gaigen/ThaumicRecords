@@ -1,50 +1,58 @@
 package team.torka.thaumicrecords.client.tooltip;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix4f;
-import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
+import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.registry.AspectRegistry;
 
-import java.util.Map;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 public class ClientAspectTooltipComponent implements ClientTooltipComponent {
 
-    private final AspectTooltipComponent aspectTooltipComponent;
+    private final AspectList aspects;
 
     public ClientAspectTooltipComponent(AspectTooltipComponent aspectTooltipComponent) {
-        this.aspectTooltipComponent = aspectTooltipComponent;
+        this.aspects = aspectTooltipComponent.aspects();
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public int getWidth(Font font) {
+        return aspects.size() * 18;
     }
 
     @Override
     public int getHeight() {
-        return 8 * aspectTooltipComponent.aspectNum().size();
+        return 16;
     }
 
     @Override
-    public int getWidth(Font font) {
-        return 8;
-    }
-
-    @Override
-    public void renderText(Font font, int mouseX, int mouseY, Matrix4f matrix, MultiBufferSource.BufferSource bufferSource) {
-        ClientTooltipComponent.super.renderText(font, mouseX, mouseY, matrix, bufferSource);
-    }
-
-    @Override
-    public void renderImage(Font font, int x, int y, GuiGraphics guiGraphics) {
-        int offsetY = 0;
-        for (Map.Entry<Aspect, Long> entry : aspectTooltipComponent.aspectNum().entrySet()) {
-            Aspect aspect = entry.getKey();
-            String line = entry.getValue().toString();
-            ResourceLocation image = ThaumicRecords.createRl("textures/aspects/" + aspect.getName() + ".png");
-            guiGraphics.blit(image, x, y + offsetY * 8, 0, 0, 8, 8, 8, 8, aspect.getARGBColor());
-            guiGraphics.drawString(Minecraft.getInstance().font, line, x + 8, y + offsetY * 8, aspect.getARGBColor());
-            offsetY += 1;
+    @ParametersAreNonnullByDefault
+    public void renderImage(Font font, int x, int y, GuiGraphics graphics) {
+        int currentX = x;
+        for (var entry : aspects.entrySet()) {
+            Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(entry.getKey());
+            if (aspect == null) {
+                continue;
+            }
+            ResourceLocation image = aspect.getImage();
+            int argbColor = aspect.getARGBColor();
+            float a = (argbColor >> 24 & 255) / 255.0F;
+            float r = (argbColor >> 16 & 255) / 255.0F;
+            float g = (argbColor >> 8 & 255) / 255.0F;
+            float b = (argbColor & 255) / 255.0F;
+            graphics.setColor(r, g, b, a);
+            graphics.blit(image, currentX, y, 0, 0, 0, 16, 16, 16, 16);
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+            String amount = String.valueOf(entry.getValue());
+            graphics.pose().pushPose();
+            graphics.pose().translate(0, 0, 200);
+            graphics.drawString(font, amount, currentX + 16 - font.width(amount), y + 10, 0xFFFFFFFF, true);
+            graphics.pose().popPose();
+            currentX += getWidth(font);
         }
     }
 }
