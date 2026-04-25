@@ -31,4 +31,4 @@ There is really a long way to go.
 ## Credits
 
 * **Azanor**, The original author of Thaumcraft
-* **[NeoForge](https://neoforged.net/)**, Modern minecraft modloader Team
+* **[NeoForged](https://neoforged.net/)**, Modern minecraft modloader Team
