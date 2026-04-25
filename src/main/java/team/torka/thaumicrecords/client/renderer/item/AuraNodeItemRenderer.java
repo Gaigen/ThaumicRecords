@@ -38,8 +38,8 @@ public class AuraNodeItemRenderer extends BlockEntityWithoutLevelRenderer {
         renderItemAuraNode(currentAspect, poseStack, buffer);
         poseStack.mulPose(Axis.YP.rotationDegrees(90));
         renderItemAuraNode(currentAspect, poseStack, buffer);
-        poseStack.mulPose(Axis.ZP.rotationDegrees(90));
         poseStack.mulPose(Axis.XP.rotationDegrees(90));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(90));
         renderItemAuraNode(currentAspect, poseStack, buffer);
         poseStack.popPose();
     }
