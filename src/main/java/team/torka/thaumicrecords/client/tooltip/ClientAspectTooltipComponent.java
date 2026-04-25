@@ -26,7 +26,7 @@ public class ClientAspectTooltipComponent implements ClientTooltipComponent {
 
     @Override
     public int getHeight() {
-        return 16;
+        return 18;
     }
 
     @Override
