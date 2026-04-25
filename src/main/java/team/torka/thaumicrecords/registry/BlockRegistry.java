@@ -7,6 +7,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.block.ArcaneWorkbenchBlock;
 import team.torka.thaumicrecords.block.AuraNodeBlock;
 
 
@@ -23,4 +24,7 @@ public class BlockRegistry {
             .dynamicShape()
             .sound(SoundType.WOOL)
             .pushReaction(PushReaction.BLOCK)));
+
+    public static final DeferredBlock<ArcaneWorkbenchBlock> ARCANE_WORKBENCH = REGISTRAR.register("arcane_workbench",
+            () -> new ArcaneWorkbenchBlock(BlockBehaviour.Properties.of().randomTicks().noOcclusion().sound(SoundType.WOOD).pushReaction(PushReaction.BLOCK)));
 }
