@@ -38,8 +38,7 @@ public class ArcaneWorkbenchRenderer implements BlockEntityRenderer<ArcaneWorkbe
         VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entitySolid(TEXTURE));
         this.model.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, 0xFFFFFFFF);
         poseStack.popPose();
-        ItemStack wandStack = ItemStack.EMPTY;
-//        ItemStack wandStack = be.getInventory().getStackInSlot(10);
+        ItemStack wandStack = be.getInventory().getStackInSlot(10);
         if (!wandStack.isEmpty()) {
             poseStack.pushPose();
             poseStack.translate(0.65D, 1.0625D, 0.25D);

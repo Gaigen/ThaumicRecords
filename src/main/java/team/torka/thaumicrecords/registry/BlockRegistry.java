@@ -26,5 +26,9 @@ public class BlockRegistry {
             .pushReaction(PushReaction.BLOCK)));
 
     public static final DeferredBlock<ArcaneWorkbenchBlock> ARCANE_WORKBENCH = REGISTRAR.register("arcane_workbench",
-            () -> new ArcaneWorkbenchBlock(BlockBehaviour.Properties.of().randomTicks().noOcclusion().sound(SoundType.WOOD).pushReaction(PushReaction.BLOCK)));
+            () -> new ArcaneWorkbenchBlock(BlockBehaviour.Properties.of()
+                    .strength(2.5F, 3.0F)
+                    .noOcclusion()
+                    .sound(SoundType.WOOD)
+                    .pushReaction(PushReaction.BLOCK)));
 }
