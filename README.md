@@ -1,25 +1,34 @@
-
-Installation information
+Thaumic Records
 =======
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+Obviously, this is just an implementation of Thaumcraft 4 for Neoforge 1.21.1.
+I'll try to make its gameplay as close as possible to all (maybe) of TC4 content and adapt it to modern Minecraft
+content.
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+**About Resources**  
+Because of my bad drawing skills, I will be using original TC4 resources for now until I can create (or
+find) new ones.
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+**Why do this?**
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+TC4 is my favorite mod, but it's just too ancient for modern Minecraft versions. While I could go back to playing the
+1.7.10 modpack, I'd prefer to play it alongside many excellent mods that are only active in higher versions.
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+**When I do that**  
+Whenever my TC4 addiction kicks in (laughs).
+
+## Progress
+
+It is in a very early stage...
+
+* Aspects
+* Some items
+* Wands
+* Aura Nodes
+
+There is really a long way to go.
+
+## Credits
+
+* **Azanor**, The original author of Thaumcraft
+* **[NeoForge](https://neoforged.net/)**, Modern minecraft modloader Team
