@@ -1,8 +1,5 @@
 {
   "parent": "builtin/entity",
-  "textures": {
-    "particle": "thaumicrecords:block/arcane_workbench"
-  },
   "gui_light": "side",
   "display": {
     "gui": {
