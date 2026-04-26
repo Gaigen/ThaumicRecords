@@ -6,26 +6,38 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import team.torka.thaumicrecords.api.aspect.Aspect;
+import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.api.item.WandCap;
+import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.menu.ArcaneWorkbenchMenu;
-import team.torka.thaumicrecords.registry.BlockEntityRegistry;
+import team.torka.thaumicrecords.recipe.ShapedArcaneCraftingRecipe;
+import team.torka.thaumicrecords.registry.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.*;
 
 public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvider {
 
     private final ItemStackHandler inventory = new ItemStackHandler(11) {
         @Override
         protected void onContentsChanged(int slot) {
-            if (slot != 9) { // 避免死循环
+            if (slot != 9) {
                 updateRecipeOutput();
             }
             setChanged();
@@ -39,12 +51,67 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
         super(BlockEntityRegistry.ARCANE_WORKBENCH.get(), pos, state);
     }
 
-    private void updateRecipeOutput() {
-        // 1. 检查是否匹配原版合成
-        // 2. 检查是否匹配奥术合成
-        // 3. 如果匹配且 Vis 足够 -> 设置 Slot 9 为产物
-        // 4. 否则 -> Slot 9 设为空
+    public void updateRecipeOutput() {
+        if (this.level == null || this.level.isClientSide) {
+            return;
+        }
+        List<ItemStack> stacks = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            stacks.add(this.inventory.getStackInSlot(i));
+        }
+        CraftingInput input = CraftingInput.of(3, 3, stacks);
+
+        Optional<RecipeHolder<ShapedArcaneCraftingRecipe>> arcaneRecipe = this.level.getRecipeManager().getRecipeFor(
+                RecipeTypeRegistry.SHAPED_ARCANE_CRAFTING.get(), input, this.level);
+        if (arcaneRecipe.isPresent()) {
+            ShapedArcaneCraftingRecipe recipe = arcaneRecipe.get().value();
+            ItemStack wand = this.inventory.getStackInSlot(10);
+            if (canCraftArcane(recipe, wand)) {
+                ItemStack result = recipe.assemble(input, this.level.registryAccess());
+                this.inventory.setStackInSlot(9, result);
+                return;
+            }
+        }
+        Optional<RecipeHolder<CraftingRecipe>> vanillaRecipe = this.level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, this.level);
+        if (vanillaRecipe.isPresent()) {
+            ItemStack result = vanillaRecipe.get().value().assemble(input, this.level.registryAccess());
+            this.inventory.setStackInSlot(9, result);
+        } else {
+            this.inventory.setStackInSlot(9, ItemStack.EMPTY);
+        }
     }
+
+    private boolean canCraftArcane(ShapedArcaneCraftingRecipe recipe, ItemStack wand) {
+        if (wand.isEmpty() || (wand.getItem() != ItemRegistry.WAND.asItem())) {
+            return false;
+        }
+        // TODO 检查研究
+//        recipe.requiredResearch();
+        WandItemComponent data = wand.get(DataComponentRegistry.WAND_ITEM_DATA.get());
+        if (Objects.isNull(data)) {
+            return false;
+        }
+        AspectList wandStorage = data.getAspects();
+        WandCap wandCap = WandCapRegistry.WAND_CAP_REGISTRY.get(data.getCap());
+        if (Objects.isNull(wandCap)) {
+            return false;
+        }
+        AspectList cost = recipe.baseVisCost();
+        for (Map.Entry<ResourceLocation, Integer> entry : cost.entrySet()) {
+            Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(entry.getKey());
+            if (Objects.isNull(aspect) || !aspect.isPrimal()) {
+                continue;
+            }
+            Integer wandVis = wandStorage.getOrDefault(entry.getKey(), 0);
+            Integer baseCostVis = cost.get(entry.getKey());
+            double modifier = wandCap.getAspectCostModifier(aspect);
+            if (wandVis < (int) (baseCostVis * modifier)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     @NotNull
     @Override
