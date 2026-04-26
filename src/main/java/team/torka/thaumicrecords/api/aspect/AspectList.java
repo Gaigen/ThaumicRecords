@@ -28,6 +28,16 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
 
     public String getScaled(ResourceLocation aspectRl) {
         return BigDecimal.valueOf(getOrDefault(aspectRl, 0))
+                .setScale(2, RoundingMode.HALF_UP)
+                .divide(new BigDecimal(100), RoundingMode.HALF_UP)
+                .setScale(2, RoundingMode.HALF_UP)
+                .stripTrailingZeros()
+                .toPlainString();
+    }
+
+    public static String formatScaled(Integer amount) {
+        return BigDecimal.valueOf(amount)
+                .setScale(2, RoundingMode.HALF_UP)
                 .divide(new BigDecimal(100), RoundingMode.HALF_UP)
                 .setScale(2, RoundingMode.HALF_UP)
                 .stripTrailingZeros()
@@ -84,6 +94,13 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
         aspectList.forEach((aspect, amount) -> {
             this.merge(aspect, amount, Integer::sum);
         });
+    }
+
+    public AspectList multiply(int multiplier) {
+        this.forEach((aspect, amount) -> {
+            this.put(aspect, amount * multiplier);
+        });
+        return this;
     }
 }
 

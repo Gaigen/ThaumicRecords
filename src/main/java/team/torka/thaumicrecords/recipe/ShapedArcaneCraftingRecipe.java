@@ -6,15 +6,31 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.api.item.WandCap;
+import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.RecipeSerializerRegistry;
 import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-public record ShapedArcaneCraftingRecipe(ShapedRecipePattern pattern, AspectList basicVisCost, ItemStack result,
+public record ShapedArcaneCraftingRecipe(ShapedRecipePattern pattern, AspectList baseVisCost, ItemStack result,
                                          List<ResourceLocation> requiredResearch) implements Recipe<CraftingInput> {
+    public ShapedArcaneCraftingRecipe {
+        if (baseVisCost == null) {
+            baseVisCost = new AspectList();
+        }
+        if (requiredResearch == null) {
+            requiredResearch = Collections.emptyList();
+        }
+        if (result == null) {
+            result = ItemStack.EMPTY;
+        }
+    }
 
     @Override
     @ParametersAreNonnullByDefault
@@ -50,6 +66,15 @@ public record ShapedArcaneCraftingRecipe(ShapedRecipePattern pattern, AspectList
     @NotNull
     @Override
     public RecipeType<?> getType() {
-        return RecipeTypeRegistry.ASPECT_REGISTRATION.get();
+        return RecipeTypeRegistry.SHAPED_ARCANE_CRAFTING.get();
+    }
+
+    public int getActualCost(ResourceLocation aspectRl, WandCap cap) {
+        int base = this.baseVisCost.getOrDefault(aspectRl, 0);
+        Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(aspectRl);
+        if (Objects.isNull(aspect)) {
+            return base;
+        }
+        return (int) (base * (cap != null ? cap.getAspectCostModifier(aspect) : 1.0));
     }
 }

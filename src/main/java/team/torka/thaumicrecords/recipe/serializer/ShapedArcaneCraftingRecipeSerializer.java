@@ -13,16 +13,20 @@ import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.recipe.ShapedArcaneCraftingRecipe;
 
+import java.util.function.Function;
+
 public class ShapedArcaneCraftingRecipeSerializer implements RecipeSerializer<ShapedArcaneCraftingRecipe> {
     public static final MapCodec<ShapedArcaneCraftingRecipe> CODEC = RecordCodecBuilder.mapCodec(
-            inst -> inst.group(ShapedRecipePattern.MAP_CODEC.forGetter(ShapedArcaneCraftingRecipe::pattern),
-                            AspectList.CODEC.optionalFieldOf("baseVisCost", AspectList.empty()).forGetter(ShapedArcaneCraftingRecipe::basicVisCost),
+            inst -> inst.group(ShapedRecipePattern.MAP_CODEC.forGetter(ShapedArcaneCraftingRecipe::pattern), AspectList.CODEC.xmap(
+                                            list -> list.copy().multiply(100), Function.identity())
+                                    .optionalFieldOf("baseVisCost", AspectList.empty())
+                                    .forGetter(ShapedArcaneCraftingRecipe::baseVisCost),
                             ItemStack.STRICT_CODEC.fieldOf("result").forGetter(ShapedArcaneCraftingRecipe::result),
                             ResourceLocation.CODEC.listOf().fieldOf("requiredResearch").forGetter(ShapedArcaneCraftingRecipe::requiredResearch))
                     .apply(inst, ShapedArcaneCraftingRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ShapedArcaneCraftingRecipe> STREAM_CODEC = StreamCodec.composite(ShapedRecipePattern.STREAM_CODEC,
-            ShapedArcaneCraftingRecipe::pattern, AspectList.STREAM_CODEC, ShapedArcaneCraftingRecipe::basicVisCost, ItemStack.STREAM_CODEC,
+            ShapedArcaneCraftingRecipe::pattern, AspectList.STREAM_CODEC, ShapedArcaneCraftingRecipe::baseVisCost, ItemStack.STREAM_CODEC,
             ShapedArcaneCraftingRecipe::result, ResourceLocation.STREAM_CODEC.apply(ByteBufCodecs.list()), ShapedArcaneCraftingRecipe::requiredResearch,
             ShapedArcaneCraftingRecipe::new);
 

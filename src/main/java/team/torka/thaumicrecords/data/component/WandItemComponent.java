@@ -29,4 +29,31 @@ public record WandItemComponent(ResourceLocation rod, ResourceLocation cap, Aspe
     public ResourceLocation getCap() {
         return cap;
     }
+
+    public WandItemComponent withAspects(AspectList newAspects) {
+        return new WandItemComponent(this.rod, this.cap, newAspects);
+    }
+
+    public WandItemComponent addVis(ResourceLocation aspect, int amount, int maxVis) {
+        AspectList newAspects = this.aspects.copy();
+        int current = newAspects.getOrDefault(aspect, 0);
+        newAspects.put(aspect, Math.min(maxVis, current + amount));
+        return withAspects(newAspects);
+    }
+
+    public WandItemComponent consumeVis(ResourceLocation aspect, int amount) {
+        AspectList newAspects = this.aspects.copy();
+        int current = newAspects.getOrDefault(aspect, 0);
+        newAspects.put(aspect, Math.max(0, current - amount));
+        return withAspects(newAspects);
+    }
+
+    public WandItemComponent consumeVis(AspectList aspectList) {
+        AspectList newAspects = this.aspects.copy();
+        aspectList.forEach((aspect, amount) -> {
+            int current = newAspects.getOrDefault(aspect, 0);
+            newAspects.put(aspect, Math.max(0, current - amount));
+        });
+        return withAspects(newAspects);
+    }
 }

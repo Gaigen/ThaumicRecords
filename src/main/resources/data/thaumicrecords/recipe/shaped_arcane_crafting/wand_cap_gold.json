@@ -19,6 +19,6 @@
     "thaumicrecords:ordo": 3
   },
   "requiredResearch": [
-    "thaumicrecords:WAND_CAP_GOLD"
+    "thaumicrecords:wand_cap_gold"
   ]
 }
