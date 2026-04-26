@@ -25,7 +25,7 @@ public class ArcaneWorkbenchRenderer implements BlockEntityRenderer<ArcaneWorkbe
     private final ItemRenderer itemRenderer;
 
     public ArcaneWorkbenchRenderer(BlockEntityRendererProvider.Context context) {
-        this.model = new ArcaneWorkbenchModel(context.bakeLayer(CustomModelLayer.ARCANE_WORKTABLE));
+        this.model = new ArcaneWorkbenchModel(context.bakeLayer(CustomModelLayer.ARCANE_WORKBENCH));
         this.itemRenderer = context.getItemRenderer();
     }
 
@@ -41,7 +41,7 @@ public class ArcaneWorkbenchRenderer implements BlockEntityRenderer<ArcaneWorkbe
         ItemStack wandStack = be.getInventory().getStackInSlot(10);
         if (!wandStack.isEmpty()) {
             poseStack.pushPose();
-            poseStack.translate(0.65D, 1.0625D, 0.25D);
+            poseStack.translate(0.45D, 1.0625D, 0.45D);
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
             poseStack.mulPose(Axis.ZP.rotationDegrees(20.0F));
             poseStack.scale(0.5F, 0.5F, 0.5F);

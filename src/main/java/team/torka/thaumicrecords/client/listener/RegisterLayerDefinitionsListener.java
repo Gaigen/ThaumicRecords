@@ -12,6 +12,6 @@ public class RegisterLayerDefinitionsListener {
 
     @SubscribeEvent
     public static void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(CustomModelLayer.ARCANE_WORKTABLE, ArcaneWorkbenchModel::createLayerDefinition);
+        event.registerLayerDefinition(CustomModelLayer.ARCANE_WORKBENCH, ArcaneWorkbenchModel::createLayerDefinition);
     }
 }

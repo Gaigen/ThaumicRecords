@@ -29,6 +29,7 @@ public class ThaumicRecords {
         ArmorMaterialRegistry.REGISTRAR.register(modEventBus);
         RecipeTypeRegistry.REGISTRAR.register(modEventBus);
         RecipeSerializerRegistry.REGISTRAR.register(modEventBus);
+        MenuRegistry.REGISTRAR.register(modEventBus);
     }
 
     public static String createTranslationKey(String prefix, String path) {

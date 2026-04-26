@@ -2,7 +2,11 @@ package team.torka.thaumicrecords.block;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -10,12 +14,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.block.entity.ArcaneWorkbenchBlockEntity;
+import team.torka.thaumicrecords.menu.ArcaneWorkbenchMenu;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -80,5 +86,18 @@ public class ArcaneWorkbenchBlock extends BaseEntityBlock {
             }
             super.onRemove(state, level, pos, newState, isMoving);
         }
+    }
+
+    @NotNull
+    @Override
+    @ParametersAreNonnullByDefault
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (!level.isClientSide) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof ArcaneWorkbenchBlockEntity workbench) {
+                player.openMenu(new SimpleMenuProvider((id, inv, p) -> new ArcaneWorkbenchMenu(id, inv, workbench), Component.empty()), pos);
+            }
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 }
