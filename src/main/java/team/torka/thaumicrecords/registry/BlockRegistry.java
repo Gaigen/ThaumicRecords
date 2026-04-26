@@ -9,6 +9,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.block.ArcaneWorkbenchBlock;
 import team.torka.thaumicrecords.block.AuraNodeBlock;
+import team.torka.thaumicrecords.block.TableBlock;
 
 
 public class BlockRegistry {
@@ -31,4 +32,10 @@ public class BlockRegistry {
                     .noOcclusion()
                     .sound(SoundType.WOOD)
                     .pushReaction(PushReaction.BLOCK)));
+
+    public static final DeferredBlock<TableBlock> TABLE = REGISTRAR.register("table", () -> new TableBlock(BlockBehaviour.Properties.of()
+            .strength(2.5F, 3.0F)
+            .noOcclusion()
+            .sound(SoundType.WOOD)
+            .pushReaction(PushReaction.NORMAL)));
 }

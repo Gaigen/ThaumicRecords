@@ -5,4 +5,5 @@ import team.torka.thaumicrecords.ThaumicRecords;
 
 public class CustomModelLayer {
     public static final ModelLayerLocation ARCANE_WORKBENCH = new ModelLayerLocation(ThaumicRecords.createRl("arcane_workbench"), "main");
+    public static final ModelLayerLocation TABLE = new ModelLayerLocation(ThaumicRecords.createRl("table"), "main");
 }

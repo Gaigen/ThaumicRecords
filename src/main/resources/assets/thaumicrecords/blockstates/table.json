@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "thaumicrecords:block/table"
+    },
+    "facing=south": {
+      "model": "thaumicrecords:block/table",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "thaumicrecords:block/table",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "thaumicrecords:block/table",
+      "y": 270
+    }
+  }
+}

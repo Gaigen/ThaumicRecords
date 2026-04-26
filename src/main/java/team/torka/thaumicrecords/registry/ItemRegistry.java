@@ -50,6 +50,8 @@ public class ItemRegistry {
             () -> new BlockItem(BlockRegistry.AURA_NODE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> ARCANE_WORKBENCH = REGISTRAR.register("arcane_workbench",
             () -> new BlockItem(BlockRegistry.ARCANE_WORKBENCH.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> TABLE = REGISTRAR.register("table",
+            () -> new BlockItem(BlockRegistry.TABLE.get(), new Item.Properties()));
     // @formatter:on
     public static void putInCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(ironCappedWoodWand());
@@ -68,6 +70,7 @@ public class ItemRegistry {
         output.accept(WAND_ROD_GREATWOOD);
         output.accept(WAND_ROD_SILVERWOOD);
         output.accept(GOGGLES);
+        output.accept(TABLE);
         output.accept(ARCANE_WORKBENCH);
     }
 

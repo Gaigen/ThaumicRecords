@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.block.entity.ArcaneWorkbenchBlockEntity;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
+import team.torka.thaumicrecords.block.entity.TableBlockEntity;
 
 public class BlockEntityRegistry {
 
@@ -18,4 +19,8 @@ public class BlockEntityRegistry {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcaneWorkbenchBlockEntity>> ARCANE_WORKBENCH = REGISTRAR.register(
             "arcane_workbench",
             () -> BlockEntityType.Builder.of(ArcaneWorkbenchBlockEntity::new, BlockRegistry.ARCANE_WORKBENCH.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TableBlockEntity>> TABLE = REGISTRAR.register(
+            "table",
+            () -> BlockEntityType.Builder.of(TableBlockEntity::new, BlockRegistry.TABLE.get()).build(null));
 }

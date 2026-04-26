@@ -14,8 +14,10 @@ import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import team.torka.thaumicrecords.client.renderer.blockentity.ArcaneWorkbenchRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.AuraNodeRenderer;
+import team.torka.thaumicrecords.client.renderer.blockentity.TableRenderer;
 import team.torka.thaumicrecords.client.renderer.item.ArcaneWorkbenchItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.AuraNodeItemRenderer;
+import team.torka.thaumicrecords.client.renderer.item.TableItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.WandItemRenderer;
 import team.torka.thaumicrecords.registry.*;
 
@@ -34,6 +36,7 @@ public class RegisterClientExtensionsEventListener {
         event.registerItem(WandItemRenderer.INSTANCE.getExtensions(), ItemRegistry.WAND.get());
         event.registerItem(AuraNodeItemRenderer.INSTANCE.getExtensions(), ItemRegistry.AURA_NODE.get());
         event.registerItem(ArcaneWorkbenchItemRenderer.INSTANCE.getExtensions(), ItemRegistry.ARCANE_WORKBENCH.get());
+        event.registerItem(TableItemRenderer.INSTANCE.getExtensions(), ItemRegistry.TABLE.get());
     }
 
     private static void registerBlockExtensions(RegisterClientExtensionsEvent event) {
@@ -59,5 +62,6 @@ public class RegisterClientExtensionsEventListener {
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(BlockEntityRegistry.AURA_NODE.get(), AuraNodeRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.ARCANE_WORKBENCH.get(), ArcaneWorkbenchRenderer::new);
+        event.registerBlockEntityRenderer(BlockEntityRegistry.TABLE.get(), TableRenderer::new);
     }
 }
