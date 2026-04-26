@@ -1,0 +1,9 @@
+{
+  "type": "thaumicrecords:aspect_registration",
+  "ingredient": {
+    "tag": "c:dyes"
+  },
+  "aspects": {
+    "thaumicrecords:sensus": 1
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "thaumicrecords:aspect_registration",
+  "ingredient": {
+    "tag": "c:stones"
+  },
+  "aspects": {
+    "thaumicrecords:terra": 2
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "thaumicrecords:aspect_registration",
+  "ingredient": {
+    "item": "minecraft:stick"
+  },
+  "aspects": {
+    "thaumicrecords:arbor": 1
+  }
+}

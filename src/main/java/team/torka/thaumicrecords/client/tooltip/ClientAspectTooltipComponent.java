@@ -52,7 +52,7 @@ public class ClientAspectTooltipComponent implements ClientTooltipComponent {
             graphics.pose().translate(0, 0, 200);
             graphics.drawString(font, amount, currentX + 16 - font.width(amount), y + 10, 0xFFFFFFFF, true);
             graphics.pose().popPose();
-            currentX += getWidth(font);
+            currentX += 18;
         }
     }
 }

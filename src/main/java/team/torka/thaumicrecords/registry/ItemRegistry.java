@@ -52,6 +52,9 @@ public class ItemRegistry {
             () -> new BlockItem(BlockRegistry.ARCANE_WORKBENCH.get(), new Item.Properties()));
     // @formatter:on
     public static void putInCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
+        output.accept(ironCappedWoodWand());
+        output.accept(goldCappedGreatwoodWand());
+        output.accept(thaumiumCappedSilverwoodWand());
         output.accept(AMBER);
         output.accept(BATH_SALTS);
         output.accept(PRIMAL_CHARM);
@@ -65,15 +68,12 @@ public class ItemRegistry {
         output.accept(WAND_ROD_GREATWOOD);
         output.accept(WAND_ROD_SILVERWOOD);
         output.accept(GOGGLES);
+        output.accept(ARCANE_WORKBENCH);
     }
 
     public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
-        output.accept(ironCappedWoodWand());
-        output.accept(goldCappedGreatwoodWand());
-        output.accept(thaumiumCappedSilverwoodWand());
         output.accept(PRIMORDIAL_PEARL);
         output.accept(AURA_NODE);
-        output.accept(ARCANE_WORKBENCH);
     }
 
     public static void putInWispEssenceCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {

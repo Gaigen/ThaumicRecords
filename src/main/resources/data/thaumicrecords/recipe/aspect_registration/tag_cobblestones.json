@@ -1,0 +1,10 @@
+{
+  "type": "thaumicrecords:aspect_registration",
+  "ingredient": {
+    "tag": "c:cobblestones"
+  },
+  "aspects": {
+    "thaumicrecords:terra": 1,
+    "thaumicrecords:perditio": 1
+  }
+}
