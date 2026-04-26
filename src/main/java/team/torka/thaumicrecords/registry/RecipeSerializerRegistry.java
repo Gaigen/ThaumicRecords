@@ -6,7 +6,9 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.recipe.AspectRecipe;
+import team.torka.thaumicrecords.recipe.ShapedArcaneCraftingRecipe;
 import team.torka.thaumicrecords.recipe.serializer.AspectRecipeSerializer;
+import team.torka.thaumicrecords.recipe.serializer.ShapedArcaneCraftingRecipeSerializer;
 
 public class RecipeSerializerRegistry {
 
@@ -14,4 +16,7 @@ public class RecipeSerializerRegistry {
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AspectRecipe>> ASPECT_REGISTRATION = REGISTRAR.register("aspect_registration",
             AspectRecipeSerializer::new);
+
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapedArcaneCraftingRecipe>> SHAPED_ARCANE_CRAFTING = REGISTRAR.register(
+            "shaped_arcane_crafting", ShapedArcaneCraftingRecipeSerializer::new);
 }
