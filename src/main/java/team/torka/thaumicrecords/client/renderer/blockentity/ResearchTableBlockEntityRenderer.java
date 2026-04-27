@@ -9,12 +9,14 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.block.ResearchTableBlock;
 import team.torka.thaumicrecords.block.entity.ResearchTableBlockEntity;
 import team.torka.thaumicrecords.block.part.ResearchTablePart;
 import team.torka.thaumicrecords.client.model.ResearchTableModel;
 import team.torka.thaumicrecords.client.renderer.CustomModelLayer;
+import team.torka.thaumicrecords.menu.ResearchTableMenu;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -43,16 +45,17 @@ public class ResearchTableBlockEntityRenderer implements BlockEntityRenderer<Res
         float rotation = be.getBlockState().getValue(ResearchTableBlock.FACING).toYRot();
         poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
         VertexConsumer vc = bufferSource.getBuffer(RenderType.entityCutout(TEXTURE));
-
         model.renderTable(poseStack, vc, packedLight, packedOverlay);
-//        ItemStack scribeTools = be.getItem(0);
-//        if (!scribeTools.isEmpty()) {
-        model.renderInkwell(poseStack, vc, packedLight, packedOverlay);
-        renderQuill(poseStack, bufferSource, packedLight, packedOverlay);
-//        }
+        ItemStack scribeTools = be.getInventory().getStackInSlot(ResearchTableMenu.SLOT_SCRIBE_TOOLS);
+        if (!scribeTools.isEmpty()) {
+            model.renderInkwell(poseStack, vc, packedLight, packedOverlay);
+            renderQuill(poseStack, bufferSource, packedLight, packedOverlay);
+        }
         renderParchmentStack(poseStack, bufferSource, packedLight, packedOverlay);
-
-        renderScroll(poseStack, bufferSource, packedLight, packedOverlay);
+        ItemStack researchNote = be.getInventory().getStackInSlot(ResearchTableMenu.SLOT_RESEARCH_NOTE);
+        if (!researchNote.isEmpty()) {
+            renderScroll(poseStack, bufferSource, packedLight, packedOverlay);
+        }
         poseStack.popPose();
     }
 

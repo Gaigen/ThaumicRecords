@@ -117,7 +117,7 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
     @NotNull
     @Override
     public Component getDisplayName() {
-        return Component.translatable(ThaumicRecords.createTranslationKey("container", "wand.arcane_workbench"));
+        return Component.translatable(ThaumicRecords.createTranslationKey("container", "arcane_workbench"));
     }
 
     @Nullable

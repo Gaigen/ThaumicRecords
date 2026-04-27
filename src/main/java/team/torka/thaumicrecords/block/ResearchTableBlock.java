@@ -95,14 +95,14 @@ public class ResearchTableBlock extends BaseEntityBlock {
     @Override
     @ParametersAreNonnullByDefault
     public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (level.isClientSide) {
-            return InteractionResult.SUCCESS;
+        if (!level.isClientSide) {
+            BlockPos mainPos = (state.getValue(PART) == ResearchTablePart.LEFT) ? pos : pos.relative(state.getValue(FACING).getCounterClockWise());
+            BlockEntity be = level.getBlockEntity(mainPos);
+            if (be instanceof ResearchTableBlockEntity tableBE) {
+                player.openMenu(tableBE, mainPos);
+            }
         }
-
-        BlockPos mainPos = getMainPos(state, pos);
-        BlockEntity be = level.getBlockEntity(mainPos);
-
-        return InteractionResult.PASS;
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @NotNull

@@ -97,9 +97,9 @@ public class WandItem extends Item {
             if (Objects.nonNull(wandRod) && Objects.nonNull(wandCap)) {
                 Component capPart = Component.translatable(wandCap.getTranslationKey());
                 Component rodPart = Component.translatable(wandRod.getTranslationKey());
-                return Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand"), capPart, rodPart);
+                return Component.translatable(ThaumicRecords.createTranslationKey("item", "wand"), capPart, rodPart);
             }
         }
-        return Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand.default"));
+        return Component.translatable(ThaumicRecords.createTranslationKey("item", "wand.default"));
     }
 }
