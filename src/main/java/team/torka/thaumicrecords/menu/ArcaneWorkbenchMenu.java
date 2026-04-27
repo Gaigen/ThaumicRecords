@@ -34,7 +34,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
 
     public static final int SLOT_CRAFT_RESULT = 9;
     public static final int SLOT_WAND = 10;
-    public static final int SLOT_INVENTORY_START = 10;
+    public static final int SLOT_INVENTORY_START = 11;
 
     public ArcaneWorkbenchMenu(int containerId, Inventory playerInventory, FriendlyByteBuf extraData) {
         this(containerId, playerInventory, (ArcaneWorkbenchBlockEntity) playerInventory.player.level().getBlockEntity(extraData.readBlockPos()));
