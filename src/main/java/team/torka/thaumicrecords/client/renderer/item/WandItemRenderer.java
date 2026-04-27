@@ -44,7 +44,7 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
         WandCap wandCap = Optional.ofNullable(WandCapRegistry.WAND_CAP_REGISTRY.get(data.getCap())).orElse(WandCapRegistry.WAND_CAP_IRON.get());
 
         poseStack.translate(0.5, 0.5, 0.5);
-        poseStack.mulPose(Axis.ZP.rotationDegrees(180)); // 翻转 Y 轴
+        poseStack.mulPose(Axis.ZP.rotationDegrees(180));
 
         ResourceLocation rodTex = wandRod.getModelTexture();
         VertexConsumer rodBuf = buffer.getBuffer(RenderType.entityCutout(rodTex));

@@ -25,8 +25,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import team.torka.thaumicrecords.api.ModTags;
 import team.torka.thaumicrecords.block.entity.ArcaneWorkbenchBlockEntity;
 import team.torka.thaumicrecords.block.entity.TableBlockEntity;
+import team.torka.thaumicrecords.block.part.ResearchTablePart;
 import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 
@@ -65,9 +67,10 @@ public class TableBlock extends BaseEntityBlock {
     @NotNull
     @Override
     @ParametersAreNonnullByDefault
-    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        ItemStack itemstack = player.getItemInHand(InteractionHand.MAIN_HAND);
-
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+                                           BlockHitResult hitResult) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        // 法杖，转化为奥术工作台
         if (itemstack.getItem() == ItemRegistry.WAND.asItem()) {
             if (!level.isClientSide) {
                 level.setBlock(pos, BlockRegistry.ARCANE_WORKBENCH.get().defaultBlockState(), 3);
@@ -78,11 +81,25 @@ public class TableBlock extends BaseEntityBlock {
                     level.playSound(null, pos, SoundEvents.WOODEN_BUTTON_CLICK_OFF, SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
+        // 笔与墨，转化为研究台
+        if (itemstack.is(ModTags.SCRIBING_TOOLS)) {
+            for (Direction dir : Direction.Plane.HORIZONTAL) {
+                BlockPos neighborPos = pos.relative(dir);
+                BlockState neighborState = level.getBlockState(neighborPos);
+                if (neighborState.is(BlockRegistry.TABLE.get())) {
+                    if (!level.isClientSide) {
+                        this.convertToResearchTable(level, pos, neighborPos, player, stack, dir);
+                    }
+                    return ItemInteractionResult.sidedSuccess(level.isClientSide);
+                }
+            }
         }
 
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
+
 
     @Nullable
     @Override
@@ -99,5 +116,25 @@ public class TableBlock extends BaseEntityBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    private void convertToResearchTable(Level level, BlockPos pos1, BlockPos pos2, Player player, ItemStack stack, Direction dir) {
+        Direction tableFacing = dir.getCounterClockWise();
+        level.setBlock(pos1, BlockRegistry.RESEARCH_TABLE.get()
+                .defaultBlockState()
+                .setValue(ResearchTableBlock.FACING, tableFacing)
+                .setValue(ResearchTableBlock.PART, ResearchTablePart.LEFT), 3);
+        level.setBlock(pos2, BlockRegistry.RESEARCH_TABLE.get()
+                .defaultBlockState()
+                .setValue(ResearchTableBlock.FACING, tableFacing)
+                .setValue(ResearchTableBlock.PART, ResearchTablePart.RIGHT), 3);
+        if (!player.getAbilities().instabuild) {
+            stack.shrink(1);
+        }
+//        BlockEntity be = level.getBlockEntity(pos1);
+//        if (be instanceof ResearchTableBlockEntity researchBE) {
+//            researchBE.setInventorySlotContents(0, stack.split(1));
+//        }
+
     }
 }

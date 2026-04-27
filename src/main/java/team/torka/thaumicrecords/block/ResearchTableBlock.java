@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +34,14 @@ public class ResearchTableBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<ResearchTablePart> PART = EnumProperty.create("part", ResearchTablePart.class);
 
-    protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
+    private static final VoxelShape TOP_LEFT = Block.box(0, 12, 0, 16, 16, 16);
+    private static final VoxelShape TOP_RIGHT = Block.box(0, 12, 0, 16, 16, 16);
+    private static final VoxelShape LEGS_LEFT = Shapes.or(Block.box(2, 0, 2, 6, 12, 6), Block.box(2, 0, 10, 6, 12, 14));
+    private static final VoxelShape LEGS_RIGHT = Shapes.or(Block.box(10, 0, 2, 14, 12, 6), Block.box(10, 0, 10, 14, 12, 14));
+    private static final VoxelShape CROSSBAR_LEFT = Block.box(4, 2, 6, 16, 6, 10);
+    private static final VoxelShape CROSSBAR_RIGHT = Block.box(0, 2, 6, 12, 6, 10);
+    private static final VoxelShape SHAPE_LEFT = Shapes.or(TOP_LEFT, LEGS_LEFT, CROSSBAR_LEFT);
+    private static final VoxelShape SHAPE_RIGHT = Shapes.or(TOP_RIGHT, LEGS_RIGHT, CROSSBAR_RIGHT);
 
     public ResearchTableBlock(Properties properties) {
         super(properties);
@@ -50,7 +58,22 @@ public class ResearchTableBlock extends BaseEntityBlock {
     @Override
     @ParametersAreNonnullByDefault
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        Direction facing = state.getValue(FACING);
+        ResearchTablePart part = state.getValue(PART);
+        VoxelShape baseShape = (part == ResearchTablePart.LEFT) ? SHAPE_LEFT : SHAPE_RIGHT;
+        return rotateShape(facing, baseShape);
+    }
+
+    public static VoxelShape rotateShape(Direction to, VoxelShape shape) {
+        VoxelShape[] buffer = new VoxelShape[]{shape, Shapes.empty()};
+        int times = (to.get2DDataValue() - Direction.NORTH.get2DDataValue() + 4) % 4;
+        for (int i = 0; i < times; i++) {
+            buffer[0].forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) -> buffer[1] = Shapes.or(buffer[1],
+                    Block.box(16 * (1 - maxZ), 16 * minY, 16 * minX, 16 * (1 - minZ), 16 * maxY, 16 * maxX)));
+            buffer[0] = buffer[1];
+            buffer[1] = Shapes.empty();
+        }
+        return buffer[0];
     }
 
     @NotNull
