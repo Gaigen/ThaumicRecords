@@ -18,9 +18,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public record ShapedArcaneCraftingRecipe(ShapedRecipePattern pattern, AspectList baseVisCost, ItemStack result,
+public record ArcaneCraftingShapedRecipe(ShapedRecipePattern pattern, AspectList baseVisCost, ItemStack result,
                                          List<ResourceLocation> requiredResearch) implements Recipe<CraftingInput> {
-    public ShapedArcaneCraftingRecipe {
+    public ArcaneCraftingShapedRecipe {
         if (baseVisCost == null) {
             baseVisCost = new AspectList();
         }
@@ -60,13 +60,13 @@ public record ShapedArcaneCraftingRecipe(ShapedRecipePattern pattern, AspectList
     @NotNull
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return RecipeSerializerRegistry.SHAPED_ARCANE_CRAFTING.get();
+        return RecipeSerializerRegistry.ARCANE_CRAFTING_SHAPED.get();
     }
 
     @NotNull
     @Override
     public RecipeType<?> getType() {
-        return RecipeTypeRegistry.SHAPED_ARCANE_CRAFTING.get();
+        return RecipeTypeRegistry.ARCANE_CRAFTING_SHAPED.get();
     }
 
     public int getActualCost(ResourceLocation aspectRl, WandCap cap) {

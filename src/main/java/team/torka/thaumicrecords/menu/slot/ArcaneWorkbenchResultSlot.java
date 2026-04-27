@@ -10,7 +10,7 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.menu.ArcaneWorkbenchMenu;
-import team.torka.thaumicrecords.recipe.ShapedArcaneCraftingRecipe;
+import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.WandCapRegistry;
 
@@ -46,7 +46,7 @@ public class ArcaneWorkbenchResultSlot extends SlotItemHandler {
         if (player.level().isClientSide) {
             return;
         }
-        ShapedArcaneCraftingRecipe cachedRecipe = this.menu.getCachedRecipe();
+        ArcaneCraftingShapedRecipe cachedRecipe = this.menu.getCachedRecipe();
         if (Objects.isNull(cachedRecipe)) {
             this.menu.consumeCraftingMaterials(1);
             this.menu.updateResultSlot();

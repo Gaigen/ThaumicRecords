@@ -15,7 +15,7 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.menu.ArcaneWorkbenchMenu;
-import team.torka.thaumicrecords.recipe.ShapedArcaneCraftingRecipe;
+import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.WandCapRegistry;
@@ -61,7 +61,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
     private void renderAspects(GuiGraphics guiGraphics, int guiX, int guiY) {
         float ticks = (System.currentTimeMillis() % 10000) / 50.0F;
-        ShapedArcaneCraftingRecipe recipe = this.menu.getCachedRecipe();
+        ArcaneCraftingShapedRecipe recipe = this.menu.getCachedRecipe();
         if (Objects.isNull(recipe)) {
             return;
         }

@@ -26,7 +26,7 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.menu.ArcaneWorkbenchMenu;
-import team.torka.thaumicrecords.recipe.ShapedArcaneCraftingRecipe;
+import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.registry.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -61,10 +61,10 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
         }
         CraftingInput input = CraftingInput.of(3, 3, stacks);
 
-        Optional<RecipeHolder<ShapedArcaneCraftingRecipe>> arcaneRecipe = this.level.getRecipeManager().getRecipeFor(
-                RecipeTypeRegistry.SHAPED_ARCANE_CRAFTING.get(), input, this.level);
+        Optional<RecipeHolder<ArcaneCraftingShapedRecipe>> arcaneRecipe = this.level.getRecipeManager().getRecipeFor(
+                RecipeTypeRegistry.ARCANE_CRAFTING_SHAPED.get(), input, this.level);
         if (arcaneRecipe.isPresent()) {
-            ShapedArcaneCraftingRecipe recipe = arcaneRecipe.get().value();
+            ArcaneCraftingShapedRecipe recipe = arcaneRecipe.get().value();
             ItemStack wand = this.inventory.getStackInSlot(10);
             if (canCraftArcane(recipe, wand)) {
                 ItemStack result = recipe.assemble(input, this.level.registryAccess());
@@ -81,7 +81,7 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
         }
     }
 
-    private boolean canCraftArcane(ShapedArcaneCraftingRecipe recipe, ItemStack wand) {
+    private boolean canCraftArcane(ArcaneCraftingShapedRecipe recipe, ItemStack wand) {
         if (wand.isEmpty() || (wand.getItem() != ItemRegistry.WAND.asItem())) {
             return false;
         }

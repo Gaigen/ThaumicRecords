@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "P P"
+  ],
+  "key": {
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "tag": "minecraft:slabs"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "thaumicrecords:table"
+  }
+}
