@@ -1,6 +1,5 @@
 package team.torka.thaumicrecords.client.renderer.blockentity;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -73,7 +72,7 @@ public class ResearchTableBlockEntityRenderer implements BlockEntityRenderer<Res
     }
 
     private void renderQuill(PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
-        VertexConsumer quillVC = buffer.getBuffer(RenderType.entityCutout(QUILL));
+        VertexConsumer quillVC = buffer.getBuffer(RenderType.entityCutoutNoCull(QUILL));
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(-90.0F));
         poseStack.translate(0.08D, 0.15D, 0.23D);
@@ -82,10 +81,6 @@ public class ResearchTableBlockEntityRenderer implements BlockEntityRenderer<Res
         poseStack.scale(0.5F, 0.5F, 0.5F);
         renderSimpleQuad(quillVC, poseStack, light, overlay);
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-        RenderSystem.disableCull();
-        poseStack.scale(-1F, 1F, 1F);
-        renderSimpleQuad(quillVC, poseStack, light, overlay);
-        RenderSystem.disableCull();
         poseStack.popPose();
     }
 

@@ -70,13 +70,13 @@ public class ItemRegistry {
         output.accept(WAND_ROD_SILVERWOOD);
         output.accept(GOGGLES);
         output.accept(TABLE);
+        output.accept(SCRIBING_TOOLS);
         output.accept(ARCANE_WORKBENCH);
     }
 
     public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(PRIMORDIAL_PEARL);
         output.accept(AURA_NODE);
-        output.accept(SCRIBING_TOOLS);
     }
 
     public static void putInWispEssenceCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
