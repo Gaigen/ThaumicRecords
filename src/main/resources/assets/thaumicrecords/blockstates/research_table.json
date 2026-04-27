@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,part=left": {
+      "model": "thaumicrecords:block/table"
+    },
+    "facing=north,part=right": {
+      "model": "thaumicrecords:block/table"
+    },
+    "facing=south,part=left": {
+      "model": "thaumicrecords:block/table",
+      "y": 180
+    },
+    "facing=south,part=right": {
+      "model": "thaumicrecords:block/table",
+      "y": 180
+    },
+    "facing=east,part=left": {
+      "model": "thaumicrecords:block/table",
+      "y": 90
+    },
+    "facing=east,part=right": {
+      "model": "thaumicrecords:block/table",
+      "y": 90
+    },
+    "facing=west,part=left": {
+      "model": "thaumicrecords:block/table",
+      "y": 270
+    },
+    "facing=west,part=right": {
+      "model": "thaumicrecords:block/table",
+      "y": 270
+    }
+  }
+}

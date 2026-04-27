@@ -12,10 +12,7 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.data.component.AspectListComponent;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
-import team.torka.thaumicrecords.item.GogglesItem;
-import team.torka.thaumicrecords.item.PrimordialPearItem;
-import team.torka.thaumicrecords.item.WandItem;
-import team.torka.thaumicrecords.item.WispEssenceItem;
+import team.torka.thaumicrecords.item.*;
 
 public class ItemRegistry {
     public static final DeferredRegister.Items REGISTRAR = DeferredRegister.createItems(ThaumicRecords.MOD_ID);
@@ -44,6 +41,8 @@ public class ItemRegistry {
     public static final DeferredItem<GogglesItem> GOGGLES=REGISTRAR.register("goggles",GogglesItem::new);
 
     public static final DeferredItem<WispEssenceItem> WISP_ESSENCE=REGISTRAR.register("wisp_essence",WispEssenceItem::new);
+
+    public static final DeferredItem<ScribingToolsItem> SCRIBING_TOOLS=REGISTRAR.register("scribing_tools",ScribingToolsItem::new);
 
     // Block Items
     public static final DeferredItem<BlockItem> AURA_NODE = REGISTRAR.register("aura_node",
@@ -77,6 +76,7 @@ public class ItemRegistry {
     public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(PRIMORDIAL_PEARL);
         output.accept(AURA_NODE);
+        output.accept(SCRIBING_TOOLS);
     }
 
     public static void putInWispEssenceCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
