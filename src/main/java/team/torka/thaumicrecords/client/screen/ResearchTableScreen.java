@@ -1,5 +1,6 @@
 package team.torka.thaumicrecords.client.screen;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -7,7 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import team.torka.thaumicrecords.ThaumicRecords;
-import team.torka.thaumicrecords.api.helper.HexHelper;
+import team.torka.thaumicrecords.api.helper.CubeCoordinateHelper;
 import team.torka.thaumicrecords.menu.ResearchTableMenu;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -47,12 +48,13 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         RenderSystem.enableBlend();
         graphics.blit(GUI_TEX, x, y, 0, 0, 255, 167);
         graphics.blit(GUI_TEX, x + 40, y + 167, 0, 166, 184, 88);
+        if (!this.menu.slots.get(ResearchTableMenu.SLOT_RESEARCH_NOTE).getItem().isEmpty()) {
+            this.drawSheet(graphics, x, y, mouseX, mouseY);
+        }
 
-        this.drawSheet(graphics, x, y, mouseX, mouseY);
-
-//        if (this.menu.page > 0) {
+        // TODO 玩家持有和发现要素分页
         graphics.blit(GUI_TEX, x + 27, y + 121, 184, 208, 24, 8);
-//        }
+
     }
 
     @Override
@@ -65,7 +67,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         long time = System.currentTimeMillis();
         updateRuneGenerator(time);
         for (Rune rune : runes.values()) {
-            HexHelper.Pixel pix = (new HexHelper.Hex(rune.q, rune.r)).toPixel(9);
+            CubeCoordinateHelper.ScreenPos pix = rune.hex.toPixel(9.0f);
             float progress = (float) (time - rune.start) / (float) (rune.decay - rune.start);
             float alpha = 0.5F;
             if (progress < 0.25F) {
@@ -73,7 +75,9 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             } else if (progress > 0.5F) {
                 alpha = 1.0F - progress;
             }
-            this.drawRune(graphics, (double) (x + 169) + pix.x, (double) (y + 83) + pix.y, rune.rune, alpha * 0.66F);
+            double renderX = (double) (x + 169) + pix.x();
+            double renderY = (double) (y + 83) - pix.y();
+            this.drawRune(graphics, renderX, renderY, rune.rune, alpha * 0.66F);
         }
 
         renderHexGrid(graphics, x + 169, y + 83, mx, my);
@@ -82,20 +86,36 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     private void renderHexGrid(GuiGraphics graphics, int centerX, int centerY, int mx, int my) {
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0);
+        // TODO 获取研究笔记决定渲染格子
+        var hex = new CubeCoordinateHelper.CubeHex(0, 0, 0);
 
-        // 渲染连接线 (仿照 drawLine)
-        // 现代做法：使用 VertexConsumer 在屏幕上画色块线，或者直接 blit 拉伸的小像素
-        // 这里简化为逻辑：
-        // for (Hex line : lines) drawConnectionLine(graphics, ...);
+        this.drawHex(graphics, hex);
+        CubeCoordinateHelper.CubeHex hoveredHex = CubeCoordinateHelper.pixelToCube(mx - centerX, -my + centerY, 9.0f);
+        this.drawHexHighlight(graphics, hoveredHex);
+        graphics.pose().popPose();
+    }
 
-        // 渲染六边形格子
-        RenderSystem.setShaderTexture(0, HEX_TEX);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 0.25f);
+    private void drawHex(GuiGraphics graphics, CubeCoordinateHelper.CubeHex hex) {
+        CubeCoordinateHelper.ScreenPos pix = hex.toPixel(9.0f);
+        graphics.pose().pushPose();
+        graphics.pose().translate(0 + pix.x(), 0 + pix.y(), 0);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.25F);
+        graphics.blit(HEX_TEX, -8, -8, 0, 0, 16, 16, 16, 16);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        graphics.pose().popPose();
+    }
 
-        // 示例：渲染一个格子
-        // graphics.blit(HEX_TEX, localX - 8, localY - 8, 0, 0, 16, 16, 16, 16);
-
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+    private void drawHexHighlight(GuiGraphics graphics, CubeCoordinateHelper.CubeHex hex) {
+        CubeCoordinateHelper.ScreenPos pix = hex.toPixel(9.0f);
+        graphics.pose().pushPose();
+        graphics.pose().translate(0 + pix.x(), 0 + pix.y(), 0);
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        graphics.blit(HEX_LIGHT_TEX, -8, -8, 0, 0, 16, 16, 16, 16);
+        RenderSystem.defaultBlendFunc();
         graphics.pose().popPose();
     }
 
@@ -118,34 +138,21 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     private void updateRuneGenerator(long time) {
         if (this.lastRuneCheck < time) {
             this.lastRuneCheck = time + 250L;
-
             var random = this.minecraft.level.random;
             int k = random.nextInt(120) - 60;
             int l = random.nextInt(120) - 60;
-
-            HexHelper.Hex hp = (new HexHelper.Pixel(k, l)).toHex(9);
-            String hexKey = hp.toString();
-
-            if (!this.runes.containsKey(hexKey) /* TODO 不是格子*/) {
+            CubeCoordinateHelper.CubeHex hex = CubeCoordinateHelper.pixelToCube(k, -l, 9.0f);
+            String hexKey = hex.toString();
+            if (!this.runes.containsKey(hexKey) /* && TODO 判断不在笔记格子里*/) {
                 long decayTime = this.lastRuneCheck + 15000L + (long) random.nextInt(10000);
                 int runeType = random.nextInt(16);
 
-                this.runes.put(hexKey, new Rune(hp.q, hp.r, time, decayTime, runeType));
+                this.runes.put(hexKey, new Rune(hex, time, decayTime, runeType));
             }
         }
         this.runes.entrySet().removeIf(entry -> entry.getValue().decay < time);
     }
 
-    private static class Rune {
-        public int q, r, rune;
-        public long start, decay;
-
-        public Rune(int q, int r, long start, long decay, int rune) {
-            this.q = q;
-            this.r = r;
-            this.start = start;
-            this.decay = decay;
-            this.rune = rune;
-        }
+    private record Rune(CubeCoordinateHelper.CubeHex hex, long start, long decay, int rune) {
     }
 }
