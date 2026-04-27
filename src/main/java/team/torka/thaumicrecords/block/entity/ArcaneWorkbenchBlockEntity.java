@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandCap;
@@ -37,7 +38,7 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
     private final ItemStackHandler inventory = new ItemStackHandler(11) {
         @Override
         protected void onContentsChanged(int slot) {
-            if (slot != 9) {
+            if (slot != ArcaneWorkbenchMenu.SLOT_CRAFT_RESULT) {
                 updateRecipeOutput();
             }
             setChanged();
@@ -68,16 +69,16 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
             ItemStack wand = this.inventory.getStackInSlot(10);
             if (canCraftArcane(recipe, wand)) {
                 ItemStack result = recipe.assemble(input, this.level.registryAccess());
-                this.inventory.setStackInSlot(9, result);
+                this.inventory.setStackInSlot(ArcaneWorkbenchMenu.SLOT_CRAFT_RESULT, result);
                 return;
             }
         }
         Optional<RecipeHolder<CraftingRecipe>> vanillaRecipe = this.level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, this.level);
         if (vanillaRecipe.isPresent()) {
             ItemStack result = vanillaRecipe.get().value().assemble(input, this.level.registryAccess());
-            this.inventory.setStackInSlot(9, result);
+            this.inventory.setStackInSlot(ArcaneWorkbenchMenu.SLOT_CRAFT_RESULT, result);
         } else {
-            this.inventory.setStackInSlot(9, ItemStack.EMPTY);
+            this.inventory.setStackInSlot(ArcaneWorkbenchMenu.SLOT_CRAFT_RESULT, ItemStack.EMPTY);
         }
     }
 
@@ -116,7 +117,7 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
     @NotNull
     @Override
     public Component getDisplayName() {
-        return Component.translatable("container.thaumicrecords.arcane_workbench");
+        return Component.translatable(ThaumicRecords.createTranslationKey("container", "wand.arcane_workbench"));
     }
 
     @Nullable

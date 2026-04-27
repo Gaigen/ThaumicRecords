@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.data.component.AspectListComponent;
@@ -28,11 +29,9 @@ public class WispEssenceItem extends Item {
             aspects.forEach((aspect, amount) -> {
                 Aspect aspect1 = AspectRegistry.ASPECT_REGISTRY.get(aspect);
                 if (!Objects.isNull(aspect1)) {
-                    tooltip.add(Component.translatable(aspect1.getNameTranslationKey())
-                            .append(" x" + amount)
-                            .withStyle(ChatFormatting.GRAY));
+                    tooltip.add(Component.translatable(aspect1.getNameTranslationKey()).append(" x" + amount).withStyle(ChatFormatting.GRAY));
                 } else {
-                    tooltip.add(Component.translatable("tooltip.thaumicrecords.unknown_aspect"));
+                    tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "unknown_aspect")));
                 }
             });
         }

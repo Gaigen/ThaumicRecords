@@ -32,6 +32,10 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
     private ArcaneCraftingShapedRecipe cachedRecipe;
     private boolean isDirty = true;
 
+    public static final int SLOT_CRAFT_RESULT = 9;
+    public static final int SLOT_WAND = 10;
+    public static final int SLOT_INVENTORY_START = 10;
+
     public ArcaneWorkbenchMenu(int containerId, Inventory playerInventory, FriendlyByteBuf extraData) {
         this(containerId, playerInventory, (ArcaneWorkbenchBlockEntity) playerInventory.player.level().getBlockEntity(extraData.readBlockPos()));
     }
@@ -56,9 +60,9 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
             }
         }
         // craft result
-        this.addSlot(new ArcaneWorkbenchResultSlot(this, inventory, 9, 160, 64));
+        this.addSlot(new ArcaneWorkbenchResultSlot(this, inventory, SLOT_CRAFT_RESULT, 160, 64));
         // wand slot
-        this.addSlot(new SlotItemHandler(inventory, 10, 160, 24) {
+        this.addSlot(new SlotItemHandler(inventory, SLOT_WAND, 160, 24) {
             @Override
             @ParametersAreNonnullByDefault
             public boolean mayPlace(ItemStack stack) {
@@ -86,13 +90,13 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
         if (slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
-            if (index < 11) {
-                if (!this.moveItemStackTo(itemstack1, 11, 47, true)) {
+            if (index < SLOT_INVENTORY_START) {
+                if (!this.moveItemStackTo(itemstack1, SLOT_INVENTORY_START, 47, true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 if (itemstack1.getItem() == ItemRegistry.WAND.asItem()) {
-                    if (!this.moveItemStackTo(itemstack1, 10, 11, false)) {
+                    if (!this.moveItemStackTo(itemstack1, SLOT_WAND, SLOT_INVENTORY_START, false)) {
                         if (!this.moveItemStackTo(itemstack1, 0, 9, false)) {
                             return ItemStack.EMPTY;
                         }
@@ -104,7 +108,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
                                 return ItemStack.EMPTY;
                             }
                         } else {
-                            if (!this.moveItemStackTo(itemstack1, 11, 38, false)) {
+                            if (!this.moveItemStackTo(itemstack1, SLOT_INVENTORY_START, 38, false)) {
                                 return ItemStack.EMPTY;
                             }
                         }
@@ -131,7 +135,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
     }
 
     public ItemStack getWandStack() {
-        return this.getSlot(10).getItem();
+        return this.getSlot(SLOT_WAND).getItem();
     }
 
     @Nullable
