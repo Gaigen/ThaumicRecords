@@ -19,7 +19,7 @@ import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.block.entity.ArcaneWorkbenchBlockEntity;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.menu.slot.ArcaneWorkbenchResultSlot;
-import team.torka.thaumicrecords.recipe.ShapedArcaneCraftingRecipe;
+import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.registry.*;
 
 import javax.annotation.Nullable;
@@ -29,7 +29,7 @@ import java.util.*;
 public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
     private final ArcaneWorkbenchBlockEntity blockEntity;
     private final ContainerLevelAccess levelAccess;
-    private ShapedArcaneCraftingRecipe cachedRecipe;
+    private ArcaneCraftingShapedRecipe cachedRecipe;
     private boolean isDirty = true;
 
     public ArcaneWorkbenchMenu(int containerId, Inventory playerInventory, FriendlyByteBuf extraData) {
@@ -135,7 +135,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
     }
 
     @Nullable
-    public ShapedArcaneCraftingRecipe getCachedRecipe() {
+    public ArcaneCraftingShapedRecipe getCachedRecipe() {
         if (this.isDirty) {
             this.cachedRecipe = this.getCurrentRecipe();
             this.updateResultSlot();
@@ -148,11 +148,11 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
         this.blockEntity.updateRecipeOutput();
     }
 
-    private ShapedArcaneCraftingRecipe getCurrentRecipe() {
+    private ArcaneCraftingShapedRecipe getCurrentRecipe() {
         return this.levelAccess.evaluate((level, pos) -> {
             CraftingInput input = getCraftingInput();
-            return level.getRecipeManager().getRecipeFor(RecipeTypeRegistry.SHAPED_ARCANE_CRAFTING.get(), input, level).map(RecipeHolder::value);
-        }, Optional.<ShapedArcaneCraftingRecipe>empty()).orElse(null);
+            return level.getRecipeManager().getRecipeFor(RecipeTypeRegistry.ARCANE_CRAFTING_SHAPED.get(), input, level).map(RecipeHolder::value);
+        }, Optional.<ArcaneCraftingShapedRecipe>empty()).orElse(null);
     }
 
     private CraftingInput getCraftingInput() {
@@ -178,7 +178,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
 
     public boolean isVisInsufficient() {
         ItemStack wand = getWandStack();
-        ShapedArcaneCraftingRecipe recipe = getCachedRecipe();
+        ArcaneCraftingShapedRecipe recipe = getCachedRecipe();
         if (recipe == null) {
             return false;
         }
