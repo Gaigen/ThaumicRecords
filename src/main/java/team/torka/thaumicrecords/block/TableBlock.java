@@ -71,7 +71,7 @@ public class TableBlock extends BaseEntityBlock {
                                            BlockHitResult hitResult) {
         ItemStack itemstack = player.getItemInHand(hand);
         // 法杖，转化为奥术工作台
-        if (itemstack.getItem() == ItemRegistry.WAND.asItem()) {
+        if (stack.is(ItemRegistry.WAND)) {
             if (!level.isClientSide) {
                 level.setBlock(pos, BlockRegistry.ARCANE_WORKBENCH.get().defaultBlockState(), 3);
                 BlockEntity be = level.getBlockEntity(pos);

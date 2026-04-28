@@ -44,6 +44,8 @@ public class ItemRegistry {
 
     public static final DeferredItem<ScribingToolsItem> SCRIBING_TOOLS=REGISTRAR.register("scribing_tools",ScribingToolsItem::new);
 
+    public static final DeferredItem<ResearchNotesItem> RESEARCH_NOTE=REGISTRAR.register("research_note",ResearchNotesItem::new);
+
     // Block Items
     public static final DeferredItem<BlockItem> AURA_NODE = REGISTRAR.register("aura_node",
             () -> new BlockItem(BlockRegistry.AURA_NODE.get(), new Item.Properties()));

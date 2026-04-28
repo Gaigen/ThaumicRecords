@@ -12,6 +12,7 @@ import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.api.ModTags;
 import team.torka.thaumicrecords.block.entity.ResearchTableBlockEntity;
+import team.torka.thaumicrecords.registry.ItemRegistry;
 import team.torka.thaumicrecords.registry.MenuRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -80,14 +81,11 @@ public class ResearchTableMenu extends AbstractContainerMenu {
                     if (!this.moveItemStackTo(itemstack1, SLOT_SCRIBE_TOOLS, SLOT_SCRIBE_TOOLS + 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                }
-//                // TODO 判断是否研究笔记
-//                else if () {
-//                    if (!this.moveItemStackTo(itemstack1, SLOT_RESEARCH_NOTE, SLOT_RESEARCH_NOTE + 1, false)) {
-//                        return ItemStack.EMPTY;
-//                    }
-//                }
-                else if (index < 29) {
+                } else if (itemstack1.is(ItemRegistry.RESEARCH_NOTE)) {
+                    if (!this.moveItemStackTo(itemstack1, SLOT_RESEARCH_NOTE, SLOT_RESEARCH_NOTE + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index < 29) {
                     if (!this.moveItemStackTo(itemstack1, 29, 38, false)) {
                         return ItemStack.EMPTY;
                     }

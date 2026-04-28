@@ -66,7 +66,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
             @Override
             @ParametersAreNonnullByDefault
             public boolean mayPlace(ItemStack stack) {
-                return stack.getItem() == ItemRegistry.WAND.asItem();
+                return stack.is(ItemRegistry.WAND);
             }
         });
         // player inventory
@@ -95,7 +95,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (itemstack1.getItem() == ItemRegistry.WAND.asItem()) {
+                if (itemstack1.is(ItemRegistry.WAND)) {
                     if (!this.moveItemStackTo(itemstack1, SLOT_WAND, SLOT_INVENTORY_START, false)) {
                         if (!this.moveItemStackTo(itemstack1, 0, 9, false)) {
                             return ItemStack.EMPTY;

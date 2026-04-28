@@ -6,6 +6,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.data.component.AspectListComponent;
+import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 
 public class DataComponentRegistry {
@@ -22,5 +23,9 @@ public class DataComponentRegistry {
                     .persistent(AspectListComponent.CODEC)
                     .networkSynchronized(AspectListComponent.STREAM_CODEC)
                     .build());
-
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResearchNoteComponent>> RESEARCH_NOTE = REGISTRAR.register("research_note_data",
+            () -> DataComponentType.<ResearchNoteComponent>builder()
+                    .persistent(ResearchNoteComponent.CODEC)
+                    .networkSynchronized(ResearchNoteComponent.STREAM_CODEC)
+                    .build());
 }
