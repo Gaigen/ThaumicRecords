@@ -6,8 +6,10 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
 import team.torka.thaumicrecords.item.WispEssenceItem;
 import team.torka.thaumicrecords.registry.AspectRegistry;
+import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 
 import java.util.Objects;
@@ -38,5 +40,13 @@ public class RegisterColorHandlersEventListener {
                 return AspectRegistry.ASPECT_REGISTRY.stream().skip(index).findFirst().map(Aspect::getARGBColor).orElse(-1);
             }
         }, ItemRegistry.WISP_ESSENCE.get());
+
+        event.register((stack, tintIndex) -> {
+            if (tintIndex == 1) {
+                ResearchNoteComponent data = stack.get(DataComponentRegistry.RESEARCH_NOTE.get());
+                return data != null ? data.color() | 0xFF000000 : -1;
+            }
+            return -1;
+        }, ItemRegistry.RESEARCH_NOTES.get());
     }
 }

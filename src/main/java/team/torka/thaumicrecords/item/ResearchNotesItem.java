@@ -17,6 +17,7 @@ import team.torka.thaumicrecords.registry.DataComponentRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.Objects;
 
 public class ResearchNotesItem extends Item {
     public ResearchNotesItem() {
@@ -41,7 +42,9 @@ public class ResearchNotesItem extends Item {
     @ParametersAreNonnullByDefault
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         ResearchNoteComponent data = stack.get(DataComponentRegistry.RESEARCH_NOTE.get());
-        ResourceLocation researchKey = data.research();
+        if (Objects.isNull(data)) {
+            return;
+        }
         // TODO 显示金色研究名称 灰色斜体研究描述，扭曲等级
     }
 }

@@ -23,7 +23,15 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 public class ResearchTableBlockEntity extends BlockEntity implements MenuProvider {
 
-    private final ItemStackHandler inventory = new ItemStackHandler(2);
+    private final ItemStackHandler inventory = new ItemStackHandler(2) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+            if (level != null && !level.isClientSide) {
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+            }
+        }
+    };
 
     public ResearchTableBlockEntity(BlockPos pos, BlockState blockState) {
         super(BlockEntityRegistry.RESEARCH_TABLE.get(), pos, blockState);

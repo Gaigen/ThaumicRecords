@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "thaumicrecords:item/research_notes_completed",
+    "layer1": "thaumicrecords:item/research_notes_completed_overlay"
+  }
+}

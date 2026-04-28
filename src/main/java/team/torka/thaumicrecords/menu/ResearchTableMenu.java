@@ -47,8 +47,7 @@ public class ResearchTableMenu extends AbstractContainerMenu {
             @Override
             @ParametersAreNonnullByDefault
             public boolean mayPlace(ItemStack stack) {
-                // TODO 判断是否研究笔记
-                return true;
+                return stack.is(ItemRegistry.RESEARCH_NOTES);
             }
         });
         // player inventory
@@ -81,7 +80,7 @@ public class ResearchTableMenu extends AbstractContainerMenu {
                     if (!this.moveItemStackTo(itemstack1, SLOT_SCRIBE_TOOLS, SLOT_SCRIBE_TOOLS + 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (itemstack1.is(ItemRegistry.RESEARCH_NOTE)) {
+                } else if (itemstack1.is(ItemRegistry.RESEARCH_NOTES)) {
                     if (!this.moveItemStackTo(itemstack1, SLOT_RESEARCH_NOTE, SLOT_RESEARCH_NOTE + 1, false)) {
                         return ItemStack.EMPTY;
                     }
