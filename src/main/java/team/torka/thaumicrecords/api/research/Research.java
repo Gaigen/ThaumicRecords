@@ -63,9 +63,6 @@ public class Research {
         this.discoveryStrategy = discoveryStrategy;
     }
 
-    /**
-     *
-     */
     public Research createNormal(String key, ResourceLocation category, AspectList aspects, @Nullable ResourceLocation icon, @Nullable ItemStack iconItem,
                                  ResourceLocation[] parents, int row, int col, int gridSize) {
         return new Research(key, category, aspects, icon, iconItem, parents, row, col, gridSize, RenderStrategy.NORMAL, UnlockStrategy.RESEARCH,
