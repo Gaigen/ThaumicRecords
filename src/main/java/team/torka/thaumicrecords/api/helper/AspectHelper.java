@@ -1,17 +1,24 @@
 package team.torka.thaumicrecords.api.helper;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.attachment.AspectDiscovery;
 import team.torka.thaumicrecords.recipe.AspectRecipe;
+import team.torka.thaumicrecords.registry.AttachmentRegistry;
 import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
 
+
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AspectHelper {
@@ -59,4 +66,17 @@ public class AspectHelper {
         }
     }
 
+    public static void discoverAspect(ServerPlayer player, ResourceLocation aspect) {
+        AspectDiscovery oldData = player.getData(AttachmentRegistry.ASPECT_DISCOVERY);
+        if (!oldData.discovered().contains(aspect)) {
+            Set<ResourceLocation> newSet = new HashSet<>(oldData.discovered());
+            newSet.add(aspect);
+            player.setData(AttachmentRegistry.ASPECT_DISCOVERY, new AspectDiscovery(newSet));
+        }
+    }
+
+    public static boolean isAspectDiscovered(ServerPlayer player, ResourceLocation aspect) {
+        AspectDiscovery oldData = player.getData(AttachmentRegistry.ASPECT_DISCOVERY);
+        return oldData.discovered().contains(aspect);
+    }
 }

@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.registry.AspectRegistry;
 
 import java.util.Arrays;
 import java.util.List;
@@ -95,8 +96,9 @@ public class Aspect implements Comparable<Aspect> {
         return components;
     }
 
-    public static List<Aspect> getPrimal() {
-        return Arrays.asList(AER, IGNIS, AQUA, TERRA, ORDO, PERDITIO);
+    public static List<ResourceLocation> getPrimalList() {
+        return Arrays.asList(AspectRegistry.AER.getId(), AspectRegistry.IGNIS.getId(), AspectRegistry.AQUA.getId(), AspectRegistry.TERRA.getId(),
+                AspectRegistry.ORDO.getId(), AspectRegistry.PERDITIO.getId());
     }
 
     /*@formatter:off*/

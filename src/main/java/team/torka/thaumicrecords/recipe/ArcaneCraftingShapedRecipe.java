@@ -75,6 +75,6 @@ public record ArcaneCraftingShapedRecipe(ShapedRecipePattern pattern, AspectList
         if (Objects.isNull(aspect)) {
             return base;
         }
-        return (int) (base * (cap != null ? cap.getAspectCostModifier(aspect) : 1.0));
+        return (int) (base * (cap != null ? cap.getAspectCostModifier(aspectRl) : 1.0));
     }
 }

@@ -16,7 +16,7 @@ public class WandCap {
 
     private final int craftCost;
 
-    private final Map<Aspect, Double> aspectCostModifier;
+    private final Map<ResourceLocation, Double> aspectCostModifier;
 
     private final Item item;
 
@@ -24,15 +24,15 @@ public class WandCap {
 
     private final String translationKey;
 
-    public WandCap(String name, Map<Aspect, Double> aspectCostModifier, int craftCost, Item item, ResourceLocation modelTexture, String translationKey) {
+    public WandCap(String name, Map<ResourceLocation, Double> aspectCostModifier, int craftCost, Item item, ResourceLocation modelTexture,
+                   String translationKey) {
         this.name = name;
         if (Objects.isNull(aspectCostModifier)) {
             this.aspectCostModifier = Collections.emptyMap();
         } else {
             for (var key : aspectCostModifier.keySet()) {
-                if (!Aspect.getPrimal().contains(key)) {
-                    throw new IllegalArgumentException(
-                            "WandCap {" + name + "} aspectCostModifier should only apply to primal aspect but got {" + key.getName() + "}");
+                if (!Aspect.getPrimalList().contains(key)) {
+                    throw new IllegalArgumentException("WandCap {" + name + "} aspectCostModifier should only apply to primal aspect but got {" + key + "}");
                 }
             }
             this.aspectCostModifier = aspectCostModifier;
@@ -46,7 +46,7 @@ public class WandCap {
     /**
      * 内部使用
      */
-    public WandCap(String name, Map<Aspect, Double> aspectCostModifier, int craftCost, Item item) {
+    public WandCap(String name, Map<ResourceLocation, Double> aspectCostModifier, int craftCost, Item item) {
         this(name, aspectCostModifier, craftCost, item, ThaumicRecords.createRl("textures/item/cap/" + name.toLowerCase() + ".png"),
                 ThaumicRecords.createTranslationKey("wand_cap", name));
     }
@@ -59,7 +59,7 @@ public class WandCap {
         return craftCost;
     }
 
-    public double getAspectCostModifier(Aspect aspect) {
+    public double getAspectCostModifier(ResourceLocation aspect) {
         return aspectCostModifier.getOrDefault(aspect, 1.0);
     }
 
@@ -71,9 +71,9 @@ public class WandCap {
         return modelTexture;
     }
 
-    public static Map<Aspect, Double> getAllAspectModifierWithAmount(Double modifier) {
-        var modifierMap = new HashMap<Aspect, Double>();
-        for (var aspect : Aspect.getPrimal()) {
+    public static Map<ResourceLocation, Double> getAllAspectModifierWithAmount(Double modifier) {
+        var modifierMap = new HashMap<ResourceLocation, Double>();
+        for (var aspect : Aspect.getPrimalList()) {
             modifierMap.put(aspect, modifier);
         }
         return modifierMap;

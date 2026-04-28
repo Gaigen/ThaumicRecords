@@ -50,11 +50,13 @@ public class WandItem extends Item {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand.capacity"), wandRod.getCapacityScaled())
                     .withStyle(ChatFormatting.GOLD));
-            for (Aspect aspect : Aspect.getPrimal()) {
-                ResourceLocation rl = AspectRegistry.ASPECT_REGISTRY.getKey(aspect);
+            for (ResourceLocation rl : Aspect.getPrimalList()) {
+                Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
+                if (Objects.isNull(aspect)) {
+                    continue;
+                }
                 String scaled = data.getAspects().getScaled(rl);
-                BigDecimal modifier = BigDecimal.valueOf(wandCap.getAspectCostModifier(aspect)).multiply(BigDecimal.valueOf(100)).setScale(0,
-                        RoundingMode.HALF_UP);
+                BigDecimal modifier = BigDecimal.valueOf(wandCap.getAspectCostModifier(rl)).multiply(BigDecimal.valueOf(100)).setScale(0, RoundingMode.HALF_UP);
                 MutableComponent line = Component.literal(" ")
                         .append(Component.translatable(aspect.getNameTranslationKey()).withStyle(aspect.getTextColor()))
                         .append(Component.literal(" x ")
@@ -66,18 +68,23 @@ public class WandItem extends Item {
                 tooltip.add(line);
             }
         } else {
-            BigDecimal averageModifier = BigDecimal.valueOf(Aspect.getPrimal().stream().map(wandCap::getAspectCostModifier).reduce(0.0, Double::sum)).divide(
-                    BigDecimal.valueOf(Aspect.getPrimal().size())).multiply(BigDecimal.valueOf(100)).setScale(0, RoundingMode.HALF_UP);
+            BigDecimal averageModifier = BigDecimal.valueOf(Aspect.getPrimalList().stream().map(wandCap::getAspectCostModifier).reduce(0.0, Double::sum))
+                    .divide(BigDecimal.valueOf(Aspect.getPrimalList().size()))
+                    .multiply(BigDecimal.valueOf(100))
+                    .setScale(0, RoundingMode.HALF_UP);
             tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand.capacity"), wandRod.getCapacityScaled())
                     .withStyle(ChatFormatting.GOLD)
                     .append(" ")
                     .append(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand.average_modifier"), averageModifier.toPlainString())
                             .withStyle(ChatFormatting.WHITE)));
             MutableComponent line = Component.literal("");
-            Iterator<Aspect> iterator = Aspect.getPrimal().iterator();
+            Iterator<ResourceLocation> iterator = Aspect.getPrimalList().iterator();
             while (iterator.hasNext()) {
-                Aspect aspect = iterator.next();
-                ResourceLocation rl = AspectRegistry.ASPECT_REGISTRY.getKey(aspect);
+                ResourceLocation rl = iterator.next();
+                Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
+                if (Objects.isNull(aspect)) {
+                    continue;
+                }
                 line.append(Component.literal(String.valueOf(data.getAspects().getScaled(rl))).withStyle(aspect.getTextColor()));
                 if (iterator.hasNext()) {
                     line.append(" | ");

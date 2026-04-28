@@ -69,15 +69,15 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         WandItemComponent data = wand.get(DataComponentRegistry.WAND_ITEM_DATA.get());
         WandCap wandCap = Objects.nonNull(data) ? WandCapRegistry.WAND_CAP_REGISTRY.get(data.getCap()) : null;
         for (int i = 0; i < 6; i++) {
-            Aspect aspect = Aspect.getPrimal().get(i);
-            ResourceLocation aspectRl = AspectRegistry.ASPECT_REGISTRY.getKey(aspect);
-            int baseCost = recipe.baseVisCost().getOrDefault(aspectRl, 0);
+            ResourceLocation rl = Aspect.getPrimalList().get(i);
+            Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
+            int baseCost = recipe.baseVisCost().getOrDefault(rl, 0);
             if (baseCost <= 0) {
                 continue;
             }
-            int actualCost = recipe.getActualCost(aspectRl, wandCap);
+            int actualCost = recipe.getActualCost(rl, wandCap);
             float alpha;
-            int wandVis = Objects.isNull(data) ? AspectList.empty().getOrDefault(aspectRl, 0) : data.getAspects().getOrDefault(aspectRl, 0);
+            int wandVis = Objects.isNull(data) ? AspectList.empty().getOrDefault(rl, 0) : data.getAspects().getOrDefault(rl, 0);
             if (wandVis >= actualCost) {
                 alpha = 1.0F;
             } else {

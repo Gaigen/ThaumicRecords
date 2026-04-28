@@ -99,13 +99,14 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
         }
         AspectList cost = recipe.baseVisCost();
         for (Map.Entry<ResourceLocation, Integer> entry : cost.entrySet()) {
-            Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(entry.getKey());
+            ResourceLocation rl = entry.getKey();
+            Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
             if (Objects.isNull(aspect) || !aspect.isPrimal()) {
                 continue;
             }
             Integer wandVis = wandStorage.getOrDefault(entry.getKey(), 0);
             Integer baseCostVis = cost.get(entry.getKey());
-            double modifier = wandCap.getAspectCostModifier(aspect);
+            double modifier = wandCap.getAspectCostModifier(rl);
             if (wandVis < (int) (baseCostVis * modifier)) {
                 return false;
             }
