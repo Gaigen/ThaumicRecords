@@ -30,6 +30,7 @@ public class ThaumicRecords {
         RecipeTypeRegistry.REGISTRAR.register(modEventBus);
         RecipeSerializerRegistry.REGISTRAR.register(modEventBus);
         MenuRegistry.REGISTRAR.register(modEventBus);
+        AttachmentRegistry.REGISTRAR.register(modEventBus);
     }
 
     public static String createTranslationKey(String prefix, String path) {

@@ -7,12 +7,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.neoforged.neoforge.network.PacketDistributor;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.attachment.AspectDiscovery;
+import team.torka.thaumicrecords.network.packet.SyncAspectDiscoveryPacket;
 import team.torka.thaumicrecords.recipe.AspectRecipe;
 import team.torka.thaumicrecords.registry.AttachmentRegistry;
 import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
-
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -71,7 +72,9 @@ public class AspectHelper {
         if (!oldData.discovered().contains(aspect)) {
             Set<ResourceLocation> newSet = new HashSet<>(oldData.discovered());
             newSet.add(aspect);
-            player.setData(AttachmentRegistry.ASPECT_DISCOVERY, new AspectDiscovery(newSet));
+            AspectDiscovery newData = new AspectDiscovery(newSet);
+            player.setData(AttachmentRegistry.ASPECT_DISCOVERY, newData);
+            PacketDistributor.sendToPlayer(player, new SyncAspectDiscoveryPacket(newData));
         }
     }
 
