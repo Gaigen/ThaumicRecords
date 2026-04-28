@@ -9,18 +9,16 @@ import net.minecraft.world.phys.HitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import team.torka.thaumicrecords.client.renderer.blockentity.ArcaneWorkbenchRenderer;
-import team.torka.thaumicrecords.client.renderer.blockentity.AuraNodeRenderer;
-import team.torka.thaumicrecords.client.renderer.blockentity.ResearchTableBlockEntityRenderer;
-import team.torka.thaumicrecords.client.renderer.blockentity.TableRenderer;
 import team.torka.thaumicrecords.client.renderer.item.ArcaneWorkbenchItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.AuraNodeItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.TableItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.WandItemRenderer;
-import team.torka.thaumicrecords.registry.*;
+import team.torka.thaumicrecords.registry.BlockRegistry;
+import team.torka.thaumicrecords.registry.ItemRegistry;
+import team.torka.thaumicrecords.registry.ParticleRegistry;
+import team.torka.thaumicrecords.registry.SoundRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -57,13 +55,5 @@ public class RegisterClientExtensionsEventListener {
             }
 
         }, BlockRegistry.AURA_NODE.get());
-    }
-
-    @SubscribeEvent
-    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(BlockEntityRegistry.AURA_NODE.get(), AuraNodeRenderer::new);
-        event.registerBlockEntityRenderer(BlockEntityRegistry.ARCANE_WORKBENCH.get(), ArcaneWorkbenchRenderer::new);
-        event.registerBlockEntityRenderer(BlockEntityRegistry.TABLE.get(), TableRenderer::new);
-        event.registerBlockEntityRenderer(BlockEntityRegistry.RESEARCH_TABLE.get(), ResearchTableBlockEntityRenderer::new);
     }
 }

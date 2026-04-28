@@ -1,4 +1,4 @@
-package team.torka.thaumicrecords.client;
+package team.torka.thaumicrecords.client.listener;
 
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
@@ -6,21 +6,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
-import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.helper.AspectHelper;
 import team.torka.thaumicrecords.client.tooltip.AspectTooltipComponent;
-import team.torka.thaumicrecords.client.tooltip.ClientAspectTooltipComponent;
 
-@EventBusSubscriber(modid = ThaumicRecords.MOD_ID, value = Dist.CLIENT)
-public class TooltipRegistry {
-
-    @SubscribeEvent
-    public static void onRegisterClientTooltip(RegisterClientTooltipComponentFactoriesEvent event) {
-        event.register(AspectTooltipComponent.class, ClientAspectTooltipComponent::new);
-    }
+@EventBusSubscriber(value = Dist.CLIENT)
+public class RenderTooltipEventListener {
 
     @SubscribeEvent
     public static void onPreRenderTooltipEvent(RenderTooltipEvent.GatherComponents event) {
