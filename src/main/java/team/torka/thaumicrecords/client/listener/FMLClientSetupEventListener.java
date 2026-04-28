@@ -13,7 +13,7 @@ import team.torka.thaumicrecords.registry.ItemRegistry;
 @EventBusSubscriber(value = Dist.CLIENT)
 public class FMLClientSetupEventListener {
     @SubscribeEvent
-    public static void onClientSetup(FMLClientSetupEvent event) {
+    public static void onEvent(FMLClientSetupEvent event) {
         event.enqueueWork(() -> ItemProperties.register(ItemRegistry.RESEARCH_NOTES.get(), ResourceLocation.fromNamespaceAndPath("thaumicrecords", "completed"),
                 (stack, level, entity, seed) -> {
                     ResearchNoteComponent data = stack.get(DataComponentRegistry.RESEARCH_NOTE.get());

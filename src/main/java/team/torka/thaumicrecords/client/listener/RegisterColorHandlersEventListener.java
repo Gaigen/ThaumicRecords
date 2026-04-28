@@ -18,7 +18,7 @@ import java.util.Objects;
 public class RegisterColorHandlersEventListener {
 
     @SubscribeEvent
-    public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
+    public static void onItemEvent(RegisterColorHandlersEvent.Item event) {
         event.register((stack, tintIndex) -> {
             if (tintIndex != 0) {
                 return -1;

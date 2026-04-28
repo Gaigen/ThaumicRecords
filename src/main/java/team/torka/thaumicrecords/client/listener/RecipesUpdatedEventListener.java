@@ -10,7 +10,7 @@ import team.torka.thaumicrecords.api.helper.AspectHelper;
 public class RecipesUpdatedEventListener {
 
     @SubscribeEvent
-    public static void onRecipesUpdated(RecipesUpdatedEvent event) {
+    public static void onEvent(RecipesUpdatedEvent event) {
         AspectHelper.rebuildAspectRegistrationRecipeCache(event.getRecipeManager());
     }
 }

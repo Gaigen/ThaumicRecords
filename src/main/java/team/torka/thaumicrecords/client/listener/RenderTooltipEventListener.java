@@ -15,7 +15,7 @@ import team.torka.thaumicrecords.client.tooltip.AspectTooltipComponent;
 public class RenderTooltipEventListener {
 
     @SubscribeEvent
-    public static void onPreRenderTooltipEvent(RenderTooltipEvent.GatherComponents event) {
+    public static void onGatherComponentsEvent(RenderTooltipEvent.GatherComponents event) {
         if (Minecraft.getInstance().level == null || event.getItemStack().isEmpty()) {
             return;
         }

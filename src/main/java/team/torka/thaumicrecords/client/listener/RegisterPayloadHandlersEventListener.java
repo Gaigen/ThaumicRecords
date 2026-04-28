@@ -14,7 +14,7 @@ import team.torka.thaumicrecords.registry.AttachmentRegistry;
 public class RegisterPayloadHandlersEventListener {
 
     @SubscribeEvent
-    public static void register(final RegisterPayloadHandlersEvent event) {
+    public static void onEvent(RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("1.0.0");
         registrar.playToClient(SyncAspectDiscoveryPacket.TYPE, SyncAspectDiscoveryPacket.STREAM_CODEC, (payload, context) -> context.enqueueWork(() -> {
             context.player().setData(AttachmentRegistry.ASPECT_DISCOVERY, payload.data());

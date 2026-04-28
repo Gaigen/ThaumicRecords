@@ -11,7 +11,7 @@ import team.torka.thaumicrecords.client.tooltip.ClientAspectTooltipComponent;
 public class RegisterClientTooltipComponentFactoriesEventListener {
 
     @SubscribeEvent
-    public static void onRegisterClientTooltip(RegisterClientTooltipComponentFactoriesEvent event) {
+    public static void onEvent(RegisterClientTooltipComponentFactoriesEvent event) {
         event.register(AspectTooltipComponent.class, ClientAspectTooltipComponent::new);
     }
 }

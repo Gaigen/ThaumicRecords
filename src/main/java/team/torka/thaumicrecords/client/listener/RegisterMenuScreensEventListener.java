@@ -12,7 +12,7 @@ import team.torka.thaumicrecords.registry.MenuRegistry;
 public class RegisterMenuScreensEventListener {
 
     @SubscribeEvent
-    public static void registerScreens(RegisterMenuScreensEvent event) {
+    public static void onEvent(RegisterMenuScreensEvent event) {
         event.register(MenuRegistry.ARCANE_WORKBENCH.get(), ArcaneWorkbenchScreen::new);
         event.register(MenuRegistry.RESEARCH_TABLE.get(), ResearchTableScreen::new);
     }

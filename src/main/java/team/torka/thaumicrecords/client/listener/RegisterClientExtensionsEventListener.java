@@ -26,7 +26,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class RegisterClientExtensionsEventListener {
 
     @SubscribeEvent
-    public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+    public static void onEvent(RegisterClientExtensionsEvent event) {
         registerItemExtensions(event);
         registerBlockExtensions(event);
     }

@@ -10,7 +10,7 @@ import team.torka.thaumicrecords.block.AuraNodeBlock;
 @EventBusSubscriber(value = Dist.CLIENT)
 public class RenderHighlightEventListener {
     @SubscribeEvent
-    public static void registerClientExtensions(RenderHighlightEvent.Block event) {
+    public static void onBlockEvent(RenderHighlightEvent.Block event) {
         BlockState state = event.getCamera().getEntity().level().getBlockState(event.getTarget().getBlockPos());
         if (state.getBlock() instanceof AuraNodeBlock) {
             event.setCanceled(true);

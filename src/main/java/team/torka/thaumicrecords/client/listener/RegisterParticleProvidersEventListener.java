@@ -11,7 +11,7 @@ import team.torka.thaumicrecords.registry.ParticleRegistry;
 public class RegisterParticleProvidersEventListener {
 
     @SubscribeEvent
-    public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
+    public static void onEvent(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ParticleRegistry.NODE_BREAK.get(), AuraNodeBreakParticle.Provider::new);
     }
 }
