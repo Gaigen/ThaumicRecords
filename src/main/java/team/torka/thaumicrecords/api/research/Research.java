@@ -12,6 +12,8 @@ import java.util.List;
 public class Research {
     public final String key;
 
+    public final ResourceLocation category;
+
     public final AspectList aspects;
 
     /**
@@ -44,9 +46,11 @@ public class Research {
     public final UnlockStrategy unlockStrategy;
     public final List<DiscoveryStrategy> discoveryStrategy;
 
-    public Research(String key, AspectList aspects, @Nullable ResourceLocation icon, @Nullable ItemStack iconItem, ResourceLocation[] parents, int row,
-                    int col, int gridSize, RenderStrategy renderStrategy, UnlockStrategy unlockStrategy, List<DiscoveryStrategy> discoveryStrategy) {
+    public Research(String key, ResourceLocation category, AspectList aspects, @Nullable ResourceLocation icon, @Nullable ItemStack iconItem,
+                    ResourceLocation[] parents, int row, int col, int gridSize, RenderStrategy renderStrategy, UnlockStrategy unlockStrategy,
+                    List<DiscoveryStrategy> discoveryStrategy) {
         this.key = key;
+        this.category = category;
         this.aspects = aspects;
         this.icon = icon;
         this.iconItem = iconItem;
@@ -59,11 +63,13 @@ public class Research {
         this.discoveryStrategy = discoveryStrategy;
     }
 
-
-    public Research createNormal(String key, AspectList aspects, @Nullable ResourceLocation icon, @Nullable ItemStack iconItem, ResourceLocation[] parents,
-                                 int row, int col, int gridSize, RenderStrategy renderStrategy, UnlockStrategy unlockStrategy,
-                                 List<DiscoveryStrategy> discoveryStrategy) {
-        return new Research(key, aspects, icon, iconItem, parents, row, col, gridSize, renderStrategy, unlockStrategy, discoveryStrategy);
+    /**
+     *
+     */
+    public Research createNormal(String key, ResourceLocation category, AspectList aspects, @Nullable ResourceLocation icon, @Nullable ItemStack iconItem,
+                                 ResourceLocation[] parents, int row, int col, int gridSize) {
+        return new Research(key, category, aspects, icon, iconItem, parents, row, col, gridSize, RenderStrategy.NORMAL, UnlockStrategy.RESEARCH,
+                List.of(DiscoveryStrategy.PARENT));
     }
 
     public enum RenderStrategy implements StringRepresentable {
@@ -127,9 +133,9 @@ public class Research {
 
     public enum DiscoveryStrategy implements StringRepresentable {
         /**
-         * 初始
+         * 总是
          */
-        INITIAL("INITIAL"),
+        ALWAYS("ALWAYS"),
         /**
          * 当前置研究完成时发现
          */
