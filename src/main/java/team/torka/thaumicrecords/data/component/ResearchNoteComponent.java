@@ -47,7 +47,7 @@ public record ResearchNoteComponent(ResourceLocation research, int color, boolea
                 ByteBufCodecs.optional(ResourceLocation.STREAM_CODEC), entry -> Optional.ofNullable(entry.aspect), (t, a) -> new HexEntry(t, a.orElse(null)));
 
         public boolean isRoot() {
-            return type == 1;
+            return type == ROOT;
         }
     }
 }

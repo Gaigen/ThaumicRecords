@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import team.torka.thaumicrecords.ThaumicRecords;
@@ -23,13 +24,12 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMenu> {
-    private static final ResourceLocation GUI_TEX = ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "textures/gui/research_table.png");
-    private static final ResourceLocation PAPER_TEX = ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "textures/gui/research_table_parchment.png");
-    private static final ResourceLocation HEX_TEX = ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "textures/gui/research_table_hex_dark.png");
-    private static final ResourceLocation HEX_LIGHT_TEX = ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID,
-            "textures/gui/research_table_hex_light.png");
-    private static final ResourceLocation RUNE_TEX = ResourceLocation.fromNamespaceAndPath(ThaumicRecords.MOD_ID, "textures/misc/runes.png");
-
+    private static final ResourceLocation GUI_TEX = ThaumicRecords.createRl("textures/gui/research_table.png");
+    private static final ResourceLocation PAPER_TEX = ThaumicRecords.createRl("textures/gui/research_table_parchment.png");
+    private static final ResourceLocation HEX_TEX = ThaumicRecords.createRl("textures/gui/research_table_hex_dark.png");
+    private static final ResourceLocation HEX_LIGHT_TEX = ThaumicRecords.createRl("textures/gui/research_table_hex_light.png");
+    private static final ResourceLocation RUNE_TEX = ThaumicRecords.createRl("textures/misc/runes.png");
+    private static final ResourceLocation PARTICLES_TEX = ThaumicRecords.createRl("textures/misc/particles.png");
     private final Map<String, Rune> runes = new ConcurrentHashMap<>();
     private long lastRuneCheck = 0L;
 
@@ -107,6 +107,9 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 if (!researchNoteComponent.complete()) {
                     this.drawHex(graphics, hex);
                 }
+            }
+            if (hexEntry.type() == ResearchNoteComponent.HexEntry.ROOT) {
+                this.drawOrb(graphics, hex);
             }
             if (Arrays.asList(ResearchNoteComponent.HexEntry.FULL, ResearchNoteComponent.HexEntry.ROOT).contains(hexEntry.type())) {
                 Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(hexEntry.aspect());
@@ -188,6 +191,36 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         graphics.pose().popPose();
         RenderSystem.disableBlend();
+    }
+
+    private void drawOrb(GuiGraphics graphics, CubeCoordinateHelper.CubeHex hex) {
+        CubeCoordinateHelper.ScreenPos pix = hex.toPixel(9.0f);
+        float ticks = (float) (System.currentTimeMillis() / 50.0);
+        float red = 0.7F + Mth.sin((ticks + (float) pix.x()) / 10.0F) * 0.15F + 0.15F;
+        float green = 0.7F + Mth.sin((ticks + (float) pix.x() + (float) pix.y()) / 11.0F) * 0.15F + 0.15F;
+        float blue = 0.7F + Mth.sin((ticks + (float) pix.y()) / 12.0F) * 0.15F + 0.15F;
+        int dynamicColor = ((int) (red * 255) << 16) | ((int) (green * 255) << 8) | (int) (blue * 255);
+        drawOrb(graphics, hex, dynamicColor);
+    }
+
+    private void drawOrb(GuiGraphics graphics, CubeCoordinateHelper.CubeHex hex, int color) {
+        CubeCoordinateHelper.ScreenPos pix = hex.toPixel(9.0f);
+        float r = (float) (color >> 16 & 255) / 255.0F;
+        float g = (float) (color >> 8 & 255) / 255.0F;
+        float b = (float) (color & 255) / 255.0F;
+        long ticks = System.currentTimeMillis() / 50;
+        int part = (int) (ticks % 8);
+        float u = (0.5F + (float) part / 8.0F) * 256.0F;
+        float v = 0.5F * 256.0F;
+        graphics.pose().pushPose();
+        graphics.pose().translate(pix.x(), pix.y(), 0);
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        RenderSystem.setShaderColor(r, g, b, 1.0F);
+        graphics.blit(PARTICLES_TEX, -8, -8, u, v, 16, 16, 256, 256);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.defaultBlendFunc();
+        graphics.pose().popPose();
     }
 
     private void updateRuneGenerator(long time) {
