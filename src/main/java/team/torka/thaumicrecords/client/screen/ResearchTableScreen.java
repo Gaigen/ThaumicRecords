@@ -7,12 +7,19 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.helper.CubeCoordinateHelper;
+import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
 import team.torka.thaumicrecords.menu.ResearchTableMenu;
+import team.torka.thaumicrecords.registry.AspectRegistry;
+import team.torka.thaumicrecords.registry.DataComponentRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMenu> {
@@ -86,13 +93,44 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     private void renderHexGrid(GuiGraphics graphics, int centerX, int centerY, int mx, int my) {
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0);
-        // TODO 获取研究笔记决定渲染格子
-        var hex = new CubeCoordinateHelper.CubeHex(0, 0, 0);
-
-        this.drawHex(graphics, hex);
+        ItemStack researchNote = menu.getResearchNote();
+        ResearchNoteComponent researchNoteComponent = researchNote.get(DataComponentRegistry.RESEARCH_NOTE);
+        if (Objects.isNull(researchNoteComponent)) {
+            graphics.pose().popPose();
+            return;
+        }
+        Map<CubeCoordinateHelper.CubeHex, ResearchNoteComponent.HexEntry> decodedHexes = researchNoteComponent.getDecodedHexes();
+        for (Map.Entry<CubeCoordinateHelper.CubeHex, ResearchNoteComponent.HexEntry> entry : decodedHexes.entrySet()) {
+            CubeCoordinateHelper.CubeHex hex = entry.getKey();
+            ResearchNoteComponent.HexEntry hexEntry = entry.getValue();
+            if (hexEntry.type() != ResearchNoteComponent.HexEntry.ROOT) {
+                if (!researchNoteComponent.complete()) {
+                    this.drawHex(graphics, hex);
+                }
+            }
+            if (Arrays.asList(ResearchNoteComponent.HexEntry.FULL, ResearchNoteComponent.HexEntry.ROOT).contains(hexEntry.type())) {
+                Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(hexEntry.aspect());
+                if (Objects.isNull(aspect)) {
+                    continue;
+                }
+                this.drawAspectIcon(graphics, hex, aspect);
+            }
+        }
         CubeCoordinateHelper.CubeHex hoveredHex = CubeCoordinateHelper.pixelToCube(mx - centerX, -my + centerY, 9.0f);
-        this.drawHexHighlight(graphics, hoveredHex);
+        if (decodedHexes.containsKey(hoveredHex)) {
+            this.drawHexHighlight(graphics, hoveredHex);
+        }
         graphics.pose().popPose();
+    }
+
+    private boolean isCoordinateInNote(CubeCoordinateHelper.CubeHex coordinate) {
+        ItemStack researchNote = menu.getResearchNote();
+        ResearchNoteComponent researchNoteComponent = researchNote.get(DataComponentRegistry.RESEARCH_NOTE);
+        if (Objects.isNull(researchNoteComponent)) {
+            return false;
+        }
+        Map<CubeCoordinateHelper.CubeHex, ResearchNoteComponent.HexEntry> decodedHexes = researchNoteComponent.getDecodedHexes();
+        return decodedHexes.containsKey(coordinate);
     }
 
     private void drawHex(GuiGraphics graphics, CubeCoordinateHelper.CubeHex hex) {
@@ -115,6 +153,23 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         graphics.blit(HEX_LIGHT_TEX, -8, -8, 0, 0, 16, 16, 16, 16);
+        RenderSystem.defaultBlendFunc();
+        graphics.pose().popPose();
+    }
+
+    private void drawAspectIcon(GuiGraphics graphics, CubeCoordinateHelper.CubeHex hex, Aspect aspect) {
+        CubeCoordinateHelper.ScreenPos pix = hex.toPixel(9.0f);
+        graphics.pose().pushPose();
+        graphics.pose().translate(0 + pix.x(), 0 + pix.y(), 0);
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        int argb = aspect.getARGBColor();
+        float r = (float) (argb >> 16 & 255) / 255.0F;
+        float g = (float) (argb >> 8 & 255) / 255.0F;
+        float b = (float) (argb & 255) / 255.0F;
+        RenderSystem.setShaderColor(r, g, b, 1.0F);
+        graphics.blit(aspect.getImage(), -8, -8, 0, 0, 16, 16, 16, 16);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.defaultBlendFunc();
         graphics.pose().popPose();
     }
@@ -143,7 +198,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             int l = random.nextInt(120) - 60;
             CubeCoordinateHelper.CubeHex hex = CubeCoordinateHelper.pixelToCube(k, -l, 9.0f);
             String hexKey = hex.toString();
-            if (!this.runes.containsKey(hexKey) /* && TODO 判断不在笔记格子里*/) {
+            if (!this.runes.containsKey(hexKey) && !isCoordinateInNote(hex)) {
                 long decayTime = this.lastRuneCheck + 15000L + (long) random.nextInt(10000);
                 int runeType = random.nextInt(16);
 

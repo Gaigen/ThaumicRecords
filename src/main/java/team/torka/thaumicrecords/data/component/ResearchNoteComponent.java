@@ -7,6 +7,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
+import team.torka.thaumicrecords.api.helper.CubeCoordinateHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +23,18 @@ public record ResearchNoteComponent(ResourceLocation research, int color, boolea
     public static final StreamCodec<ByteBuf, ResearchNoteComponent> STREAM_CODEC = StreamCodec.composite(ResourceLocation.STREAM_CODEC,
             ResearchNoteComponent::research, ByteBufCodecs.INT, ResearchNoteComponent::color, ByteBufCodecs.BOOL, ResearchNoteComponent::complete,
             ByteBufCodecs.map(HashMap::new, ByteBufCodecs.STRING_UTF8, HexEntry.STREAM_CODEC), ResearchNoteComponent::hexes, ResearchNoteComponent::new);
+
+
+    @Nullable
+    public HexEntry getHex(CubeCoordinateHelper.CubeHex pos) {
+        return hexes.get(pos.toKey());
+    }
+
+    public Map<CubeCoordinateHelper.CubeHex, HexEntry> getDecodedHexes() {
+        Map<CubeCoordinateHelper.CubeHex, HexEntry> decoded = new HashMap<>();
+        hexes.forEach((key, entry) -> decoded.put(CubeCoordinateHelper.CubeHex.fromKey(key), entry));
+        return decoded;
+    }
 
     public record HexEntry(int type, @Nullable ResourceLocation aspect) {
         public static final int EMPTY = 0;

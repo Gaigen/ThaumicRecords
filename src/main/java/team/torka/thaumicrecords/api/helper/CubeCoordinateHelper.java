@@ -19,6 +19,21 @@ public class CubeCoordinateHelper {
             int[] d = DIRECTIONS[direction % 6];
             return new CubeHex(x + d[0], y + d[1], z + d[2]);
         }
+
+        public String toKey() {
+            return this.x + "," + this.z;
+        }
+
+        public static CubeHex fromKey(String key) {
+            try {
+                String[] parts = key.split(",");
+                int x = Integer.parseInt(parts[0]);
+                int z = Integer.parseInt(parts[1]);
+                return new CubeHex(x, -x - z, z);
+            } catch (Exception e) {
+                return new CubeHex(0, 0, 0);
+            }
+        }
     }
 
     public record ScreenPos(double x, double y) {

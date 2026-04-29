@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Aspect implements Comparable<Aspect> {
+    public final ResourceLocation UNKNOWN_TEX = ThaumicRecords.createRl("textures/aspects/_unknown.png");
 
     private final String name;
 

@@ -112,4 +112,8 @@ public class ResearchTableMenu extends AbstractContainerMenu {
     public boolean stillValid(Player player) {
         return stillValid(this.levelAccess, player, blockEntity.getBlockState().getBlock());
     }
+
+    public ItemStack getResearchNote() {
+        return this.getSlot(SLOT_RESEARCH_NOTE).getItem();
+    }
 }
