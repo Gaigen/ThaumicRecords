@@ -220,7 +220,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         for (int i = startIndex; i < sortedKeys.size() && drawn < 25; i++) {
             ResourceLocation aspectId = sortedKeys.get(i);
             Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(aspectId);
-            if (aspect == null) {
+            if (Objects.isNull(aspect)) {
                 continue;
             }
             int amount = points.get(aspectId);
@@ -371,7 +371,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         if (button == 0) {
             ResourceLocation rl = this.getClickedAspect(mx, my);
             Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
-            if (aspect != null) {
+            if (Objects.nonNull(aspect)) {
                 this.draggingAspect = aspect;
                 this.dragging = true;
                 this.playButtonAspect();
@@ -379,18 +379,18 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             }
         }
 
-        if (this.left != null && isHovering(11, 137, 16, 16, mx, my)) {
+        if (Objects.nonNull(this.left) && isHovering(11, 137, 16, 16, mx, my)) {
             this.left = null;
             this.playButtonAspect();
             return true;
         }
-        if (this.right != null && isHovering(71, 137, 16, 16, mx, my)) {
+        if (Objects.nonNull(this.right) && isHovering(71, 137, 16, 16, mx, my)) {
             this.right = null;
             this.playButtonAspect();
             return true;
         }
         if (isHovering(35, 139, 32, 16, mx, my)) {
-            if (this.left != null && this.right != null && this.buttonCombineTime < System.nanoTime()) {
+            if (Objects.nonNull(this.left) && Objects.nonNull(this.right) && this.buttonCombineTime < System.nanoTime()) {
                 this.buttonCombineTime = System.nanoTime() + 200000000L;
                 this.playButtonClick();
                 this.playButtonCombine();
@@ -415,7 +415,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     }
 
     private void handleMouseDraggingEnd(double mx, double my) {
-        if (this.dragging && this.draggingAspect != null) {
+        if (this.dragging && Objects.nonNull(this.draggingAspect)) {
             ItemStack note = this.menu.getResearchNote();
             ResearchNoteComponent researchNoteComponent = note.get(DataComponentRegistry.RESEARCH_NOTE);
             if (!note.isEmpty() && Objects.nonNull(researchNoteComponent)) {
@@ -433,7 +433,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 }
             }
         }
-        if (this.draggingAspect != null) {
+        if (Objects.nonNull(this.draggingAspect)) {
             boolean skip = false;
             if (isHovering(11, 137, 16, 16, mx, my)) {
                 this.playButtonAspect();
@@ -450,9 +450,9 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
                 if (Objects.nonNull(aspect)) {
                     if (aspect == this.draggingAspect) {
-                        if (this.left == null) {
+                        if (Objects.isNull(this.left)) {
                             this.left = this.draggingAspect;
-                        } else if (this.right == null) {
+                        } else if (Objects.isNull(this.right)) {
                             this.right = this.draggingAspect;
                         }
                     }
@@ -464,19 +464,19 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     }
 
     private void playButtonClick() {
-        if (this.minecraft != null && this.minecraft.player != null) {
+        if (Objects.nonNull(this.minecraft) && Objects.nonNull(this.minecraft.player)) {
             this.minecraft.player.playSound(SoundRegistry.BUTTON_CLICK.get(), 0.4F, 1.0F);
         }
     }
 
     private void playButtonCombine() {
-        if (this.minecraft != null && this.minecraft.player != null) {
+        if (Objects.nonNull(this.minecraft) && Objects.nonNull(this.minecraft.player)) {
             this.minecraft.player.playSound(SoundRegistry.HHON.get(), 0.4F, 1.0F);
         }
     }
 
     private void playButtonAspect() {
-        if (this.minecraft != null && this.minecraft.player != null) {
+        if (Objects.nonNull(this.minecraft) && Objects.nonNull(this.minecraft.player)) {
             this.minecraft.player.playSound(SoundRegistry.HHOFF.get(), 0.4F, 1.0F);
         }
     }
