@@ -417,9 +417,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             ItemStack note = this.menu.getResearchNote();
             ResearchNoteComponent researchNoteComponent = note.get(DataComponentRegistry.RESEARCH_NOTE);
             if (!note.isEmpty() && Objects.nonNull(researchNoteComponent)) {
-                int mouseX = (int) (mx - 169);
-                int mouseY = (int) (my - 83);
-                CubeCoordinateHelper.CubeHex hex = CubeCoordinateHelper.pixelToCube(mouseX, mouseY, 9.0F);
+                CubeCoordinateHelper.CubeHex hex = CubeCoordinateHelper.pixelToCube(mx, my, 9.0F);
                 if (researchNoteComponent.hexes().containsKey(hex.toKey()) && researchNoteComponent.hexes()
                         .get(hex.toKey())
                         .type() == ResearchNoteComponent.HexEntry.EMPTY) {
@@ -427,21 +425,23 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                     this.draggingAspect = null;
                 }
             }
-            if (this.draggingAspect != null) {
-                boolean skip = false;
-                if (isHovering(12, 138, 16, 16, mx, my)) {
-                    this.playButtonAspect();
-                    this.left = this.draggingAspect;
-                    skip = true;
-                }
-                if (!skip && isHovering(71, 138, 16, 16, mx, my)) {
-                    this.playButtonAspect();
-                    this.right = this.draggingAspect;
-                    skip = true;
-                }
-                if (!skip) {
-                    ResourceLocation rl = this.getClickedAspect(mx, my);
-                    Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
+        }
+        if (this.draggingAspect != null) {
+            boolean skip = false;
+            if (isHovering(11, 137, 16, 16, mx, my)) {
+                this.playButtonAspect();
+                this.left = this.draggingAspect;
+                skip = true;
+            }
+            if (!skip && isHovering(71, 137, 16, 16, mx, my)) {
+                this.playButtonAspect();
+                this.right = this.draggingAspect;
+                skip = true;
+            }
+            if (!skip) {
+                ResourceLocation rl = this.getClickedAspect(mx, my);
+                Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
+                if (Objects.nonNull(aspect)) {
                     if (aspect == this.draggingAspect) {
                         if (this.left == null) {
                             this.left = this.draggingAspect;
