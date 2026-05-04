@@ -1,5 +1,6 @@
 package team.torka.thaumicrecords.menu;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -115,5 +116,9 @@ public class ResearchTableMenu extends AbstractContainerMenu {
 
     public ItemStack getResearchNote() {
         return this.getSlot(SLOT_RESEARCH_NOTE).getItem();
+    }
+
+    public BlockPos getBlockEntityPos() {
+        return blockEntity.getBlockPos();
     }
 }

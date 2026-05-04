@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
@@ -18,10 +19,13 @@ import team.torka.thaumicrecords.api.helper.CubeCoordinateHelper;
 import team.torka.thaumicrecords.attachment.ResearchPoint;
 import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
 import team.torka.thaumicrecords.menu.ResearchTableMenu;
+import team.torka.thaumicrecords.network.payload.PlayerCombineAspectPayload;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.AttachmentRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
+import team.torka.thaumicrecords.registry.SoundRegistry;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +44,11 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     private long lastRuneCheck = 0L;
     private int page = 0;
     private int lastPage = 0;
+    private Aspect left;
+    private Aspect right;
+    private Aspect draggingAspect;
+    private long buttonCombineTime;
+    private boolean dragging;
 
     public ResearchTableScreen(ResearchTableMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -68,6 +77,8 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         }
 
         this.drawPlayerAspects(graphics, x + 10, y + 40, mouseX, mouseY);
+        this.renderCombinationArea(graphics, x, y, mouseX, mouseY);
+        this.drawDraggingOrb(graphics, mouseX, mouseY);
         graphics.blit(GUI_TEX, x + 27, y + 121, 184, 208, 24, 8);
 
     }
@@ -134,6 +145,55 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         graphics.pose().popPose();
     }
 
+    private void renderCombinationArea(GuiGraphics graphics, int x, int y, int mx, int my) {
+        graphics.blit(GUI_TEX, x + 35, y + 139, 184, 184, 32, 16);
+
+        if (this.left != null && this.right != null) {
+            if (this.buttonCombineTime < System.nanoTime()) {
+                this.drawOrb(graphics, x + 43, y + 139);
+            } else {
+                graphics.blit(GUI_TEX, x + 35, y + 139, 184, 168, 32, 16);
+            }
+        }
+        if (this.left != null) {
+            this.drawAspectTag(graphics, x + 13, y + 139, this.left, 0, mx, my);
+        }
+        if (this.right != null) {
+            this.drawAspectTag(graphics, x + 71, y + 139, this.right, 0, mx, my);
+        }
+    }
+
+    @Nullable
+    private ResourceLocation getClickedAspect(double mouseX, double mouseY) {
+        if (Objects.isNull(this.minecraft) || Objects.isNull(this.minecraft.player)) {
+            return null;
+        }
+        ResearchPoint researchPoint = this.minecraft.player.getData(AttachmentRegistry.RESEARCH_POINT);
+        AspectList points = researchPoint.points().copy();
+        List<ResourceLocation> sortedKeys = points.keySet().stream().sorted().toList();
+        int count = 0;
+        int drawn = 0;
+        for (ResourceLocation rl : sortedKeys) {
+            count++;
+            if (count - 1 >= this.page * 5 && drawn < 25) {
+                int offsetX = (drawn / 5) * 16;
+                int offsetY = (drawn % 5) * 16;
+                int slotX = 10 + offsetX;
+                int slotY = 40 + offsetY;
+                if (isHovering(slotX, slotY, 16, 16, mouseX, mouseY)) {
+                    int amount = points.get(rl);
+                    if (amount > 0) {
+                        return rl;
+                    }
+                    return null;
+                }
+                drawn++;
+            }
+        }
+
+        return null;
+    }
+
     private boolean isCoordinateInNote(CubeCoordinateHelper.CubeHex coordinate) {
         ItemStack researchNote = menu.getResearchNote();
         ResearchNoteComponent researchNoteComponent = researchNote.get(DataComponentRegistry.RESEARCH_NOTE);
@@ -194,7 +254,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         if (mx >= x && mx < x + 16 && my >= y && my < y + 16) {
             MutableComponent title = Component.translatable(aspect.getNameTranslationKey()).withStyle(ChatFormatting.AQUA);
             MutableComponent lore = Component.translatable(aspect.getLoreTranslationKey()).withStyle(ChatFormatting.GRAY);
-            graphics.renderComponentTooltip(this.font, Arrays.asList(title, lore), mx, my);
+            graphics.renderComponentTooltip(this.font, Arrays.asList(title, lore), mx, my - 8);
         }
     }
 
@@ -255,6 +315,21 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         RenderSystem.disableBlend();
     }
 
+    private void drawDraggingOrb(GuiGraphics graphics, int mx, int my) {
+        if (this.dragging && Objects.nonNull(this.draggingAspect)) {
+            this.drawOrbXY(graphics, mx, my, this.draggingAspect.getARGBColor());
+        }
+    }
+
+    private void drawOrb(GuiGraphics graphics, double x, double y) {
+        float ticks = (float) (System.currentTimeMillis() / 50.0);
+        float red = 0.7F + Mth.sin((ticks + (float) x) / 10.0F) * 0.15F + 0.15F;
+        float green = 0.7F + Mth.sin((ticks + (float) x + (float) y) / 11.0F) * 0.15F + 0.15F;
+        float blue = 0.7F + Mth.sin((ticks + (float) y) / 12.0F) * 0.15F + 0.15F;
+        int dynamicColor = ((int) (red * 255) << 16) | ((int) (green * 255) << 8) | (int) (blue * 255);
+        drawOrbXY(graphics, x, y, dynamicColor);
+    }
+
     private void drawOrb(GuiGraphics graphics, CubeCoordinateHelper.CubeHex hex) {
         CubeCoordinateHelper.ScreenPos pix = hex.toPixel(9.0f);
         float ticks = (float) (System.currentTimeMillis() / 50.0);
@@ -267,6 +342,10 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
 
     private void drawOrb(GuiGraphics graphics, CubeCoordinateHelper.CubeHex hex, int color) {
         CubeCoordinateHelper.ScreenPos pix = hex.toPixel(9.0f);
+        this.drawOrbXY(graphics, pix.x(), pix.y(), color);
+    }
+
+    private void drawOrbXY(GuiGraphics graphics, double x, double y, int color) {
         float r = (float) (color >> 16 & 255) / 255.0F;
         float g = (float) (color >> 8 & 255) / 255.0F;
         float b = (float) (color & 255) / 255.0F;
@@ -275,7 +354,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         float u = (0.5F + (float) part / 8.0F) * 256.0F;
         float v = 0.5F * 256.0F;
         graphics.pose().pushPose();
-        graphics.pose().translate(pix.x(), pix.y(), 0);
+        graphics.pose().translate(x, y, 0);
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
         RenderSystem.setShaderColor(r, g, b, 1.0F);
@@ -283,6 +362,116 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.defaultBlendFunc();
         graphics.pose().popPose();
+    }
+
+    @Override
+    public boolean mouseClicked(double mx, double my, int button) {
+        if (button == 0) {
+            ResourceLocation rl = this.getClickedAspect(mx, my);
+            Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
+            if (aspect != null) {
+                this.draggingAspect = aspect;
+                this.dragging = true;
+                this.playButtonAspect();
+                return true;
+            }
+        }
+
+        if (this.left != null && isHovering(11, 137, 16, 16, mx, my)) {
+            this.left = null;
+            this.playButtonAspect();
+            return true;
+        }
+        if (this.right != null && isHovering(71, 137, 16, 16, mx, my)) {
+            this.right = null;
+            this.playButtonAspect();
+            return true;
+        }
+        if (isHovering(35, 139, 32, 16, mx, my)) {
+            if (this.left != null && this.right != null && this.buttonCombineTime < System.nanoTime()) {
+                this.buttonCombineTime = System.nanoTime() + 200000000L;
+                this.playButtonClick();
+                this.playButtonCombine();
+                ResourceLocation leftAspect = AspectRegistry.ASPECT_REGISTRY.getKey(left);
+                ResourceLocation rightAspect = AspectRegistry.ASPECT_REGISTRY.getKey(right);
+                PacketDistributor.sendToServer(new PlayerCombineAspectPayload(this.menu.getBlockEntityPos(), leftAspect, rightAspect));
+                return true;
+            }
+        }
+        return super.mouseClicked(mx, my, button);
+    }
+
+    @Override
+    public boolean mouseReleased(double mx, double my, int button) {
+        if (button == 0 && this.dragging) {
+            this.handleMouseDraggingEnd(mx, my);
+            this.dragging = false;
+            this.draggingAspect = null;
+            return true;
+        }
+        return super.mouseReleased(mx, my, button);
+    }
+
+    private void handleMouseDraggingEnd(double mx, double my) {
+        if (this.dragging && this.draggingAspect != null) {
+            ItemStack note = this.menu.getResearchNote();
+            ResearchNoteComponent researchNoteComponent = note.get(DataComponentRegistry.RESEARCH_NOTE);
+            if (!note.isEmpty() && Objects.nonNull(researchNoteComponent)) {
+                int mouseX = (int) (mx - 169);
+                int mouseY = (int) (my - 83);
+                CubeCoordinateHelper.CubeHex hex = CubeCoordinateHelper.pixelToCube(mouseX, mouseY, 9.0F);
+                if (researchNoteComponent.hexes().containsKey(hex.toKey()) && researchNoteComponent.hexes()
+                        .get(hex.toKey())
+                        .type() == ResearchNoteComponent.HexEntry.EMPTY) {
+                    this.playButtonCombine();
+                    this.draggingAspect = null;
+                }
+            }
+            if (this.draggingAspect != null) {
+                boolean skip = false;
+                if (isHovering(12, 138, 16, 16, mx, my)) {
+                    this.playButtonAspect();
+                    this.left = this.draggingAspect;
+                    skip = true;
+                }
+                if (!skip && isHovering(71, 138, 16, 16, mx, my)) {
+                    this.playButtonAspect();
+                    this.right = this.draggingAspect;
+                    skip = true;
+                }
+                if (!skip) {
+                    ResourceLocation rl = this.getClickedAspect(mx, my);
+                    Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
+                    if (aspect == this.draggingAspect) {
+                        if (this.left == null) {
+                            this.left = this.draggingAspect;
+                        } else if (this.right == null) {
+                            this.right = this.draggingAspect;
+                        }
+                    }
+                }
+            }
+        }
+        this.dragging = false;
+        this.draggingAspect = null;
+    }
+
+    private void playButtonClick() {
+        if (this.minecraft != null && this.minecraft.player != null) {
+            this.minecraft.player.playSound(SoundRegistry.BUTTON_CLICK.get(), 0.4F, 1.0F);
+        }
+    }
+
+    private void playButtonCombine() {
+        if (this.minecraft != null && this.minecraft.player != null) {
+            this.minecraft.player.playSound(SoundRegistry.HHON.get(), 0.4F, 1.0F);
+        }
+    }
+
+    private void playButtonAspect() {
+        if (this.minecraft != null && this.minecraft.player != null) {
+            this.minecraft.player.playSound(SoundRegistry.HHOFF.get(), 0.4F, 1.0F);
+        }
     }
 
     private void updateRuneGenerator(long time) {

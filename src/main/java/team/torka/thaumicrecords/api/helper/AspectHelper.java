@@ -8,10 +8,13 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
+import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.attachment.AspectDiscovery;
-import team.torka.thaumicrecords.network.packet.SyncAspectDiscoveryPacket;
+import team.torka.thaumicrecords.network.payload.SyncAspectDiscoveryPayload;
 import team.torka.thaumicrecords.recipe.AspectRecipe;
+import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.AttachmentRegistry;
 import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
 
@@ -19,6 +22,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -74,12 +78,25 @@ public class AspectHelper {
             newSet.add(aspect);
             AspectDiscovery newData = new AspectDiscovery(newSet);
             player.setData(AttachmentRegistry.ASPECT_DISCOVERY, newData);
-            PacketDistributor.sendToPlayer(player, new SyncAspectDiscoveryPacket(newData));
+            PacketDistributor.sendToPlayer(player, new SyncAspectDiscoveryPayload(newData));
         }
     }
 
     public static boolean isAspectDiscovered(ServerPlayer player, ResourceLocation aspect) {
         AspectDiscovery oldData = player.getData(AttachmentRegistry.ASPECT_DISCOVERY);
         return oldData.discovered().contains(aspect);
+    }
+
+    @Nullable
+    public static ResourceLocation getAspectCombined(Aspect a1, Aspect a2) {
+        Aspect aspect = AspectRegistry.ASPECT_REGISTRY.stream().filter(a -> !a.isPrimal() && Objects.nonNull(a.getComponents())).filter(
+                a -> a.getComponents().length >= 2).filter(a -> {
+            Aspect[] components = a.getComponents();
+            return (components[0] == a1 && components[1] == a2) || (components[0] == a2 && components[1] == a1);
+        }).findFirst().orElse(null);
+        if (Objects.isNull(aspect)) {
+            return null;
+        }
+        return AspectRegistry.ASPECT_REGISTRY.getKey(aspect);
     }
 }
