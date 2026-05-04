@@ -7,8 +7,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import team.torka.thaumicrecords.attachment.AspectDiscovery;
 import team.torka.thaumicrecords.attachment.ResearchPoint;
-import team.torka.thaumicrecords.network.packet.SyncAspectDiscoveryPacket;
-import team.torka.thaumicrecords.network.packet.SyncResearchPointPacket;
+import team.torka.thaumicrecords.network.payload.SyncAspectDiscoveryPayload;
+import team.torka.thaumicrecords.network.payload.SyncResearchPointPayload;
 import team.torka.thaumicrecords.registry.AttachmentRegistry;
 
 @EventBusSubscriber()
@@ -30,8 +30,8 @@ public class PlayerEventsListener {
 
     private static void syncAllData(ServerPlayer player) {
         AspectDiscovery discoveryData = player.getData(AttachmentRegistry.ASPECT_DISCOVERY);
-        PacketDistributor.sendToPlayer(player, new SyncAspectDiscoveryPacket(discoveryData));
+        PacketDistributor.sendToPlayer(player, new SyncAspectDiscoveryPayload(discoveryData));
         ResearchPoint pointsData = player.getData(AttachmentRegistry.RESEARCH_POINT);
-        PacketDistributor.sendToPlayer(player, new SyncResearchPointPacket(pointsData));
+        PacketDistributor.sendToPlayer(player, new SyncResearchPointPayload(pointsData));
     }
 }
