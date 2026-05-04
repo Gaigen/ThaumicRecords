@@ -12,5 +12,28 @@
     "sounds": [
       "thaumicrecords:node_break"
     ]
+  },
+  "button_click": {
+    "category": "gui",
+    "subtitle": "sound.thaumicrecords.button_click",
+    "sounds": [
+      "thaumicrecords:button_click1",
+      "thaumicrecords:button_click2",
+      "thaumicrecords:button_click3"
+    ]
+  },
+  "hhon": {
+    "category": "gui",
+    "subtitle": "sound.thaumicrecords.hhon",
+    "sounds": [
+      "thaumicrecords:hhon"
+    ]
+  },
+  "hhoff": {
+    "category": "gui",
+    "subtitle": "sound.thaumicrecords.hhoff",
+    "sounds": [
+      "thaumicrecords:hhoff"
+    ]
   }
 }

@@ -14,4 +14,13 @@ public class SoundRegistry {
 
     public static final DeferredHolder<SoundEvent, SoundEvent> NODE_BREAK = REGISTRAR.register("node_break",
             () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("node_break")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> BUTTON_CLICK = REGISTRAR.register("button_click",
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("button_click")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> HHON = REGISTRAR.register("hhon",
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("hhon")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> HHOFF = REGISTRAR.register("hhoff",
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("hhoff")));
 }
