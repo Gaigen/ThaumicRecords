@@ -79,8 +79,12 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         this.drawPlayerAspects(graphics, x + 10, y + 40, mouseX, mouseY);
         this.renderCombinationArea(graphics, x, y, mouseX, mouseY);
         this.drawDraggingOrb(graphics, mouseX, mouseY);
-        graphics.blit(GUI_TEX, x + 27, y + 121, 184, 208, 24, 8);
-
+        if (this.page < this.lastPage) {
+            graphics.blit(GUI_TEX, x + 51, y + 121, 208, 208, 24, 8);
+        }
+        if (this.page > 0) {
+            graphics.blit(GUI_TEX, x + 27, y + 121, 184, 208, 24, 8);
+        }
     }
 
     @Override
@@ -158,10 +162,10 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             }
         }
         if (Objects.nonNull(this.left)) {
-            this.drawAspectTag(graphics, x + 13, y + 139, this.left, 0, mx, my);
+            this.drawAspectTag(graphics, x + 13, y + 139, this.left, 1, mx, my, false);
         }
         if (Objects.nonNull(this.right)) {
-            this.drawAspectTag(graphics, x + 71, y + 139, this.right, 0, mx, my);
+            this.drawAspectTag(graphics, x + 71, y + 139, this.right, 1, mx, my, false);
         }
     }
 
@@ -214,24 +218,26 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         AspectList points = researchPoint.points().copy();
         List<ResourceLocation> sortedKeys = points.keySet().stream().sorted().toList();
         int count = sortedKeys.size();
-        this.lastPage = Math.max(0, (count - 1) / 25);
+        this.lastPage = (count - 20) / 5;
+        count = 0;
         int drawn = 0;
-        int startIndex = this.page * 25;
-        for (int i = startIndex; i < sortedKeys.size() && drawn < 25; i++) {
-            ResourceLocation aspectId = sortedKeys.get(i);
-            Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(aspectId);
-            if (Objects.isNull(aspect)) {
-                continue;
+        for (ResourceLocation rl : sortedKeys) {
+            ++count;
+            if (count - 1 >= this.page * 5 && drawn < 25) {
+                Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
+                if (Objects.isNull(aspect)) {
+                    continue;
+                }
+                int amount = points.get(rl);
+                int xx = x + (drawn / 5) * 16;
+                int yy = y + (drawn % 5) * 16;
+                this.drawAspectTag(graphics, xx, yy, aspect, amount, mx, my, true);
+                ++drawn;
             }
-            int amount = points.get(aspectId);
-            int xx = x + (drawn / 5) * 16;
-            int yy = y + (drawn % 5) * 16;
-            this.drawAspectTag(graphics, xx, yy, aspect, amount, mx, my);
-            drawn++;
         }
     }
 
-    private void drawAspectTag(GuiGraphics graphics, int x, int y, Aspect aspect, int amount, int mx, int my) {
+    private void drawAspectTag(GuiGraphics graphics, int x, int y, Aspect aspect, int amount, int mx, int my, boolean renderAmount) {
         boolean faded = amount <= 0;
         float alpha = faded ? 0.33F : 1.0F;
         graphics.pose().pushPose();
@@ -246,7 +252,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         graphics.blit(aspect.getImage(), -8, -8, 0, 0, 16, 16, 16, 16);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         graphics.pose().popPose();
-        if (amount > 0) {
+        if (amount > 0 && renderAmount) {
             graphics.pose().pushPose();
             graphics.pose().translate(x + 16, y + 12, 0.5f);
             String s = String.valueOf(amount);
@@ -399,6 +405,12 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 PacketDistributor.sendToServer(new PlayerCombineAspectPayload(this.menu.getBlockEntityPos(), leftAspect, rightAspect));
                 return true;
             }
+        }
+        if (this.page > 0 && isHovering(27, 121, 24, 8, mx, my)) {
+            --this.page;
+        }
+        if (this.page < this.lastPage && isHovering(51, 121, 24, 8, mx, my)) {
+            ++this.page;
         }
         return super.mouseClicked(mx, my, button);
     }
