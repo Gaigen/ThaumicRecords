@@ -146,19 +146,21 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     }
 
     private void renderCombinationArea(GuiGraphics graphics, int x, int y, int mx, int my) {
-        graphics.blit(GUI_TEX, x + 35, y + 139, 184, 184, 32, 16);
-
-        if (this.left != null && this.right != null) {
+        if (Objects.nonNull(this.left) && Objects.nonNull(this.right)) {
             if (this.buttonCombineTime < System.nanoTime()) {
-                this.drawOrb(graphics, x + 43, y + 139);
+                graphics.blit(GUI_TEX, x + 35, y + 139, 184, 184, 32, 16);
+                this.drawOrb(graphics, x + 43 + 8, y + 139 + 8);
             } else {
+                graphics.blit(GUI_TEX, x + 35, y + 139, 184, 184, 32, 16);
+                RenderSystem.enableBlend();
                 graphics.blit(GUI_TEX, x + 35, y + 139, 184, 168, 32, 16);
+                RenderSystem.disableBlend();
             }
         }
-        if (this.left != null) {
+        if (Objects.nonNull(this.left)) {
             this.drawAspectTag(graphics, x + 13, y + 139, this.left, 0, mx, my);
         }
-        if (this.right != null) {
+        if (Objects.nonNull(this.right)) {
             this.drawAspectTag(graphics, x + 71, y + 139, this.right, 0, mx, my);
         }
     }
@@ -422,6 +424,11 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                         .get(hex.toKey())
                         .type() == ResearchNoteComponent.HexEntry.EMPTY) {
                     this.playButtonCombine();
+//                        this.playButtonWrite();
+
+//                        PacketDistributor.SERVER.noArg().send(
+//                                new PacketAspectPlacePayload(this.tileEntity.getBlockPos(), (byte) hp.q, (byte) hp.r, this.draggedAspect.getTag()));
+
                     this.draggingAspect = null;
                 }
             }
