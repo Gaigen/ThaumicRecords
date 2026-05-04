@@ -29,21 +29,23 @@ public class PlayerCombineAspectHandler {
                 }
                 AspectList modify = new AspectList();
                 modify.put(payload.left(), -1);
-                modify.put(payload.right(), -1);
+                modify.merge(payload.right(), -1, Integer::sum);
                 ResourceLocation rl = AspectHelper.getAspectCombined(left, right);
                 if (Objects.isNull(rl)) {
+                    ResearchHelper.modifyResearchPoint(player, modify);
                     return;
                 }
                 Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
                 if (Objects.isNull(aspect)) {
+                    ResearchHelper.modifyResearchPoint(player, modify);
                     return;
                 }
 
                 boolean discovered = AspectHelper.isAspectDiscovered(player, rl);
                 if (!discovered) {
-                    modify.put(rl, 3);
+                    modify.merge(rl, 3, Integer::sum);
                 } else {
-                    modify.put(rl, 1);
+                    modify.merge(rl, 1, Integer::sum);
                 }
                 AspectHelper.discoverAspect(player, rl);
                 ResearchHelper.modifyResearchPoint(player, modify);
