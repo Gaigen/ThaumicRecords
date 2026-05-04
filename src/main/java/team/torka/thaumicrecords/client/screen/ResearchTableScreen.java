@@ -2,23 +2,29 @@ package team.torka.thaumicrecords.client.screen;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
+import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.helper.CubeCoordinateHelper;
+import team.torka.thaumicrecords.attachment.ResearchPoint;
 import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
 import team.torka.thaumicrecords.menu.ResearchTableMenu;
 import team.torka.thaumicrecords.registry.AspectRegistry;
+import team.torka.thaumicrecords.registry.AttachmentRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,6 +38,8 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     private static final ResourceLocation PARTICLES_TEX = ThaumicRecords.createRl("textures/misc/particles.png");
     private final Map<String, Rune> runes = new ConcurrentHashMap<>();
     private long lastRuneCheck = 0L;
+    private int page = 0;
+    private int lastPage = 0;
 
     public ResearchTableScreen(ResearchTableMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -59,7 +67,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             this.drawSheet(graphics, x, y, mouseX, mouseY);
         }
 
-        // TODO 玩家持有和发现要素分页
+        this.drawPlayerAspects(graphics, x + 10, y + 40, mouseX, mouseY);
         graphics.blit(GUI_TEX, x + 27, y + 121, 184, 208, 24, 8);
 
     }
@@ -134,6 +142,60 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         }
         Map<CubeCoordinateHelper.CubeHex, ResearchNoteComponent.HexEntry> decodedHexes = researchNoteComponent.getDecodedHexes();
         return decodedHexes.containsKey(coordinate);
+    }
+
+    private void drawPlayerAspects(GuiGraphics graphics, int x, int y, int mx, int my) {
+        if (Objects.isNull(this.minecraft) || Objects.isNull(this.minecraft.player)) {
+            return;
+        }
+        ResearchPoint researchPoint = this.minecraft.player.getData(AttachmentRegistry.RESEARCH_POINT);
+        AspectList points = researchPoint.points().copy();
+        List<ResourceLocation> sortedKeys = points.keySet().stream().sorted().toList();
+        int count = sortedKeys.size();
+        this.lastPage = Math.max(0, (count - 1) / 25);
+        int drawn = 0;
+        int startIndex = this.page * 25;
+        for (int i = startIndex; i < sortedKeys.size() && drawn < 25; i++) {
+            ResourceLocation aspectId = sortedKeys.get(i);
+            Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(aspectId);
+            if (aspect == null) {
+                continue;
+            }
+            int amount = points.get(aspectId);
+            int xx = x + (drawn / 5) * 16;
+            int yy = y + (drawn % 5) * 16;
+            this.drawAspectTag(graphics, xx, yy, aspect, amount, mx, my);
+            drawn++;
+        }
+    }
+
+    private void drawAspectTag(GuiGraphics graphics, int x, int y, Aspect aspect, int amount, int mx, int my) {
+        boolean faded = amount <= 0;
+        float alpha = faded ? 0.33F : 1.0F;
+        graphics.pose().pushPose();
+        graphics.pose().translate(x + 8, y + 8, 0.1f);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        int color = aspect.getARGBColor();
+        float r = (float) (color >> 16 & 255) / 255.0F;
+        float g = (float) (color >> 8 & 255) / 255.0F;
+        float b = (float) (color & 255) / 255.0F;
+        RenderSystem.setShaderColor(r, g, b, alpha);
+        graphics.blit(aspect.getImage(), -8, -8, 0, 0, 16, 16, 16, 16);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        graphics.pose().popPose();
+        if (amount > 0) {
+            graphics.pose().pushPose();
+            graphics.pose().translate(x + 16, y + 12, 0.5f);
+            String s = String.valueOf(amount);
+            graphics.drawString(this.font, s, -this.font.width(s), -3, 0xFFFFFF, true);
+            graphics.pose().popPose();
+        }
+        if (mx >= x && mx < x + 16 && my >= y && my < y + 16) {
+            MutableComponent title = Component.translatable(aspect.getNameTranslationKey()).withStyle(ChatFormatting.AQUA);
+            MutableComponent lore = Component.translatable(aspect.getLoreTranslationKey()).withStyle(ChatFormatting.GRAY);
+            graphics.renderComponentTooltip(this.font, Arrays.asList(title, lore), mx, my);
+        }
     }
 
     private void drawHex(GuiGraphics graphics, CubeCoordinateHelper.CubeHex hex) {
