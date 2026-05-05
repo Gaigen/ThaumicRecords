@@ -35,5 +35,20 @@
     "sounds": [
       "thaumicrecords:hhoff"
     ]
+  },
+  "write": {
+    "category": "gui",
+    "subtitle": "sound.thaumicrecords.write",
+    "sounds": [
+      "thaumicrecords:write1",
+      "thaumicrecords:write2"
+    ]
+  },
+  "erase": {
+    "category": "gui",
+    "subtitle": "sound.thaumicrecords.erase",
+    "sounds": [
+      "thaumicrecords:erase"
+    ]
   }
 }

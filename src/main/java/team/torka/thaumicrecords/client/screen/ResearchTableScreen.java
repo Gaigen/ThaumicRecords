@@ -20,6 +20,7 @@ import team.torka.thaumicrecords.attachment.ResearchPoint;
 import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
 import team.torka.thaumicrecords.menu.ResearchTableMenu;
 import team.torka.thaumicrecords.network.payload.PlayerCombineAspectPayload;
+import team.torka.thaumicrecords.network.payload.PlayerWriteNotePayload;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.AttachmentRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
@@ -116,7 +117,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     private void renderHexGrid(GuiGraphics graphics, int centerX, int centerY, int mx, int my) {
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0);
-        ItemStack researchNote = menu.getResearchNote();
+        ItemStack researchNote = menu.getResearchNotes();
         ResearchNoteComponent researchNoteComponent = researchNote.get(DataComponentRegistry.RESEARCH_NOTE);
         if (Objects.isNull(researchNoteComponent)) {
             graphics.pose().popPose();
@@ -201,7 +202,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     }
 
     private boolean isCoordinateInNote(CubeCoordinateHelper.CubeHex coordinate) {
-        ItemStack researchNote = menu.getResearchNote();
+        ItemStack researchNote = menu.getResearchNotes();
         ResearchNoteComponent researchNoteComponent = researchNote.get(DataComponentRegistry.RESEARCH_NOTE);
         if (Objects.isNull(researchNoteComponent)) {
             return false;
@@ -428,19 +429,19 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
 
     private void handleMouseDraggingEnd(double mx, double my) {
         if (this.dragging && Objects.nonNull(this.draggingAspect)) {
-            ItemStack note = this.menu.getResearchNote();
+            ItemStack note = this.menu.getResearchNotes();
             ResearchNoteComponent researchNoteComponent = note.get(DataComponentRegistry.RESEARCH_NOTE);
             if (!note.isEmpty() && Objects.nonNull(researchNoteComponent)) {
-                CubeCoordinateHelper.CubeHex hex = CubeCoordinateHelper.pixelToCube(mx, my, 9.0F);
+                CubeCoordinateHelper.CubeHex hex = CubeCoordinateHelper.pixelToCube(mx - this.leftPos - 169, -my + this.topPos + 83, 9.0F);
                 if (researchNoteComponent.hexes().containsKey(hex.toKey()) && researchNoteComponent.hexes()
                         .get(hex.toKey())
                         .type() == ResearchNoteComponent.HexEntry.EMPTY) {
                     this.playButtonCombine();
-//                        this.playButtonWrite();
-
-//                        PacketDistributor.SERVER.noArg().send(
-//                                new PacketAspectPlacePayload(this.tileEntity.getBlockPos(), (byte) hp.q, (byte) hp.r, this.draggedAspect.getTag()));
-
+                    this.playButtonWrite();
+                    ResourceLocation rl = AspectRegistry.ASPECT_REGISTRY.getKey(this.draggingAspect);
+                    if (Objects.nonNull(rl)) {
+                        PacketDistributor.sendToServer(new PlayerWriteNotePayload(menu.getBlockEntityPos(), hex.toKey(), rl));
+                    }
                     this.draggingAspect = null;
                 }
             }
@@ -483,13 +484,25 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
 
     private void playButtonCombine() {
         if (Objects.nonNull(this.minecraft) && Objects.nonNull(this.minecraft.player)) {
-            this.minecraft.player.playSound(SoundRegistry.HHON.get(), 0.4F, 1.0F);
+            this.minecraft.player.playSound(SoundRegistry.HHON.get(), 0.3F, 1.0F);
         }
     }
 
     private void playButtonAspect() {
         if (Objects.nonNull(this.minecraft) && Objects.nonNull(this.minecraft.player)) {
             this.minecraft.player.playSound(SoundRegistry.HHOFF.get(), 0.4F, 1.0F);
+        }
+    }
+
+    private void playButtonWrite() {
+        if (Objects.nonNull(this.minecraft) && Objects.nonNull(this.minecraft.player)) {
+            this.minecraft.player.playSound(SoundRegistry.WRITE.get(), 0.2F, 1.0F);
+        }
+    }
+
+    private void playButtonErase() {
+        if (Objects.nonNull(this.minecraft) && Objects.nonNull(this.minecraft.player)) {
+            this.minecraft.player.playSound(SoundRegistry.ERASE.get(), 0.2F, 1.0F);
         }
     }
 

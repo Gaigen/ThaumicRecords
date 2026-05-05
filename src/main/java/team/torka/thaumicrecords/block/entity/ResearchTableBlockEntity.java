@@ -10,12 +10,14 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.api.ModTags;
 import team.torka.thaumicrecords.menu.ResearchTableMenu;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 
@@ -92,5 +94,31 @@ public class ResearchTableBlockEntity extends BlockEntity implements MenuProvide
     @ParametersAreNonnullByDefault
     public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
         return new ResearchTableMenu(containerId, playerInventory, this);
+    }
+
+    public ItemStack getScribingTool() {
+        return inventory.getStackInSlot(0);
+    }
+
+    public ItemStack getResearchNotes() {
+        return inventory.getStackInSlot(1);
+    }
+
+    public void consumeScribingToolDurability() {
+        ItemStack scribingTool = getScribingTool();
+        if (canWrite()) {
+            int damageValue = scribingTool.getDamageValue();
+            scribingTool.setDamageValue(damageValue + 1);
+        }
+    }
+
+    public boolean canWrite() {
+        ItemStack scribingTool = getScribingTool();
+        if (!scribingTool.is(ModTags.SCRIBING_TOOLS)) {
+            return false;
+        }
+        int damageValue = scribingTool.getDamageValue();
+        int maxDamage = scribingTool.getMaxDamage();
+        return damageValue < maxDamage;
     }
 }

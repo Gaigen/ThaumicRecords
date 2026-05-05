@@ -11,7 +11,7 @@ import team.torka.thaumicrecords.ThaumicRecords;
 public record PlayerCombineAspectPayload(BlockPos blockPos, ResourceLocation left, ResourceLocation right) implements CustomPacketPayload {
     public static final Type<PlayerCombineAspectPayload> TYPE = new Type<>(ThaumicRecords.createRl("player_combine_aspect"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, PlayerCombineAspectPayload> CODEC = StreamCodec.composite(BlockPos.STREAM_CODEC,
+    public static final StreamCodec<RegistryFriendlyByteBuf, PlayerCombineAspectPayload> STREAM_CODEC = StreamCodec.composite(BlockPos.STREAM_CODEC,
             PlayerCombineAspectPayload::blockPos, ResourceLocation.STREAM_CODEC, PlayerCombineAspectPayload::left, ResourceLocation.STREAM_CODEC,
             PlayerCombineAspectPayload::right, PlayerCombineAspectPayload::new);
 

@@ -23,4 +23,10 @@ public class SoundRegistry {
 
     public static final DeferredHolder<SoundEvent, SoundEvent> HHOFF = REGISTRAR.register("hhoff",
             () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("hhoff")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> WRITE = REGISTRAR.register("write",
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("write")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> ERASE = REGISTRAR.register("erase",
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("erase")));
 }

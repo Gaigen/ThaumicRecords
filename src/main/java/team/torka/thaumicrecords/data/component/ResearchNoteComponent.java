@@ -9,8 +9,10 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.api.helper.CubeCoordinateHelper;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public record ResearchNoteComponent(ResourceLocation research, int color, boolean complete, Map<String, HexEntry> hexes) {
@@ -49,6 +51,17 @@ public record ResearchNoteComponent(ResourceLocation research, int color, boolea
         public boolean isRoot() {
             return type == ROOT;
         }
+    }
+
+    public boolean canWriteTo(String coordinate) {
+        HexEntry entry = hexes.get(coordinate);
+        return Objects.nonNull(coordinate) && entry.type() == HexEntry.EMPTY;
+    }
+
+    public ResearchNoteComponent writeHex(String coordinate, HexEntry newEntry) {
+        Map<String, HexEntry> newHexes = new HashMap<>(this.hexes);
+        newHexes.put(coordinate, newEntry);
+        return new ResearchNoteComponent(this.research, this.color, this.complete, Collections.unmodifiableMap(newHexes));
     }
 }
 
