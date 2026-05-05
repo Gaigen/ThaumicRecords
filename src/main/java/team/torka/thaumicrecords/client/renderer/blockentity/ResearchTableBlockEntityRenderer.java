@@ -15,9 +15,12 @@ import team.torka.thaumicrecords.block.entity.ResearchTableBlockEntity;
 import team.torka.thaumicrecords.block.part.ResearchTablePart;
 import team.torka.thaumicrecords.client.model.ResearchTableModel;
 import team.torka.thaumicrecords.client.renderer.CustomModelLayer;
+import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
 import team.torka.thaumicrecords.menu.ResearchTableMenu;
+import team.torka.thaumicrecords.registry.DataComponentRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
 
 public class ResearchTableBlockEntityRenderer implements BlockEntityRenderer<ResearchTableBlockEntity> {
 
@@ -53,7 +56,12 @@ public class ResearchTableBlockEntityRenderer implements BlockEntityRenderer<Res
         renderParchmentStack(poseStack, bufferSource, packedLight, packedOverlay);
         ItemStack researchNote = be.getInventory().getStackInSlot(ResearchTableMenu.SLOT_RESEARCH_NOTE);
         if (!researchNote.isEmpty()) {
-            renderScroll(poseStack, bufferSource, packedLight, packedOverlay);
+            ResearchNoteComponent researchNoteComponent = researchNote.get(DataComponentRegistry.RESEARCH_NOTE);
+            int color = 0xFF999999;
+            if (Objects.nonNull(researchNoteComponent)) {
+                color = researchNoteComponent.color() == 0 ? color : researchNoteComponent.color() | 0xFF000000;
+            }
+            renderScroll(poseStack, bufferSource, packedLight, packedOverlay, color);
         }
         poseStack.popPose();
     }
@@ -64,9 +72,8 @@ public class ResearchTableBlockEntityRenderer implements BlockEntityRenderer<Res
         return true;
     }
 
-    private void renderScroll(PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
+    private void renderScroll(PoseStack poseStack, MultiBufferSource buffer, int light, int overlay, int color) {
         VertexConsumer scrollVC = buffer.getBuffer(RenderType.entityCutout(SCROLL));
-        int color = 0xFF999999;
         poseStack.translate(1, -0.1, -0.05);
         model.renderScroll(poseStack, scrollVC, light, overlay, color);
     }
