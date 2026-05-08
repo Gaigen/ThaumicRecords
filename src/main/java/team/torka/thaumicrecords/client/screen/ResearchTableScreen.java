@@ -488,7 +488,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         }
         if (button == 0) {
             this.handleEraseNote(mx, my);
-            return true;
         }
         return super.mouseReleased(mx, my, button);
     }
