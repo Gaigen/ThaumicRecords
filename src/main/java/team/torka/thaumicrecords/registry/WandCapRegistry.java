@@ -11,10 +11,9 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.RegistryKeys;
 import team.torka.thaumicrecords.api.item.WandCap;
 
-@EventBusSubscriber(modid = ThaumicRecords.MOD_ID)
+@EventBusSubscriber
 public class WandCapRegistry {
-    public static final DeferredRegister<WandCap> REGISTRAR =
-            DeferredRegister.create(RegistryKeys.WAND_CAPS, ThaumicRecords.MOD_ID);
+    public static final DeferredRegister<WandCap> REGISTRAR = DeferredRegister.create(RegistryKeys.WAND_CAPS, ThaumicRecords.MOD_ID);
 
     public static Registry<WandCap> WAND_CAP_REGISTRY = null;
 

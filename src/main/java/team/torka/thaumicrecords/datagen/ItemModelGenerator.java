@@ -10,7 +10,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 
-@EventBusSubscriber(modid = ThaumicRecords.MOD_ID)
+@EventBusSubscriber
 public class ItemModelGenerator extends ItemModelProvider {
     public ItemModelGenerator(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, ThaumicRecords.MOD_ID, existingFileHelper);

@@ -12,7 +12,7 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.RegistryKeys;
 import team.torka.thaumicrecords.api.item.WandRod;
 
-@EventBusSubscriber(modid = ThaumicRecords.MOD_ID)
+@EventBusSubscriber
 public class WandRodRegistry {
     public static final DeferredRegister<WandRod> REGISTRAR = DeferredRegister.create(RegistryKeys.WAND_RODS, ThaumicRecords.MOD_ID);
 

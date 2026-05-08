@@ -10,7 +10,7 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.RegistryKeys;
 import team.torka.thaumicrecords.api.research.Research;
 
-@EventBusSubscriber(modid = ThaumicRecords.MOD_ID)
+@EventBusSubscriber
 public class ResearchRegistry {
     public static final DeferredRegister<Research> REGISTRAR = DeferredRegister.create(RegistryKeys.RESEARCHES, ThaumicRecords.MOD_ID);
     public static Registry<Research> RESEARCH_REGISTRY = null;

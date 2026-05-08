@@ -12,10 +12,9 @@ import team.torka.thaumicrecords.api.RegistryKeys;
 import team.torka.thaumicrecords.api.node.NodeModifier;
 import team.torka.thaumicrecords.node.modifier.NormalNodeModifier;
 
-@EventBusSubscriber(modid = ThaumicRecords.MOD_ID)
+@EventBusSubscriber
 public class NodeModifierRegistry {
-    public static final DeferredRegister<NodeModifier> REGISTRAR =
-            DeferredRegister.create(RegistryKeys.NODE_MODIFIERS, ThaumicRecords.MOD_ID);
+    public static final DeferredRegister<NodeModifier> REGISTRAR = DeferredRegister.create(RegistryKeys.NODE_MODIFIERS, ThaumicRecords.MOD_ID);
     public static Registry<NodeModifier> NODE_TYPE_REGISTRY = null;
 
     @SubscribeEvent
