@@ -7,13 +7,21 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
+import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.helper.CubeCoordinateHelper;
+import team.torka.thaumicrecords.registry.AspectRegistry;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
 
 public record ResearchNoteComponent(ResourceLocation research, int color, boolean complete, Map<String, HexEntry> hexes) {
     public static final Codec<ResearchNoteComponent> CODEC = RecordCodecBuilder.create(
@@ -44,6 +52,9 @@ public record ResearchNoteComponent(ResourceLocation research, int color, boolea
     }
 
     public boolean canWriteTo(String coordinate) {
+        if (this.complete) {
+            return false;
+        }
         HexEntry entry = hexes.get(coordinate);
         return Objects.nonNull(coordinate) && entry.type() == HexEntry.EMPTY;
     }
@@ -52,6 +63,141 @@ public record ResearchNoteComponent(ResourceLocation research, int color, boolea
         Map<String, HexEntry> newHexes = new HashMap<>(this.hexes);
         newHexes.put(coordinate, newEntry);
         return new ResearchNoteComponent(this.research, this.color, this.complete, Collections.unmodifiableMap(newHexes));
+    }
+
+    public ResearchNoteComponent finishedOrSelf() {
+        if (isNoteFinished()) {
+            Map<String, HexEntry> newHexes = new HashMap<>(this.hexes);
+            List<CubeCoordinateHelper.CubeHex> disconnected = getDisconnectedFullHexes();
+            for (CubeCoordinateHelper.CubeHex hex : disconnected) {
+                newHexes.put(hex.toKey(), new HexEntry(HexEntry.EMPTY, null));
+            }
+            return new ResearchNoteComponent(this.research, this.color, true, Collections.unmodifiableMap(newHexes));
+        }
+        return this;
+    }
+
+    public boolean isNoteFinished() {
+        Map<CubeCoordinateHelper.CubeHex, ResearchNoteComponent.HexEntry> decoded = this.getDecodedHexes();
+        List<CubeCoordinateHelper.CubeHex> roots = new ArrayList<>();
+        decoded.forEach((pos, entry) -> {
+            if (entry.type() == ResearchNoteComponent.HexEntry.ROOT) {
+                roots.add(pos);
+            }
+        });
+        if (roots.isEmpty()) {
+            return true;
+        }
+        if (roots.size() == 1) {
+            return true;
+        }
+        Set<CubeCoordinateHelper.CubeHex> visited = new HashSet<>();
+        Queue<CubeCoordinateHelper.CubeHex> queue = new LinkedList<>();
+        CubeCoordinateHelper.CubeHex startNode = roots.get(0);
+        queue.add(startNode);
+        visited.add(startNode);
+        while (!queue.isEmpty()) {
+            CubeCoordinateHelper.CubeHex current = queue.poll();
+            ResearchNoteComponent.HexEntry currentEntry = decoded.get(current);
+            Aspect currentAspect = AspectRegistry.ASPECT_REGISTRY.get(currentEntry.aspect());
+            for (int i = 0; i < 6; i++) {
+                CubeCoordinateHelper.CubeHex neighbor = current.getNeighbor(i);
+                if (decoded.containsKey(neighbor) && !visited.contains(neighbor)) {
+                    ResearchNoteComponent.HexEntry neighborEntry = decoded.get(neighbor);
+                    if (neighborEntry.type() != ResearchNoteComponent.HexEntry.EMPTY) {
+                        Aspect neighborAspect = AspectRegistry.ASPECT_REGISTRY.get(neighborEntry.aspect());
+                        if (currentAspect != null && neighborAspect != null && currentAspect.isRelatedTo(neighborAspect)) {
+                            visited.add(neighbor);
+                            queue.add(neighbor);
+                        }
+                    }
+                }
+            }
+        }
+        for (CubeCoordinateHelper.CubeHex root : roots) {
+            if (!visited.contains(root)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public List<CubeCoordinateHelper.CubeHex> getDisconnectedFullHexes() {
+        Map<CubeCoordinateHelper.CubeHex, HexEntry> decodedHexes = this.getDecodedHexes();
+        Set<CubeCoordinateHelper.CubeHex> connected = new HashSet<>();
+        Queue<CubeCoordinateHelper.CubeHex> queue = new LinkedList<>();
+
+        decodedHexes.forEach((pos, entry) -> {
+            if (entry.type() == ResearchNoteComponent.HexEntry.ROOT) {
+                queue.add(pos);
+                connected.add(pos);
+            }
+        });
+
+        while (!queue.isEmpty()) {
+            CubeCoordinateHelper.CubeHex current = queue.poll();
+            for (int i = 0; i < 6; i++) {
+                CubeCoordinateHelper.CubeHex neighbor = current.getNeighbor(i);
+                if (decodedHexes.containsKey(neighbor)) {
+                    ResearchNoteComponent.HexEntry neighborEntry = decodedHexes.get(neighbor);
+                    if (neighborEntry.type() == ResearchNoteComponent.HexEntry.FULL && !connected.contains(neighbor)) {
+                        Aspect currentAspect = AspectRegistry.ASPECT_REGISTRY.get(decodedHexes.get(current).aspect());
+                        Aspect neighborAspect = AspectRegistry.ASPECT_REGISTRY.get(decodedHexes.get(neighbor).aspect());
+                        if (Objects.nonNull(currentAspect) && Objects.nonNull(neighborAspect)) {
+                            if (currentAspect.isRelatedTo(neighborAspect)) {
+                                connected.add(neighbor);
+                                queue.add(neighbor);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        List<CubeCoordinateHelper.CubeHex> disconnected = new ArrayList<>();
+        decodedHexes.forEach((pos, entry) -> {
+            if (entry.type() == ResearchNoteComponent.HexEntry.FULL && !connected.contains(pos)) {
+                disconnected.add(pos);
+            }
+        });
+        return disconnected;
+    }
+
+    public Set<HexLink> getAllLinks() {
+        Map<CubeCoordinateHelper.CubeHex, HexEntry> decodedHexes = this.getDecodedHexes();
+        Set<HexLink> links = new HashSet<>();
+        for (Map.Entry<CubeCoordinateHelper.CubeHex, ResearchNoteComponent.HexEntry> entry : decodedHexes.entrySet()) {
+            CubeCoordinateHelper.CubeHex pos = entry.getKey();
+            ResearchNoteComponent.HexEntry current = entry.getValue();
+            if (current.type() == ResearchNoteComponent.HexEntry.EMPTY) {
+                continue;
+            }
+            for (int i = 0; i < 6; i++) {
+                CubeCoordinateHelper.CubeHex neighborPos = pos.getNeighbor(i);
+                if (decodedHexes.containsKey(neighborPos)) {
+                    ResearchNoteComponent.HexEntry neighborEntry = decodedHexes.get(neighborPos);
+                    if (neighborEntry.type() != ResearchNoteComponent.HexEntry.EMPTY) {
+                        Aspect currentAspect = AspectRegistry.ASPECT_REGISTRY.get(current.aspect());
+                        Aspect neighborAspect = AspectRegistry.ASPECT_REGISTRY.get(neighborEntry.aspect());
+                        if (Objects.nonNull(currentAspect) && Objects.nonNull(neighborAspect)) {
+                            if (currentAspect.isRelatedTo(neighborAspect)) {
+                                links.add(new HexLink(pos, neighborPos));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return links;
+    }
+
+    public record HexLink(CubeCoordinateHelper.CubeHex a, CubeCoordinateHelper.CubeHex b) {
+        public HexLink {
+            if (a.hashCode() > b.hashCode()) {
+                CubeCoordinateHelper.CubeHex temp = a;
+                a = b;
+                b = temp;
+            }
+        }
     }
 }
 

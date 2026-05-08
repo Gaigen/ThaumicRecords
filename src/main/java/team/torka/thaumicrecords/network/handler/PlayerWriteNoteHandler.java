@@ -34,7 +34,8 @@ public class PlayerWriteNoteHandler {
                             if (researchNoteComponent.canWriteTo(payload.coordinate())) {
                                 ResearchNoteComponent.HexEntry newEntry = new ResearchNoteComponent.HexEntry(ResearchNoteComponent.HexEntry.FULL,
                                         payload.aspect());
-                                researchNote.set(DataComponentRegistry.RESEARCH_NOTE.get(), researchNoteComponent.writeHex(payload.coordinate(), newEntry));
+                                ResearchNoteComponent temp = researchNoteComponent.writeHex(payload.coordinate(), newEntry);
+                                researchNote.set(DataComponentRegistry.RESEARCH_NOTE.get(), temp.finishedOrSelf());
                                 table.consumeScribingToolDurability();
                                 table.setChanged();
                             }

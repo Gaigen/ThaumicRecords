@@ -22,7 +22,7 @@ public class PlayerEraseNoteHandler {
                     ItemStack researchNote = table.getResearchNotes();
                     if (researchNote.is(ItemRegistry.RESEARCH_NOTES)) {
                         ResearchNoteComponent researchNoteComponent = researchNote.get(DataComponentRegistry.RESEARCH_NOTE);
-                        if (Objects.nonNull(researchNoteComponent)) {
+                        if (Objects.nonNull(researchNoteComponent) && !researchNoteComponent.complete()) {
                             if (researchNoteComponent.hexes().containsKey(payload.coordinate())) {
                                 ResearchNoteComponent.HexEntry hexEntry = researchNoteComponent.hexes().get(payload.coordinate());
                                 if (hexEntry.type() == ResearchNoteComponent.HexEntry.FULL) {

@@ -37,14 +37,10 @@ import team.torka.thaumicrecords.registry.SoundRegistry;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -138,9 +134,9 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             return;
         }
         Map<CubeCoordinateHelper.CubeHex, ResearchNoteComponent.HexEntry> decodedHexes = researchNoteComponent.getDecodedHexes();
-        List<CubeCoordinateHelper.CubeHex> disconnectedHexes = getDisconnectedFullHexes(decodedHexes);
+        List<CubeCoordinateHelper.CubeHex> disconnectedHexes = researchNoteComponent.getDisconnectedFullHexes();
         CubeCoordinateHelper.CubeHex hoveredHex = CubeCoordinateHelper.pixelToCube(mx - centerX, my - centerY, 9.0f);
-        if (decodedHexes.containsKey(hoveredHex)) {
+        if (!researchNoteComponent.complete() && decodedHexes.containsKey(hoveredHex)) {
             if (decodedHexes.get(hoveredHex).type() != ResearchNoteComponent.HexEntry.ROOT) {
                 this.drawHexHighlight(graphics, hoveredHex);
             }
@@ -154,8 +150,8 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 }
             }
         }
-        Set<HexLink> allLinks = getAllLinks(decodedHexes);
-        for (HexLink link : allLinks) {
+        Set<ResearchNoteComponent.HexLink> allLinks = researchNoteComponent.getAllLinks();
+        for (ResearchNoteComponent.HexLink link : allLinks) {
             CubeCoordinateHelper.ScreenPos p1 = link.a().toPixel(9.0F);
             CubeCoordinateHelper.ScreenPos p2 = link.b().toPixel(9.0F);
             this.drawConnectionLine(graphics, (float) (p1.x()), (float) (p1.y()), (float) (p2.x()), (float) (p2.y()));
@@ -201,7 +197,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         buffer.addVertex(matrix, (float) (x2 - nx), (float) (y2 - ny), 0.0F).setColor(0.0F, 0.6F, 0.8F, alpha);
         buffer.addVertex(matrix, (float) (x - nx), (float) (y - ny), 0.0F).setColor(0.0F, 0.6F, 0.8F, alpha);
         MeshData mesh = buffer.build();
-        if (mesh != null) {
+        if (Objects.nonNull(mesh)) {
             BufferUploader.drawWithShader(mesh);
         }
         RenderSystem.defaultBlendFunc();
@@ -497,6 +493,9 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             ItemStack note = this.menu.getResearchNotes();
             ResearchNoteComponent researchNoteComponent = note.get(DataComponentRegistry.RESEARCH_NOTE);
             if (!note.isEmpty() && Objects.nonNull(researchNoteComponent)) {
+                if (researchNoteComponent.complete()) {
+                    return;
+                }
                 CubeCoordinateHelper.CubeHex hex = CubeCoordinateHelper.pixelToCube(mx - this.leftPos - 169, my - this.topPos - 83, 9.0F);
                 if (researchNoteComponent.hexes().containsKey(hex.toKey()) && researchNoteComponent.hexes()
                         .get(hex.toKey())
@@ -514,6 +513,9 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             ItemStack note = this.menu.getResearchNotes();
             ResearchNoteComponent researchNoteComponent = note.get(DataComponentRegistry.RESEARCH_NOTE);
             if (!note.isEmpty() && Objects.nonNull(researchNoteComponent)) {
+                if (researchNoteComponent.complete()) {
+                    return;
+                }
                 CubeCoordinateHelper.CubeHex hex = CubeCoordinateHelper.pixelToCube(mx - this.leftPos - 169, my - this.topPos - 83, 9.0F);
                 if (researchNoteComponent.hexes().containsKey(hex.toKey()) && researchNoteComponent.hexes()
                         .get(hex.toKey())
@@ -604,82 +606,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             }
         }
         this.runes.entrySet().removeIf(entry -> entry.getValue().decay < time);
-    }
-
-    public List<CubeCoordinateHelper.CubeHex> getDisconnectedFullHexes(Map<CubeCoordinateHelper.CubeHex, ResearchNoteComponent.HexEntry> hexes) {
-        Set<CubeCoordinateHelper.CubeHex> connected = new HashSet<>();
-        Queue<CubeCoordinateHelper.CubeHex> queue = new LinkedList<>();
-
-        hexes.forEach((pos, entry) -> {
-            if (entry.type() == ResearchNoteComponent.HexEntry.ROOT) {
-                queue.add(pos);
-                connected.add(pos);
-            }
-        });
-
-        while (!queue.isEmpty()) {
-            CubeCoordinateHelper.CubeHex current = queue.poll();
-            for (int i = 0; i < 6; i++) {
-                CubeCoordinateHelper.CubeHex neighbor = current.getNeighbor(i);
-                if (hexes.containsKey(neighbor)) {
-                    ResearchNoteComponent.HexEntry neighborEntry = hexes.get(neighbor);
-                    if (neighborEntry.type() == ResearchNoteComponent.HexEntry.FULL && !connected.contains(neighbor)) {
-                        Aspect currentAspect = AspectRegistry.ASPECT_REGISTRY.get(hexes.get(current).aspect());
-                        Aspect neighborAspect = AspectRegistry.ASPECT_REGISTRY.get(hexes.get(neighbor).aspect());
-                        if (Objects.nonNull(currentAspect) && Objects.nonNull(neighborAspect)) {
-                            if (currentAspect.isRelatedTo(neighborAspect)) {
-                                connected.add(neighbor);
-                                queue.add(neighbor);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        List<CubeCoordinateHelper.CubeHex> disconnected = new ArrayList<>();
-        hexes.forEach((pos, entry) -> {
-            if (entry.type() == ResearchNoteComponent.HexEntry.FULL && !connected.contains(pos)) {
-                disconnected.add(pos);
-            }
-        });
-        return disconnected;
-    }
-
-    public Set<HexLink> getAllLinks(Map<CubeCoordinateHelper.CubeHex, ResearchNoteComponent.HexEntry> hexes) {
-        Set<HexLink> links = new HashSet<>();
-        for (Map.Entry<CubeCoordinateHelper.CubeHex, ResearchNoteComponent.HexEntry> entry : hexes.entrySet()) {
-            CubeCoordinateHelper.CubeHex pos = entry.getKey();
-            ResearchNoteComponent.HexEntry current = entry.getValue();
-            if (current.type() == ResearchNoteComponent.HexEntry.EMPTY) {
-                continue;
-            }
-            for (int i = 0; i < 6; i++) {
-                CubeCoordinateHelper.CubeHex neighborPos = pos.getNeighbor(i);
-                if (hexes.containsKey(neighborPos)) {
-                    ResearchNoteComponent.HexEntry neighborEntry = hexes.get(neighborPos);
-                    if (neighborEntry.type() != ResearchNoteComponent.HexEntry.EMPTY) {
-                        Aspect currentAspect = AspectRegistry.ASPECT_REGISTRY.get(current.aspect());
-                        Aspect neighborAspect = AspectRegistry.ASPECT_REGISTRY.get(neighborEntry.aspect());
-                        if (Objects.nonNull(currentAspect) && Objects.nonNull(neighborAspect)) {
-                            if (currentAspect.isRelatedTo(neighborAspect)) {
-                                links.add(new HexLink(pos, neighborPos));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return links;
-    }
-
-    public record HexLink(CubeCoordinateHelper.CubeHex a, CubeCoordinateHelper.CubeHex b) {
-        public HexLink {
-            if (a.hashCode() > b.hashCode()) {
-                CubeCoordinateHelper.CubeHex temp = a;
-                a = b;
-                b = temp;
-            }
-        }
     }
 
     private record Rune(CubeCoordinateHelper.CubeHex hex, long start, long decay, int rune) {
