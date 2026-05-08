@@ -3,6 +3,7 @@ package team.torka.thaumicrecords.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.block.entity.ResearchTableBlockEntity;
 import team.torka.thaumicrecords.block.part.ResearchTablePart;
+import team.torka.thaumicrecords.registry.BlockRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -83,11 +85,25 @@ public class ResearchTableBlock extends BaseEntityBlock {
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 
-    public BlockPos getMainPos(BlockState state, BlockPos pos) {
-        if (state.getValue(PART) == ResearchTablePart.LEFT) {
-            return pos;
-        } else {
-            return pos.relative(state.getValue(FACING).getCounterClockWise());
+    @Override
+    @ParametersAreNonnullByDefault
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock())) {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof ResearchTableBlockEntity tableEntity) {
+                for (int i = 0; i < tableEntity.getInventory().getSlots(); i++) {
+                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), tableEntity.getInventory().getStackInSlot(i));
+                }
+                level.updateNeighborsAt(pos, this);
+            }
+            ResearchTablePart part = state.getValue(PART);
+            Direction facing = state.getValue(FACING);
+            BlockPos otherPos = (part == ResearchTablePart.LEFT) ? pos.relative(facing.getClockWise()) : pos.relative(facing.getCounterClockWise());
+            BlockState otherState = level.getBlockState(otherPos);
+            if (otherState.is(this) && otherState.getValue(PART) != part) {
+                level.setBlock(pos, BlockRegistry.TABLE.get().defaultBlockState(), 3);
+            }
+            super.onRemove(state, level, pos, newState, isMoving);
         }
     }
 

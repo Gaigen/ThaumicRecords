@@ -27,8 +27,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.api.ModTags;
 import team.torka.thaumicrecords.block.entity.ArcaneWorkbenchBlockEntity;
+import team.torka.thaumicrecords.block.entity.ResearchTableBlockEntity;
 import team.torka.thaumicrecords.block.entity.TableBlockEntity;
 import team.torka.thaumicrecords.block.part.ResearchTablePart;
+import team.torka.thaumicrecords.menu.ArcaneWorkbenchMenu;
+import team.torka.thaumicrecords.menu.ResearchTableMenu;
 import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 
@@ -76,7 +79,7 @@ public class TableBlock extends BaseEntityBlock {
                 level.setBlock(pos, BlockRegistry.ARCANE_WORKBENCH.get().defaultBlockState(), 3);
                 BlockEntity be = level.getBlockEntity(pos);
                 if (be instanceof ArcaneWorkbenchBlockEntity workbenchBE) {
-                    workbenchBE.getInventory().setStackInSlot(10, itemstack.copy());
+                    workbenchBE.getInventory().setStackInSlot(ArcaneWorkbenchMenu.SLOT_WAND, itemstack.copy());
                     itemstack.setCount(0);
                     level.playSound(null, pos, SoundEvents.WOODEN_BUTTON_CLICK_OFF, SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
@@ -131,10 +134,11 @@ public class TableBlock extends BaseEntityBlock {
         if (!player.getAbilities().instabuild) {
             stack.shrink(1);
         }
-//        BlockEntity be = level.getBlockEntity(pos1);
-//        if (be instanceof ResearchTableBlockEntity researchBE) {
-//            researchBE.setInventorySlotContents(0, stack.split(1));
-//        }
+        BlockEntity be = level.getBlockEntity(pos1);
+        if (be instanceof ResearchTableBlockEntity researchBE) {
+            researchBE.getInventory().setStackInSlot(ResearchTableMenu.SLOT_SCRIBE_TOOLS, stack.copy());
+            stack.setCount(0);
+        }
 
     }
 }
