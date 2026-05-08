@@ -4,13 +4,14 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferUploader;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -178,17 +179,31 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     }
 
     private void drawConnectionLine(GuiGraphics graphics, double x, double y, double x2, double y2) {
+        float thickness = 1F;
         float ticks = (float) (System.currentTimeMillis() / 50.0);
         float alpha = 0.3F + Mth.sin(ticks * 0.2F + (float) x) * 0.3F + 0.3F;
+        float dx = (float) (x2 - x);
+        float dy = (float) (y2 - y);
+        float len = Mth.sqrt(dx * dx + dy * dy);
+        if (len <= 0) {
+            return;
+        }
+        float nx = -dy / len * (thickness / 2.0F);
+        float ny = dx / len * (thickness / 2.0F);
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder bufferBuilder = tesselator.begin(VertexFormat.Mode.DEBUG_LINES, RenderType.debugLineStrip(3).format());
+        BufferBuilder buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         Matrix4f matrix = graphics.pose().last().pose();
-        bufferBuilder.addVertex(matrix, (float) x, (float) y, 0.0F).setColor(0.0F, 0.6F, 0.8F, alpha);
-        bufferBuilder.addVertex(matrix, (float) x2, (float) y2, 0.0F).setColor(0.0F, 0.6F, 0.8F, alpha);
-        BufferUploader.drawWithShader(bufferBuilder.buildOrThrow());
+        buffer.addVertex(matrix, (float) (x + nx), (float) (y + ny), 0.0F).setColor(0.0F, 0.6F, 0.8F, alpha);
+        buffer.addVertex(matrix, (float) (x2 + nx), (float) (y2 + ny), 0.0F).setColor(0.0F, 0.6F, 0.8F, alpha);
+        buffer.addVertex(matrix, (float) (x2 - nx), (float) (y2 - ny), 0.0F).setColor(0.0F, 0.6F, 0.8F, alpha);
+        buffer.addVertex(matrix, (float) (x - nx), (float) (y - ny), 0.0F).setColor(0.0F, 0.6F, 0.8F, alpha);
+        MeshData mesh = buffer.build();
+        if (mesh != null) {
+            BufferUploader.drawWithShader(mesh);
+        }
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
     }
