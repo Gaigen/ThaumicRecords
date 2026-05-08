@@ -143,7 +143,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 this.drawAspectIcon(graphics, hex, aspect);
             }
         }
-        CubeCoordinateHelper.CubeHex hoveredHex = CubeCoordinateHelper.pixelToCube(mx - centerX, -my + centerY, 9.0f);
+        CubeCoordinateHelper.CubeHex hoveredHex = CubeCoordinateHelper.pixelToCube(mx - centerX, my - centerY, 9.0f);
         if (decodedHexes.containsKey(hoveredHex)) {
             this.drawHexHighlight(graphics, hoveredHex);
         }
@@ -432,7 +432,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             ItemStack note = this.menu.getResearchNotes();
             ResearchNoteComponent researchNoteComponent = note.get(DataComponentRegistry.RESEARCH_NOTE);
             if (!note.isEmpty() && Objects.nonNull(researchNoteComponent)) {
-                CubeCoordinateHelper.CubeHex hex = CubeCoordinateHelper.pixelToCube(mx - this.leftPos - 169, -my + this.topPos + 83, 9.0F);
+                CubeCoordinateHelper.CubeHex hex = CubeCoordinateHelper.pixelToCube(mx - this.leftPos - 169, my - this.topPos - 83, 9.0F);
                 if (researchNoteComponent.hexes().containsKey(hex.toKey()) && researchNoteComponent.hexes()
                         .get(hex.toKey())
                         .type() == ResearchNoteComponent.HexEntry.EMPTY) {
