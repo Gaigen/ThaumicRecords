@@ -20,6 +20,7 @@ import team.torka.thaumicrecords.attachment.ResearchPoint;
 import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
 import team.torka.thaumicrecords.menu.ResearchTableMenu;
 import team.torka.thaumicrecords.network.payload.PlayerCombineAspectPayload;
+import team.torka.thaumicrecords.network.payload.PlayerEraseNotePayload;
 import team.torka.thaumicrecords.network.payload.PlayerWriteNotePayload;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.AttachmentRegistry;
@@ -424,7 +425,28 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             this.draggingAspect = null;
             return true;
         }
+        if (button == 0) {
+            this.handleEraseNote(mx, my);
+            return true;
+        }
         return super.mouseReleased(mx, my, button);
+    }
+
+    private void handleEraseNote(double mx, double my) {
+        if (!this.dragging && Objects.isNull(this.draggingAspect)) {
+            ItemStack note = this.menu.getResearchNotes();
+            ResearchNoteComponent researchNoteComponent = note.get(DataComponentRegistry.RESEARCH_NOTE);
+            if (!note.isEmpty() && Objects.nonNull(researchNoteComponent)) {
+                CubeCoordinateHelper.CubeHex hex = CubeCoordinateHelper.pixelToCube(mx - this.leftPos - 169, my - this.topPos - 83, 9.0F);
+                if (researchNoteComponent.hexes().containsKey(hex.toKey()) && researchNoteComponent.hexes()
+                        .get(hex.toKey())
+                        .type() == ResearchNoteComponent.HexEntry.FULL) {
+                    this.playButtonCombine();
+                    this.playButtonErase();
+                    PacketDistributor.sendToServer(new PlayerEraseNotePayload(menu.getBlockEntityPos(), hex.toKey()));
+                }
+            }
+        }
     }
 
     private void handleMouseDraggingEnd(double mx, double my) {
