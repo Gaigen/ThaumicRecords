@@ -102,6 +102,24 @@ public class Aspect implements Comparable<Aspect> {
                 AspectRegistry.ORDO.getId(), AspectRegistry.PERDITIO.getId());
     }
 
+    public boolean isRelatedTo(Aspect other) {
+        if (Objects.nonNull(this.components)) {
+            for (Aspect component : this.components) {
+                if (component == other) {
+                    return true;
+                }
+            }
+        }
+        if (Objects.nonNull(other.components)) {
+            for (Aspect component : other.components) {
+                if (component == this) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /*@formatter:off*/
     public static final Aspect AER = new Aspect("aer",0xFFFF7E,ChatFormatting.YELLOW);
     public static final Aspect TERRA = new Aspect("terra",0x56C000,ChatFormatting.DARK_GREEN);

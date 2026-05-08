@@ -31,15 +31,12 @@ public class PlayerWriteNoteHandler {
                     if (researchNote.is(ItemRegistry.RESEARCH_NOTES)) {
                         ResearchNoteComponent researchNoteComponent = researchNote.get(DataComponentRegistry.RESEARCH_NOTE);
                         if (Objects.nonNull(researchNoteComponent)) {
-                            if (researchNoteComponent.hexes().containsKey(payload.coordinate())) {
-                                ResearchNoteComponent.HexEntry hexEntry = researchNoteComponent.hexes().get(payload.coordinate());
-                                if (hexEntry.type() == ResearchNoteComponent.HexEntry.EMPTY) {
-                                    ResearchNoteComponent.HexEntry newEntry = new ResearchNoteComponent.HexEntry(ResearchNoteComponent.HexEntry.FULL,
-                                            payload.aspect());
-                                    researchNote.set(DataComponentRegistry.RESEARCH_NOTE.get(), researchNoteComponent.writeHex(payload.coordinate(), newEntry));
-                                    table.consumeScribingToolDurability();
-                                    table.setChanged();
-                                }
+                            if (researchNoteComponent.canWriteTo(payload.coordinate())) {
+                                ResearchNoteComponent.HexEntry newEntry = new ResearchNoteComponent.HexEntry(ResearchNoteComponent.HexEntry.FULL,
+                                        payload.aspect());
+                                researchNote.set(DataComponentRegistry.RESEARCH_NOTE.get(), researchNoteComponent.writeHex(payload.coordinate(), newEntry));
+                                table.consumeScribingToolDurability();
+                                table.setChanged();
                             }
                         }
                     }

@@ -26,12 +26,6 @@ public record ResearchNoteComponent(ResourceLocation research, int color, boolea
             ResearchNoteComponent::research, ByteBufCodecs.INT, ResearchNoteComponent::color, ByteBufCodecs.BOOL, ResearchNoteComponent::complete,
             ByteBufCodecs.map(HashMap::new, ByteBufCodecs.STRING_UTF8, HexEntry.STREAM_CODEC), ResearchNoteComponent::hexes, ResearchNoteComponent::new);
 
-
-    @Nullable
-    public HexEntry getHex(CubeCoordinateHelper.CubeHex pos) {
-        return hexes.get(pos.toKey());
-    }
-
     public Map<CubeCoordinateHelper.CubeHex, HexEntry> getDecodedHexes() {
         Map<CubeCoordinateHelper.CubeHex, HexEntry> decoded = new HashMap<>();
         hexes.forEach((key, entry) -> decoded.put(CubeCoordinateHelper.CubeHex.fromKey(key), entry));
@@ -47,10 +41,6 @@ public record ResearchNoteComponent(ResourceLocation research, int color, boolea
                 .apply(instance, (t, a) -> new HexEntry(t, a.orElse(null))));
         public static final StreamCodec<ByteBuf, HexEntry> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, HexEntry::type,
                 ByteBufCodecs.optional(ResourceLocation.STREAM_CODEC), entry -> Optional.ofNullable(entry.aspect), (t, a) -> new HexEntry(t, a.orElse(null)));
-
-        public boolean isRoot() {
-            return type == ROOT;
-        }
     }
 
     public boolean canWriteTo(String coordinate) {
