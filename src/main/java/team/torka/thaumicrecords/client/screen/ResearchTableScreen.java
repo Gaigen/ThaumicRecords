@@ -125,6 +125,12 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             return;
         }
         Map<CubeCoordinateHelper.CubeHex, ResearchNoteComponent.HexEntry> decodedHexes = researchNoteComponent.getDecodedHexes();
+        CubeCoordinateHelper.CubeHex hoveredHex = CubeCoordinateHelper.pixelToCube(mx - centerX, my - centerY, 9.0f);
+        if (decodedHexes.containsKey(hoveredHex)) {
+            if (decodedHexes.get(hoveredHex).type() != ResearchNoteComponent.HexEntry.ROOT) {
+                this.drawHexHighlight(graphics, hoveredHex);
+            }
+        }
         for (Map.Entry<CubeCoordinateHelper.CubeHex, ResearchNoteComponent.HexEntry> entry : decodedHexes.entrySet()) {
             CubeCoordinateHelper.CubeHex hex = entry.getKey();
             ResearchNoteComponent.HexEntry hexEntry = entry.getValue();
@@ -133,6 +139,10 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                     this.drawHex(graphics, hex);
                 }
             }
+        }
+        for (Map.Entry<CubeCoordinateHelper.CubeHex, ResearchNoteComponent.HexEntry> entry : decodedHexes.entrySet()) {
+            CubeCoordinateHelper.CubeHex hex = entry.getKey();
+            ResearchNoteComponent.HexEntry hexEntry = entry.getValue();
             if (hexEntry.type() == ResearchNoteComponent.HexEntry.ROOT) {
                 this.drawOrb(graphics, hex);
             }
@@ -143,10 +153,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 }
                 this.drawAspectIcon(graphics, hex, aspect);
             }
-        }
-        CubeCoordinateHelper.CubeHex hoveredHex = CubeCoordinateHelper.pixelToCube(mx - centerX, my - centerY, 9.0f);
-        if (decodedHexes.containsKey(hoveredHex)) {
-            this.drawHexHighlight(graphics, hoveredHex);
         }
         graphics.pose().popPose();
     }
