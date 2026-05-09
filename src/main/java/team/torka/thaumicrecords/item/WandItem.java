@@ -161,7 +161,7 @@ public class WandItem extends Item {
                 }
                 int useDuration = this.getUseDuration(stack, livingEntity) - remainingUseDuration;
                 if (useDuration % 5 == 0) {
-                    int drainRate = 5;
+                    int drainRate = 1;
                     // TODO 研究增加吸取速率
                     boolean preserve = !player.isShiftKeyDown();
                     // TODO 节点防护术
