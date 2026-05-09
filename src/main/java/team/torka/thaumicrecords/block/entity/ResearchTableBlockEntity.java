@@ -17,7 +17,7 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.ThaumicRecords;
-import team.torka.thaumicrecords.api.ModTags;
+import team.torka.thaumicrecords.api.item.ScribingTool;
 import team.torka.thaumicrecords.menu.ResearchTableMenu;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 
@@ -106,19 +106,16 @@ public class ResearchTableBlockEntity extends BlockEntity implements MenuProvide
 
     public void consumeScribingToolDurability() {
         ItemStack scribingTool = getScribingTool();
-        if (canWrite()) {
-            int damageValue = scribingTool.getDamageValue();
-            scribingTool.setDamageValue(damageValue + 1);
+        if (scribingTool.getItem() instanceof ScribingTool tool) {
+            tool.consumeDurability(scribingTool);
         }
     }
 
-    public boolean canWrite() {
+    public boolean canWrite(Player player) {
         ItemStack scribingTool = getScribingTool();
-        if (!scribingTool.is(ModTags.SCRIBING_TOOLS)) {
-            return false;
+        if (scribingTool.getItem() instanceof ScribingTool tool) {
+            return tool.canScribe(scribingTool, player);
         }
-        int damageValue = scribingTool.getDamageValue();
-        int maxDamage = scribingTool.getMaxDamage();
-        return damageValue < maxDamage;
+        return false;
     }
 }

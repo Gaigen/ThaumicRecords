@@ -18,7 +18,7 @@ public class PlayerEraseNoteHandler {
         context.enqueueWork(() -> {
             BlockEntity be = player.level().getBlockEntity(payload.blockPos());
             if (be instanceof ResearchTableBlockEntity table) {
-                if (table.canWrite()) {
+                if (table.canWrite(player)) {
                     ItemStack researchNote = table.getResearchNotes();
                     if (researchNote.is(ItemRegistry.RESEARCH_NOTES)) {
                         ResearchNoteComponent researchNoteComponent = researchNote.get(DataComponentRegistry.RESEARCH_NOTE);

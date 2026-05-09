@@ -26,7 +26,7 @@ public class PlayerWriteNoteHandler {
                 if (Objects.isNull(aspect)) {
                     return;
                 }
-                if (table.canWrite()) {
+                if (table.canWrite(player)) {
                     ItemStack researchNote = table.getResearchNotes();
                     if (researchNote.is(ItemRegistry.RESEARCH_NOTES)) {
                         ResearchNoteComponent researchNoteComponent = researchNote.get(DataComponentRegistry.RESEARCH_NOTE);

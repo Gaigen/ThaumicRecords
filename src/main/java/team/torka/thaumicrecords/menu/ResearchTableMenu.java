@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
-import team.torka.thaumicrecords.api.ModTags;
+import team.torka.thaumicrecords.api.item.ScribingTool;
 import team.torka.thaumicrecords.block.entity.ResearchTableBlockEntity;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 import team.torka.thaumicrecords.registry.MenuRegistry;
@@ -40,7 +40,7 @@ public class ResearchTableMenu extends AbstractContainerMenu {
             @Override
             @ParametersAreNonnullByDefault
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(ModTags.SCRIBING_TOOLS);
+                return stack.getItem() instanceof ScribingTool;
             }
         });
 
@@ -77,7 +77,7 @@ public class ResearchTableMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (itemstack1.is(ModTags.SCRIBING_TOOLS)) {
+                if (itemstack1.getItem() instanceof ScribingTool) {
                     if (!this.moveItemStackTo(itemstack1, SLOT_SCRIBE_TOOLS, SLOT_SCRIBE_TOOLS + 1, false)) {
                         return ItemStack.EMPTY;
                     }
