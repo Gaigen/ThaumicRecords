@@ -5,7 +5,16 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.api.item.WandRod;
+import team.torka.thaumicrecords.registry.WandRodRegistry;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public record WandItemComponent(ResourceLocation rod, ResourceLocation cap, AspectList aspects) {
     public static final Codec<WandItemComponent> CODEC = RecordCodecBuilder.create(
@@ -34,10 +43,29 @@ public record WandItemComponent(ResourceLocation rod, ResourceLocation cap, Aspe
         return new WandItemComponent(this.rod, this.cap, newAspects);
     }
 
-    public WandItemComponent addVis(ResourceLocation aspect, int amount, int maxVis) {
+    public WandItemComponent addVis(ResourceLocation aspect, int amount, AtomicInteger remain) {
         AspectList newAspects = this.aspects.copy();
-        int current = newAspects.getOrDefault(aspect, 0);
-        newAspects.put(aspect, Math.min(maxVis, current + amount));
+        if (!Aspect.getPrimalList().contains(aspect)) {
+            remain.set(amount);
+            return this;
+        }
+        WandRod wandRod = WandRodRegistry.WAND_ROD_REGISTRY.get(this.getRod());
+        if (Objects.isNull(wandRod)) {
+            remain.set(amount);
+            return this;
+        }
+        int current = this.getAspects().get(aspect);
+        int max = wandRod.getCapacity();
+        int lack = Math.max(max - current, 0);
+        int actualAmountToProcess = amount * 100;
+        if (actualAmountToProcess >= lack) {
+            int left = actualAmountToProcess - lack;
+            remain.set(left / 100);
+            newAspects.put(aspect, max);
+        } else {
+            remain.set(0);
+            newAspects.put(aspect, current + actualAmountToProcess);
+        }
         return withAspects(newAspects);
     }
 
@@ -55,5 +83,28 @@ public record WandItemComponent(ResourceLocation rod, ResourceLocation cap, Aspe
             newAspects.put(aspect, Math.max(0, current - amount));
         });
         return withAspects(newAspects);
+    }
+
+    public Integer getCapacity() {
+        WandRod wandRod = WandRodRegistry.WAND_ROD_REGISTRY.get(this.getRod());
+        if (Objects.isNull(wandRod)) {
+            return 0;
+        }
+        return wandRod.getCapacity();
+    }
+
+    public List<ResourceLocation> getLackVisAspect() {
+        WandRod wandRod = WandRodRegistry.WAND_ROD_REGISTRY.get(this.getRod());
+        if (Objects.isNull(wandRod)) {
+            return Collections.emptyList();
+        }
+        int max = wandRod.getCapacity();
+        List<ResourceLocation> result = new ArrayList<>();
+        this.aspects.forEach((k, v) -> {
+            if (v < max) {
+                result.add(k);
+            }
+        });
+        return result;
     }
 }

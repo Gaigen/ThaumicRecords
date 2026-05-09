@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -93,6 +94,10 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
     public AspectList multiply(int multiplier) {
         this.forEach((aspect, amount) -> this.put(aspect, amount * multiplier));
         return this;
+    }
+
+    public List<ResourceLocation> getPrimalKey() {
+        return this.keySet().stream().filter(e -> Aspect.getPrimalList().contains(e)).toList();
     }
 }
 

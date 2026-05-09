@@ -14,7 +14,7 @@ public class WandRod {
     private final String name;
 
     /**
-     * 两位小数，实际显示是1/100，比如传入2500，那么显示是200
+     * 两位小数，实际显示是1/100，比如传入2500，那么显示是250
      */
     private final int capacity;
 

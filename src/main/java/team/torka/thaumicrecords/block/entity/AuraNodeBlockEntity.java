@@ -120,4 +120,26 @@ public class AuraNodeBlockEntity extends BlockEntity {
     public AspectList getLimitAspect() {
         return limit;
     }
+
+    public int drainAspect(ResourceLocation aspectId, int amount, boolean preserve) {
+        int currentAmt = this.current.get(aspectId);
+        if (currentAmt <= 0) {
+            return 0;
+        }
+        int toDrain = amount;
+        if (preserve && toDrain >= currentAmt) {
+            toDrain = currentAmt - 1;
+        } else if (toDrain > currentAmt) {
+            toDrain = currentAmt;
+        }
+        if (toDrain > 0) {
+            this.current.add(aspectId, -toDrain);
+            this.setChanged();
+            if (this.level != null && !this.level.isClientSide) {
+                this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), 3);
+            }
+            return toDrain;
+        }
+        return 0;
+    }
 }

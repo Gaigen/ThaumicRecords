@@ -5,18 +5,29 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.api.item.WandRod;
+import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
+import team.torka.thaumicrecords.registry.ItemRegistry;
 import team.torka.thaumicrecords.registry.WandCapRegistry;
 import team.torka.thaumicrecords.registry.WandRodRegistry;
 
@@ -26,6 +37,7 @@ import java.math.RoundingMode;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class WandItem extends Item {
 
@@ -109,4 +121,72 @@ public class WandItem extends Item {
         }
         return Component.translatable(ThaumicRecords.createTranslationKey("item", "wand.default"));
     }
+
+    @NotNull
+    @Override
+    @ParametersAreNonnullByDefault
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        player.startUsingItem(hand);
+        return InteractionResultHolder.consume(itemstack);
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public int getUseDuration(ItemStack stack, LivingEntity livingEntity) {
+        return 72000;
+    }
+
+    @NotNull
+    @Override
+    @ParametersAreNonnullByDefault
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.NONE;
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
+        if (livingEntity instanceof ServerPlayer player) {
+            HitResult hitResult = player.pick(5.0D, 0.0F, true);
+            if (hitResult instanceof BlockHitResult blockHit && level.getBlockEntity(blockHit.getBlockPos()) instanceof AuraNodeBlockEntity nodeBE) {
+                if (!stack.is(ItemRegistry.WAND)) {
+                    player.stopUsingItem();
+                    return;
+                }
+                WandItemComponent wandItemComponent = stack.get(DataComponentRegistry.WAND_ITEM_DATA);
+                if (Objects.isNull(wandItemComponent)) {
+                    player.stopUsingItem();
+                    return;
+                }
+                int useDuration = this.getUseDuration(stack, livingEntity) - remainingUseDuration;
+                if (useDuration % 5 == 0) {
+                    int drainRate = 5;
+                    // TODO 研究增加吸取速率
+                    boolean preserve = !player.isShiftKeyDown();
+                    // TODO 节点防护术
+                    // TODO 铁杖端木杖柄判断
+                    List<ResourceLocation> notFull = wandItemComponent.getLackVisAspect();
+                    List<ResourceLocation> randomPrimalList = nodeBE.getLimitAspect().getPrimalKey().stream().filter(notFull::contains).toList();
+                    if (!randomPrimalList.isEmpty()) {
+                        ResourceLocation randomAspect = randomPrimalList.get(level.random.nextInt(randomPrimalList.size()));
+                        int space = wandItemComponent.getCapacity() - wandItemComponent.getAspects().get(randomAspect);
+                        int toDrain = Math.min(drainRate, space);
+                        int drained = nodeBE.drainAspect(randomAspect, toDrain, preserve);
+                        if (drained > 0) {
+                            AtomicInteger remain = new AtomicInteger();
+                            WandItemComponent newComponent = wandItemComponent.addVis(randomAspect, drained, remain);
+                            if (remain.get() < drained) {
+                                nodeBE.getCurrentAspect().add(randomAspect, remain.get());
+                                stack.set(DataComponentRegistry.WAND_ITEM_DATA, newComponent);
+                            }
+                        }
+                    }
+                }
+            } else {
+                player.stopUsingItem();
+            }
+        }
+    }
+
 }
