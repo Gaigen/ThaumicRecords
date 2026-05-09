@@ -4,7 +4,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public interface ScribingTool {
-    boolean canScribe(ItemStack itemStack, Player player);
+    default boolean canScribe(ItemStack itemStack, Player player) {
+        int damageValue = itemStack.getDamageValue();
+        int maxDamage = itemStack.getMaxDamage();
+        return damageValue < maxDamage;
+    }
 
-    void consumeDurability(ItemStack itemStack);
+    default void consumeDurability(ItemStack itemStack) {
+        if (itemStack.getItem() instanceof ScribingTool) {
+            int damageValue = itemStack.getDamageValue();
+            itemStack.setDamageValue(damageValue + 1);
+        }
+    }
 }
