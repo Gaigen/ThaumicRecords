@@ -165,6 +165,7 @@ public record ResearchNoteComponent(ResourceLocation research, int color, boolea
     public Set<HexLink> getAllLinks() {
         Map<CubeCoordinateHelper.CubeHex, HexEntry> decodedHexes = this.getDecodedHexes();
         Set<HexLink> links = new HashSet<>();
+        List<CubeCoordinateHelper.CubeHex> disconnected = getDisconnectedFullHexes();
         for (Map.Entry<CubeCoordinateHelper.CubeHex, ResearchNoteComponent.HexEntry> entry : decodedHexes.entrySet()) {
             CubeCoordinateHelper.CubeHex pos = entry.getKey();
             ResearchNoteComponent.HexEntry current = entry.getValue();
@@ -175,6 +176,9 @@ public record ResearchNoteComponent(ResourceLocation research, int color, boolea
                 CubeCoordinateHelper.CubeHex neighborPos = pos.getNeighbor(i);
                 if (decodedHexes.containsKey(neighborPos)) {
                     ResearchNoteComponent.HexEntry neighborEntry = decodedHexes.get(neighborPos);
+                    if (disconnected.contains(pos) || disconnected.contains(neighborPos)) {
+                        continue;
+                    }
                     if (neighborEntry.type() != ResearchNoteComponent.HexEntry.EMPTY) {
                         Aspect currentAspect = AspectRegistry.ASPECT_REGISTRY.get(current.aspect());
                         Aspect neighborAspect = AspectRegistry.ASPECT_REGISTRY.get(neighborEntry.aspect());

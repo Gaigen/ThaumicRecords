@@ -24,6 +24,7 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.helper.CubeCoordinateHelper;
+import team.torka.thaumicrecords.api.item.ScribingTool;
 import team.torka.thaumicrecords.attachment.ResearchPoint;
 import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
 import team.torka.thaumicrecords.menu.ResearchTableMenu;
@@ -85,6 +86,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         graphics.blit(GUI_TEX, x + 40, y + 167, 0, 166, 184, 88);
         if (!this.menu.slots.get(ResearchTableMenu.SLOT_RESEARCH_NOTE).getItem().isEmpty()) {
             this.drawSheet(graphics, x, y, mouseX, mouseY);
+            this.drawNoInkTooltip(graphics);
         }
 
         this.drawPlayerAspects(graphics, x + 10, y + 40, mouseX, mouseY);
@@ -319,6 +321,26 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             MutableComponent lore = Component.translatable(aspect.getLoreTranslationKey()).withStyle(ChatFormatting.GRAY);
             graphics.renderComponentTooltip(this.font, Arrays.asList(title, lore), mx, my - 8);
         }
+    }
+
+    private void drawNoInkTooltip(GuiGraphics graphics) {
+        if (Objects.isNull(this.minecraft) || Objects.isNull(this.minecraft.player)) {
+            return;
+        }
+        ItemStack scribingTool = this.menu.getScribingTool();
+        if (scribingTool.getItem() instanceof ScribingTool sc) {
+            if (sc.canScribe(scribingTool, this.minecraft.player)) {
+                return;
+            }
+        }
+        MutableComponent title = Component.translatable(ThaumicRecords.createTranslationKey("text", "researchtable.noink.title")).withStyle(
+                ChatFormatting.AQUA);
+        MutableComponent lore = Component.translatable(ThaumicRecords.createTranslationKey("text", "researchtable.noink.lore")).withStyle(ChatFormatting.GRAY);
+        List<Component> tooltip = List.of(title, lore);
+        int width1 = this.font.width(title);
+        int width2 = this.font.width(lore);
+        int sx = Math.max(width1, width2) / 2;
+        graphics.renderComponentTooltip(this.font, tooltip, leftPos + 157 - sx, topPos + 84);
     }
 
     private void drawHex(GuiGraphics graphics, CubeCoordinateHelper.CubeHex hex) {

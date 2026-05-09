@@ -40,6 +40,8 @@
   "wand_rod.thaumicrecords.greatwood": "宏伟之木",
   "wand_rod.thaumicrecords.silverwood": "银树",
   "text.thaumicrecords.insufficient_vis": "魔力不足",
+  "text.thaumicrecords.researchtable.noink.title": "墨水已耗尽!",
+  "text.thaumicrecords.researchtable.noink.lore": "请补充新的笔与墨!",
   "aspect.thaumicrecords.name.aer": "Aer",
   "aspect.thaumicrecords.name.terra": "Terra",
   "aspect.thaumicrecords.name.ignis": "Ignis",

@@ -118,6 +118,10 @@ public class ResearchTableMenu extends AbstractContainerMenu {
         return blockEntity.getResearchNotes();
     }
 
+    public ItemStack getScribingTool() {
+        return blockEntity.getScribingTool();
+    }
+
     public BlockPos getBlockEntityPos() {
         return blockEntity.getBlockPos();
     }

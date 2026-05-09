@@ -5,7 +5,23 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import org.slf4j.Logger;
-import team.torka.thaumicrecords.registry.*;
+import team.torka.thaumicrecords.registry.ArmorMaterialRegistry;
+import team.torka.thaumicrecords.registry.AspectRegistry;
+import team.torka.thaumicrecords.registry.AttachmentRegistry;
+import team.torka.thaumicrecords.registry.BlockEntityRegistry;
+import team.torka.thaumicrecords.registry.BlockRegistry;
+import team.torka.thaumicrecords.registry.CreativeTabRegistry;
+import team.torka.thaumicrecords.registry.DataComponentRegistry;
+import team.torka.thaumicrecords.registry.ItemRegistry;
+import team.torka.thaumicrecords.registry.MenuRegistry;
+import team.torka.thaumicrecords.registry.NodeModifierRegistry;
+import team.torka.thaumicrecords.registry.NodeTypeRegistry;
+import team.torka.thaumicrecords.registry.ParticleRegistry;
+import team.torka.thaumicrecords.registry.RecipeSerializerRegistry;
+import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
+import team.torka.thaumicrecords.registry.SoundRegistry;
+import team.torka.thaumicrecords.registry.WandCapRegistry;
+import team.torka.thaumicrecords.registry.WandRodRegistry;
 
 @Mod(ThaumicRecords.MOD_ID)
 public class ThaumicRecords {
