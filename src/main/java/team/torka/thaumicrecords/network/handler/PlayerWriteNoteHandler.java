@@ -6,10 +6,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import team.torka.thaumicrecords.api.aspect.Aspect;
+import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.attachment.ResearchPoint;
 import team.torka.thaumicrecords.block.entity.ResearchTableBlockEntity;
 import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
 import team.torka.thaumicrecords.network.payload.PlayerWriteNotePayload;
 import team.torka.thaumicrecords.registry.AspectRegistry;
+import team.torka.thaumicrecords.registry.AttachmentRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 
@@ -32,12 +35,18 @@ public class PlayerWriteNoteHandler {
                         ResearchNoteComponent researchNoteComponent = researchNote.get(DataComponentRegistry.RESEARCH_NOTE);
                         if (Objects.nonNull(researchNoteComponent)) {
                             if (researchNoteComponent.canWriteTo(payload.coordinate())) {
-                                ResearchNoteComponent.HexEntry newEntry = new ResearchNoteComponent.HexEntry(ResearchNoteComponent.HexEntry.FULL,
-                                        payload.aspect());
-                                ResearchNoteComponent temp = researchNoteComponent.writeHex(payload.coordinate(), newEntry);
-                                researchNote.set(DataComponentRegistry.RESEARCH_NOTE.get(), temp.finishedOrSelf());
-                                table.consumeScribingToolDurability();
-                                table.setChanged();
+                                ResearchPoint data = player.getData(AttachmentRegistry.RESEARCH_POINT);
+                                if (data.points().get(payload.aspect()) >= 0) {
+                                    AspectList newData = data.points().copy();
+                                    newData.put(payload.aspect(), data.points().get(payload.aspect()) - 1);
+                                    player.setData(AttachmentRegistry.RESEARCH_POINT, new ResearchPoint(newData));
+                                    ResearchNoteComponent.HexEntry newEntry = new ResearchNoteComponent.HexEntry(ResearchNoteComponent.HexEntry.FULL,
+                                            payload.aspect());
+                                    ResearchNoteComponent temp = researchNoteComponent.writeHex(payload.coordinate(), newEntry);
+                                    researchNote.set(DataComponentRegistry.RESEARCH_NOTE.get(), temp.finishedOrSelf());
+                                    table.consumeScribingToolDurability();
+                                    table.setChanged();
+                                }
                             }
                         }
                     }
