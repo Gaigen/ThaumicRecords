@@ -49,11 +49,11 @@ public class RecipeGenerator extends RecipeProvider {
                 .save(output);
         // 笔与墨
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ItemRegistry.SCRIBING_TOOLS).requires(Items.GLASS_BOTTLE).requires(Items.FEATHER).requires(
-                Tags.Items.DYED_BLACK).unlockedBy("has_ink", has(Tags.Items.DYED_BLACK)).save(output);
+                Tags.Items.DYES_BLACK).unlockedBy("has_ink", has(Tags.Items.DYES_BLACK)).save(output);
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ItemRegistry.SCRIBING_TOOLS)
                 .requires(ItemRegistry.SCRIBING_TOOLS)
                 .requires(Tags.Items.DYES_BLACK)
-                .unlockedBy("has_ink", has(Tags.Items.DYED_BLACK))
+                .unlockedBy("has_ink", has(Tags.Items.DYES_BLACK))
                 .save(output, ThaumicRecords.createRl("scribing_tools_fill_ink"));
     }
 
