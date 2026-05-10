@@ -3,11 +3,14 @@ package team.torka.thaumicrecords.api.helper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.api.research.Research;
 import team.torka.thaumicrecords.attachment.ResearchPoint;
 import team.torka.thaumicrecords.attachment.ResearchUnlocked;
 import team.torka.thaumicrecords.registry.AttachmentRegistry;
+import team.torka.thaumicrecords.registry.ResearchRegistry;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class ResearchHelper {
@@ -32,5 +35,14 @@ public class ResearchHelper {
             newSet.add(research);
             player.setData(AttachmentRegistry.RESEARCH_UNLOCKED, new ResearchUnlocked(newSet));
         }
+    }
+
+    public static boolean isResearchUnlocked(ServerPlayer player, ResourceLocation research) {
+        ResearchUnlocked data = player.getData(AttachmentRegistry.RESEARCH_UNLOCKED);
+        Research research1 = ResearchRegistry.RESEARCH_REGISTRY.get(research);
+        if (Objects.isNull(research1)) {
+            return false;
+        }
+        return data.researches().contains(research);
     }
 }
