@@ -7,12 +7,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.attachment.AspectDiscovery;
-import team.torka.thaumicrecords.network.payload.SyncAspectDiscoveryPayload;
 import team.torka.thaumicrecords.recipe.AspectRecipe;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.AttachmentRegistry;
@@ -78,7 +76,6 @@ public class AspectHelper {
             newSet.add(aspect);
             AspectDiscovery newData = new AspectDiscovery(newSet);
             player.setData(AttachmentRegistry.ASPECT_DISCOVERY, newData);
-            PacketDistributor.sendToPlayer(player, new SyncAspectDiscoveryPayload(newData));
         }
     }
 
