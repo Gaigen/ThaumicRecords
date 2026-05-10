@@ -13,7 +13,12 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.data.component.AspectListComponent;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
-import team.torka.thaumicrecords.item.*;
+import team.torka.thaumicrecords.item.GogglesItem;
+import team.torka.thaumicrecords.item.PrimordialPearItem;
+import team.torka.thaumicrecords.item.ResearchNotesItem;
+import team.torka.thaumicrecords.item.ScribingToolsItem;
+import team.torka.thaumicrecords.item.WandItem;
+import team.torka.thaumicrecords.item.WispEssenceItem;
 
 public class ItemRegistry {
     public static final DeferredRegister.Items REGISTRAR = DeferredRegister.createItems(ThaumicRecords.MOD_ID);
@@ -25,8 +30,14 @@ public class ItemRegistry {
     public static final DeferredItem<Item> PRIMAL_CHARM = REGISTRAR.registerSimpleItem("primal_charm");
     public static final DeferredItem<Item> ENCHANTED_FABRIC = REGISTRAR.registerSimpleItem("enchanted_fabric");
     public static final DeferredItem<Item> COIN = REGISTRAR.registerSimpleItem("coin");
+    public static final DeferredItem<Item> AER_SHARD = REGISTRAR.registerSimpleItem("aer_shard");
+    public static final DeferredItem<Item> IGNIS_SHARD = REGISTRAR.registerSimpleItem("ignis_shard");
+    public static final DeferredItem<Item> AQUA_SHARD = REGISTRAR.registerSimpleItem("aqua_shard");
+    public static final DeferredItem<Item> TERRA_SHARD = REGISTRAR.registerSimpleItem("terra_shard");
+    public static final DeferredItem<Item> ORDO_SHARD = REGISTRAR.registerSimpleItem("ordo_shard");
+    public static final DeferredItem<Item> PERDITIO_SHARD = REGISTRAR.registerSimpleItem("perditio_shard");
+    public static final DeferredItem<Item> BALANCED_SHARD = REGISTRAR.registerSimpleItem("balanced_shard");
     public static final DeferredItem<Item> SALIS_MUNDUS = REGISTRAR.registerSimpleItem("salis_mundus");
-
     public static final DeferredItem<Item> PRIMORDIAL_PEARL=REGISTRAR.registerItem("primordial_pearl", PrimordialPearItem::new, itemProp(1));
 
 
@@ -64,6 +75,13 @@ public class ItemRegistry {
         output.accept(PRIMAL_CHARM);
         output.accept(ENCHANTED_FABRIC);
         output.accept(COIN);
+        output.accept(AER_SHARD);
+        output.accept(IGNIS_SHARD);
+        output.accept(AQUA_SHARD);
+        output.accept(TERRA_SHARD);
+        output.accept(ORDO_SHARD);
+        output.accept(PERDITIO_SHARD);
+        output.accept(BALANCED_SHARD);
         output.accept(SALIS_MUNDUS);
         output.accept(WAND_CAP_IRON);
         output.accept(WAND_CAP_GOLD);

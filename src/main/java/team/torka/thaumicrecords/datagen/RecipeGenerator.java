@@ -1,7 +1,6 @@
 package team.torka.thaumicrecords.datagen;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -11,10 +10,7 @@ import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
@@ -26,7 +22,7 @@ import team.torka.thaumicrecords.registry.WandRodRegistry;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber
+
 public class RecipeGenerator extends RecipeProvider {
     public RecipeGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider);
@@ -61,11 +57,4 @@ public class RecipeGenerator extends RecipeProvider {
                 .save(output, ThaumicRecords.createRl("scribing_tools_fill_ink"));
     }
 
-    @SubscribeEvent
-    public static void gatherData(GatherDataEvent event) {
-        DataGenerator generator = event.getGenerator();
-        PackOutput packOutput = generator.getPackOutput();
-        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
-        generator.addProvider(event.includeServer(), new RecipeGenerator(packOutput, lookupProvider));
-    }
 }

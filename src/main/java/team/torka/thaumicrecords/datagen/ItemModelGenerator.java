@@ -1,16 +1,11 @@
 package team.torka.thaumicrecords.datagen;
 
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 
-@EventBusSubscriber
 public class ItemModelGenerator extends ItemModelProvider {
     public ItemModelGenerator(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, ThaumicRecords.MOD_ID, existingFileHelper);
@@ -24,6 +19,13 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.PRIMAL_CHARM.get());
         basicItem(ItemRegistry.ENCHANTED_FABRIC.get());
         basicItem(ItemRegistry.COIN.get());
+        withExistingParent(ItemRegistry.AER_SHARD.getId().getPath(), "item/generated").texture("layer0", modLoc("item/shard"));
+        withExistingParent(ItemRegistry.IGNIS_SHARD.getId().getPath(), "item/generated").texture("layer0", modLoc("item/shard"));
+        withExistingParent(ItemRegistry.AQUA_SHARD.getId().getPath(), "item/generated").texture("layer0", modLoc("item/shard"));
+        withExistingParent(ItemRegistry.TERRA_SHARD.getId().getPath(), "item/generated").texture("layer0", modLoc("item/shard"));
+        withExistingParent(ItemRegistry.ORDO_SHARD.getId().getPath(), "item/generated").texture("layer0", modLoc("item/shard"));
+        withExistingParent(ItemRegistry.PERDITIO_SHARD.getId().getPath(), "item/generated").texture("layer0", modLoc("item/shard"));
+        basicItem(ItemRegistry.BALANCED_SHARD.get());
         basicItem(ItemRegistry.SALIS_MUNDUS.get());
         basicItem(ItemRegistry.PRIMORDIAL_PEARL.get());
 
@@ -37,14 +39,5 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.WISP_ESSENCE.get());
         basicItem(ItemRegistry.SCRIBING_TOOLS.get());
 
-    }
-
-    @SubscribeEvent
-    public static void gatherData(GatherDataEvent event) {
-        DataGenerator generator = event.getGenerator();
-        PackOutput output = generator.getPackOutput();
-        ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-
-        generator.addProvider(event.includeClient(), new ItemModelGenerator(output, existingFileHelper));
     }
 }
