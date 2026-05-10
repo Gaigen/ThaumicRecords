@@ -52,7 +52,7 @@ public class RecipeGenerator extends RecipeProvider {
                 Tags.Items.DYED_BLACK).unlockedBy("has_ink", has(Tags.Items.DYED_BLACK)).save(output);
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ItemRegistry.SCRIBING_TOOLS)
                 .requires(ItemRegistry.SCRIBING_TOOLS)
-                .requires(Tags.Items.DYED_BLACK)
+                .requires(Tags.Items.DYES_BLACK)
                 .unlockedBy("has_ink", has(Tags.Items.DYED_BLACK))
                 .save(output, ThaumicRecords.createRl("scribing_tools_fill_ink"));
     }

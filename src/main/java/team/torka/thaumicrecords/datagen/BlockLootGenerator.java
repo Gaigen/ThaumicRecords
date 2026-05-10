@@ -1,13 +1,21 @@
 package team.torka.thaumicrecords.datagen;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.registry.BlockRegistry;
+import team.torka.thaumicrecords.registry.ItemRegistry;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 
 public class BlockLootGenerator extends BlockLootSubProvider {
@@ -20,12 +28,22 @@ public class BlockLootGenerator extends BlockLootSubProvider {
     protected void generate() {
         this.dropSelf(BlockRegistry.ARCANE_WORKBENCH.get());
         this.dropSelf(BlockRegistry.TABLE.get());
+        // 琥珀矿石
+        HolderLookup.RegistryLookup<Enchantment> enchantmentLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        this.add(BlockRegistry.AMBER_ORE.get(), block -> createSilkTouchDispatchTable(block, this.applyExplosionCondition(block, LootItem.lootTableItem(
+                        ItemRegistry.AMBER)
+                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 1.0F)))
+                .apply(ApplyBonusCount.addOreBonusCount(enchantmentLookup.getOrThrow(Enchantments.FORTUNE))))));
     }
 
     @NotNull
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        return List.of(BlockRegistry.ARCANE_WORKBENCH.get(), BlockRegistry.TABLE.get());
+        ArrayList<Block> blocks = new ArrayList<>();
+        blocks.add(BlockRegistry.ARCANE_WORKBENCH.get());
+        blocks.add(BlockRegistry.TABLE.get());
+        blocks.add(BlockRegistry.AMBER_ORE.get());
+        return blocks;
     }
 
 }

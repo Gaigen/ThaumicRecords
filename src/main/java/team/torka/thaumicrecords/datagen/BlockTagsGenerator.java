@@ -23,5 +23,7 @@ public class BlockTagsGenerator extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.RESEARCH_TABLE.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.TABLE.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.ARCANE_WORKBENCH.get());
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.AMBER_ORE.get());
+        this.tag(BlockTags.NEEDS_IRON_TOOL).add(BlockRegistry.AMBER_ORE.get());
     }
 }

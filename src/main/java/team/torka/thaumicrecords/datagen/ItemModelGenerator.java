@@ -4,6 +4,7 @@ import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 
 public class ItemModelGenerator extends ItemModelProvider {
@@ -38,6 +39,8 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.GOGGLES.get());
         basicItem(ItemRegistry.WISP_ESSENCE.get());
         basicItem(ItemRegistry.SCRIBING_TOOLS.get());
+
+        simpleBlockItem(BlockRegistry.AMBER_ORE.get());
 
     }
 }

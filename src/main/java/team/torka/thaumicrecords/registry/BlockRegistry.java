@@ -1,7 +1,9 @@
 package team.torka.thaumicrecords.registry;
 
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -15,6 +17,13 @@ import team.torka.thaumicrecords.block.TableBlock;
 
 public class BlockRegistry {
     public static final DeferredRegister.Blocks REGISTRAR = DeferredRegister.createBlocks(ThaumicRecords.MOD_ID);
+
+    public static final DeferredBlock<Block> AMBER_ORE = REGISTRAR.registerSimpleBlock("amber_ore", BlockBehaviour.Properties.of()
+            .mapColor(MapColor.STONE)
+            .instrument(NoteBlockInstrument.BASEDRUM)
+            .requiresCorrectToolForDrops()
+            .strength(1.5F, 5.0F)
+            .sound(SoundType.STONE));
 
     public static final DeferredBlock<AuraNodeBlock> AURA_NODE = REGISTRAR.register("aura_node", () -> new AuraNodeBlock(BlockBehaviour.Properties.of()
             .mapColor(MapColor.NONE)

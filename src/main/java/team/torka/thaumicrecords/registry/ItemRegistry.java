@@ -59,6 +59,8 @@ public class ItemRegistry {
     public static final DeferredItem<ResearchNotesItem> RESEARCH_NOTES=REGISTRAR.register("research_notes",ResearchNotesItem::new);
 
     // Block Items
+    public static final DeferredItem<BlockItem> AMBER_ORE = REGISTRAR.register("amber_ore",
+            () -> new BlockItem(BlockRegistry.AMBER_ORE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> AURA_NODE = REGISTRAR.register("aura_node",
             () -> new BlockItem(BlockRegistry.AURA_NODE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> ARCANE_WORKBENCH = REGISTRAR.register("arcane_workbench",
@@ -70,6 +72,7 @@ public class ItemRegistry {
         output.accept(ironCappedWoodWand());
         output.accept(goldCappedGreatwoodWand());
         output.accept(thaumiumCappedSilverwoodWand());
+        output.accept(AMBER_ORE);
         output.accept(AMBER);
         output.accept(BATH_SALTS);
         output.accept(PRIMAL_CHARM);

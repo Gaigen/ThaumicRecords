@@ -10,6 +10,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import team.torka.thaumicrecords.datagen.BlockLootGenerator;
+import team.torka.thaumicrecords.datagen.BlockStateGenerator;
 import team.torka.thaumicrecords.datagen.BlockTagsGenerator;
 import team.torka.thaumicrecords.datagen.ItemModelGenerator;
 import team.torka.thaumicrecords.datagen.ItemTagsGenerator;
@@ -35,6 +36,9 @@ public class GatherDataEventListener {
         // block tags
         BlockTagsGenerator blockTags = new BlockTagsGenerator(packOutput, lookupProvider, existingFileHelper);
         generator.addProvider(event.includeServer(), blockTags);
+
+        // block state
+        generator.addProvider(event.includeClient(), new BlockStateGenerator(packOutput, existingFileHelper));
 
         // item model
         generator.addProvider(event.includeClient(), new ItemModelGenerator(packOutput, existingFileHelper));
