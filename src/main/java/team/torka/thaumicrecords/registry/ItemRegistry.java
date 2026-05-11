@@ -26,6 +26,7 @@ public class ItemRegistry {
     // Simple Items
     // @formatter:off
     public static final DeferredItem<Item> AMBER = REGISTRAR.registerSimpleItem("amber");
+    public static final DeferredItem<Item> QUICKSILVER = REGISTRAR.registerSimpleItem("quicksilver");
     public static final DeferredItem<Item> BATH_SALTS = REGISTRAR.registerSimpleItem("bath_salts");
     public static final DeferredItem<Item> PRIMAL_CHARM = REGISTRAR.registerSimpleItem("primal_charm");
     public static final DeferredItem<Item> ENCHANTED_FABRIC = REGISTRAR.registerSimpleItem("enchanted_fabric");
@@ -61,6 +62,8 @@ public class ItemRegistry {
     // Block Items
     public static final DeferredItem<BlockItem> AMBER_ORE = REGISTRAR.register("amber_ore",
             () -> new BlockItem(BlockRegistry.AMBER_ORE.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> CINNABAR_ORE = REGISTRAR.register("cinnabar_ore",
+            () -> new BlockItem(BlockRegistry.CINNABAR_ORE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> AURA_NODE = REGISTRAR.register("aura_node",
             () -> new BlockItem(BlockRegistry.AURA_NODE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> ARCANE_WORKBENCH = REGISTRAR.register("arcane_workbench",
@@ -74,6 +77,8 @@ public class ItemRegistry {
         output.accept(thaumiumCappedSilverwoodWand());
         output.accept(AMBER_ORE);
         output.accept(AMBER);
+        output.accept(CINNABAR_ORE);
+        output.accept(QUICKSILVER);
         output.accept(BATH_SALTS);
         output.accept(PRIMAL_CHARM);
         output.accept(ENCHANTED_FABRIC);

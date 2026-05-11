@@ -15,7 +15,7 @@ public class ItemModelGenerator extends ItemModelProvider {
     @Override
     protected void registerModels() {
         basicItem(ItemRegistry.AMBER.get());
-        basicItem(ItemRegistry.AMBER.get());
+        basicItem(ItemRegistry.QUICKSILVER.get());
         basicItem(ItemRegistry.BATH_SALTS.get());
         basicItem(ItemRegistry.PRIMAL_CHARM.get());
         basicItem(ItemRegistry.ENCHANTED_FABRIC.get());
@@ -41,6 +41,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.SCRIBING_TOOLS.get());
 
         simpleBlockItem(BlockRegistry.AMBER_ORE.get());
+        simpleBlockItem(BlockRegistry.CINNABAR_ORE.get());
 
     }
 }

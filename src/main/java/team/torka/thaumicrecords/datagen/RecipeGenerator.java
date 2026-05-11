@@ -20,6 +20,7 @@ import team.torka.thaumicrecords.registry.WandCapRegistry;
 import team.torka.thaumicrecords.registry.WandRodRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -55,6 +56,15 @@ public class RecipeGenerator extends RecipeProvider {
                 .requires(Tags.Items.DYES_BLACK)
                 .unlockedBy("has_ink", has(Tags.Items.DYES_BLACK))
                 .save(output, ThaumicRecords.createRl("scribing_tools_fill_ink"));
+
+        burningRecipe(output);
+    }
+
+    private void burningRecipe(RecipeOutput output) {
+        oreSmelting(output, List.of(ItemRegistry.AMBER_ORE), RecipeCategory.MISC, ItemRegistry.AMBER, 0.7F, 200, "amber");
+        oreBlasting(output, List.of(ItemRegistry.AMBER_ORE), RecipeCategory.MISC, ItemRegistry.AMBER, 0.7F, 100, "amber");
+        oreSmelting(output, List.of(ItemRegistry.CINNABAR_ORE), RecipeCategory.MISC, ItemRegistry.QUICKSILVER, 0.7F, 200, "quicksilver");
+        oreBlasting(output, List.of(ItemRegistry.CINNABAR_ORE), RecipeCategory.MISC, ItemRegistry.QUICKSILVER, 0.7F, 100, "quicksilver");
     }
 
 }

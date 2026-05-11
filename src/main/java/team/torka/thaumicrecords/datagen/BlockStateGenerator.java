@@ -15,6 +15,7 @@ public class BlockStateGenerator extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         simpleBlock(BlockRegistry.AMBER_ORE.get(), models().cubeAll("amber_ore", modLoc("block/amber_ore")));
+        simpleBlock(BlockRegistry.CINNABAR_ORE.get(), models().cubeAll("cinnabar_ore", modLoc("block/cinnabar_ore")));
     }
 
 }

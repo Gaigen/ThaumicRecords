@@ -25,6 +25,9 @@ public class BlockRegistry {
             .strength(1.5F, 5.0F)
             .sound(SoundType.STONE));
 
+    public static final DeferredBlock<Block> CINNABAR_ORE = REGISTRAR.registerSimpleBlock("cinnabar_ore", BlockBehaviour.Properties.of().mapColor(
+            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
+
     public static final DeferredBlock<AuraNodeBlock> AURA_NODE = REGISTRAR.register("aura_node", () -> new AuraNodeBlock(BlockBehaviour.Properties.of()
             .mapColor(MapColor.NONE)
             .strength(2.0F, 200.0F)
