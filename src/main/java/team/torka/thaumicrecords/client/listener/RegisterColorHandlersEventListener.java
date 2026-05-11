@@ -49,11 +49,11 @@ public class RegisterColorHandlersEventListener {
             return -1;
         }, ItemRegistry.RESEARCH_NOTES.get());
 
-        event.register((stack, tintIndex) -> Aspect.AER.getARGBColor(), ItemRegistry.AER_SHARD.get());
-        event.register((stack, tintIndex) -> Aspect.IGNIS.getARGBColor(), ItemRegistry.IGNIS_SHARD.get());
-        event.register((stack, tintIndex) -> Aspect.AQUA.getARGBColor(), ItemRegistry.AQUA_SHARD.get());
-        event.register((stack, tintIndex) -> Aspect.TERRA.getARGBColor(), ItemRegistry.TERRA_SHARD.get());
-        event.register((stack, tintIndex) -> Aspect.ORDO.getARGBColor(), ItemRegistry.ORDO_SHARD.get());
-        event.register((stack, tintIndex) -> Aspect.PERDITIO.getARGBColor(), ItemRegistry.PERDITIO_SHARD.get());
+        event.register((stack, tintIndex) -> 16777086 | 0xFF000000, ItemRegistry.AER_SHARD.get());
+        event.register((stack, tintIndex) -> 16727041 | 0xFF000000, ItemRegistry.IGNIS_SHARD.get());
+        event.register((stack, tintIndex) -> 37119 | 0xFF000000, ItemRegistry.AQUA_SHARD.get());
+        event.register((stack, tintIndex) -> 40960 | 0xFF000000, ItemRegistry.TERRA_SHARD.get());
+        event.register((stack, tintIndex) -> 15650047 | 0xFF000000, ItemRegistry.ORDO_SHARD.get());
+        event.register((stack, tintIndex) -> 5592439 | 0xFF000000, ItemRegistry.PERDITIO_SHARD.get());
     }
 }
