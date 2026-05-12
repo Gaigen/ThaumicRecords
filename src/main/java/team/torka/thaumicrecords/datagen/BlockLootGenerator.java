@@ -35,6 +35,9 @@ public class BlockLootGenerator extends BlockLootSubProvider {
                         ItemRegistry.AMBER)
                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 1.0F)))
                 .apply(ApplyBonusCount.addOreBonusCount(enchantmentLookup.getOrThrow(Enchantments.FORTUNE))))));
+        this.dropSelf(BlockRegistry.SILVERWOOD_LOG.get());
+        this.dropSelf(BlockRegistry.SILVERWOOD_SAPLING.get());
+        this.add(BlockRegistry.SILVERWOOD_LEAVES.get(), block -> createLeavesDrops(block, BlockRegistry.SILVERWOOD_SAPLING.get(), 0.004F));
     }
 
     @NotNull
@@ -45,6 +48,9 @@ public class BlockLootGenerator extends BlockLootSubProvider {
         blocks.add(BlockRegistry.TABLE.get());
         blocks.add(BlockRegistry.AMBER_ORE.get());
         blocks.add(BlockRegistry.CINNABAR_ORE.get());
+        blocks.add(BlockRegistry.SILVERWOOD_SAPLING.get());
+        blocks.add(BlockRegistry.SILVERWOOD_LOG.get());
+        blocks.add(BlockRegistry.SILVERWOOD_LEAVES.get());
         return blocks;
     }
 

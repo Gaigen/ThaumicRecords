@@ -1,6 +1,10 @@
 package team.torka.thaumicrecords.registry;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -13,6 +17,7 @@ import team.torka.thaumicrecords.block.ArcaneWorkbenchBlock;
 import team.torka.thaumicrecords.block.AuraNodeBlock;
 import team.torka.thaumicrecords.block.ResearchTableBlock;
 import team.torka.thaumicrecords.block.TableBlock;
+import team.torka.thaumicrecords.world.tree.TreeGrowers;
 
 
 public class BlockRegistry {
@@ -58,4 +63,18 @@ public class BlockRegistry {
                     .noOcclusion()
                     .sound(SoundType.WOOD)
                     .pushReaction(PushReaction.BLOCK)));
+
+    public static final DeferredBlock<SaplingBlock> SILVERWOOD_SAPLING = REGISTRAR.register("silverwood_sapling",
+            () -> new SaplingBlock(TreeGrowers.SILVERWOOD_TREE, BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .noCollission()
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.GRASS)
+                    .pushReaction(PushReaction.DESTROY)));
+
+    public static final DeferredBlock<Block> SILVERWOOD_LOG = REGISTRAR.register("silverwood_log",
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LOG)));
+    public static final DeferredBlock<Block> SILVERWOOD_LEAVES = REGISTRAR.register("silverwood_leaves",
+            () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES)));
 }

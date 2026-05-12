@@ -70,6 +70,12 @@ public class ItemRegistry {
             () -> new BlockItem(BlockRegistry.ARCANE_WORKBENCH.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> TABLE = REGISTRAR.register("table",
             () -> new BlockItem(BlockRegistry.TABLE.get(), new Item.Properties()));
+    public static final DeferredItem<Item> SILVERWOOD_SAPLING = ItemRegistry.REGISTRAR.register("silverwood_sapling",
+            () -> new BlockItem(BlockRegistry.SILVERWOOD_SAPLING.get(), new Item.Properties()));
+    public static final DeferredItem<Item> SILVERWOOD_LOG = ItemRegistry.REGISTRAR.register("silverwood_log",
+            () -> new BlockItem(BlockRegistry.SILVERWOOD_LOG.get(), new Item.Properties()));
+    public static final DeferredItem<Item> SILVERWOOD_LEAVES = ItemRegistry.REGISTRAR.register("silverwood_leaves",
+            () -> new BlockItem(BlockRegistry.SILVERWOOD_LEAVES.get(), new Item.Properties()));
     // @formatter:on
     public static void putInCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(ironCappedWoodWand());
@@ -101,6 +107,9 @@ public class ItemRegistry {
         output.accept(TABLE);
         output.accept(SCRIBING_TOOLS);
         output.accept(ARCANE_WORKBENCH);
+        output.accept(SILVERWOOD_SAPLING);
+        output.accept(SILVERWOOD_LOG);
+        output.accept(SILVERWOOD_LEAVES);
     }
 
     public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
