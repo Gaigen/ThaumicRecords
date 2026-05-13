@@ -26,6 +26,8 @@ public class FMLClientSetupEventListener {
             FireBlock fireBlock = (FireBlock) Blocks.FIRE;
             fireBlock.setFlammable(BlockRegistry.SILVERWOOD_LOG.get(), 5, 5);
             fireBlock.setFlammable(BlockRegistry.SILVERWOOD_LEAVES.get(), 30, 60);
+            fireBlock.setFlammable(BlockRegistry.GREATWOOD_LOG.get(), 5, 5);
+            fireBlock.setFlammable(BlockRegistry.GREATWOOD_LEAVES.get(), 30, 60);
         });
     }
 }

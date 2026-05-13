@@ -40,11 +40,14 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.WISP_ESSENCE.get());
         basicItem(ItemRegistry.SCRIBING_TOOLS.get());
         withExistingParent(ItemRegistry.SILVERWOOD_SAPLING.getId().getPath(), mcLoc("item/generated")).texture("layer0", modLoc("block/silverwood_sapling"));
+        withExistingParent(ItemRegistry.GREATWOOD_SAPLING.getId().getPath(), mcLoc("item/generated")).texture("layer0", modLoc("block/greatwood_sapling"));
 
         simpleBlockItem(BlockRegistry.AMBER_ORE.get());
         simpleBlockItem(BlockRegistry.CINNABAR_ORE.get());
         simpleBlockItem(BlockRegistry.SILVERWOOD_LEAVES.get());
         simpleBlockItem(BlockRegistry.SILVERWOOD_LOG.get());
+        simpleBlockItem(BlockRegistry.GREATWOOD_LEAVES.get());
+        simpleBlockItem(BlockRegistry.GREATWOOD_LOG.get());
 
     }
 }

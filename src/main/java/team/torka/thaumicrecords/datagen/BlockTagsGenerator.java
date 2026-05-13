@@ -33,5 +33,11 @@ public class BlockTagsGenerator extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_HOE).add(BlockRegistry.SILVERWOOD_LEAVES.get());
         this.tag(BlockTags.SAPLINGS).add(BlockRegistry.SILVERWOOD_SAPLING.get());
         this.tag(BlockTags.LOGS_THAT_BURN).add(BlockRegistry.SILVERWOOD_LOG.get());
+        this.tag(BlockTags.LOGS).add(BlockRegistry.GREATWOOD_LOG.get());
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.GREATWOOD_LOG.get());
+        this.tag(BlockTags.LEAVES).add(BlockRegistry.GREATWOOD_LEAVES.get());
+        this.tag(BlockTags.MINEABLE_WITH_HOE).add(BlockRegistry.GREATWOOD_LEAVES.get());
+        this.tag(BlockTags.SAPLINGS).add(BlockRegistry.GREATWOOD_SAPLING.get());
+        this.tag(BlockTags.LOGS_THAT_BURN).add(BlockRegistry.GREATWOOD_LOG.get());
     }
 }

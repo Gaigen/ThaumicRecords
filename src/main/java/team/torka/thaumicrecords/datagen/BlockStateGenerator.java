@@ -22,6 +22,11 @@ public class BlockStateGenerator extends BlockStateProvider {
                 .texture("all", modLoc("block/silverwood_leaves"))
                 .renderType("cutout"));
         simpleBlock(BlockRegistry.SILVERWOOD_SAPLING.get(), models().cross("silverwood_sapling", modLoc("block/silverwood_sapling")).renderType("cutout"));
+        logBlock((RotatedPillarBlock) BlockRegistry.GREATWOOD_LOG.get());
+        simpleBlock(BlockRegistry.GREATWOOD_LEAVES.get(), models().withExistingParent("greatwood_leaves", "block/leaves")
+                .texture("all", modLoc("block/greatwood_leaves"))
+                .renderType("cutout"));
+        simpleBlock(BlockRegistry.GREATWOOD_SAPLING.get(), models().cross("greatwood_sapling", modLoc("block/greatwood_sapling")).renderType("cutout"));
     }
 
 }

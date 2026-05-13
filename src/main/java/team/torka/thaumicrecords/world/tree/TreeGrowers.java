@@ -9,4 +9,7 @@ import java.util.Optional;
 public class TreeGrowers {
     public static final TreeGrower SILVERWOOD_TREE = new TreeGrower(ThaumicRecords.MOD_ID + ":silverwood", Optional.empty(),
             Optional.of(ConfiguredFeatures.SILVERWOOD_TREE), Optional.empty());
+
+    public static final TreeGrower GREATWOOD_TREE = new TreeGrower(ThaumicRecords.MOD_ID + ":silverwood", Optional.empty(),
+            Optional.of(ConfiguredFeatures.SILVERWOOD_TREE), Optional.empty());
 }

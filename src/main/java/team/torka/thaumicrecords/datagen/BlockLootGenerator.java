@@ -38,6 +38,10 @@ public class BlockLootGenerator extends BlockLootSubProvider {
         this.dropSelf(BlockRegistry.SILVERWOOD_LOG.get());
         this.dropSelf(BlockRegistry.SILVERWOOD_SAPLING.get());
         this.add(BlockRegistry.SILVERWOOD_LEAVES.get(), block -> createLeavesDrops(block, BlockRegistry.SILVERWOOD_SAPLING.get(), 0.004F));
+        this.dropSelf(BlockRegistry.GREATWOOD_LOG.get());
+        this.dropSelf(BlockRegistry.GREATWOOD_SAPLING.get());
+        this.add(BlockRegistry.GREATWOOD_LEAVES.get(), block -> createLeavesDrops(block, BlockRegistry.SILVERWOOD_SAPLING.get(), 0.005F));
+
     }
 
     @NotNull
@@ -51,6 +55,9 @@ public class BlockLootGenerator extends BlockLootSubProvider {
         blocks.add(BlockRegistry.SILVERWOOD_SAPLING.get());
         blocks.add(BlockRegistry.SILVERWOOD_LOG.get());
         blocks.add(BlockRegistry.SILVERWOOD_LEAVES.get());
+        blocks.add(BlockRegistry.GREATWOOD_SAPLING.get());
+        blocks.add(BlockRegistry.GREATWOOD_LOG.get());
+        blocks.add(BlockRegistry.GREATWOOD_LEAVES.get());
         return blocks;
     }
 

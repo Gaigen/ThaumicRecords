@@ -76,6 +76,12 @@ public class ItemRegistry {
             () -> new BlockItem(BlockRegistry.SILVERWOOD_LOG.get(), new Item.Properties()));
     public static final DeferredItem<Item> SILVERWOOD_LEAVES = ItemRegistry.REGISTRAR.register("silverwood_leaves",
             () -> new BlockItem(BlockRegistry.SILVERWOOD_LEAVES.get(), new Item.Properties()));
+    public static final DeferredItem<Item> GREATWOOD_SAPLING = ItemRegistry.REGISTRAR.register("greatwood_sapling",
+            () -> new BlockItem(BlockRegistry.GREATWOOD_SAPLING.get(), new Item.Properties()));
+    public static final DeferredItem<Item> GREATWOOD_LOG = ItemRegistry.REGISTRAR.register("greatwood_log",
+            () -> new BlockItem(BlockRegistry.GREATWOOD_LOG.get(), new Item.Properties()));
+    public static final DeferredItem<Item> GREATWOOD_LEAVES = ItemRegistry.REGISTRAR.register("greatwood_leaves",
+            () -> new BlockItem(BlockRegistry.GREATWOOD_LEAVES.get(), new Item.Properties()));
     // @formatter:on
     public static void putInCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(ironCappedWoodWand());
@@ -110,6 +116,9 @@ public class ItemRegistry {
         output.accept(SILVERWOOD_SAPLING);
         output.accept(SILVERWOOD_LOG);
         output.accept(SILVERWOOD_LEAVES);
+        output.accept(GREATWOOD_SAPLING);
+        output.accept(GREATWOOD_LOG);
+        output.accept(GREATWOOD_LEAVES);
     }
 
     public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
