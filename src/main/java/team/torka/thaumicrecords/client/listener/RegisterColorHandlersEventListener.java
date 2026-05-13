@@ -1,5 +1,7 @@
 package team.torka.thaumicrecords.client.listener;
 
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.world.level.FoliageColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -9,6 +11,7 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
 import team.torka.thaumicrecords.item.WispEssenceItem;
 import team.torka.thaumicrecords.registry.AspectRegistry;
+import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 
@@ -55,5 +58,16 @@ public class RegisterColorHandlersEventListener {
         event.register((stack, tintIndex) -> 40960 | 0xFF000000, ItemRegistry.TERRA_SHARD.get());
         event.register((stack, tintIndex) -> 15650047 | 0xFF000000, ItemRegistry.ORDO_SHARD.get());
         event.register((stack, tintIndex) -> 5592439 | 0xFF000000, ItemRegistry.PERDITIO_SHARD.get());
+        event.register((stack, tintIndex) -> FoliageColor.get(0.5D, 1.0D), BlockRegistry.GREATWOOD_LEAVES.get());
+    }
+
+    @SubscribeEvent
+    public static void onBlockEvent(RegisterColorHandlersEvent.Block event) {
+        event.register((state, level, pos, tintIndex) -> {
+            if (state.is(BlockRegistry.GREATWOOD_LEAVES.get()) && level != null && pos != null) {
+                return BiomeColors.getAverageFoliageColor(level, pos);
+            }
+            return FoliageColor.getDefaultColor();
+        }, BlockRegistry.GREATWOOD_LEAVES.get());
     }
 }

@@ -22,6 +22,7 @@ public class SilverwoodTreeFeature extends Feature<NoneFeatureConfiguration> {
 
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        boolean isFromSapling = context.level().getBlockState(context.origin()).is(BlockRegistry.SILVERWOOD_SAPLING.get());
         WorldGenLevel world = context.level();
         BlockPos pos = context.origin();
         RandomSource random = context.random();
@@ -136,6 +137,7 @@ public class SilverwoodTreeFeature extends Feature<NoneFeatureConfiguration> {
         world.setBlock(pos.offset(2, height - 4, 0), BlockRegistry.SILVERWOOD_LOG.get().defaultBlockState(), 3);
         world.setBlock(pos.offset(0, height - 4, -2), BlockRegistry.SILVERWOOD_LOG.get().defaultBlockState(), 3);
         world.setBlock(pos.offset(0, height - 4, 2), BlockRegistry.SILVERWOOD_LOG.get().defaultBlockState(), 3);
+        // TODO 自然生成时候生成水银花
         return true;
     }
 

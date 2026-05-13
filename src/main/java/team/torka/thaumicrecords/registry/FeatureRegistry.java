@@ -6,6 +6,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.world.feature.GreatwoodTreeFeature;
 import team.torka.thaumicrecords.world.feature.SilverwoodTreeFeature;
 
 public class FeatureRegistry {
@@ -14,5 +15,8 @@ public class FeatureRegistry {
 
     public static final DeferredHolder<Feature<?>, SilverwoodTreeFeature> SILVERWOOD_TREE = REGISTRAR.register("silverwood_tree",
             () -> new SilverwoodTreeFeature(NoneFeatureConfiguration.CODEC));
+
+    public static final DeferredHolder<Feature<?>, GreatwoodTreeFeature> GREATWOOD_TREE = REGISTRAR.register("greatwood_tree",
+            () -> new GreatwoodTreeFeature(NoneFeatureConfiguration.CODEC));
 
 }
