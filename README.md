@@ -21,10 +21,22 @@ Whenever my TC4 addiction kicks in (laughs).
 
 It is in a very early stage...
 
-* Aspects
-* Some items
+* Aspects System
+* Research System (without Thaumonomicon)
+* Arcane Crafting
+* Some Basic Resources (no worldgen yet)
+* Trees
 * Wands
 * Aura Nodes
+
+**Next**
+
+* Arcane Pedestal (to display completed items XD)
+* Some misc blocks (if I have not time)
+* Thaumonomicon
+* Crucible Recipe
+* Infusion Recipe
+* World generation (after all natural resources are completed)
 
 There is really a long way to go.
 
