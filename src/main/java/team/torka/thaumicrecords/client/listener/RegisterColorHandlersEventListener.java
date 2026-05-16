@@ -59,15 +59,27 @@ public class RegisterColorHandlersEventListener {
         event.register((stack, tintIndex) -> 15650047 | 0xFF000000, ItemRegistry.ORDO_SHARD.get());
         event.register((stack, tintIndex) -> 5592439 | 0xFF000000, ItemRegistry.PERDITIO_SHARD.get());
         event.register((stack, tintIndex) -> FoliageColor.get(0.5D, 1.0D), BlockRegistry.GREATWOOD_LEAVES.get());
+        event.register((stack, tintIndex) -> tintIndex == 1 ? 16777086 | 0xFF000000 : -1, BlockRegistry.AER_INFUSED_STONE.get());
+        event.register((stack, tintIndex) -> tintIndex == 1 ? 16727041 | 0xFF000000 : -1, BlockRegistry.IGNIS_INFUSED_STONE.get());
+        event.register((stack, tintIndex) -> tintIndex == 1 ? 37119 | 0xFF000000 : -1, BlockRegistry.AQUA_INFUSED_STONE.get());
+        event.register((stack, tintIndex) -> tintIndex == 1 ? 40960 | 0xFF000000 : -1, BlockRegistry.TERRA_INFUSED_STONE.get());
+        event.register((stack, tintIndex) -> tintIndex == 1 ? 15650047 | 0xFF000000 : -1, BlockRegistry.ORDO_INFUSED_STONE.get());
+        event.register((stack, tintIndex) -> tintIndex == 1 ? 5592439 | 0xFF000000 : -1, BlockRegistry.PERDITIO_INFUSED_STONE.get());
     }
 
     @SubscribeEvent
     public static void onBlockEvent(RegisterColorHandlersEvent.Block event) {
         event.register((state, level, pos, tintIndex) -> {
-            if (state.is(BlockRegistry.GREATWOOD_LEAVES.get()) && level != null && pos != null) {
+            if (level != null && pos != null) {
                 return BiomeColors.getAverageFoliageColor(level, pos);
             }
             return FoliageColor.getDefaultColor();
         }, BlockRegistry.GREATWOOD_LEAVES.get());
+        event.register((state, level, pos, tintIndex) -> tintIndex == 1 ? 16777086 | 0xFF000000 : -1, BlockRegistry.AER_INFUSED_STONE.get());
+        event.register((state, level, pos, tintIndex) -> tintIndex == 1 ? 16727041 | 0xFF000000 : -1, BlockRegistry.IGNIS_INFUSED_STONE.get());
+        event.register((state, level, pos, tintIndex) -> tintIndex == 1 ? 37119 | 0xFF000000 : -1, BlockRegistry.AQUA_INFUSED_STONE.get());
+        event.register((state, level, pos, tintIndex) -> tintIndex == 1 ? 40960 | 0xFF000000 : -1, BlockRegistry.TERRA_INFUSED_STONE.get());
+        event.register((state, level, pos, tintIndex) -> tintIndex == 1 ? 15650047 | 0xFF000000 : -1, BlockRegistry.ORDO_INFUSED_STONE.get());
+        event.register((state, level, pos, tintIndex) -> tintIndex == 1 ? 5592439 | 0xFF000000 : -1, BlockRegistry.PERDITIO_INFUSED_STONE.get());
     }
 }

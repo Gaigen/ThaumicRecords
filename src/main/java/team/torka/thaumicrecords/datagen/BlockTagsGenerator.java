@@ -27,6 +27,12 @@ public class BlockTagsGenerator extends BlockTagsProvider {
         this.tag(BlockTags.NEEDS_IRON_TOOL).add(BlockRegistry.AMBER_ORE.get());
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.CINNABAR_ORE.get());
         this.tag(BlockTags.NEEDS_IRON_TOOL).add(BlockRegistry.CINNABAR_ORE.get());
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.AER_INFUSED_STONE.get());
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.IGNIS_INFUSED_STONE.get());
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.AQUA_INFUSED_STONE.get());
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.TERRA_INFUSED_STONE.get());
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.ORDO_INFUSED_STONE.get());
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.PERDITIO_INFUSED_STONE.get());
         this.tag(BlockTags.LOGS).add(BlockRegistry.SILVERWOOD_LOG.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.SILVERWOOD_LOG.get());
         this.tag(BlockTags.LEAVES).add(BlockRegistry.SILVERWOOD_LEAVES.get());

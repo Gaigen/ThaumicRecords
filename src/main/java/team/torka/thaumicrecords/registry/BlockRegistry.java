@@ -23,6 +23,23 @@ import team.torka.thaumicrecords.world.tree.TreeGrowers;
 public class BlockRegistry {
     public static final DeferredRegister.Blocks REGISTRAR = DeferredRegister.createBlocks(ThaumicRecords.MOD_ID);
 
+    public static final DeferredBlock<Block> AER_INFUSED_STONE = REGISTRAR.registerSimpleBlock("aer_infused_stone", BlockBehaviour.Properties.of().mapColor(
+            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
+    public static final DeferredBlock<Block> IGNIS_INFUSED_STONE = REGISTRAR.registerSimpleBlock("ignis_infused_stone", BlockBehaviour.Properties.of().mapColor(
+            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
+    public static final DeferredBlock<Block> AQUA_INFUSED_STONE = REGISTRAR.registerSimpleBlock("aqua_infused_stone", BlockBehaviour.Properties.of().mapColor(
+            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
+    public static final DeferredBlock<Block> TERRA_INFUSED_STONE = REGISTRAR.registerSimpleBlock("terra_infused_stone", BlockBehaviour.Properties.of().mapColor(
+            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
+    public static final DeferredBlock<Block> ORDO_INFUSED_STONE = REGISTRAR.registerSimpleBlock("ordo_infused_stone", BlockBehaviour.Properties.of().mapColor(
+            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
+    public static final DeferredBlock<Block> PERDITIO_INFUSED_STONE = REGISTRAR.registerSimpleBlock("perditio_infused_stone", BlockBehaviour.Properties.of()
+            .mapColor(MapColor.STONE)
+            .instrument(NoteBlockInstrument.BASEDRUM)
+            .requiresCorrectToolForDrops()
+            .strength(1.5F, 5.0F)
+            .sound(SoundType.STONE));
+
     public static final DeferredBlock<Block> AMBER_ORE = REGISTRAR.registerSimpleBlock("amber_ore", BlockBehaviour.Properties.of()
             .mapColor(MapColor.STONE)
             .instrument(NoteBlockInstrument.BASEDRUM)

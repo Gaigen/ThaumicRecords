@@ -42,6 +42,12 @@ public class ItemModelGenerator extends ItemModelProvider {
         withExistingParent(ItemRegistry.SILVERWOOD_SAPLING.getId().getPath(), mcLoc("item/generated")).texture("layer0", modLoc("block/silverwood_sapling"));
         withExistingParent(ItemRegistry.GREATWOOD_SAPLING.getId().getPath(), mcLoc("item/generated")).texture("layer0", modLoc("block/greatwood_sapling"));
 
+        simpleBlockItem(BlockRegistry.AER_INFUSED_STONE.get());
+        simpleBlockItem(BlockRegistry.IGNIS_INFUSED_STONE.get());
+        simpleBlockItem(BlockRegistry.AQUA_INFUSED_STONE.get());
+        simpleBlockItem(BlockRegistry.TERRA_INFUSED_STONE.get());
+        simpleBlockItem(BlockRegistry.ORDO_INFUSED_STONE.get());
+        simpleBlockItem(BlockRegistry.PERDITIO_INFUSED_STONE.get());
         simpleBlockItem(BlockRegistry.AMBER_ORE.get());
         simpleBlockItem(BlockRegistry.CINNABAR_ORE.get());
         simpleBlockItem(BlockRegistry.SILVERWOOD_LEAVES.get());

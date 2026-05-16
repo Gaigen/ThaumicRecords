@@ -60,6 +60,18 @@ public class ItemRegistry {
     public static final DeferredItem<ResearchNotesItem> RESEARCH_NOTES=REGISTRAR.register("research_notes",ResearchNotesItem::new);
 
     // Block Items
+    public static final DeferredItem<BlockItem> AER_INFUSED_STONE = REGISTRAR.register("aer_infused_stone",
+            () -> new BlockItem(BlockRegistry.AER_INFUSED_STONE.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> IGNIS_INFUSED_STONE = REGISTRAR.register("ignis_infused_stone",
+            () -> new BlockItem(BlockRegistry.IGNIS_INFUSED_STONE.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> AQUA_INFUSED_STONE = REGISTRAR.register("aqua_infused_stone",
+            () -> new BlockItem(BlockRegistry.AQUA_INFUSED_STONE.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> TERRA_INFUSED_STONE = REGISTRAR.register("terra_infused_stone",
+            () -> new BlockItem(BlockRegistry.TERRA_INFUSED_STONE.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> ORDO_INFUSED_STONE = REGISTRAR.register("ordo_infused_stone",
+            () -> new BlockItem(BlockRegistry.ORDO_INFUSED_STONE.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> PERDITIO_INFUSED_STONE = REGISTRAR.register("perditio_infused_stone",
+            () -> new BlockItem(BlockRegistry.PERDITIO_INFUSED_STONE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> AMBER_ORE = REGISTRAR.register("amber_ore",
             () -> new BlockItem(BlockRegistry.AMBER_ORE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> CINNABAR_ORE = REGISTRAR.register("cinnabar_ore",
@@ -87,6 +99,12 @@ public class ItemRegistry {
         output.accept(ironCappedWoodWand());
         output.accept(goldCappedGreatwoodWand());
         output.accept(thaumiumCappedSilverwoodWand());
+        output.accept(AER_INFUSED_STONE);
+        output.accept(IGNIS_INFUSED_STONE);
+        output.accept(AQUA_INFUSED_STONE);
+        output.accept(TERRA_INFUSED_STONE);
+        output.accept(ORDO_INFUSED_STONE);
+        output.accept(PERDITIO_INFUSED_STONE);
         output.accept(AMBER_ORE);
         output.accept(AMBER);
         output.accept(CINNABAR_ORE);
