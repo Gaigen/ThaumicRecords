@@ -1,7 +1,9 @@
 package team.torka.thaumicrecords.registry;
 
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SaplingBlock;
@@ -23,29 +25,55 @@ import team.torka.thaumicrecords.world.tree.TreeGrowers;
 public class BlockRegistry {
     public static final DeferredRegister.Blocks REGISTRAR = DeferredRegister.createBlocks(ThaumicRecords.MOD_ID);
 
-    public static final DeferredBlock<Block> AER_INFUSED_STONE = REGISTRAR.registerSimpleBlock("aer_infused_stone", BlockBehaviour.Properties.of().mapColor(
-            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
-    public static final DeferredBlock<Block> IGNIS_INFUSED_STONE = REGISTRAR.registerSimpleBlock("ignis_infused_stone", BlockBehaviour.Properties.of().mapColor(
-            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
-    public static final DeferredBlock<Block> AQUA_INFUSED_STONE = REGISTRAR.registerSimpleBlock("aqua_infused_stone", BlockBehaviour.Properties.of().mapColor(
-            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
-    public static final DeferredBlock<Block> TERRA_INFUSED_STONE = REGISTRAR.registerSimpleBlock("terra_infused_stone", BlockBehaviour.Properties.of().mapColor(
-            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
-    public static final DeferredBlock<Block> ORDO_INFUSED_STONE = REGISTRAR.registerSimpleBlock("ordo_infused_stone", BlockBehaviour.Properties.of().mapColor(
-            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
-    public static final DeferredBlock<Block> PERDITIO_INFUSED_STONE = REGISTRAR.registerSimpleBlock("perditio_infused_stone", BlockBehaviour.Properties.of()
-            .mapColor(MapColor.STONE)
-            .instrument(NoteBlockInstrument.BASEDRUM)
-            .requiresCorrectToolForDrops()
-            .strength(1.5F, 5.0F)
-            .sound(SoundType.STONE));
-
-    public static final DeferredBlock<Block> AMBER_ORE = REGISTRAR.registerSimpleBlock("amber_ore", BlockBehaviour.Properties.of()
-            .mapColor(MapColor.STONE)
-            .instrument(NoteBlockInstrument.BASEDRUM)
-            .requiresCorrectToolForDrops()
-            .strength(1.5F, 5.0F)
-            .sound(SoundType.STONE));
+    public static final DeferredBlock<Block> AER_INFUSED_STONE = REGISTRAR.register("aer_infused_stone",
+            () -> new DropExperienceBlock(UniformInt.of(0, 3), BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+                    .strength(1.5F, 5.0F)
+                    .sound(SoundType.STONE)));
+    public static final DeferredBlock<Block> IGNIS_INFUSED_STONE = REGISTRAR.register("ignis_infused_stone",
+            () -> new DropExperienceBlock(UniformInt.of(0, 3), BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+                    .strength(1.5F, 5.0F)
+                    .sound(SoundType.STONE)));
+    public static final DeferredBlock<Block> AQUA_INFUSED_STONE = REGISTRAR.register("aqua_infused_stone",
+            () -> new DropExperienceBlock(UniformInt.of(0, 3), BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+                    .strength(1.5F, 5.0F)
+                    .sound(SoundType.STONE)));
+    public static final DeferredBlock<Block> TERRA_INFUSED_STONE = REGISTRAR.register("terra_infused_stone",
+            () -> new DropExperienceBlock(UniformInt.of(0, 3), BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+                    .strength(1.5F, 5.0F)
+                    .sound(SoundType.STONE)));
+    public static final DeferredBlock<Block> ORDO_INFUSED_STONE = REGISTRAR.register("ordo_infused_stone",
+            () -> new DropExperienceBlock(UniformInt.of(0, 3), BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+                    .strength(1.5F, 5.0F)
+                    .sound(SoundType.STONE)));
+    public static final DeferredBlock<Block> PERDITIO_INFUSED_STONE = REGISTRAR.register("perditio_infused_stone",
+            () -> new DropExperienceBlock(UniformInt.of(0, 3), BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+                    .strength(1.5F, 5.0F)
+                    .sound(SoundType.STONE)));
+    public static final DeferredBlock<Block> AMBER_ORE = REGISTRAR.register("amber_ore",
+            () -> new DropExperienceBlock(UniformInt.of(1, 4), BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+                    .strength(1.5F, 5.0F)
+                    .sound(SoundType.STONE)));
 
     public static final DeferredBlock<Block> CINNABAR_ORE = REGISTRAR.registerSimpleBlock("cinnabar_ore", BlockBehaviour.Properties.of().mapColor(
             MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));

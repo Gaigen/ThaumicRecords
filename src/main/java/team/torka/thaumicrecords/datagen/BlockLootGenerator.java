@@ -44,7 +44,7 @@ public class BlockLootGenerator extends BlockLootSubProvider {
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))
                         .apply(ApplyBonusCount.addOreBonusCount(enchantmentLookup.getOrThrow(Enchantments.FORTUNE))))));
         this.add(BlockRegistry.AQUA_INFUSED_STONE.get(),
-                block -> createSilkTouchDispatchTable(block, this.applyExplosionCondition(block, LootItem.lootTableItem(ItemRegistry.AQUA_INFUSED_STONE)
+                block -> createSilkTouchDispatchTable(block, this.applyExplosionCondition(block, LootItem.lootTableItem(ItemRegistry.AQUA_SHARD)
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))
                         .apply(ApplyBonusCount.addOreBonusCount(enchantmentLookup.getOrThrow(Enchantments.FORTUNE))))));
         this.add(BlockRegistry.TERRA_INFUSED_STONE.get(),
