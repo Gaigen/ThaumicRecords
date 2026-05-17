@@ -70,7 +70,7 @@ public class RegisterColorHandlersEventListener {
     @SubscribeEvent
     public static void onBlockEvent(RegisterColorHandlersEvent.Block event) {
         event.register((state, level, pos, tintIndex) -> {
-            if (level != null && pos != null) {
+            if (Objects.nonNull(level) && Objects.nonNull(pos)) {
                 return BiomeColors.getAverageFoliageColor(level, pos);
             }
             return FoliageColor.getDefaultColor();

@@ -15,7 +15,7 @@ import team.torka.thaumicrecords.network.payload.PlayerWriteNotePayload;
 public class RegisterPayloadHandlersEventListener {
 
     @SubscribeEvent
-    public static void register(final RegisterPayloadHandlersEvent event) {
+    public static void onRegisterPayloadHandlers(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("1.0.0");
         registrar.playToServer(PlayerCombineAspectPayload.TYPE, PlayerCombineAspectPayload.STREAM_CODEC, PlayerCombineAspectHandler::handle);
         registrar.playToServer(PlayerWriteNotePayload.TYPE, PlayerWriteNotePayload.STREAM_CODEC, PlayerWriteNoteHandler::handle);

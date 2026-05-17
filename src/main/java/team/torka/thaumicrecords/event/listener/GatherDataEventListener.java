@@ -33,7 +33,7 @@ public class GatherDataEventListener {
             ConfiguredFeatures::bootstrap);
 
     @SubscribeEvent
-    public static void gatherData(GatherDataEvent event) {
+    public static void onGatherData(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
