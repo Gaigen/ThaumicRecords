@@ -29,6 +29,7 @@ public class BlockLootGenerator extends BlockLootSubProvider {
         this.dropSelf(BlockRegistry.ARCANE_WORKBENCH.get());
         this.dropSelf(BlockRegistry.TABLE.get());
         this.dropSelf(BlockRegistry.CINNABAR_ORE.get());
+        this.dropSelf(BlockRegistry.ARCANE_PEDESTAL.get());
         // 琥珀矿石
         HolderLookup.RegistryLookup<Enchantment> enchantmentLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
         this.add(BlockRegistry.AMBER_ORE.get(), block -> createSilkTouchDispatchTable(block, this.applyExplosionCondition(block, LootItem.lootTableItem(
@@ -88,6 +89,7 @@ public class BlockLootGenerator extends BlockLootSubProvider {
         blocks.add(BlockRegistry.GREATWOOD_SAPLING.get());
         blocks.add(BlockRegistry.GREATWOOD_LOG.get());
         blocks.add(BlockRegistry.GREATWOOD_LEAVES.get());
+        blocks.add(BlockRegistry.ARCANE_PEDESTAL.get());
         return blocks;
     }
 

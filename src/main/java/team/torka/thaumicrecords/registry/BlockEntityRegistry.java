@@ -5,6 +5,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.block.entity.ArcanePedestalBlockEntity;
 import team.torka.thaumicrecords.block.entity.ArcaneWorkbenchBlockEntity;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.block.entity.ResearchTableBlockEntity;
@@ -25,4 +26,7 @@ public class BlockEntityRegistry {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ResearchTableBlockEntity>> RESEARCH_TABLE = REGISTRAR.register("research_table",
             () -> BlockEntityType.Builder.of(ResearchTableBlockEntity::new, BlockRegistry.RESEARCH_TABLE.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcanePedestalBlockEntity>> ARCANE_PEDESTAL = REGISTRAR.register("arcane_pedestal",
+            () -> BlockEntityType.Builder.of(ArcanePedestalBlockEntity::new, BlockRegistry.ARCANE_PEDESTAL.get()).build(null));
 }

@@ -82,6 +82,8 @@ public class ItemRegistry {
             () -> new BlockItem(BlockRegistry.ARCANE_WORKBENCH.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> TABLE = REGISTRAR.register("table",
             () -> new BlockItem(BlockRegistry.TABLE.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> ARCANE_PEDESTAL = REGISTRAR.register("arcane_pedestal",
+            () -> new BlockItem(BlockRegistry.ARCANE_PEDESTAL.get(), new Item.Properties()));
     public static final DeferredItem<Item> SILVERWOOD_SAPLING = ItemRegistry.REGISTRAR.register("silverwood_sapling",
             () -> new BlockItem(BlockRegistry.SILVERWOOD_SAPLING.get(), new Item.Properties()));
     public static final DeferredItem<Item> SILVERWOOD_LOG = ItemRegistry.REGISTRAR.register("silverwood_log",
@@ -137,6 +139,7 @@ public class ItemRegistry {
         output.accept(GREATWOOD_SAPLING);
         output.accept(GREATWOOD_LOG);
         output.accept(GREATWOOD_LEAVES);
+        output.accept(ARCANE_PEDESTAL);
     }
 
     public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
@@ -190,10 +193,6 @@ public class ItemRegistry {
                 initialAspects);
         initialWand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
         return initialWand;
-    }
-
-    private static Item.Properties itemProp() {
-        return new Item.Properties();
     }
 
     private static Item.Properties itemProp(int stackSize) {

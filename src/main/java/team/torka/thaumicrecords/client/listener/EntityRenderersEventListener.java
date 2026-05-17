@@ -8,6 +8,7 @@ import team.torka.thaumicrecords.client.model.ArcaneWorkbenchModel;
 import team.torka.thaumicrecords.client.model.ResearchTableModel;
 import team.torka.thaumicrecords.client.model.TableModel;
 import team.torka.thaumicrecords.client.renderer.CustomModelLayer;
+import team.torka.thaumicrecords.client.renderer.blockentity.ArcanePedestalBlockEntityRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ArcaneWorkbenchRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.AuraNodeRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ResearchTableBlockEntityRenderer;
@@ -22,6 +23,7 @@ public class EntityRenderersEventListener {
         event.registerBlockEntityRenderer(BlockEntityRegistry.ARCANE_WORKBENCH.get(), ArcaneWorkbenchRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.TABLE.get(), TableRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.RESEARCH_TABLE.get(), ResearchTableBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(BlockEntityRegistry.ARCANE_PEDESTAL.get(), ArcanePedestalBlockEntityRenderer::new);
     }
 
     @SubscribeEvent

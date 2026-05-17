@@ -15,6 +15,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.block.ArcanePedestalBlock;
 import team.torka.thaumicrecords.block.ArcaneWorkbenchBlock;
 import team.torka.thaumicrecords.block.AuraNodeBlock;
 import team.torka.thaumicrecords.block.ResearchTableBlock;
@@ -73,6 +74,13 @@ public class BlockRegistry {
                     .instrument(NoteBlockInstrument.BASEDRUM)
                     .requiresCorrectToolForDrops()
                     .strength(1.5F, 5.0F)
+                    .sound(SoundType.STONE)));
+    public static final DeferredBlock<ArcanePedestalBlock> ARCANE_PEDESTAL = REGISTRAR.register("arcane_pedestal",
+            () -> new ArcanePedestalBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(3.0F, 25.0F)
+                    .noOcclusion()
                     .sound(SoundType.STONE)));
 
     public static final DeferredBlock<Block> CINNABAR_ORE = REGISTRAR.registerSimpleBlock("cinnabar_ore", BlockBehaviour.Properties.of().mapColor(
