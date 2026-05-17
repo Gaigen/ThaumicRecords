@@ -31,8 +31,8 @@ It is in a very early stage...
 
 **Next**
 
-* Arcane Pedestal (to display completed items XD)
 * Some misc blocks (if I have not time)
+* Thaumometer Scanning
 * Thaumonomicon
 * Crucible Recipe
 * Infusion Recipe
