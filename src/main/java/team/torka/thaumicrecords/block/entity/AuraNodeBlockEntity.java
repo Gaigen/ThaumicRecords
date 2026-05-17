@@ -25,6 +25,7 @@ import team.torka.thaumicrecords.registry.NodeModifierRegistry;
 import team.torka.thaumicrecords.registry.NodeTypeRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
 
 public class AuraNodeBlockEntity extends BlockEntity {
     private Holder<NodeType> type = NodeTypeRegistry.NORMAL;
@@ -100,7 +101,7 @@ public class AuraNodeBlockEntity extends BlockEntity {
     public void onDataPacket(@NotNull Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.@NotNull Provider lookupProvider) {
         CompoundTag tag = pkt.getTag();
         this.loadAdditional(tag, lookupProvider);
-        if (this.level != null && this.level.isClientSide) {
+        if (Objects.nonNull(level) && this.level.isClientSide) {
             this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), 3);
         }
     }
@@ -135,7 +136,7 @@ public class AuraNodeBlockEntity extends BlockEntity {
         if (toDrain > 0) {
             this.current.add(aspectId, -toDrain);
             this.setChanged();
-            if (this.level != null && !this.level.isClientSide) {
+            if (Objects.nonNull(level) && !this.level.isClientSide) {
                 this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), 3);
             }
             return toDrain;

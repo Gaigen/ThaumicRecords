@@ -22,6 +22,7 @@ import team.torka.thaumicrecords.menu.ResearchTableMenu;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
 
 public class ResearchTableBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -29,7 +30,7 @@ public class ResearchTableBlockEntity extends BlockEntity implements MenuProvide
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
-            if (level != null && !level.isClientSide) {
+            if (Objects.nonNull(level) && !level.isClientSide) {
                 level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
             }
         }
@@ -74,7 +75,7 @@ public class ResearchTableBlockEntity extends BlockEntity implements MenuProvide
     @ParametersAreNonnullByDefault
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
         super.onDataPacket(net, pkt, registries);
-        if (level != null && level.isClientSide) {
+        if (Objects.nonNull(level) && level.isClientSide) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     }

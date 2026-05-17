@@ -28,10 +28,19 @@ import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.menu.ArcaneWorkbenchMenu;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
-import team.torka.thaumicrecords.registry.*;
+import team.torka.thaumicrecords.registry.AspectRegistry;
+import team.torka.thaumicrecords.registry.BlockEntityRegistry;
+import team.torka.thaumicrecords.registry.DataComponentRegistry;
+import team.torka.thaumicrecords.registry.ItemRegistry;
+import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
+import team.torka.thaumicrecords.registry.WandCapRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -42,7 +51,7 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
                 updateRecipeOutput();
             }
             setChanged();
-            if (level != null && !level.isClientSide) {
+            if (Objects.nonNull(level) && !level.isClientSide) {
                 level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
             }
         }
@@ -163,7 +172,7 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
     @ParametersAreNonnullByDefault
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
         super.onDataPacket(net, pkt, registries);
-        if (level != null && level.isClientSide) {
+        if (Objects.nonNull(level) && level.isClientSide) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     }
