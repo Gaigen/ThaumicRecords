@@ -22,14 +22,12 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.ThaumicRecords;
-import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.menu.ArcaneWorkbenchMenu;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingWandRecipe;
-import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
@@ -119,19 +117,6 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
         WandCap wandCap = WandCapRegistry.WAND_CAP_REGISTRY.get(data.getCap());
         if (Objects.isNull(wandCap)) {
             return false;
-        }
-        for (Map.Entry<ResourceLocation, Integer> entry : cost.entrySet()) {
-            ResourceLocation rl = entry.getKey();
-            Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
-            if (Objects.isNull(aspect) || !aspect.isPrimal()) {
-                continue;
-            }
-            Integer wandVis = wandStorage.getOrDefault(entry.getKey(), 0);
-            Integer baseCostVis = cost.get(entry.getKey());
-            double modifier = wandCap.getAspectCostModifier(rl);
-            if (wandVis < (int) (baseCostVis * modifier)) {
-                return false;
-            }
         }
         return true;
     }

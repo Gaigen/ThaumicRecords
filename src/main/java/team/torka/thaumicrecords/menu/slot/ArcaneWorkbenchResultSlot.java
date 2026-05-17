@@ -40,7 +40,6 @@ public class ArcaneWorkbenchResultSlot extends SlotItemHandler {
     @Override
     @ParametersAreNonnullByDefault
     public void onTake(Player player, ItemStack stack) {
-        this.checkTakeAchievements(stack);
         super.onTake(player, stack);
         if (player.level().isClientSide) {
             return;
