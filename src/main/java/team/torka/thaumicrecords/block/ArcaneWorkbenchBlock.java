@@ -27,14 +27,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 public class ArcaneWorkbenchBlock extends BaseEntityBlock {
     public static final MapCodec<ArcaneWorkbenchBlock> CODEC = simpleCodec(ArcaneWorkbenchBlock::new);
-    private static final VoxelShape TOP = Block.box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    private static final VoxelShape BASE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
-    private static final VoxelShape LEG1 = Block.box(11.0D, 4.0D, 1.0D, 15.0D, 8.0D, 5.0D);
-    private static final VoxelShape LEG2 = Block.box(1.0D, 4.0D, 11.0D, 5.0D, 8.0D, 15.0D);
-    private static final VoxelShape LEG3 = Block.box(11.0D, 4.0D, 11.0D, 15.0D, 8.0D, 15.0D);
-    private static final VoxelShape LEG4 = Block.box(1.0D, 4.0D, 1.0D, 5.0D, 8.0D, 5.0D);
-
-    private static final VoxelShape SHAPE = Shapes.or(TOP, BASE, LEG1, LEG2, LEG3, LEG4);
+    private static final VoxelShape SHAPE = Shapes.or(Block.box(0, 8, 0, 16, 16, 16), Block.box(0, 0, 0, 16, 4, 16), Block.box(11, 4, 1, 15, 8, 5),
+            Block.box(1, 4, 11, 5, 8, 15), Block.box(11, 4, 11, 15, 8, 15), Block.box(1, 4, 1, 5, 8, 5));
 
     public ArcaneWorkbenchBlock(Properties properties) {
         super(properties);

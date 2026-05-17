@@ -1,5 +1,6 @@
 package team.torka.thaumicrecords.block;
 
+import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,15 +38,41 @@ import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Map;
 
 public class TableBlock extends BaseEntityBlock {
     public static final MapCodec<TableBlock> CODEC = simpleCodec(TableBlock::new);
-    protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
+    private static final VoxelShape SHAPE = Shapes.or(Block.box(0, 12, 0, 16, 16, 16), Block.box(10, 4, 6, 14, 12, 10), Block.box(2, 4, 6, 6, 12, 10),
+            Block.box(0, 0, 4, 16, 4, 12));
+    private static final Map<Direction, VoxelShape> DIRECTIONAL_SHAPE = ImmutableMap.of(Direction.NORTH, SHAPE, Direction.SOUTH,
+            calculateRotation(Direction.SOUTH), Direction.EAST, calculateRotation(Direction.EAST), Direction.WEST, calculateRotation(Direction.WEST));
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public TableBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+    }
+
+    private static VoxelShape calculateRotation(Direction targetDirection) {
+        VoxelShape[] buffer = new VoxelShape[]{Shapes.empty()};
+        TableBlock.SHAPE.toAabbs().forEach(aabb -> {
+            double minX = aabb.minX * 16.0D;
+            double minY = aabb.minY * 16.0D;
+            double minZ = aabb.minZ * 16.0D;
+            double maxX = aabb.maxX * 16.0D;
+            double maxY = aabb.maxY * 16.0D;
+            double maxZ = aabb.maxZ * 16.0D;
+            VoxelShape rotatedCube;
+            switch (targetDirection) {
+                case SOUTH -> rotatedCube = Block.box(16.0D - maxX, minY, 16.0D - maxZ, 16.0D - minX, maxY, 16.0D - minZ);
+                case WEST -> rotatedCube = Block.box(minZ, minY, 16.0D - maxX, maxZ, maxY, 16.0D - minX);
+                case EAST -> rotatedCube = Block.box(16.0D - maxZ, minY, minX, 16.0D - minZ, maxY, maxX);
+                default -> rotatedCube = Block.box(minX, minY, minZ, maxX, maxY, maxZ);
+            }
+            buffer[0] = Shapes.or(buffer[0], rotatedCube);
+        });
+
+        return buffer[0].optimize();
     }
 
     @NotNull
@@ -57,7 +85,16 @@ public class TableBlock extends BaseEntityBlock {
     @Override
     @ParametersAreNonnullByDefault
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        Direction direction = state.getValue(FACING);
+        return DIRECTIONAL_SHAPE.getOrDefault(direction, SHAPE);
+    }
+
+    @NotNull
+    @Override
+    @ParametersAreNonnullByDefault
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+        Direction direction = state.getValue(FACING);
+        return DIRECTIONAL_SHAPE.getOrDefault(direction, SHAPE);
     }
 
     @NotNull
@@ -102,7 +139,6 @@ public class TableBlock extends BaseEntityBlock {
 
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
-
 
     @Nullable
     @Override
