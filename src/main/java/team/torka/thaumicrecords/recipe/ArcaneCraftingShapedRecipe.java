@@ -3,20 +3,20 @@ package team.torka.thaumicrecords.recipe;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
-import team.torka.thaumicrecords.api.item.WandCap;
-import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.RecipeSerializerRegistry;
 import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public record ArcaneCraftingShapedRecipe(ShapedRecipePattern pattern, AspectList baseVisCost, ItemStack result,
                                          List<ResourceLocation> requiredResearch) implements Recipe<CraftingInput> {
@@ -67,14 +67,5 @@ public record ArcaneCraftingShapedRecipe(ShapedRecipePattern pattern, AspectList
     @Override
     public RecipeType<?> getType() {
         return RecipeTypeRegistry.ARCANE_CRAFTING_SHAPED.get();
-    }
-
-    public int getActualCost(ResourceLocation aspectRl, WandCap cap) {
-        int base = this.baseVisCost.getOrDefault(aspectRl, 0);
-        Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(aspectRl);
-        if (Objects.isNull(aspect)) {
-            return base;
-        }
-        return (int) (base * (cap != null ? cap.getAspectCostModifier(aspectRl) : 1.0));
     }
 }

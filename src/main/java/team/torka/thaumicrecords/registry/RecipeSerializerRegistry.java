@@ -2,10 +2,12 @@ package team.torka.thaumicrecords.registry;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
+import team.torka.thaumicrecords.recipe.ArcaneCraftingWandRecipe;
 import team.torka.thaumicrecords.recipe.AspectRecipe;
 import team.torka.thaumicrecords.recipe.serializer.AspectRecipeSerializer;
 import team.torka.thaumicrecords.recipe.serializer.ShapedArcaneCraftingRecipeSerializer;
@@ -19,4 +21,7 @@ public class RecipeSerializerRegistry {
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ArcaneCraftingShapedRecipe>> ARCANE_CRAFTING_SHAPED = REGISTRAR.register(
             "arcane_crafting_shaped", ShapedArcaneCraftingRecipeSerializer::new);
+
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ArcaneCraftingWandRecipe>> ARCANE_CRAFTING_WAND = REGISTRAR.register(
+            "arcane_crafting_wand", () -> new SimpleCraftingRecipeSerializer<>(ArcaneCraftingWandRecipe::new));
 }

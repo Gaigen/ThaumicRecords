@@ -15,7 +15,6 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.menu.ArcaneWorkbenchMenu;
-import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.WandCapRegistry;
@@ -61,8 +60,8 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
     private void renderAspects(GuiGraphics guiGraphics, int guiX, int guiY) {
         float ticks = (System.currentTimeMillis() % 10000) / 50.0F;
-        ArcaneCraftingShapedRecipe recipe = this.menu.getCachedRecipe();
-        if (Objects.isNull(recipe)) {
+        AspectList cost = this.menu.getCachedAspect();
+        if (Objects.isNull(cost) || cost.isEmpty()) {
             return;
         }
         ItemStack wand = this.menu.getWandStack();
@@ -71,11 +70,11 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         for (int i = 0; i < 6; i++) {
             ResourceLocation rl = Aspect.getPrimalList().get(i);
             Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
-            int baseCost = recipe.baseVisCost().getOrDefault(rl, 0);
+            int baseCost = cost.getOrDefault(rl, 0);
             if (baseCost <= 0) {
                 continue;
             }
-            int actualCost = recipe.getActualCost(rl, wandCap);
+            int actualCost = cost.getWithModifier(rl, Objects.nonNull(wandCap) ? wandCap.getAspectCostModifier(rl) : 1);
             float alpha;
             int wandVis = Objects.isNull(data) ? AspectList.empty().getOrDefault(rl, 0) : data.getAspects().getOrDefault(rl, 0);
             if (wandVis >= actualCost) {

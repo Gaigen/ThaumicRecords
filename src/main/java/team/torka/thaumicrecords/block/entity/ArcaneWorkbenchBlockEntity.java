@@ -28,6 +28,7 @@ import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.menu.ArcaneWorkbenchMenu;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
+import team.torka.thaumicrecords.recipe.ArcaneCraftingWandRecipe;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
@@ -37,6 +38,7 @@ import team.torka.thaumicrecords.registry.WandCapRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -71,12 +73,24 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
         }
         CraftingInput input = CraftingInput.of(3, 3, stacks);
 
+        Optional<RecipeHolder<ArcaneCraftingWandRecipe>> wandRecipe = this.level.getRecipeManager().getRecipeFor(RecipeTypeRegistry.ARCANE_CRAFTING_WAND.get(),
+                input, this.level);
+        if (wandRecipe.isPresent()) {
+            ArcaneCraftingWandRecipe recipe = wandRecipe.get().value();
+            ItemStack wand = this.inventory.getStackInSlot(10);
+            if (canCraftArcane(recipe.getVisCost(input, this.level), wand, Collections.emptyList())) {
+                ItemStack result = recipe.assemble(input, this.level.registryAccess());
+                this.inventory.setStackInSlot(ArcaneWorkbenchMenu.SLOT_CRAFT_RESULT, result);
+                return;
+            }
+        }
+
         Optional<RecipeHolder<ArcaneCraftingShapedRecipe>> arcaneRecipe = this.level.getRecipeManager().getRecipeFor(
                 RecipeTypeRegistry.ARCANE_CRAFTING_SHAPED.get(), input, this.level);
         if (arcaneRecipe.isPresent()) {
             ArcaneCraftingShapedRecipe recipe = arcaneRecipe.get().value();
             ItemStack wand = this.inventory.getStackInSlot(10);
-            if (canCraftArcane(recipe, wand)) {
+            if (canCraftArcane(recipe.baseVisCost(), wand, recipe.requiredResearch())) {
                 ItemStack result = recipe.assemble(input, this.level.registryAccess());
                 this.inventory.setStackInSlot(ArcaneWorkbenchMenu.SLOT_CRAFT_RESULT, result);
                 return;
@@ -86,12 +100,12 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
         if (vanillaRecipe.isPresent()) {
             ItemStack result = vanillaRecipe.get().value().assemble(input, this.level.registryAccess());
             this.inventory.setStackInSlot(ArcaneWorkbenchMenu.SLOT_CRAFT_RESULT, result);
-        } else {
-            this.inventory.setStackInSlot(ArcaneWorkbenchMenu.SLOT_CRAFT_RESULT, ItemStack.EMPTY);
+            return;
         }
+        this.inventory.setStackInSlot(ArcaneWorkbenchMenu.SLOT_CRAFT_RESULT, ItemStack.EMPTY);
     }
 
-    private boolean canCraftArcane(ArcaneCraftingShapedRecipe recipe, ItemStack wand) {
+    private boolean canCraftArcane(AspectList cost, ItemStack wand, List<ResourceLocation> requiredResearch) {
         if (wand.isEmpty() || (wand.getItem() != ItemRegistry.WAND.asItem())) {
             return false;
         }
@@ -106,7 +120,6 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
         if (Objects.isNull(wandCap)) {
             return false;
         }
-        AspectList cost = recipe.baseVisCost();
         for (Map.Entry<ResourceLocation, Integer> entry : cost.entrySet()) {
             ResourceLocation rl = entry.getKey();
             Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);

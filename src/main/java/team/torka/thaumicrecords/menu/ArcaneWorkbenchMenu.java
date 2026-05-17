@@ -20,16 +20,26 @@ import team.torka.thaumicrecords.block.entity.ArcaneWorkbenchBlockEntity;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.menu.slot.ArcaneWorkbenchResultSlot;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
-import team.torka.thaumicrecords.registry.*;
+import team.torka.thaumicrecords.recipe.ArcaneCraftingWandRecipe;
+import team.torka.thaumicrecords.registry.AspectRegistry;
+import team.torka.thaumicrecords.registry.DataComponentRegistry;
+import team.torka.thaumicrecords.registry.ItemRegistry;
+import team.torka.thaumicrecords.registry.MenuRegistry;
+import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
+import team.torka.thaumicrecords.registry.WandCapRegistry;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
     private final ArcaneWorkbenchBlockEntity blockEntity;
     private final ContainerLevelAccess levelAccess;
-    private ArcaneCraftingShapedRecipe cachedRecipe;
+    private AspectList cachedAspect;
     private boolean isDirty = true;
 
     public static final int SLOT_CRAFT_RESULT = 9;
@@ -139,24 +149,35 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
     }
 
     @Nullable
-    public ArcaneCraftingShapedRecipe getCachedRecipe() {
+    public AspectList getCachedAspect() {
         if (this.isDirty) {
-            this.cachedRecipe = this.getCurrentRecipe();
+            this.cachedAspect = this.getCurrentRecipeAspect();
             this.updateResultSlot();
             this.isDirty = false;
         }
-        return this.cachedRecipe;
+        return this.cachedAspect;
     }
 
     public void updateResultSlot() {
         this.blockEntity.updateRecipeOutput();
     }
 
-    private ArcaneCraftingShapedRecipe getCurrentRecipe() {
+    private AspectList getCurrentRecipeAspect() {
         return this.levelAccess.evaluate((level, pos) -> {
             CraftingInput input = getCraftingInput();
-            return level.getRecipeManager().getRecipeFor(RecipeTypeRegistry.ARCANE_CRAFTING_SHAPED.get(), input, level).map(RecipeHolder::value);
-        }, Optional.<ArcaneCraftingShapedRecipe>empty()).orElse(null);
+            Optional<ArcaneCraftingWandRecipe> wandRecipe = level.getRecipeManager()
+                    .getRecipeFor(RecipeTypeRegistry.ARCANE_CRAFTING_WAND.get(), input, level)
+                    .map(RecipeHolder::value);
+            if (wandRecipe.isPresent()) {
+                return wandRecipe.get().getVisCost(input, level);
+            }
+            Optional<ArcaneCraftingShapedRecipe> arcaneCraftingShapedRecipe = level.getRecipeManager().getRecipeFor(
+                    RecipeTypeRegistry.ARCANE_CRAFTING_SHAPED.get(), input, level).map(RecipeHolder::value);
+            if (arcaneCraftingShapedRecipe.isPresent()) {
+                return arcaneCraftingShapedRecipe.get().baseVisCost();
+            }
+            return AspectList.empty();
+        }, AspectList.empty());
     }
 
     private CraftingInput getCraftingInput() {
@@ -182,8 +203,8 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
 
     public boolean isVisInsufficient() {
         ItemStack wand = getWandStack();
-        ArcaneCraftingShapedRecipe recipe = getCachedRecipe();
-        if (recipe == null) {
+        AspectList cachedCost = getCachedAspect();
+        if (cachedCost == null) {
             return false;
         }
         WandItemComponent data = wand.get(DataComponentRegistry.WAND_ITEM_DATA.get());
@@ -195,14 +216,13 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
         if (Objects.isNull(wandCap)) {
             return true;
         }
-        AspectList cost = recipe.baseVisCost();
-        for (Map.Entry<ResourceLocation, Integer> entry : cost.entrySet()) {
+        for (Map.Entry<ResourceLocation, Integer> entry : cachedCost.entrySet()) {
             Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(entry.getKey());
             if (Objects.isNull(aspect) || !aspect.isPrimal()) {
                 continue;
             }
             Integer wandVis = wandStorage.getOrDefault(entry.getKey(), 0);
-            var actualCost = recipe.getActualCost(entry.getKey(), wandCap);
+            var actualCost = cachedCost.getWithModifier(entry.getKey(), wandCap.getAspectCostModifier(entry.getKey()));
             if (wandVis < actualCost) {
                 return true;
             }

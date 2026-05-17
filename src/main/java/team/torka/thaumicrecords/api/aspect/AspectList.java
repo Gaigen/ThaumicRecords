@@ -7,12 +7,14 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import team.torka.thaumicrecords.registry.AspectRegistry;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
@@ -98,6 +100,15 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
 
     public List<ResourceLocation> getPrimalKey() {
         return this.keySet().stream().filter(e -> Aspect.getPrimalList().contains(e)).toList();
+    }
+
+    public int getWithModifier(ResourceLocation rl, Double modifier) {
+        int base = this.getOrDefault(rl, 0);
+        Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
+        if (Objects.isNull(aspect)) {
+            return base;
+        }
+        return (int) (base * (Objects.nonNull(modifier) ? modifier : 1.0));
     }
 }
 

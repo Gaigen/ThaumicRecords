@@ -10,7 +10,6 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.menu.ArcaneWorkbenchMenu;
-import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.WandCapRegistry;
 
@@ -46,8 +45,8 @@ public class ArcaneWorkbenchResultSlot extends SlotItemHandler {
         if (player.level().isClientSide) {
             return;
         }
-        ArcaneCraftingShapedRecipe cachedRecipe = this.menu.getCachedRecipe();
-        if (Objects.isNull(cachedRecipe)) {
+        AspectList cachedAspect = this.menu.getCachedAspect();
+        if (Objects.isNull(cachedAspect)) {
             this.menu.consumeCraftingMaterials(1);
             this.menu.updateResultSlot();
             return;
@@ -55,12 +54,11 @@ public class ArcaneWorkbenchResultSlot extends SlotItemHandler {
         ItemStack wand = this.menu.getWandStack();
         WandItemComponent data = wand.get(DataComponentRegistry.WAND_ITEM_DATA.get());
         if (data != null) {
-            AspectList cost = cachedRecipe.baseVisCost();
             WandCap cap = WandCapRegistry.WAND_CAP_REGISTRY.get(data.getCap());
             WandItemComponent currentData = data;
-            for (Map.Entry<ResourceLocation, Integer> entry : cost.entrySet()) {
+            for (Map.Entry<ResourceLocation, Integer> entry : cachedAspect.entrySet()) {
                 ResourceLocation aspectRl = entry.getKey();
-                int actualCost = cachedRecipe.getActualCost(aspectRl, cap);
+                int actualCost = cachedAspect.getWithModifier(aspectRl, Objects.nonNull(cap) ? cap.getAspectCostModifier(aspectRl) : 1);
                 currentData = currentData.consumeVis(aspectRl, actualCost);
             }
             wand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), currentData);
