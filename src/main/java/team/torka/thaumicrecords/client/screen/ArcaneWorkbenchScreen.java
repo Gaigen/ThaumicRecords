@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
@@ -93,7 +94,6 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     }
 
     private void renderInsufficientVisOverlay(GuiGraphics guiGraphics, int x, int y) {
-        guiGraphics.fill(x + 160, y + 64, x + 160 + 16, y + 64 + 16, 0xAA444444);
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(x + 168, y + 46, 0);
         String text = Component.translatable(ThaumicRecords.createTranslationKey("text", "insufficient_vis")).getString();
@@ -120,8 +120,29 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
     private void renderCostText(GuiGraphics g, int x, int y, String cost) {
         g.pose().pushPose();
-        g.pose().translate(x + 8, y + 16, 500);
+        g.pose().translate(x + 8, y + 16, 300);
         g.drawString(this.font, cost, 4, -5, 0xFFFFFF, true);
         g.pose().popPose();
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    protected void renderSlot(GuiGraphics guiGraphics, Slot slot) {
+        boolean isResultSlot = slot.index == ArcaneWorkbenchMenu.SLOT_CRAFT_RESULT;
+        if (isResultSlot && this.menu.isVisInsufficient() && slot.hasItem()) {
+            int slotX = slot.x;
+            int slotY = slot.y;
+            ItemStack stack = slot.getItem();
+            if (!stack.isEmpty()) {
+                if (this.menu.isVisInsufficient()) {
+                    RenderSystem.setShaderColor(0.4F, 0.4F, 0.4F, 1.0F);
+                }
+                guiGraphics.renderItem(stack, slotX, slotY, slot.x + slot.y * this.imageWidth);
+                guiGraphics.renderItemDecorations(this.font, stack, slotX, slotY);
+                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            }
+        } else {
+            super.renderSlot(guiGraphics, slot);
+        }
     }
 }
