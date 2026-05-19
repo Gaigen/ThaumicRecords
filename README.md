@@ -24,14 +24,13 @@ It is in a very early stage...
 * Aspects System
 * Research System (without Thaumonomicon)
 * Arcane Crafting
-* Some Basic Resources (no worldgen yet)
-* Trees
+* Some Basic Resources (ores, trees, no worldgen yet)
 * Wands
 * Aura Nodes
 
 **Next**
 
-* Some misc blocks (if I have not time)
+* Some misc non-functional blocks (if I have no time)
 * Thaumometer Scanning
 * Thaumonomicon
 * Crucible Recipe
