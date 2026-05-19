@@ -1,4 +1,4 @@
-package team.torka.thaumicrecords.client.listener;
+package team.torka.thaumicrecords.client.event.listener;
 
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.level.FoliageColor;

@@ -1,4 +1,4 @@
-package team.torka.thaumicrecords.client.listener;
+package team.torka.thaumicrecords.client.event.listener;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;

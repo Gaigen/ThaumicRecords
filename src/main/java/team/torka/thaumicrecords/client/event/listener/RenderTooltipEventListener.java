@@ -1,4 +1,4 @@
-package team.torka.thaumicrecords.client.listener;
+package team.torka.thaumicrecords.client.event.listener;
 
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;

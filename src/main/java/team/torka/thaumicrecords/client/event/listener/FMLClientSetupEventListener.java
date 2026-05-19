@@ -1,4 +1,4 @@
-package team.torka.thaumicrecords.client.listener;
+package team.torka.thaumicrecords.client.event.listener;
 
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.level.block.Blocks;

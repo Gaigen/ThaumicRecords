@@ -3,19 +3,21 @@ package team.torka.thaumicrecords.client.renderer.blockentity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.common.NeoForge;
 import org.joml.Matrix4f;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
-import team.torka.thaumicrecords.api.helper.PlayerHelper;
 import team.torka.thaumicrecords.api.node.NodeType;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
+import team.torka.thaumicrecords.client.event.RenderThaumicVisionEvent;
 import team.torka.thaumicrecords.client.renderer.CustomRenderType;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 
@@ -40,17 +42,25 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
         if (Objects.isNull(nodeType)) {
             return;
         }
-        poseStack.pushPose();
-        poseStack.translate(0.5D, 0.5D, 0.5D);
-        poseStack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
-
-        if (PlayerHelper.shouldShowNode(Minecraft.getInstance().player)) {
-            renderFullAuraNode(blockEntity, partialTicks, poseStack, bufferSource, nodeType);
-        } else {
-            renderOnlyCore(blockEntity, poseStack, bufferSource);
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (Objects.isNull(player)) {
+            return;
         }
 
-        poseStack.popPose();
+        if (player.level().isClientSide()) {
+            RenderThaumicVisionEvent.Node event = new RenderThaumicVisionEvent.Node(player, player.level());
+            NeoForge.EVENT_BUS.post(event);
+
+            poseStack.pushPose();
+            poseStack.translate(0.5D, 0.5D, 0.5D);
+            poseStack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
+            if (event.isVisible()) {
+                renderFullAuraNode(blockEntity, partialTicks, poseStack, bufferSource, nodeType);
+            } else {
+                renderOnlyCore(blockEntity, poseStack, bufferSource);
+            }
+            poseStack.popPose();
+        }
     }
 
     private void renderOnlyCore(AuraNodeBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource bufferSource) {
