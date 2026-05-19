@@ -34,7 +34,7 @@ public class AspectHelper {
         }
         Item item = stack.getItem();
         AspectList cached = ITEM_ASPECTS_CACHE.get(item);
-        if (cached != null) {
+        if (Objects.nonNull(cached)) {
             return cached;
         }
         return AspectList.empty();

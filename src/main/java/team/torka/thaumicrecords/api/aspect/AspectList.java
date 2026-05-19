@@ -48,7 +48,7 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
     }
 
     public void readFromNBT(Tag tag) {
-        if (tag == null) {
+        if (Objects.isNull(tag)) {
             return;
         }
         this.clear();

@@ -52,7 +52,7 @@ public class ArcaneWorkbenchResultSlot extends SlotItemHandler {
         }
         ItemStack wand = this.menu.getWandStack();
         WandItemComponent data = wand.get(DataComponentRegistry.WAND_ITEM_DATA.get());
-        if (data != null) {
+        if (Objects.nonNull(data)) {
             WandCap cap = WandCapRegistry.WAND_CAP_REGISTRY.get(data.getCap());
             WandItemComponent currentData = data;
             for (Map.Entry<ResourceLocation, Integer> entry : cachedAspect.entrySet()) {

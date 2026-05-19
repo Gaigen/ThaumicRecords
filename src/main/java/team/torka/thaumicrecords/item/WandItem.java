@@ -49,7 +49,7 @@ public class WandItem extends Item {
     @ParametersAreNonnullByDefault
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
         WandItemComponent data = stack.get(DataComponentRegistry.WAND_ITEM_DATA.get());
-        if (data == null) {
+        if (Objects.isNull(data)) {
             tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "bad_component")).withStyle(ChatFormatting.GRAY));
             return;
         }

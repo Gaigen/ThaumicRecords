@@ -204,7 +204,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
     public boolean isVisInsufficient() {
         ItemStack wand = getWandStack();
         AspectList cachedCost = getCachedAspect();
-        if (cachedCost == null) {
+        if (Objects.isNull(cachedCost)) {
             return false;
         }
         WandItemComponent data = wand.get(DataComponentRegistry.WAND_ITEM_DATA.get());

@@ -106,7 +106,7 @@ public record ResearchNoteComponent(ResourceLocation research, int color, boolea
                     ResearchNoteComponent.HexEntry neighborEntry = decoded.get(neighbor);
                     if (neighborEntry.type() != ResearchNoteComponent.HexEntry.EMPTY) {
                         Aspect neighborAspect = AspectRegistry.ASPECT_REGISTRY.get(neighborEntry.aspect());
-                        if (currentAspect != null && neighborAspect != null && currentAspect.isRelatedTo(neighborAspect)) {
+                        if (Objects.nonNull(currentAspect) && Objects.nonNull(neighborAspect) && currentAspect.isRelatedTo(neighborAspect)) {
                             visited.add(neighbor);
                             queue.add(neighbor);
                         }

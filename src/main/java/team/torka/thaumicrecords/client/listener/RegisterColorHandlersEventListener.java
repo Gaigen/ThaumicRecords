@@ -47,7 +47,7 @@ public class RegisterColorHandlersEventListener {
         event.register((stack, tintIndex) -> {
             if (tintIndex == 1) {
                 ResearchNoteComponent data = stack.get(DataComponentRegistry.RESEARCH_NOTE.get());
-                return data != null ? data.color() | 0xFF000000 : -1;
+                return Objects.nonNull(data) ? data.color() | 0xFF000000 : -1;
             }
             return -1;
         }, ItemRegistry.RESEARCH_NOTES.get());

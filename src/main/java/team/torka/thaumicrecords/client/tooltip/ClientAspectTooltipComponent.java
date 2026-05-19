@@ -9,6 +9,7 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
 
 public class ClientAspectTooltipComponent implements ClientTooltipComponent {
 
@@ -35,7 +36,7 @@ public class ClientAspectTooltipComponent implements ClientTooltipComponent {
         int currentX = x;
         for (var entry : aspects.entrySet()) {
             Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(entry.getKey());
-            if (aspect == null) {
+            if (Objects.isNull(aspect)) {
                 continue;
             }
             ResourceLocation image = aspect.getImage();

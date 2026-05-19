@@ -17,17 +17,18 @@ import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public record ArcaneCraftingShapedRecipe(ShapedRecipePattern pattern, AspectList baseVisCost, ItemStack result,
                                          List<ResourceLocation> requiredResearch) implements Recipe<CraftingInput> {
     public ArcaneCraftingShapedRecipe {
-        if (baseVisCost == null) {
+        if (Objects.isNull(baseVisCost)) {
             baseVisCost = new AspectList();
         }
-        if (requiredResearch == null) {
+        if (Objects.isNull(requiredResearch)) {
             requiredResearch = Collections.emptyList();
         }
-        if (result == null) {
+        if (Objects.isNull(result)) {
             result = ItemStack.EMPTY;
         }
     }

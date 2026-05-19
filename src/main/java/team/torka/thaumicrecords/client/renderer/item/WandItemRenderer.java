@@ -23,6 +23,7 @@ import team.torka.thaumicrecords.registry.WandCapRegistry;
 import team.torka.thaumicrecords.registry.WandRodRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
 import java.util.Optional;
 
 public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
@@ -38,7 +39,7 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
     @ParametersAreNonnullByDefault
     public void renderByItem(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
         WandItemComponent data = stack.get(DataComponentRegistry.WAND_ITEM_DATA.get());
-        if (data == null) {
+        if (Objects.isNull(data)) {
             data = new WandItemComponent(WandRodRegistry.WAND_ROD_WOOD.getId(), WandCapRegistry.WAND_CAP_IRON.getId(), AspectList.empty());
         }
         WandRod wandRod = Optional.ofNullable(WandRodRegistry.WAND_ROD_REGISTRY.get(data.getRod())).orElse(WandRodRegistry.WAND_ROD_WOOD.get());

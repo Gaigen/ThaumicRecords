@@ -61,7 +61,7 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
     }
 
     public void updateRecipeOutput() {
-        if (this.level == null || this.level.isClientSide) {
+        if (Objects.isNull(this.level) || this.level.isClientSide) {
             return;
         }
         List<ItemStack> stacks = new ArrayList<>();

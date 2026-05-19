@@ -11,12 +11,14 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.helper.AspectHelper;
 import team.torka.thaumicrecords.client.tooltip.AspectTooltipComponent;
 
+import java.util.Objects;
+
 @EventBusSubscriber(value = Dist.CLIENT)
 public class RenderTooltipEventListener {
 
     @SubscribeEvent
     public static void onGatherComponentsEvent(RenderTooltipEvent.GatherComponents event) {
-        if (Minecraft.getInstance().level == null || event.getItemStack().isEmpty()) {
+        if (Objects.isNull(Minecraft.getInstance().level) || event.getItemStack().isEmpty()) {
             return;
         }
         if (Screen.hasShiftDown()) {

@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import team.torka.thaumicrecords.block.entity.ArcanePedestalBlockEntity;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
 
 public class ArcanePedestalBlockEntityRenderer implements BlockEntityRenderer<ArcanePedestalBlockEntity> {
 
@@ -35,7 +36,7 @@ public class ArcanePedestalBlockEntityRenderer implements BlockEntityRenderer<Ar
         float hoverOffset = 0.0F;
         float rotationAngle = 0.0F;
 
-        if (blockEntity.getLevel() != null) {
+        if (Objects.nonNull(blockEntity.getLevel())) {
             float gameTicks = blockEntity.getLevel().getGameTime() + partialTick;
             hoverOffset = Mth.sin(gameTicks / 16.0F) * 0.05F;
             rotationAngle = gameTicks * 1.5F;

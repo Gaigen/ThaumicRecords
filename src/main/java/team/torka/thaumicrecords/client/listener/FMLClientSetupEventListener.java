@@ -13,6 +13,8 @@ import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 
+import java.util.Objects;
+
 @EventBusSubscriber(value = Dist.CLIENT)
 public class FMLClientSetupEventListener {
     @SubscribeEvent
@@ -20,7 +22,7 @@ public class FMLClientSetupEventListener {
         event.enqueueWork(
                 () -> ItemProperties.register(ItemRegistry.RESEARCH_NOTES.get(), ThaumicRecords.createRl("completed"), (stack, level, entity, seed) -> {
                     ResearchNoteComponent data = stack.get(DataComponentRegistry.RESEARCH_NOTE.get());
-                    return (data != null && data.complete()) ? 1.0F : 0.0F;
+                    return (Objects.nonNull(data) && data.complete()) ? 1.0F : 0.0F;
                 }));
         event.enqueueWork(() -> {
             FireBlock fireBlock = (FireBlock) Blocks.FIRE;

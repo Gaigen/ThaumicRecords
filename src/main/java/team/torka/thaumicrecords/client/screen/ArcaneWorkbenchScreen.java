@@ -102,7 +102,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     }
 
     private void renderAspectIcon(GuiGraphics g, Aspect aspect, int x, int y, float alpha) {
-        if (aspect == null) {
+        if (Objects.isNull(aspect)) {
             return;
         }
         int argb = aspect.getARGBColor();

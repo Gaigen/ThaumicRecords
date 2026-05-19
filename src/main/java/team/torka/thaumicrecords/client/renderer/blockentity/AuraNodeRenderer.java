@@ -37,7 +37,7 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
     public void render(AuraNodeBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight,
                        int combinedOverlay) {
         NodeType nodeType = blockEntity.getNodeType().isBound() ? blockEntity.getNodeType().value() : null;
-        if (nodeType == null) {
+        if (Objects.isNull(nodeType)) {
             return;
         }
         poseStack.pushPose();

@@ -30,7 +30,7 @@ public class ResearchNotesItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
         if (!level.isClientSide && player instanceof ServerPlayer) {
             ResearchNoteComponent data = stack.get(DataComponentRegistry.RESEARCH_NOTE.get());
-            if (data != null && data.complete()) {
+            if (Objects.nonNull(data) && data.complete()) {
                 ResourceLocation researchKey = data.research();
                 // TODO 研究完成
             }
