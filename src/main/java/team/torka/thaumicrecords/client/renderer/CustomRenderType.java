@@ -41,4 +41,16 @@ public class CustomRenderType {
                 .createCompositeState(false);
         return RenderType.create("additive_transparency_no_depth", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 1536, false, true, compositeState);
     }
+
+    public static RenderType translucentNoDepth(ResourceLocation resourceLocation) {
+        RenderType.CompositeState compositeState = RenderType.CompositeState.builder()
+                .setShaderState(RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER)
+                .setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, true, false))
+                .setCullState(RenderStateShard.CullStateShard.NO_CULL)
+                .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                .setDepthTestState(RenderStateShard.DepthTestStateShard.NO_DEPTH_TEST)
+                .setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE)
+                .createCompositeState(false);
+        return RenderType.create("translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 1536, false, true, compositeState);
+    }
 }

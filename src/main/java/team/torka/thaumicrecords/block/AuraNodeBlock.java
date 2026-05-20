@@ -3,6 +3,8 @@ package team.torka.thaumicrecords.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -17,7 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.data.component.AspectListComponent;
@@ -54,11 +55,19 @@ public class AuraNodeBlock extends BaseEntityBlock {
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 
-    @Nullable
+
     @Override
     @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return createTickerHelper(type, BlockEntityRegistry.AURA_NODE.get(), AuraNodeBlockEntity::tick);
+        return createTickerHelper(type, BlockEntityRegistry.AURA_NODE.get(), AuraNodeBlockEntity::onTick);
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        if (level.getBlockEntity(pos) instanceof AuraNodeBlockEntity be) {
+            be.onRandomTick(state, level, pos, random);
+        }
     }
 
     @Override

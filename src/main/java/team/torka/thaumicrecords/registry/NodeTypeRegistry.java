@@ -10,7 +10,12 @@ import net.neoforged.neoforge.registries.RegistryBuilder;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.RegistryKeys;
 import team.torka.thaumicrecords.api.node.NodeType;
+import team.torka.thaumicrecords.node.type.EerieNodeType;
+import team.torka.thaumicrecords.node.type.HungryNodeType;
 import team.torka.thaumicrecords.node.type.NormalNodeType;
+import team.torka.thaumicrecords.node.type.PureNodeType;
+import team.torka.thaumicrecords.node.type.TaintedNodeType;
+import team.torka.thaumicrecords.node.type.UnstableNodeType;
 
 @EventBusSubscriber
 public class NodeTypeRegistry {
@@ -24,4 +29,9 @@ public class NodeTypeRegistry {
 
     /*@formatter:off*/
     public static final DeferredHolder<NodeType,NodeType> NORMAL =  REGISTRAR.register("normal",NormalNodeType::new);
+    public static final DeferredHolder<NodeType,NodeType> EERIE =  REGISTRAR.register("eerie",EerieNodeType::new);
+    public static final DeferredHolder<NodeType,NodeType> PURE =  REGISTRAR.register("pure",PureNodeType::new);
+    public static final DeferredHolder<NodeType,NodeType> HUNGRY =  REGISTRAR.register("hungry",HungryNodeType::new);
+    public static final DeferredHolder<NodeType,NodeType> TAINTED =  REGISTRAR.register("tainted",TaintedNodeType::new);
+    public static final DeferredHolder<NodeType,NodeType> UNSTABLE =  REGISTRAR.register("unstable",UnstableNodeType::new);
 }

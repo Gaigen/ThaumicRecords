@@ -20,6 +20,7 @@ import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.client.event.RenderThaumicVisionEvent;
 import team.torka.thaumicrecords.client.renderer.CustomRenderType;
 import team.torka.thaumicrecords.registry.AspectRegistry;
+import team.torka.thaumicrecords.registry.NodeTypeRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
@@ -38,8 +39,9 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
     @ParametersAreNonnullByDefault
     public void render(AuraNodeBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight,
                        int combinedOverlay) {
-        NodeType nodeType = blockEntity.getNodeType().isBound() ? blockEntity.getNodeType().value() : null;
+        NodeType nodeType = NodeTypeRegistry.NODE_TYPE_REGISTRY.get(blockEntity.getNodeType());
         if (Objects.isNull(nodeType)) {
+            renderOnlyCore(blockEntity, poseStack, bufferSource);
             return;
         }
         LocalPlayer player = Minecraft.getInstance().player;
@@ -47,7 +49,7 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
             return;
         }
 
-        if (player.level().isClientSide()) {
+        if (player.level().isClientSide) {
             RenderThaumicVisionEvent.Node event = new RenderThaumicVisionEvent.Node(player, player.level());
             NeoForge.EVENT_BUS.post(event);
 
@@ -111,7 +113,8 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
             renderLayer(poseStack, bufferSource, size, angle, finalArgb, CustomRenderType.additiveTransparencyNoDepth(AURA), count);
             count++;
         }
-        renderLayer(poseStack, bufferSource, calculateCoreSize(averageAmount, 1.0F), angle, 0xAAFFFFFF, nodeType.getRenderType(), 0);
+        renderLayer(poseStack, bufferSource, calculateCoreSize(averageAmount, 1.0F) * nodeType.getRenderSizeModifier(), nodeType.isRotate() ? angle : 0,
+                0xAAFFFFFF, nodeType.getRenderType(), 0);
     }
 
     private void renderLayer(PoseStack poseStack, MultiBufferSource bufferSource, float size, float angle, int argb, RenderType renderType, int indexOffset) {

@@ -1,7 +1,6 @@
 package team.torka.thaumicrecords.block.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -9,13 +8,13 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
-import team.torka.thaumicrecords.api.RegistryKeys;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.node.NodeModifier;
 import team.torka.thaumicrecords.api.node.NodeType;
@@ -25,16 +24,22 @@ import team.torka.thaumicrecords.registry.NodeModifierRegistry;
 import team.torka.thaumicrecords.registry.NodeTypeRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class AuraNodeBlockEntity extends BlockEntity {
-    private Holder<NodeType> type = NodeTypeRegistry.NORMAL;
-    private Holder<NodeModifier> modifier = NodeModifierRegistry.NORMAL;
+    private ResourceLocation type;
+    private ResourceLocation modifier;
     private final AspectList limit = new AspectList();
     private final AspectList current = new AspectList();
 
+    private int tickCount = 0;
+    private int waitAfterDrain = 0;
+
     public AuraNodeBlockEntity(BlockPos pos, BlockState blockState) {
         super(BlockEntityRegistry.AURA_NODE.get(), pos, blockState);
+        type = NodeTypeRegistry.NORMAL.getId();
+        modifier = NodeModifierRegistry.NORMAL.getId();
         limit.put(AspectRegistry.AER.getId(), 20);
         limit.put(AspectRegistry.IGNIS.getId(), 20);
         limit.put(AspectRegistry.AQUA.getId(), 20);
@@ -49,7 +54,51 @@ public class AuraNodeBlockEntity extends BlockEntity {
         current.put(AspectRegistry.PERDITIO.getId(), 20);
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, AuraNodeBlockEntity be) {
+    public void onRandomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource source) {
+        NodeType nodeType = NodeTypeRegistry.NODE_TYPE_REGISTRY.get(type);
+        NodeModifier nodeModifier = NodeModifierRegistry.NODE_MODIFIER_REGISTRY.get(modifier);
+        if (Objects.isNull(nodeType) || Objects.isNull(nodeModifier)) {
+            return;
+        }
+        nodeType.onRandomTick(state, level, pos, source);
+    }
+
+    public static void onTick(Level level, BlockPos pos, BlockState state, AuraNodeBlockEntity be) {
+        NodeType nodeType = NodeTypeRegistry.NODE_TYPE_REGISTRY.get(be.type);
+        NodeModifier nodeModifier = NodeModifierRegistry.NODE_MODIFIER_REGISTRY.get(be.modifier);
+        if (Objects.isNull(nodeType) || Objects.isNull(nodeModifier)) {
+            return;
+        }
+        if (level.isClientSide) {
+            return;
+        }
+        be.tickCount++;
+        if (be.waitAfterDrain > 0) {
+            be.waitAfterDrain--;
+        }
+
+        int regenFrequency = nodeType.getRegenFrequency();
+        double regenFrequencyModifier = nodeModifier.getRegenFrequencyModifier();
+        int actualRegenFrequency = (int) (regenFrequency * regenFrequencyModifier);
+        if (actualRegenFrequency > 0 && be.waitAfterDrain == 0 && be.tickCount % actualRegenFrequency == 0) {
+            be.handleNodeRegen(level);
+        }
+        nodeType.onTick(level, pos, state, be);
+    }
+
+    private void handleNodeRegen(Level level) {
+        ArrayList<ResourceLocation> toRegenAspects = new ArrayList<>();
+        for (var aspect : limit.keySet()) {
+            if (current.containsKey(aspect) && current.get(aspect) < limit.get(aspect)) {
+                toRegenAspects.add(aspect);
+            }
+        }
+        if (toRegenAspects.isEmpty()) {
+            return;
+        }
+        ResourceLocation regenAspect = toRegenAspects.get(level.random.nextInt(toRegenAspects.size()));
+        current.add(regenAspect, 1);
+        this.setChanged();
     }
 
     @NotNull
@@ -66,13 +115,10 @@ public class AuraNodeBlockEntity extends BlockEntity {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         if (tag.contains("nodeType", Tag.TAG_STRING)) {
-            ResourceLocation typeId = ResourceLocation.parse(tag.getString("nodeType"));
-            registries.lookup(RegistryKeys.NODE_TYPES).flatMap(r -> r.get(ResourceKey.create(RegistryKeys.NODE_TYPES, typeId))).ifPresent(h -> this.type = h);
+            this.type = ResourceLocation.parse(tag.getString("nodeType"));
         }
         if (tag.contains("nodeModifier", Tag.TAG_STRING)) {
-            ResourceLocation modifierId = ResourceLocation.parse(tag.getString("nodeModifier"));
-            registries.lookup(RegistryKeys.NODE_MODIFIERS).flatMap(r -> r.get(ResourceKey.create(RegistryKeys.NODE_MODIFIERS, modifierId))).ifPresent(
-                    h -> this.modifier = h);
+            this.modifier = ResourceLocation.parse(tag.getString("nodeModifier"));
         }
         if (tag.contains("aspectsLimit")) {
             this.limit.readFromNBT(tag.getCompound("aspectsLimit"));
@@ -86,8 +132,8 @@ public class AuraNodeBlockEntity extends BlockEntity {
     @ParametersAreNonnullByDefault
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        this.type.unwrapKey().ifPresent(key -> tag.putString("nodeType", key.location().toString()));
-        this.modifier.unwrapKey().ifPresent(key -> tag.putString("nodeModifier", key.location().toString()));
+        tag.putString("nodeType", this.type.toString());
+        tag.putString("nodeModifier", this.modifier.toString());
         tag.put("aspectsLimit", this.limit.writeToNBT());
         tag.put("aspectsCurrent", this.current.writeToNBT());
     }
@@ -106,11 +152,11 @@ public class AuraNodeBlockEntity extends BlockEntity {
         }
     }
 
-    public Holder<NodeType> getNodeType() {
+    public ResourceLocation getNodeType() {
         return type;
     }
 
-    public Holder<NodeModifier> getNodeModifier() {
+    public ResourceLocation getNodeModifier() {
         return modifier;
     }
 
@@ -120,6 +166,14 @@ public class AuraNodeBlockEntity extends BlockEntity {
 
     public AspectList getLimitAspect() {
         return limit;
+    }
+
+    public void setNodeType(ResourceLocation nodeType) {
+        this.type = nodeType;
+    }
+
+    public void setNodeModifier(ResourceLocation nodeModifier) {
+        this.modifier = nodeModifier;
     }
 
     public int drainAspect(ResourceLocation aspectId, int amount, boolean preserve) {
@@ -136,9 +190,6 @@ public class AuraNodeBlockEntity extends BlockEntity {
         if (toDrain > 0) {
             this.current.add(aspectId, -toDrain);
             this.setChanged();
-            if (Objects.nonNull(level) && !this.level.isClientSide) {
-                this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), 3);
-            }
             return toDrain;
         }
         return 0;

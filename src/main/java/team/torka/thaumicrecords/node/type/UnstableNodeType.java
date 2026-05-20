@@ -4,11 +4,12 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.node.NodeType;
 import team.torka.thaumicrecords.client.renderer.CustomRenderType;
 
-public class NormalNodeType extends NodeType {
-    private static final String KEY = "normal";
+public class UnstableNodeType extends NodeType {
+    private static final String KEY = "unstable";
 
-    public NormalNodeType() {
+    public UnstableNodeType() {
         super(ThaumicRecords.createTranslationKey("node_type", KEY), ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png"),
-                CustomRenderType.additiveTransparencyNoDepth(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")));
+                CustomRenderType.additiveTransparencyNoDepth(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")), 600, 1, false);
     }
+    // TODO 不稳定节点
 }
