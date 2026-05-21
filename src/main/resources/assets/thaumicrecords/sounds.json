@@ -6,13 +6,6 @@
       "thaumicrecords:craft_fail"
     ]
   },
-  "node_break": {
-    "category": "block",
-    "subtitle": "sound.thaumicrecords.node_break",
-    "sounds": [
-      "thaumicrecords:node_break"
-    ]
-  },
   "button_click": {
     "category": "gui",
     "subtitle": "sound.thaumicrecords.button_click",
@@ -49,6 +42,13 @@
     "subtitle": "sound.thaumicrecords.erase",
     "sounds": [
       "thaumicrecords:erase"
+    ]
+  },
+  "camera_ticks": {
+    "category": "item",
+    "subtitle": "sound.thaumicrecords.camera_ticks",
+    "sounds": [
+      "thaumicrecords:camera_ticks"
     ]
   }
 }

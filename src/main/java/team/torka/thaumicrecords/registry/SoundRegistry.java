@@ -13,7 +13,7 @@ public class SoundRegistry {
             () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("craft_fail")));
 
     public static final DeferredHolder<SoundEvent, SoundEvent> NODE_BREAK = REGISTRAR.register("node_break",
-            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("node_break")));
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("craft_fail")));
 
     public static final DeferredHolder<SoundEvent, SoundEvent> BUTTON_CLICK = REGISTRAR.register("button_click",
             () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("button_click")));
@@ -29,4 +29,7 @@ public class SoundRegistry {
 
     public static final DeferredHolder<SoundEvent, SoundEvent> ERASE = REGISTRAR.register("erase",
             () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("erase")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> CAMERA_TICKS = REGISTRAR.register("camera_ticks",
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("camera_ticks")));
 }
