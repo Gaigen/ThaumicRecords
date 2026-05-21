@@ -43,13 +43,6 @@ public class ArcaneWorkbenchBlock extends BaseEntityBlock {
 
     @NotNull
     @Override
-    @ParametersAreNonnullByDefault
-    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
-        return SHAPE;
-    }
-
-    @NotNull
-    @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }

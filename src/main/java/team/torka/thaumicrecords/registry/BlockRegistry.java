@@ -94,6 +94,7 @@ public class BlockRegistry {
             .noLootTable()
             .randomTicks()
             .dynamicShape()
+            .forceSolidOn()
             .sound(SoundType.WOOL)
             .pushReaction(PushReaction.BLOCK)));
 
