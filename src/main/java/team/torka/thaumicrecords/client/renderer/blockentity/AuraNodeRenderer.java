@@ -2,6 +2,8 @@ package team.torka.thaumicrecords.client.renderer.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -120,11 +122,11 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
     private void renderLayer(PoseStack poseStack, MultiBufferSource bufferSource, float size, float angle, int argb, RenderType renderType, int indexOffset) {
         poseStack.pushPose();
         if (angle != 0) {
-            poseStack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(angle));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(angle));
         }
         VertexConsumer buffer = bufferSource.getBuffer(renderType);
         Matrix4f matrix = poseStack.last().pose();
-        float time = (float) net.minecraft.Util.getMillis() / 100.0F;
+        float time = (float) Util.getMillis() / 100.0F;
         int totalFrames = 32;
         int currentFrame = (int) (time * 2.0F + indexOffset) % 32;
         float frameWidth = 1.0F / totalFrames;

@@ -1,16 +1,19 @@
 package team.torka.thaumicrecords.client.renderer.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.client.renderer.CustomRenderType;
@@ -79,15 +82,15 @@ public class AuraNodeItemRenderer extends BlockEntityWithoutLevelRenderer {
         renderLayerInternal(poseStack, bufferSource, coreSize, coreAngle, 0xAAFFFFFF, CustomRenderType.additiveTransparency(AuraNodeRenderer.NORMAL_CORE), 0);
     }
 
-    private void renderLayerInternal(PoseStack poseStack, MultiBufferSource bufferSource, float size, float angle, int argb,
-                                     net.minecraft.client.renderer.RenderType renderType, int indexOffset) {
+    private void renderLayerInternal(PoseStack poseStack, MultiBufferSource bufferSource, float size, float angle, int argb, RenderType renderType,
+                                     int indexOffset) {
         poseStack.pushPose();
         if (angle != 0) {
-            poseStack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(angle));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(angle));
         }
         var buffer = bufferSource.getBuffer(renderType);
         var matrix = poseStack.last().pose();
-        float time = (float) net.minecraft.Util.getMillis() / 100.0F;
+        float time = (float) Util.getMillis() / 100.0F;
         int currentFrame = (int) (time * 2.0F + indexOffset) % 32;
         float minU = currentFrame * (1.0F / 32.0F);
         float maxU = (currentFrame + 1) * (1.0F / 32.0F);
@@ -98,7 +101,7 @@ public class AuraNodeItemRenderer extends BlockEntityWithoutLevelRenderer {
         poseStack.popPose();
     }
 
-    private void addVertex(com.mojang.blaze3d.vertex.VertexConsumer buffer, org.joml.Matrix4f matrix, float x, float y, float z, int argb, float u, float v) {
+    private void addVertex(VertexConsumer buffer, Matrix4f matrix, float x, float y, float z, int argb, float u, float v) {
         buffer.addVertex(matrix, x, y, z).setColor((argb >> 16) & 0xFF, (argb >> 8) & 0xFF, argb & 0xFF, (argb >> 24) & 0xFF).setUv(u, v).setOverlay(
                 OverlayTexture.NO_OVERLAY).setLight(15728880).setNormal(0.0F, 0.0F, 1.0F);
     }
