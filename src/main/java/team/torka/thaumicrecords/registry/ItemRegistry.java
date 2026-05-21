@@ -49,7 +49,10 @@ public class ItemRegistry {
     public static final DeferredItem<Item> WAND_ROD_GREATWOOD = REGISTRAR.registerSimpleItem("wand_rod_greatwood");
     public static final DeferredItem<Item> WAND_ROD_SILVERWOOD = REGISTRAR.registerSimpleItem("wand_rod_silverwood");
 
-    public static final DeferredItem<WandItem> WAND = REGISTRAR.registerItem("wand", WandItem::new, itemProp(1));
+
+    public static final DeferredItem<WandItem> WAND = REGISTRAR.register("wand", WandItem::new);
+
+    public static final DeferredItem<ThaumometerItem> THAUMOMETER = REGISTRAR.register("thaumometer", ThaumometerItem::new);
 
     public static final DeferredItem<GogglesItem> GOGGLES=REGISTRAR.register("goggles",GogglesItem::new);
 

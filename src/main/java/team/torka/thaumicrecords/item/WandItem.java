@@ -41,8 +41,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class WandItem extends Item {
 
-    public WandItem(Properties properties) {
-        super(properties.rarity(Rarity.UNCOMMON));
+    public WandItem() {
+        super(new Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     }
 
     @Override
