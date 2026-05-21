@@ -17,6 +17,7 @@ import team.torka.thaumicrecords.item.GogglesItem;
 import team.torka.thaumicrecords.item.PrimordialPearItem;
 import team.torka.thaumicrecords.item.ResearchNotesItem;
 import team.torka.thaumicrecords.item.ScribingToolsItem;
+import team.torka.thaumicrecords.item.ThaumometerItem;
 import team.torka.thaumicrecords.item.WandItem;
 import team.torka.thaumicrecords.item.WispEssenceItem;
 
@@ -104,6 +105,7 @@ public class ItemRegistry {
         output.accept(ironCappedWoodWand());
         output.accept(goldCappedGreatwoodWand());
         output.accept(thaumiumCappedSilverwoodWand());
+        output.accept(THAUMOMETER);
         output.accept(AER_INFUSED_STONE);
         output.accept(IGNIS_INFUSED_STONE);
         output.accept(AQUA_INFUSED_STONE);
