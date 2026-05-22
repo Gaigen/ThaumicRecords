@@ -14,6 +14,7 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import team.torka.thaumicrecords.client.renderer.item.ArcaneWorkbenchItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.AuraNodeItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.TableItemRenderer;
+import team.torka.thaumicrecords.client.renderer.item.ThaumometerItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.WandItemRenderer;
 import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
@@ -36,6 +37,7 @@ public class RegisterClientExtensionsEventListener {
         event.registerItem(AuraNodeItemRenderer.INSTANCE.getExtensions(), ItemRegistry.AURA_NODE.get());
         event.registerItem(ArcaneWorkbenchItemRenderer.INSTANCE.getExtensions(), ItemRegistry.ARCANE_WORKBENCH.get());
         event.registerItem(TableItemRenderer.INSTANCE.getExtensions(), ItemRegistry.TABLE.get());
+        event.registerItem(ThaumometerItemRenderer.INSTANCE.getExtensions(), ItemRegistry.THAUMOMETER.get());
     }
 
     private static void registerBlockExtensions(RegisterClientExtensionsEvent event) {

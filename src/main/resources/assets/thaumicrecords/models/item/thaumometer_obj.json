@@ -1,0 +1,9 @@
+{
+  "flip_v": true,
+  "loader": "neoforge:obj",
+  "model": "thaumicrecords:models/item/thaumometer.obj",
+  "textures": {
+    "particle": "thaumicrecords:item/thaumometer",
+    "thaumometer": "thaumicrecords:item/thaumometer"
+  }
+}
