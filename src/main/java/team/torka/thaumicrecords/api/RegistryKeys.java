@@ -7,7 +7,7 @@ import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.api.node.NodeModifier;
-import team.torka.thaumicrecords.api.node.NodeType;
+import team.torka.thaumicrecords.api.node.Node;
 import team.torka.thaumicrecords.api.research.Research;
 import team.torka.thaumicrecords.api.research.ResearchCategory;
 
@@ -17,6 +17,6 @@ public interface RegistryKeys {
     ResourceKey<Registry<ResearchCategory>> RESEARCH_CATEGORIES = ResourceKey.createRegistryKey(ThaumicRecords.createRl("research_categories"));
     ResourceKey<Registry<WandCap>> WAND_CAPS = ResourceKey.createRegistryKey(ThaumicRecords.createRl("wand_caps"));
     ResourceKey<Registry<WandRod>> WAND_RODS = ResourceKey.createRegistryKey(ThaumicRecords.createRl("wand_rods"));
-    ResourceKey<Registry<NodeType>> NODE_TYPES = ResourceKey.createRegistryKey(ThaumicRecords.createRl("node_types"));
+    ResourceKey<Registry<Node>> NODE_TYPES = ResourceKey.createRegistryKey(ThaumicRecords.createRl("node_types"));
     ResourceKey<Registry<NodeModifier>> NODE_MODIFIERS = ResourceKey.createRegistryKey(ThaumicRecords.createRl("node_modifiers"));
 }

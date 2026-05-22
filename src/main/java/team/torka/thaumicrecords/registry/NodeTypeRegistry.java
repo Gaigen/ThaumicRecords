@@ -9,29 +9,48 @@ import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.RegistryKeys;
+import team.torka.thaumicrecords.api.node.Node;
 import team.torka.thaumicrecords.api.node.NodeType;
-import team.torka.thaumicrecords.node.type.EerieNodeType;
-import team.torka.thaumicrecords.node.type.HungryNodeType;
-import team.torka.thaumicrecords.node.type.NormalNodeType;
-import team.torka.thaumicrecords.node.type.PureNodeType;
-import team.torka.thaumicrecords.node.type.TaintedNodeType;
-import team.torka.thaumicrecords.node.type.UnstableNodeType;
+import team.torka.thaumicrecords.node.EerieNode;
+import team.torka.thaumicrecords.node.HungryNode;
+import team.torka.thaumicrecords.node.NormalNode;
+import team.torka.thaumicrecords.node.PureNode;
+import team.torka.thaumicrecords.node.TaintedNode;
+import team.torka.thaumicrecords.node.UnstableNode;
 
 @EventBusSubscriber
 public class NodeTypeRegistry {
-    public static final DeferredRegister<NodeType> REGISTRAR = DeferredRegister.create(RegistryKeys.NODE_TYPES, ThaumicRecords.MOD_ID);
-    public static Registry<NodeType> NODE_TYPE_REGISTRY = null;
+    public static final DeferredRegister<Node> REGISTRAR = DeferredRegister.create(RegistryKeys.NODE_TYPES, ThaumicRecords.MOD_ID);
+    public static Registry<Node> NODE_TYPE_REGISTRY = null;
 
     @SubscribeEvent
     public static void onNewRegistryEvent(NewRegistryEvent event) {
         NODE_TYPE_REGISTRY = event.create(new RegistryBuilder<>(RegistryKeys.NODE_TYPES));
     }
 
+    public static DeferredHolder<Node,Node> getHolderFromType(NodeType type){
+        switch (type){
+            case EERIE:
+                return NodeTypeRegistry.EERIE;
+            case HUNGRY:
+                return NodeTypeRegistry.HUNGRY;
+            case NORMAL :
+                return NodeTypeRegistry.NORMAL;
+            case PURE:
+                return NodeTypeRegistry.PURE;
+            case TAINTED:
+                return NodeTypeRegistry.TAINTED;
+            case UNSTABLE:
+                return NodeTypeRegistry.UNSTABLE;
+        }
+        return NodeTypeRegistry.NORMAL;
+    }
+
     /*@formatter:off*/
-    public static final DeferredHolder<NodeType,NodeType> NORMAL =  REGISTRAR.register("normal",NormalNodeType::new);
-    public static final DeferredHolder<NodeType,NodeType> EERIE =  REGISTRAR.register("eerie",EerieNodeType::new);
-    public static final DeferredHolder<NodeType,NodeType> PURE =  REGISTRAR.register("pure",PureNodeType::new);
-    public static final DeferredHolder<NodeType,NodeType> HUNGRY =  REGISTRAR.register("hungry",HungryNodeType::new);
-    public static final DeferredHolder<NodeType,NodeType> TAINTED =  REGISTRAR.register("tainted",TaintedNodeType::new);
-    public static final DeferredHolder<NodeType,NodeType> UNSTABLE =  REGISTRAR.register("unstable",UnstableNodeType::new);
+    public static final DeferredHolder<Node,Node> NORMAL =  REGISTRAR.register("normal",NormalNode::new);
+    public static final DeferredHolder<Node,Node> EERIE =  REGISTRAR.register("eerie",EerieNode::new);
+    public static final DeferredHolder<Node,Node> PURE =  REGISTRAR.register("pure",PureNode::new);
+    public static final DeferredHolder<Node,Node> HUNGRY =  REGISTRAR.register("hungry",HungryNode::new);
+    public static final DeferredHolder<Node,Node> TAINTED =  REGISTRAR.register("tainted",TaintedNode::new);
+    public static final DeferredHolder<Node,Node> UNSTABLE =  REGISTRAR.register("unstable",UnstableNode::new);
 }

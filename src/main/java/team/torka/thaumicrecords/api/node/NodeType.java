@@ -1,69 +1,31 @@
 package team.torka.thaumicrecords.api.node;
 
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import team.torka.thaumicrecords.ThaumicRecords;
-import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
+import java.util.Arrays;
+import java.util.Optional;
 
-public class NodeType {
-    private final String translationKey;
+public enum NodeType {
+    NORMAL("normal", 0),
+    EERIE("eerie", 1),
+    PURE("pure", 2),
+    HUNGRY("hungry", 3),
+    TAINTED("tainted", 4),
+    UNSTABLE("unstable", 5);
 
-    private final ResourceLocation nodeTexture;
+    private final String key;
+    private final int id;
 
-    private final float renderSizeModifier;
-
-    private final boolean rotate;
-
-    private final RenderType renderType;
-
-    private final int regenFrequency;
-
-    public NodeType(String translationKey, ResourceLocation nodeTexture, RenderType renderType, int regenFrequency, float renderSizeModifier, boolean rotate) {
-        this.translationKey = translationKey;
-        this.nodeTexture = nodeTexture;
-        this.renderSizeModifier = renderSizeModifier;
-        this.rotate = rotate;
-        this.renderType = renderType;
-        this.regenFrequency = regenFrequency;
+    NodeType(String key, int id){
+        this.key = key;
+        this.id = id;
     }
 
-    public NodeType(String translationKey, ResourceLocation nodeTexture, RenderType renderType) {
-        this(translationKey, nodeTexture, renderType, 600, 1, false);
+    public String getKey(){
+        return this.key;
     }
 
-    public void onRandomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource source) {
-        ThaumicRecords.LOGGER.debug("randomTick");
-    }
-
-    public void onTick(Level level, BlockPos pos, BlockState state, AuraNodeBlockEntity be) {
-    }
-
-    public String getTranslationKey() {
-        return translationKey;
-    }
-
-    public ResourceLocation getNodeTexture() {
-        return nodeTexture;
-    }
-
-    public float getRenderSizeModifier() {
-        return renderSizeModifier;
-    }
-
-    public boolean isRotate() {
-        return rotate;
-    }
-
-    public RenderType getRenderType() {
-        return renderType;
-    }
-
-    public int getRegenFrequency() {
-        return regenFrequency;
+    public static NodeType getById(int id){
+        Optional<NodeType> nodeType = Arrays.stream(NodeType.values()).filter(type -> type.id == id).findFirst();
+        if(nodeType.isEmpty()) return NodeType.NORMAL;
+        return nodeType.get();
     }
 }

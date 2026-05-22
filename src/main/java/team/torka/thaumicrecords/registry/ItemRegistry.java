@@ -1,10 +1,7 @@
 package team.torka.thaumicrecords.registry;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
@@ -41,6 +38,7 @@ public class ItemRegistry {
     public static final DeferredItem<Item> BALANCED_SHARD = REGISTRAR.registerSimpleItem("balanced_shard");
     public static final DeferredItem<Item> SALIS_MUNDUS = REGISTRAR.registerSimpleItem("salis_mundus");
     public static final DeferredItem<Item> PRIMORDIAL_PEARL=REGISTRAR.registerItem("primordial_pearl", PrimordialPearItem::new, itemProp(1));
+    public static final DeferredItem<Item> GOGGLES=REGISTRAR.registerItem("goggles", GogglesItem::new, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(350));
 
 
     public static final DeferredItem<Item> WAND_CAP_IRON = REGISTRAR.registerSimpleItem("wand_cap_iron");
@@ -55,7 +53,6 @@ public class ItemRegistry {
 
     public static final DeferredItem<ThaumometerItem> THAUMOMETER = REGISTRAR.register("thaumometer", ThaumometerItem::new);
 
-    public static final DeferredItem<GogglesItem> GOGGLES=REGISTRAR.register("goggles",GogglesItem::new);
 
     public static final DeferredItem<WispEssenceItem> WISP_ESSENCE=REGISTRAR.register("wisp_essence",WispEssenceItem::new);
 
