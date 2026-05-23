@@ -17,7 +17,7 @@ import org.joml.Matrix4f;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
-import team.torka.thaumicrecords.api.node.Node;
+import team.torka.thaumicrecords.api.node.NodeType;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.client.event.RenderThaumicVisionEvent;
 import team.torka.thaumicrecords.client.renderer.CustomRenderType;
@@ -41,8 +41,8 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
     @ParametersAreNonnullByDefault
     public void render(AuraNodeBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight,
                        int combinedOverlay) {
-        Node node = NodeTypeRegistry.NODE_TYPE_REGISTRY.get(blockEntity.getNodeType());
-        if (Objects.isNull(node)) {
+        NodeType nodeType = NodeTypeRegistry.NODE_TYPE_REGISTRY.get(blockEntity.getNodeType());
+        if (Objects.isNull(nodeType)) {
             renderOnlyCore(blockEntity, poseStack, bufferSource);
             return;
         }
@@ -59,7 +59,7 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
             poseStack.translate(0.5D, 0.5D, 0.5D);
             poseStack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
             if (event.isVisible()) {
-                renderFullAuraNode(blockEntity, partialTicks, poseStack, bufferSource, node);
+                renderFullAuraNode(blockEntity, partialTicks, poseStack, bufferSource, nodeType);
             } else {
                 renderOnlyCore(blockEntity, poseStack, bufferSource);
             }
@@ -83,7 +83,7 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
     }
 
     private void renderFullAuraNode(AuraNodeBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
-                                    Node node) {
+                                    NodeType nodeType) {
         if (Objects.isNull(Minecraft.getInstance().player)) {
             return;
         }
@@ -115,8 +115,8 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
             renderLayer(poseStack, bufferSource, size, angle, finalArgb, CustomRenderType.additiveTransparencyNoDepth(AURA), count);
             count++;
         }
-        renderLayer(poseStack, bufferSource, calculateCoreSize(averageAmount, 1.0F) * node.getRenderSizeModifier(), node.isRotate() ? angle : 0,
-                0xAAFFFFFF, node.getRenderType(), 0);
+        renderLayer(poseStack, bufferSource, calculateCoreSize(averageAmount, 1.0F) * nodeType.getRenderSizeModifier(), nodeType.isRotate() ? angle : 0,
+                0xAAFFFFFF, nodeType.getRenderType(), 0);
     }
 
     private void renderLayer(PoseStack poseStack, MultiBufferSource bufferSource, float size, float angle, int argb, RenderType renderType, int indexOffset) {

@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.node.NodeModifier;
-import team.torka.thaumicrecords.api.node.Node;
 import team.torka.thaumicrecords.api.node.NodeType;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
@@ -30,6 +29,8 @@ import java.util.Objects;
 import java.util.Random;
 
 public class AuraNodeBlockEntity extends BlockEntity {
+    private static final Random RANDOM = new Random();
+
     private ResourceLocation type;
     private ResourceLocation modifier;
     private final AspectList limit = new AspectList();
@@ -41,12 +42,12 @@ public class AuraNodeBlockEntity extends BlockEntity {
     public AuraNodeBlockEntity(BlockPos pos, BlockState blockState) {
         super(BlockEntityRegistry.AURA_NODE.get(), pos, blockState);
 
-        Random rand = new Random();
-        int randomNumber = rand.nextInt(6);
-        NodeType type = NodeType.getById(randomNumber);
-        this.type = NodeTypeRegistry.getHolderFromType(type).getId();
+        var registeredTypes = NodeTypeRegistry.REGISTRAR.getEntries().stream().toList();
+        type = registeredTypes.get(RANDOM.nextInt(registeredTypes.size())).getId();
 
-        modifier = NodeModifierRegistry.NORMAL.getId(); //todo: replace with enum implemetation
+        var registeredModifiers = NodeModifierRegistry.REGISTRAR.getEntries().stream().toList();
+        modifier = registeredModifiers.get(RANDOM.nextInt(registeredModifiers.size())).getId();
+
         limit.put(AspectRegistry.AER.getId(), 20);
         limit.put(AspectRegistry.IGNIS.getId(), 20);
         limit.put(AspectRegistry.AQUA.getId(), 20);
@@ -62,18 +63,18 @@ public class AuraNodeBlockEntity extends BlockEntity {
     }
 
     public void onRandomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource source) {
-        Node node = NodeTypeRegistry.NODE_TYPE_REGISTRY.get(type);
+        NodeType nodeType = NodeTypeRegistry.NODE_TYPE_REGISTRY.get(type);
         NodeModifier nodeModifier = NodeModifierRegistry.NODE_MODIFIER_REGISTRY.get(modifier);
-        if (Objects.isNull(node) || Objects.isNull(nodeModifier)) {
+        if (Objects.isNull(nodeType) || Objects.isNull(nodeModifier)) {
             return;
         }
-        node.onRandomTick(state, level, pos, source);
+        nodeType.onRandomTick(state, level, pos, source);
     }
 
     public static void onTick(Level level, BlockPos pos, BlockState state, AuraNodeBlockEntity be) {
-        Node node = NodeTypeRegistry.NODE_TYPE_REGISTRY.get(be.type);
+        NodeType nodeType = NodeTypeRegistry.NODE_TYPE_REGISTRY.get(be.type);
         NodeModifier nodeModifier = NodeModifierRegistry.NODE_MODIFIER_REGISTRY.get(be.modifier);
-        if (Objects.isNull(node) || Objects.isNull(nodeModifier)) {
+        if (Objects.isNull(nodeType) || Objects.isNull(nodeModifier)) {
             return;
         }
         if (level.isClientSide) {
@@ -84,13 +85,13 @@ public class AuraNodeBlockEntity extends BlockEntity {
             be.waitAfterDrain--;
         }
 
-        int regenFrequency = node.getRegenFrequency();
+        int regenFrequency = nodeType.getRegenFrequency();
         double regenFrequencyModifier = nodeModifier.getRegenFrequencyModifier();
         int actualRegenFrequency = (int) (regenFrequency * regenFrequencyModifier);
         if (actualRegenFrequency > 0 && be.waitAfterDrain == 0 && be.tickCount % actualRegenFrequency == 0) {
             be.handleNodeRegen(level);
         }
-        node.onTick(level, pos, state, be);
+        nodeType.onTick(level, pos, state, be);
     }
 
     private void handleNodeRegen(Level level) {

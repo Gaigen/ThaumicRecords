@@ -1,4 +1,4 @@
-package team.torka.thaumicrecords.node;
+package team.torka.thaumicrecords.node.type;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -7,30 +7,25 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import team.torka.thaumicrecords.ThaumicRecords;
-import team.torka.thaumicrecords.api.node.Node;
 import team.torka.thaumicrecords.api.node.NodeType;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.client.renderer.CustomRenderType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HungryNode extends Node {
+public class HungryNodeType extends NodeType {
+    private static final String KEY = "hungry";
 
     private static final int BLOCK_RADIUS = 5;
     private static final int ENTITY_RADIUS = 8;
 
-    public HungryNode() {
+    public HungryNodeType() {
         super(
-                ThaumicRecords.createTranslationKey("node_type", NodeType.HUNGRY.getKey()),
-                ThaumicRecords.createRl("textures/misc/node/" + NodeType.HUNGRY.getKey() + ".png"),
-                CustomRenderType.additiveTransparencyNoDepth(
-                        ThaumicRecords.createRl("textures/misc/node/" + NodeType.HUNGRY.getKey() + ".png")
-                ),
-                NodeType.HUNGRY,
+                ThaumicRecords.createTranslationKey("node_type", KEY), ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png"),
+                CustomRenderType.additiveTransparencyNoDepth(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")),
                 600,
                 0.75F,
                 true
