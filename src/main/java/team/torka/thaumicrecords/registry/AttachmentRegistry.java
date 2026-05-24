@@ -8,6 +8,7 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.attachment.AspectDiscovery;
 import team.torka.thaumicrecords.attachment.ResearchPoint;
 import team.torka.thaumicrecords.attachment.ResearchUnlocked;
+import team.torka.thaumicrecords.attachment.ScanHistory;
 
 public class AttachmentRegistry {
 
@@ -30,4 +31,7 @@ public class AttachmentRegistry {
                     .sync(ResearchUnlocked.STREAM_CODEC)
                     .copyOnDeath()
                     .build());
+
+    public static final DeferredHolder<AttachmentType<?>, AttachmentType<ScanHistory>> SCAN_HISTORY = REGISTRAR.register("scan_history",
+            () -> AttachmentType.builder(() -> ScanHistory.DEFAULT).serialize(ScanHistory.CODEC).sync(ScanHistory.STREAM_CODEC).copyOnDeath().build());
 }

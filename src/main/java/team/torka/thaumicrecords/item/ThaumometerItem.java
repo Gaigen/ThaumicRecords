@@ -20,7 +20,9 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.attachment.ScanHistory;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
+import team.torka.thaumicrecords.registry.AttachmentRegistry;
 import team.torka.thaumicrecords.registry.SoundRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -95,6 +97,8 @@ public class ThaumometerItem extends Item {
             BlockPos pos = blockHit.getBlockPos();
             Level level = player.level();
             BlockState blockState = level.getBlockState(pos);
+            ScanHistory scanned = player.getData(AttachmentRegistry.SCAN_HISTORY);
+            // TODO 判断物品(方块 掉落物) 实体 节点 - 生成唯一key - 检查是否扫描过 - 发布事件
             ThaumicRecords.LOGGER.debug("blockPos{}, {}", pos, blockState.getBlock());
             if (level.getBlockEntity(pos) instanceof AuraNodeBlockEntity nodeBE) {
                 ThaumicRecords.LOGGER.debug("nodeBE{}", nodeBE.getCurrentAspect());
@@ -105,6 +109,7 @@ public class ThaumometerItem extends Item {
 
     private void spawnScanParticles(Level level, HitResult hitResult) {
         var pos = hitResult.getLocation();
+        // TODO 用TC4效果替换
         level.addParticle(ParticleTypes.ENCHANTED_HIT, pos.x, pos.y, pos.z, 0, 0.1, 0);
     }
 
