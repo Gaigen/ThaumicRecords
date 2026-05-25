@@ -1,0 +1,10 @@
+{
+  "type": "thaumicrecords:aspect_registration",
+  "ingredient": {
+    "item": "minecraft:rotten_flesh"
+  },
+  "aspects": {
+    "thaumicrecords:humanus": 1,
+    "thaumicrecords:corpus": 2
+  }
+}

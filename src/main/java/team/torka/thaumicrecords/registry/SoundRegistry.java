@@ -32,4 +32,16 @@ public class SoundRegistry {
 
     public static final DeferredHolder<SoundEvent, SoundEvent> CAMERA_TICKS = REGISTRAR.register("camera_ticks",
             () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("camera_ticks")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPILL = REGISTRAR.register("spill",
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("spill")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> BUBBLE = REGISTRAR.register("bubble",
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("bubble")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> CRAFT_START = REGISTRAR.register("craft_start",
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("craft_start")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> WAND = REGISTRAR.register("wand",
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("wand")));
 }

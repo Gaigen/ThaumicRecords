@@ -1,0 +1,10 @@
+{
+  "type": "thaumicrecords:aspect_registration",
+  "ingredient": {
+    "item": "minecraft:gunpowder"
+  },
+  "aspects": {
+    "thaumicrecords:ignis": 4,
+    "thaumicrecords:perditio": 4
+  }
+}

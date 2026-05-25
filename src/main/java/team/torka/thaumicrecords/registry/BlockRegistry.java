@@ -15,10 +15,13 @@ import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.block.AlchemicalConstructBlock;
 import team.torka.thaumicrecords.block.ArcanePedestalBlock;
 import team.torka.thaumicrecords.block.ArcaneWorkbenchBlock;
 import team.torka.thaumicrecords.block.AuraNodeBlock;
+import team.torka.thaumicrecords.block.CrucibleBlock;
 import team.torka.thaumicrecords.block.ResearchTableBlock;
+import team.torka.thaumicrecords.block.ThaumatoriumBlock;
 import team.torka.thaumicrecords.block.TableBlock;
 import team.torka.thaumicrecords.world.tree.TreeGrowers;
 
@@ -90,6 +93,30 @@ public class BlockRegistry {
                     .noOcclusion()
                     .sound(SoundType.STONE)));
 
+    public static final DeferredBlock<ThaumatoriumBlock> THAUMATORIUM = REGISTRAR.register("thaumatorium",
+            () -> new ThaumatoriumBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL)
+                    .requiresCorrectToolForDrops()
+                    .strength(5.0F, 10.0F)
+                    .noOcclusion()
+                    .sound(SoundType.METAL)));
+
+    public static final DeferredBlock<CrucibleBlock> CRUCIBLE = REGISTRAR.register("crucible",
+            () -> new CrucibleBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL)
+                    .requiresCorrectToolForDrops()
+                    .strength(5.0F, 10.0F)
+                    .noOcclusion()
+                    .sound(SoundType.METAL)));
+
+    public static final DeferredBlock<Block> CINNABAR_ORE = REGISTRAR.registerSimpleBlock("cinnabar_ore", BlockBehaviour.Properties.of().mapColor(
+            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
+
+    public static final DeferredBlock<AlchemicalConstructBlock> ALCHEMICAL_CONSTRUCT = REGISTRAR.register("alchemical_construct",
+            () -> new AlchemicalConstructBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL)
+                    .strength(3.0F, 17.0F)
+                    .sound(SoundType.METAL)));
 
     public static final DeferredBlock<AuraNodeBlock> AURA_NODE = REGISTRAR.register("aura_node", () -> new AuraNodeBlock(BlockBehaviour.Properties.of()
             .mapColor(MapColor.NONE)

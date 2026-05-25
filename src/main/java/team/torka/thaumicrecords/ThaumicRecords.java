@@ -50,9 +50,6 @@ public class ThaumicRecords {
         AttachmentRegistry.REGISTRAR.register(modEventBus);
         FeatureRegistry.REGISTRAR.register(modEventBus);
 
-
-//        ConfiguredFeatureRegistry.REGISTRAR.register(modEventBus);
-//        PlacedFeatureRegistry.REGISTRAR.register(modEventBus);
     }
 
 

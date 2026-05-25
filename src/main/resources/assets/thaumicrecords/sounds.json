@@ -50,5 +50,38 @@
     "sounds": [
       "thaumicrecords:camera_ticks"
     ]
+  },
+  "spill": {
+    "category": "block",
+    "subtitle": "sound.thaumicrecords.spill",
+    "sounds": [
+      "thaumicrecords:spill"
+    ]
+  },
+  "bubble": {
+    "category": "block",
+    "subtitle": "sound.thaumicrecords.bubble",
+    "sounds": [
+      "thaumicrecords:bubble1",
+      "thaumicrecords:bubble2",
+      "thaumicrecords:bubble3",
+      "thaumicrecords:bubble4"
+    ]
+  },
+  "craft_start": {
+    "category": "block",
+    "subtitle": "sound.thaumicrecords.craft_start",
+    "sounds": [
+      "thaumicrecords:craftstart"
+    ]
+  },
+  "wand": {
+    "category": "block",
+    "subtitle": "sound.thaumicrecords.wand",
+    "sounds": [
+      "thaumicrecords:wand1",
+      "thaumicrecords:wand2",
+      "thaumicrecords:wand3"
+    ]
   }
 }
