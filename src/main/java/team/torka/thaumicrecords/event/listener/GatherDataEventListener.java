@@ -1,17 +1,22 @@
 package team.torka.thaumicrecords.event.listener;
 
+import net.minecraft.core.Cloner;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.datagen.BlockLootGenerator;
 import team.torka.thaumicrecords.datagen.BlockStateGenerator;
@@ -19,7 +24,9 @@ import team.torka.thaumicrecords.datagen.BlockTagsGenerator;
 import team.torka.thaumicrecords.datagen.ItemModelGenerator;
 import team.torka.thaumicrecords.datagen.ItemTagsGenerator;
 import team.torka.thaumicrecords.datagen.RecipeGenerator;
+import team.torka.thaumicrecords.world.feature.BiomeModifiers;
 import team.torka.thaumicrecords.world.feature.ConfiguredFeatures;
+import team.torka.thaumicrecords.world.feature.PlacedFeatures;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +38,11 @@ public class GatherDataEventListener {
 
     private static final RegistrySetBuilder CONFIGURED_FEATURE_BUILDER = new RegistrySetBuilder().add(Registries.CONFIGURED_FEATURE,
             ConfiguredFeatures::bootstrap);
+
+    private static final RegistrySetBuilder PLACED_FEATURE_BUILDER = new RegistrySetBuilder().add(Registries.PLACED_FEATURE,
+            PlacedFeatures::bootstrap);
+//    private static final RegistrySetBuilder BIOME_MODIFIRE_BUILDER = new RegistrySetBuilder().add(BuiltInRegistries.Bio,
+//            PlacedFeatures::bootstrap);
 
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent event) {
@@ -60,7 +72,29 @@ public class GatherDataEventListener {
         generator.addProvider(event.includeServer(), new RecipeGenerator(packOutput, lookupProvider));
 
         // feature
-        generator.addProvider(event.includeServer(),
-                new DatapackBuiltinEntriesProvider(packOutput, lookupProvider, CONFIGURED_FEATURE_BUILDER, Set.of(ThaumicRecords.MOD_ID)));
+//        generator.addProvider(event.includeServer(),
+//                new DatapackBuiltinEntriesProvider(packOutput, lookupProvider, CONFIGURED_FEATURE_BUILDER, Set.of(ThaumicRecords.MOD_ID)));
+
+
+//        generator.addProvider(event.includeServer(),
+//                new DatapackBuiltinEntriesProvider(packOutput, lookupProvider, PLACED_FEATURE_BUILDER, Set.of(ThaumicRecords.MOD_ID)));
+//
+        CompletableFuture<RegistrySetBuilder.PatchedRegistries> patchedProvider = CompletableFuture.supplyAsync(GatherDataEventListener::getProvider);
+        generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(
+                packOutput, patchedProvider, Set.of(ThaumicRecords.MOD_ID)));
+
+    }
+
+    public static RegistrySetBuilder.PatchedRegistries getProvider(){
+        final RegistrySetBuilder registryBuilder = new RegistrySetBuilder();
+        registryBuilder.add(Registries.CONFIGURED_FEATURE, ConfiguredFeatures::bootstrap);
+        registryBuilder.add(Registries.PLACED_FEATURE, PlacedFeatures::bootstrap);
+        registryBuilder.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, BiomeModifiers::bootstrap);
+
+
+        RegistryAccess.Frozen regAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
+        Cloner.Factory cloner$factory = new Cloner.Factory();
+        net.neoforged.neoforge.registries.DataPackRegistriesHooks.getDataPackRegistriesWithDimensions().forEach(data -> data.runWithArguments(cloner$factory::addCodec));
+        return registryBuilder.buildPatch(regAccess, VanillaRegistries.createLookup(), cloner$factory);
     }
 }
