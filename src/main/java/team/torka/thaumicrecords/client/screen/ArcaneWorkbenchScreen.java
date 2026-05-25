@@ -71,13 +71,13 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         for (int i = 0; i < 6; i++) {
             ResourceLocation rl = Aspect.getPrimalList().get(i);
             Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
-            int baseCost = cost.getOrDefault(rl, 0);
+            int baseCost = cost.getOrZero(rl);
             if (baseCost <= 0) {
                 continue;
             }
             int actualCost = cost.getWithModifier(rl, Objects.nonNull(wandCap) ? wandCap.getAspectCostModifier(rl) : 1);
             float alpha;
-            int wandVis = Objects.isNull(data) ? AspectList.empty().getOrDefault(rl, 0) : data.getAspects().getOrDefault(rl, 0);
+            int wandVis = Objects.isNull(data) ? AspectList.empty().getOrZero(rl) : data.getAspects().getOrZero(rl);
             if (wandVis >= actualCost) {
                 alpha = 1.0F;
             } else {

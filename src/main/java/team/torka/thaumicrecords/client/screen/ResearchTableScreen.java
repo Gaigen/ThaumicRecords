@@ -244,7 +244,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 int slotX = 10 + offsetX;
                 int slotY = 40 + offsetY;
                 if (isHovering(slotX, slotY, 16, 16, mouseX, mouseY)) {
-                    int amount = points.get(rl);
+                    int amount = points.getOrZero(rl);
                     if (amount > 0) {
                         return rl;
                     }
@@ -285,7 +285,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 if (Objects.isNull(aspect)) {
                     continue;
                 }
-                int amount = points.get(rl);
+                int amount = points.getOrZero(rl);
                 int xx = x + (drawn / 5) * 16;
                 int yy = y + (drawn % 5) * 16;
                 this.drawAspectTag(graphics, xx, yy, aspect, amount, mx, my, true);

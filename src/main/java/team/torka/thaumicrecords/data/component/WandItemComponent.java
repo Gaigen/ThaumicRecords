@@ -54,7 +54,7 @@ public record WandItemComponent(ResourceLocation rod, ResourceLocation cap, Aspe
             remain.set(amount);
             return this;
         }
-        int current = this.getAspects().get(aspect);
+        int current = this.getAspects().getOrZero(aspect);
         int max = wandRod.getCapacity();
         int lack = Math.max(max - current, 0);
         int actualAmountToProcess = amount * 100;
@@ -71,7 +71,7 @@ public record WandItemComponent(ResourceLocation rod, ResourceLocation cap, Aspe
 
     public WandItemComponent consumeVis(ResourceLocation aspect, int amount) {
         AspectList newAspects = this.aspects.copy();
-        int current = newAspects.getOrDefault(aspect, 0);
+        int current = newAspects.getOrZero(aspect);
         newAspects.put(aspect, Math.max(0, current - amount));
         return withAspects(newAspects);
     }
@@ -79,7 +79,7 @@ public record WandItemComponent(ResourceLocation rod, ResourceLocation cap, Aspe
     public WandItemComponent consumeVis(AspectList aspectList) {
         AspectList newAspects = this.aspects.copy();
         aspectList.forEach((aspect, amount) -> {
-            int current = newAspects.getOrDefault(aspect, 0);
+            int current = newAspects.getOrZero(aspect);
             newAspects.put(aspect, Math.max(0, current - amount));
         });
         return withAspects(newAspects);
@@ -101,7 +101,7 @@ public record WandItemComponent(ResourceLocation rod, ResourceLocation cap, Aspe
         int max = wandRod.getCapacity();
         List<ResourceLocation> result = new ArrayList<>();
         Aspect.getPrimalList().forEach(rl -> {
-            if (this.aspects.get(rl) < max) {
+            if (this.aspects.getOrZero(rl) < max) {
                 result.add(rl);
             }
         });

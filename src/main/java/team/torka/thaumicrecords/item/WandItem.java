@@ -170,7 +170,7 @@ public class WandItem extends Item {
                     List<ResourceLocation> randomPrimalList = nodeBE.getLimitAspect().getPrimalKey().stream().filter(notFull::contains).toList();
                     if (!randomPrimalList.isEmpty()) {
                         ResourceLocation randomAspect = randomPrimalList.get(level.random.nextInt(randomPrimalList.size()));
-                        int space = wandItemComponent.getCapacity() - wandItemComponent.getAspects().get(randomAspect);
+                        int space = wandItemComponent.getCapacity() - wandItemComponent.getAspects().getOrZero(randomAspect);
                         int toDrain = Math.min(drainRate, space);
                         int drained = nodeBE.drainAspect(randomAspect, toDrain, preserve);
                         if (drained > 0) {

@@ -30,7 +30,7 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
     }
 
     public String getScaled(ResourceLocation aspectRl) {
-        return BigDecimal.valueOf(getOrDefault(aspectRl, 0)).setScale(2, RoundingMode.HALF_UP).divide(new BigDecimal(100), RoundingMode.HALF_UP).setScale(2,
+        return BigDecimal.valueOf(getOrZero(aspectRl)).setScale(2, RoundingMode.HALF_UP).divide(new BigDecimal(100), RoundingMode.HALF_UP).setScale(2,
                 RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
     }
 
@@ -57,11 +57,7 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
     }
 
     public AspectList add(ResourceLocation aspect, int amount) {
-        if (this.containsKey(aspect)) {
-            this.put(aspect, this.get(aspect) + amount);
-        } else {
-            this.put(aspect, amount);
-        }
+        this.put(aspect, this.getOrZero(aspect) + amount);
         return this;
     }
 
@@ -103,12 +99,16 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
     }
 
     public int getWithModifier(ResourceLocation rl, Double modifier) {
-        int base = this.getOrDefault(rl, 0);
+        int base = this.getOrZero(rl);
         Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
         if (Objects.isNull(aspect)) {
             return base;
         }
         return (int) (base * (Objects.nonNull(modifier) ? modifier : 1.0));
+    }
+
+    public Integer getOrZero(ResourceLocation rl) {
+        return getOrDefault(rl, 0);
     }
 }
 

@@ -19,6 +19,7 @@ import org.joml.Matrix4f;
 import team.torka.thaumicrecords.ThaumicRecords;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
 
 public class ThaumometerItemRenderer extends BlockEntityWithoutLevelRenderer {
     public static ThaumometerItemRenderer INSTANCE = new ThaumometerItemRenderer();
@@ -38,7 +39,7 @@ public class ThaumometerItemRenderer extends BlockEntityWithoutLevelRenderer {
         BakedModel objModel = mc.getModelManager().getModel(MODEL);
         poseStack.pushPose();
         mc.getItemRenderer().render(stack, displayContext, false, poseStack, bufferSource, packedLight, packedOverlay, objModel);
-        float ticks = mc.level != null ? (float) mc.level.getGameTime() : 0.0F;
+        float ticks = Objects.nonNull(mc.level) ? (float) mc.level.getGameTime() : 0.0F;
         float partialTicks = mc.getTimer().getGameTimeDeltaPartialTick(false);
         float renderTime = ticks + partialTicks;
         float alpha = Mth.sin(renderTime / 8.0F) * 0.1F + 0.75F;

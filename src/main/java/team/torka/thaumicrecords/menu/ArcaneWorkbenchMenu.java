@@ -221,7 +221,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
             if (Objects.isNull(aspect) || !aspect.isPrimal()) {
                 continue;
             }
-            Integer wandVis = wandStorage.getOrDefault(entry.getKey(), 0);
+            Integer wandVis = wandStorage.getOrZero(entry.getKey());
             var actualCost = cachedCost.getWithModifier(entry.getKey(), wandCap.getAspectCostModifier(entry.getKey()));
             if (wandVis < actualCost) {
                 return true;

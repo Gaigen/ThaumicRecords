@@ -98,7 +98,7 @@ public class AuraNodeBlockEntity extends BlockEntity {
     private void handleNodeRegen(Level level) {
         ArrayList<ResourceLocation> toRegenAspects = new ArrayList<>();
         for (var aspect : limit.keySet()) {
-            if (current.containsKey(aspect) && current.get(aspect) < limit.get(aspect)) {
+            if (current.containsKey(aspect) && current.getOrZero(aspect) < limit.getOrZero(aspect)) {
                 toRegenAspects.add(aspect);
             }
         }
@@ -186,7 +186,7 @@ public class AuraNodeBlockEntity extends BlockEntity {
     }
 
     public int drainAspect(ResourceLocation aspectId, int amount, boolean preserve) {
-        int currentAmt = this.current.get(aspectId);
+        int currentAmt = this.current.getOrZero(aspectId);
         if (currentAmt <= 0) {
             return 0;
         }

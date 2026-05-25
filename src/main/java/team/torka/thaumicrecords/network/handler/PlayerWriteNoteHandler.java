@@ -36,9 +36,9 @@ public class PlayerWriteNoteHandler {
                         if (Objects.nonNull(researchNoteComponent)) {
                             if (researchNoteComponent.canWriteTo(payload.coordinate())) {
                                 ResearchPoint data = player.getData(AttachmentRegistry.RESEARCH_POINT);
-                                if (data.points().get(payload.aspect()) >= 0) {
+                                if (data.points().getOrZero(payload.aspect()) >= 0) {
                                     AspectList newData = data.points().copy();
-                                    newData.put(payload.aspect(), data.points().get(payload.aspect()) - 1);
+                                    newData.put(payload.aspect(), data.points().getOrZero(payload.aspect()) - 1);
                                     player.setData(AttachmentRegistry.RESEARCH_POINT, new ResearchPoint(newData));
                                     ResearchNoteComponent.HexEntry newEntry = new ResearchNoteComponent.HexEntry(ResearchNoteComponent.HexEntry.FULL,
                                             payload.aspect());
