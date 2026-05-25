@@ -104,6 +104,8 @@ public class ItemRegistry {
             () -> new BlockItem(BlockRegistry.GREATWOOD_LOG.get(), new Item.Properties()));
     public static final DeferredItem<Item> GREATWOOD_LEAVES = ItemRegistry.REGISTRAR.register("greatwood_leaves",
             () -> new BlockItem(BlockRegistry.GREATWOOD_LEAVES.get(), new Item.Properties()));
+    public static final DeferredItem<Item> JAR = ItemRegistry.REGISTRAR.register("jar",
+            () -> new BlockItem(BlockRegistry.JAR.get(), new Item.Properties()));
     // @formatter:on
     public static void putInCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(ironCappedWoodWand());
@@ -151,6 +153,10 @@ public class ItemRegistry {
         output.accept(ARCANE_PEDESTAL);
         output.accept(CRUCIBLE);
         output.accept(ALCHEMICAL_CONSTRUCT);
+        output.accept(JAR);
+    }
+
+    public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(PRIMORDIAL_PEARL);
         output.accept(AURA_NODE);
     }
