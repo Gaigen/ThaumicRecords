@@ -9,7 +9,7 @@ public class EerieNodeType extends NodeType {
 
     public EerieNodeType() {
         super(ThaumicRecords.createTranslationKey("node_type", KEY), ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png"),
-                CustomRenderType.translucentNoDepth(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")),100,0.5F,true);
+                CustomRenderType.translucentNoDepth(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")));
     }
     // TODO 黑暗节点特殊逻辑
 }

@@ -9,7 +9,7 @@ public class PureNodeType extends NodeType {
 
     public PureNodeType() {
         super(ThaumicRecords.createTranslationKey("node_type", KEY), ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png"),
-                CustomRenderType.additiveTransparencyNoDepth(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")),250,0.75F,true);
+                CustomRenderType.additiveTransparencyNoDepth(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")));
     }
     // TODO 纯净节点
 }

@@ -75,6 +75,13 @@ public class BlockRegistry {
                     .requiresCorrectToolForDrops()
                     .strength(1.5F, 5.0F)
                     .sound(SoundType.STONE)));
+    public static final DeferredBlock<Block> CINNABAR_ORE = REGISTRAR.registerSimpleBlock("cinnabar_ore",
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+                    .strength(1.5F, 5.0F)
+                    .sound(SoundType.STONE));
     public static final DeferredBlock<ArcanePedestalBlock> ARCANE_PEDESTAL = REGISTRAR.register("arcane_pedestal",
             () -> new ArcanePedestalBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.STONE)
@@ -83,8 +90,6 @@ public class BlockRegistry {
                     .noOcclusion()
                     .sound(SoundType.STONE)));
 
-    public static final DeferredBlock<Block> CINNABAR_ORE = REGISTRAR.registerSimpleBlock("cinnabar_ore", BlockBehaviour.Properties.of().mapColor(
-            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
 
     public static final DeferredBlock<AuraNodeBlock> AURA_NODE = REGISTRAR.register("aura_node", () -> new AuraNodeBlock(BlockBehaviour.Properties.of()
             .mapColor(MapColor.NONE)

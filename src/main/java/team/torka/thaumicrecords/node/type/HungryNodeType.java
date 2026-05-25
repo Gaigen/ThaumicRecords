@@ -23,13 +23,8 @@ public class HungryNodeType extends NodeType {
     private static final int ENTITY_RADIUS = 8;
 
     public HungryNodeType() {
-        super(
-                ThaumicRecords.createTranslationKey("node_type", KEY), ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png"),
-                CustomRenderType.additiveTransparencyNoDepth(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")),
-                600,
-                0.75F,
-                true
-        );
+        super(ThaumicRecords.createTranslationKey("node_type", KEY), ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png"),
+                CustomRenderType.additiveTransparencyNoDepth(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")), 600, 0.75F, true);
     }
 
     @Override

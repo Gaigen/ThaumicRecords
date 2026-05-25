@@ -23,10 +23,6 @@ public class GogglesItem extends ArmorItem {
         super(ArmorMaterialRegistry.GOGGLES, Type.HELMET, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(350));
     }
 
-    public GogglesItem(Properties properties) {
-        super(ArmorMaterialRegistry.GOGGLES, Type.HELMET, properties);
-    }
-
     @Override
     public EquipmentSlot getEquipmentSlot() {
         return EquipmentSlot.HEAD;

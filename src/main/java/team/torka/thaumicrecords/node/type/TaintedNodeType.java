@@ -9,7 +9,7 @@ public class TaintedNodeType extends NodeType {
 
     public TaintedNodeType() {
         super(ThaumicRecords.createTranslationKey("node_type", KEY), ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png"),
-                CustomRenderType.translucentNoDepth(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")),150,1F,true);
+                CustomRenderType.translucentNoDepth(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")));
     }
     // TODO 污染节点
 }

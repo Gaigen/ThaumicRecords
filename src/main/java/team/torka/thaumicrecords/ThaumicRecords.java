@@ -1,28 +1,28 @@
 package team.torka.thaumicrecords;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.Cloner;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.minecraft.data.DataGenerator;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.slf4j.Logger;
-import team.torka.thaumicrecords.registry.ArmorMaterialRegistry;
-import team.torka.thaumicrecords.registry.AspectRegistry;
-import team.torka.thaumicrecords.registry.AttachmentRegistry;
-import team.torka.thaumicrecords.registry.BlockEntityRegistry;
-import team.torka.thaumicrecords.registry.BlockRegistry;
-import team.torka.thaumicrecords.registry.CreativeTabRegistry;
-import team.torka.thaumicrecords.registry.DataComponentRegistry;
-import team.torka.thaumicrecords.registry.FeatureRegistry;
-import team.torka.thaumicrecords.registry.ItemRegistry;
-import team.torka.thaumicrecords.registry.MenuRegistry;
-import team.torka.thaumicrecords.registry.NodeModifierRegistry;
-import team.torka.thaumicrecords.registry.NodeTypeRegistry;
-import team.torka.thaumicrecords.registry.ParticleRegistry;
-import team.torka.thaumicrecords.registry.RecipeSerializerRegistry;
-import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
-import team.torka.thaumicrecords.registry.SoundRegistry;
-import team.torka.thaumicrecords.registry.WandCapRegistry;
-import team.torka.thaumicrecords.registry.WandRodRegistry;
+import team.torka.thaumicrecords.registry.*;
+
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 @Mod(ThaumicRecords.MOD_ID)
 public class ThaumicRecords {
@@ -49,7 +49,14 @@ public class ThaumicRecords {
         MenuRegistry.REGISTRAR.register(modEventBus);
         AttachmentRegistry.REGISTRAR.register(modEventBus);
         FeatureRegistry.REGISTRAR.register(modEventBus);
+
+
+
+//        ConfiguredFeatureRegistry.REGISTRAR.register(modEventBus);
+//        PlacedFeatureRegistry.REGISTRAR.register(modEventBus);
     }
+
+
 
     public static String createTranslationKey(String prefix, String path) {
         return prefix + "." + MOD_ID + "." + path;

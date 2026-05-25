@@ -9,7 +9,7 @@ public class UnstableNodeType extends NodeType {
 
     public UnstableNodeType() {
         super(ThaumicRecords.createTranslationKey("node_type", KEY), ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png"),
-                CustomRenderType.additiveTransparencyNoDepth(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")), 100, 1, false);
+                CustomRenderType.additiveTransparencyNoDepth(ThaumicRecords.createRl("textures/misc/node/" + KEY + ".png")), 600, 1, false);
     }
     // TODO 不稳定节点
 }
