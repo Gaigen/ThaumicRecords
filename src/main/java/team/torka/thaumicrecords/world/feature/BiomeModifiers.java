@@ -38,52 +38,28 @@ public class BiomeModifiers {
 
         HolderSet.Named<Biome> overworldHolder = biomeGetter.getOrThrow(BiomeTags.IS_OVERWORLD);
 
-        context.register(ADD_AER_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(
-                overworldHolder,
-                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_AER_ORE)),
-                GenerationStep.Decoration.UNDERGROUND_ORES
-        ));
+        context.register(ADD_AER_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
+                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_AER_INFUSED_STONE)), GenerationStep.Decoration.UNDERGROUND_ORES));
 
-        context.register(ADD_IGNIS_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(
-                overworldHolder,
-                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_IGNIS_ORE)),
-                GenerationStep.Decoration.UNDERGROUND_ORES
-        ));
+        context.register(ADD_IGNIS_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
+                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_IGNIS_INFUSED_STONE)), GenerationStep.Decoration.UNDERGROUND_ORES));
 
-        context.register(ADD_TERRA_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(
-                overworldHolder,
-                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_TERRA_ORE)),
-                GenerationStep.Decoration.UNDERGROUND_ORES
-        ));
+        context.register(ADD_TERRA_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
+                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_TERRA_INFUSED_STONE)), GenerationStep.Decoration.UNDERGROUND_ORES));
 
-        context.register(ADD_AQUA_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(
-                overworldHolder,
-                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_AQUA_ORE)),
-                GenerationStep.Decoration.UNDERGROUND_ORES
-        ));
+        context.register(ADD_AQUA_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
+                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_AQUA_INFUSED_STONE)), GenerationStep.Decoration.UNDERGROUND_ORES));
 
-        context.register(ADD_ORDO_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(
-                overworldHolder,
-                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_ORDO_ORE)),
-                GenerationStep.Decoration.UNDERGROUND_ORES
-        ));
+        context.register(ADD_ORDO_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
+                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_ORDO_INFUSED_STONE)), GenerationStep.Decoration.UNDERGROUND_ORES));
 
-        context.register(ADD_PERDITIO_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(
-                overworldHolder,
-                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_PERDITIO_ORE)),
-                GenerationStep.Decoration.UNDERGROUND_ORES
-        ));
+        context.register(ADD_PERDITIO_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
+                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_PERDITIO_INFUSED_STONE)), GenerationStep.Decoration.UNDERGROUND_ORES));
 
-        context.register(ADD_AMBER_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(
-                overworldHolder,
-                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_AMBER_ORE)),
-                GenerationStep.Decoration.UNDERGROUND_ORES
-        ));
+        context.register(ADD_AMBER_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
+                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_AMBER_ORE)), GenerationStep.Decoration.UNDERGROUND_ORES));
 
-        context.register(ADD_CINNABAR_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(
-                overworldHolder,
-            HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_CINNABAR_ORE)),
-                GenerationStep.Decoration.UNDERGROUND_ORES
-        ));
-        }
+        context.register(ADD_CINNABAR_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
+                HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_CINNABAR_ORE)), GenerationStep.Decoration.UNDERGROUND_ORES));
+    }
 }

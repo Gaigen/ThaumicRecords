@@ -7,7 +7,12 @@ import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import team.torka.thaumicrecords.ThaumicRecords;
 
 import java.util.List;
@@ -15,34 +20,41 @@ import java.util.List;
 
 public class PlacedFeatures {
 
-    public static final ResourceKey<PlacedFeature> PLACED_AER_ORE = ResourceKey.create(Registries.PLACED_FEATURE,ThaumicRecords.createRl(("aer_ore")));
-    public static final ResourceKey<PlacedFeature> PLACED_IGNIS_ORE = ResourceKey.create(Registries.PLACED_FEATURE,ThaumicRecords.createRl(("ignis_ore")));
-    public static final ResourceKey<PlacedFeature> PLACED_TERRA_ORE = ResourceKey.create(Registries.PLACED_FEATURE,ThaumicRecords.createRl(("terra_ore")));
-    public static final ResourceKey<PlacedFeature> PLACED_AQUA_ORE = ResourceKey.create(Registries.PLACED_FEATURE,ThaumicRecords.createRl(("aqua_ore")));
-    public static final ResourceKey<PlacedFeature> PLACED_ORDO_ORE = ResourceKey.create(Registries.PLACED_FEATURE,ThaumicRecords.createRl(("ordo_ore")));
-    public static final ResourceKey<PlacedFeature> PLACED_PERDITIO_ORE = ResourceKey.create(Registries.PLACED_FEATURE,ThaumicRecords.createRl(("perditio_ore")));
-    public static final ResourceKey<PlacedFeature> PLACED_AMBER_ORE = ResourceKey.create(Registries.PLACED_FEATURE,ThaumicRecords.createRl(("amber_ore")));
-    public static final ResourceKey<PlacedFeature> PLACED_CINNABAR_ORE = ResourceKey.create(Registries.PLACED_FEATURE,ThaumicRecords.createRl(("cinnabar_ore")));
+    public static final ResourceKey<PlacedFeature> PLACED_AER_INFUSED_STONE = ResourceKey.create(Registries.PLACED_FEATURE,
+            ThaumicRecords.createRl(("aer_infused_stone")));
+    public static final ResourceKey<PlacedFeature> PLACED_IGNIS_INFUSED_STONE = ResourceKey.create(Registries.PLACED_FEATURE,
+            ThaumicRecords.createRl(("ignis_infused_stone")));
+    public static final ResourceKey<PlacedFeature> PLACED_TERRA_INFUSED_STONE = ResourceKey.create(Registries.PLACED_FEATURE,
+            ThaumicRecords.createRl(("terra_infused_stone")));
+    public static final ResourceKey<PlacedFeature> PLACED_AQUA_INFUSED_STONE = ResourceKey.create(Registries.PLACED_FEATURE,
+            ThaumicRecords.createRl(("aqua_infused_stone")));
+    public static final ResourceKey<PlacedFeature> PLACED_ORDO_INFUSED_STONE = ResourceKey.create(Registries.PLACED_FEATURE,
+            ThaumicRecords.createRl(("ordo_infused_stone")));
+    public static final ResourceKey<PlacedFeature> PLACED_PERDITIO_INFUSED_STONE = ResourceKey.create(Registries.PLACED_FEATURE,
+            ThaumicRecords.createRl(("perditio_infused_stone")));
+    public static final ResourceKey<PlacedFeature> PLACED_AMBER_ORE = ResourceKey.create(Registries.PLACED_FEATURE, ThaumicRecords.createRl(("amber_ore")));
+    public static final ResourceKey<PlacedFeature> PLACED_CINNABAR_ORE = ResourceKey.create(Registries.PLACED_FEATURE,
+            ThaumicRecords.createRl(("cinnabar_ore")));
 
     public static void bootstrap(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> holdergetter = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        PlacementUtils.register(context, PLACED_AER_ORE, holdergetter.getOrThrow(ConfiguredFeatures.AER_ORE),
+        PlacementUtils.register(context, PLACED_AER_INFUSED_STONE, holdergetter.getOrThrow(ConfiguredFeatures.AER_INFUSED_STONE),
                 commonOrePlacement(8, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
 
-        PlacementUtils.register(context, PLACED_IGNIS_ORE, holdergetter.getOrThrow(ConfiguredFeatures.IGNIS_ORE),
+        PlacementUtils.register(context, PLACED_IGNIS_INFUSED_STONE, holdergetter.getOrThrow(ConfiguredFeatures.IGNIS_INFUSED_STONE),
                 commonOrePlacement(8, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
 
-        PlacementUtils.register(context, PLACED_TERRA_ORE, holdergetter.getOrThrow(ConfiguredFeatures.TERRA_ORE),
+        PlacementUtils.register(context, PLACED_TERRA_INFUSED_STONE, holdergetter.getOrThrow(ConfiguredFeatures.TERRA_INFUSED_STONE),
                 commonOrePlacement(8, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
 
-        PlacementUtils.register(context, PLACED_AQUA_ORE, holdergetter.getOrThrow(ConfiguredFeatures.AQUA_ORE),
+        PlacementUtils.register(context, PLACED_AQUA_INFUSED_STONE, holdergetter.getOrThrow(ConfiguredFeatures.AQUA_INFUSED_STONE),
                 commonOrePlacement(8, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
 
-        PlacementUtils.register(context, PLACED_ORDO_ORE, holdergetter.getOrThrow(ConfiguredFeatures.ORDO_ORE),
+        PlacementUtils.register(context, PLACED_ORDO_INFUSED_STONE, holdergetter.getOrThrow(ConfiguredFeatures.ORDO_INFUSED_STONE),
                 commonOrePlacement(8, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
 
-        PlacementUtils.register(context, PLACED_PERDITIO_ORE, holdergetter.getOrThrow(ConfiguredFeatures.PERDITIO_ORE),
+        PlacementUtils.register(context, PLACED_PERDITIO_INFUSED_STONE, holdergetter.getOrThrow(ConfiguredFeatures.PERDITIO_INFUSED_STONE),
                 commonOrePlacement(8, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
 
         PlacementUtils.register(context, PLACED_AMBER_ORE, holdergetter.getOrThrow(ConfiguredFeatures.AMBER_ORE),

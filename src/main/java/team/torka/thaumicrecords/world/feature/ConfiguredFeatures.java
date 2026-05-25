@@ -24,23 +24,23 @@ public class ConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> GREATWOOD_TREE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
             ThaumicRecords.createRl("greatwood_tree"));
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> AER_ORE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
-            ThaumicRecords.createRl("aer_ore"));
+    public static final ResourceKey<ConfiguredFeature<?, ?>> AER_INFUSED_STONE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
+            ThaumicRecords.createRl("aer_infused_stone"));
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> IGNIS_ORE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
-            ThaumicRecords.createRl("ignis_ore"));
+    public static final ResourceKey<ConfiguredFeature<?, ?>> IGNIS_INFUSED_STONE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
+            ThaumicRecords.createRl("ignis_infused_stone"));
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> TERRA_ORE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
-            ThaumicRecords.createRl("terra_ore"));
+    public static final ResourceKey<ConfiguredFeature<?, ?>> TERRA_INFUSED_STONE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
+            ThaumicRecords.createRl("terra_infused_stone"));
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> AQUA_ORE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
-            ThaumicRecords.createRl("aqua_ore"));
+    public static final ResourceKey<ConfiguredFeature<?, ?>> AQUA_INFUSED_STONE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
+            ThaumicRecords.createRl("aqua_infused_stone"));
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> ORDO_ORE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
-            ThaumicRecords.createRl("ordo_ore"));
+    public static final ResourceKey<ConfiguredFeature<?, ?>> ORDO_INFUSED_STONE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
+            ThaumicRecords.createRl("ordo_infused_stone"));
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> PERDITIO_ORE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
-            ThaumicRecords.createRl("perditio_ore"));
+    public static final ResourceKey<ConfiguredFeature<?, ?>> PERDITIO_INFUSED_STONE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
+            ThaumicRecords.createRl("perditio_infused_stone"));
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> AMBER_ORE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
             ThaumicRecords.createRl("amber_ore"));
@@ -57,43 +57,35 @@ public class ConfiguredFeatures {
 
         List<OreConfiguration.TargetBlockState> aerOreReplacableList = List.of(
                 OreConfiguration.target(stoneRuleTest, BlockRegistry.AER_INFUSED_STONE.get().defaultBlockState()),
-                OreConfiguration.target(deepslateRuleTest, BlockRegistry.AER_INFUSED_STONE.get().defaultBlockState())
-        );
+                OreConfiguration.target(deepslateRuleTest, BlockRegistry.AER_INFUSED_STONE.get().defaultBlockState()));
         List<OreConfiguration.TargetBlockState> ignisOreReplacableList = List.of(
                 OreConfiguration.target(stoneRuleTest, BlockRegistry.IGNIS_INFUSED_STONE.get().defaultBlockState()),
-                OreConfiguration.target(deepslateRuleTest, BlockRegistry.IGNIS_INFUSED_STONE.get().defaultBlockState())
-        );
+                OreConfiguration.target(deepslateRuleTest, BlockRegistry.IGNIS_INFUSED_STONE.get().defaultBlockState()));
         List<OreConfiguration.TargetBlockState> terraOreReplacableList = List.of(
                 OreConfiguration.target(stoneRuleTest, BlockRegistry.TERRA_INFUSED_STONE.get().defaultBlockState()),
-                OreConfiguration.target(deepslateRuleTest, BlockRegistry.TERRA_INFUSED_STONE.get().defaultBlockState())
-        );
+                OreConfiguration.target(deepslateRuleTest, BlockRegistry.TERRA_INFUSED_STONE.get().defaultBlockState()));
         List<OreConfiguration.TargetBlockState> aquaOreReplacableList = List.of(
                 OreConfiguration.target(stoneRuleTest, BlockRegistry.AQUA_INFUSED_STONE.get().defaultBlockState()),
-                OreConfiguration.target(deepslateRuleTest, BlockRegistry.AQUA_INFUSED_STONE.get().defaultBlockState())
-        );
+                OreConfiguration.target(deepslateRuleTest, BlockRegistry.AQUA_INFUSED_STONE.get().defaultBlockState()));
         List<OreConfiguration.TargetBlockState> ordoOreReplacableList = List.of(
                 OreConfiguration.target(stoneRuleTest, BlockRegistry.ORDO_INFUSED_STONE.get().defaultBlockState()),
-                OreConfiguration.target(deepslateRuleTest, BlockRegistry.ORDO_INFUSED_STONE.get().defaultBlockState())
-        );
+                OreConfiguration.target(deepslateRuleTest, BlockRegistry.ORDO_INFUSED_STONE.get().defaultBlockState()));
         List<OreConfiguration.TargetBlockState> perditoOreReplacableList = List.of(
                 OreConfiguration.target(stoneRuleTest, BlockRegistry.PERDITIO_INFUSED_STONE.get().defaultBlockState()),
-                OreConfiguration.target(deepslateRuleTest, BlockRegistry.PERDITIO_INFUSED_STONE.get().defaultBlockState())
-        );
+                OreConfiguration.target(deepslateRuleTest, BlockRegistry.PERDITIO_INFUSED_STONE.get().defaultBlockState()));
         List<OreConfiguration.TargetBlockState> amberOreReplacableList = List.of(
                 OreConfiguration.target(stoneRuleTest, BlockRegistry.AMBER_ORE.get().defaultBlockState()),
-                OreConfiguration.target(deepslateRuleTest, BlockRegistry.AMBER_ORE.get().defaultBlockState())
-        );
+                OreConfiguration.target(deepslateRuleTest, BlockRegistry.AMBER_ORE.get().defaultBlockState()));
         List<OreConfiguration.TargetBlockState> cinnabarOreReplacableList = List.of(
                 OreConfiguration.target(stoneRuleTest, BlockRegistry.CINNABAR_ORE.get().defaultBlockState()),
-                OreConfiguration.target(deepslateRuleTest, BlockRegistry.CINNABAR_ORE.get().defaultBlockState())
-        );
+                OreConfiguration.target(deepslateRuleTest, BlockRegistry.CINNABAR_ORE.get().defaultBlockState()));
 
-        FeatureUtils.register(context, AER_ORE, Feature.ORE, new OreConfiguration(aerOreReplacableList, 8));
-        FeatureUtils.register(context, IGNIS_ORE, Feature.ORE, new OreConfiguration(ignisOreReplacableList, 8));
-        FeatureUtils.register(context, TERRA_ORE, Feature.ORE, new OreConfiguration(terraOreReplacableList, 8));
-        FeatureUtils.register(context, AQUA_ORE, Feature.ORE, new OreConfiguration(aquaOreReplacableList, 8));
-        FeatureUtils.register(context, ORDO_ORE, Feature.ORE, new OreConfiguration(ordoOreReplacableList, 8));
-        FeatureUtils.register(context, PERDITIO_ORE, Feature.ORE, new OreConfiguration(perditoOreReplacableList, 8));
+        FeatureUtils.register(context, AER_INFUSED_STONE, Feature.ORE, new OreConfiguration(aerOreReplacableList, 8));
+        FeatureUtils.register(context, IGNIS_INFUSED_STONE, Feature.ORE, new OreConfiguration(ignisOreReplacableList, 8));
+        FeatureUtils.register(context, TERRA_INFUSED_STONE, Feature.ORE, new OreConfiguration(terraOreReplacableList, 8));
+        FeatureUtils.register(context, AQUA_INFUSED_STONE, Feature.ORE, new OreConfiguration(aquaOreReplacableList, 8));
+        FeatureUtils.register(context, ORDO_INFUSED_STONE, Feature.ORE, new OreConfiguration(ordoOreReplacableList, 8));
+        FeatureUtils.register(context, PERDITIO_INFUSED_STONE, Feature.ORE, new OreConfiguration(perditoOreReplacableList, 8));
         FeatureUtils.register(context, AMBER_ORE, Feature.ORE, new OreConfiguration(amberOreReplacableList, 2));
         FeatureUtils.register(context, CINNABAR_ORE, Feature.ORE, new OreConfiguration(cinnabarOreReplacableList, 2));
     }

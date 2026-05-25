@@ -20,7 +20,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.api.aspect.AspectList;
-import team.torka.thaumicrecords.api.node.NodeType;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.data.component.AspectListComponent;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
@@ -28,7 +27,6 @@ import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Random;
 
 public class AuraNodeBlock extends BaseEntityBlock {
     public static final MapCodec<AuraNodeBlock> CODEC = simpleCodec(AuraNodeBlock::new);
@@ -47,7 +45,7 @@ public class AuraNodeBlock extends BaseEntityBlock {
     @Override
     @ParametersAreNonnullByDefault
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new AuraNodeBlockEntity(pos, state );
+        return new AuraNodeBlockEntity(pos, state);
     }
 
     @NotNull

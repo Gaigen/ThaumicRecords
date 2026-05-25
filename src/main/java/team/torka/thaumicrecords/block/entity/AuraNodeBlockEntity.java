@@ -29,8 +29,6 @@ import java.util.Objects;
 import java.util.Random;
 
 public class AuraNodeBlockEntity extends BlockEntity {
-    private static final Random RANDOM = new Random();
-
     private ResourceLocation type;
     private ResourceLocation modifier;
     private final AspectList limit = new AspectList();
@@ -42,11 +40,14 @@ public class AuraNodeBlockEntity extends BlockEntity {
     public AuraNodeBlockEntity(BlockPos pos, BlockState blockState) {
         super(BlockEntityRegistry.AURA_NODE.get(), pos, blockState);
 
-        var registeredTypes = NodeTypeRegistry.REGISTRAR.getEntries().stream().toList();
-        type = registeredTypes.get(RANDOM.nextInt(registeredTypes.size())).getId();
 
+        // TODO for test purpose
+        Random random = new Random();
+        var registeredTypes = NodeTypeRegistry.REGISTRAR.getEntries().stream().toList();
+        type = registeredTypes.get(random.nextInt(registeredTypes.size())).getId();
         var registeredModifiers = NodeModifierRegistry.REGISTRAR.getEntries().stream().toList();
-        modifier = registeredModifiers.get(RANDOM.nextInt(registeredModifiers.size())).getId();
+        modifier = registeredModifiers.get(random.nextInt(registeredModifiers.size())).getId();
+
 
         limit.put(AspectRegistry.AER.getId(), 20);
         limit.put(AspectRegistry.IGNIS.getId(), 20);

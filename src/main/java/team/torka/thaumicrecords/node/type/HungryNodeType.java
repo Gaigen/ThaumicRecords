@@ -1,6 +1,8 @@
 package team.torka.thaumicrecords.node.type;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -10,8 +12,6 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.node.NodeType;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.client.renderer.CustomRenderType;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.item.ItemEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,110 +43,64 @@ public class HungryNodeType extends NodeType {
 
     private void pullAndDestroyBlocks(Level level, BlockPos centerPos) {
 
-        // Не каждый тик
         if (level.getGameTime() % 20 != 0) {
             return;
         }
 
         List<BlockPos> validBlocks = new ArrayList<>();
-
-        BlockPos.betweenClosedStream(
-                centerPos.offset(-BLOCK_RADIUS, -BLOCK_RADIUS, -BLOCK_RADIUS),
-                centerPos.offset(BLOCK_RADIUS, BLOCK_RADIUS, BLOCK_RADIUS)
-        ).forEach(pos -> {
-
-            if (pos.equals(centerPos)) {
-                return;
-            }
-
-            BlockState state = level.getBlockState(pos);
-
-            if (state.isAir()) {
-                return;
-            }
-
-            if (state.getDestroySpeed(level, pos) < 0) {
-                return;
-            }
-
-            validBlocks.add(pos.immutable());
-        });
+        BlockPos.betweenClosedStream(centerPos.offset(-BLOCK_RADIUS, -BLOCK_RADIUS, -BLOCK_RADIUS), centerPos.offset(BLOCK_RADIUS, BLOCK_RADIUS, BLOCK_RADIUS))
+                .forEach(pos -> {
+                    if (pos.equals(centerPos)) {
+                        return;
+                    }
+                    BlockState state = level.getBlockState(pos);
+                    if (state.isAir()) {
+                        return;
+                    }
+                    if (state.getDestroySpeed(level, pos) < 0) {
+                        return;
+                    }
+                    validBlocks.add(pos.immutable());
+                });
 
         if (validBlocks.isEmpty()) {
             return;
         }
-
         BlockPos target = validBlocks.get(level.random.nextInt(validBlocks.size()));
-
-        // Частицы / звук можно добавить тут
         level.destroyBlock(target, true);
     }
 
     private void pullEntities(Level level, Vec3 center) {
-
-        AABB area = new AABB(
-                center.x - ENTITY_RADIUS,
-                center.y - ENTITY_RADIUS,
-                center.z - ENTITY_RADIUS,
-                center.x + ENTITY_RADIUS,
-                center.y + ENTITY_RADIUS,
-                center.z + ENTITY_RADIUS
-        );
-
-        List<Entity> entities = level.getEntitiesOfClass(
-                Entity.class,
-                area,
-                entity -> entity instanceof ItemEntity || entity instanceof Player
-        );
-
+        AABB area = new AABB(center.x - ENTITY_RADIUS, center.y - ENTITY_RADIUS, center.z - ENTITY_RADIUS, center.x + ENTITY_RADIUS, center.y + ENTITY_RADIUS,
+                center.z + ENTITY_RADIUS);
+        List<Entity> entities = level.getEntitiesOfClass(Entity.class, area, entity -> entity instanceof ItemEntity || entity instanceof Player);
         for (Entity entity : entities) {
-
             Vec3 entityPos = entity.position();
-
             double distance = entityPos.distanceTo(center);
-
             if (distance < 0.001D) {
                 continue;
             }
-
             double strength = 1.0D - (distance / ENTITY_RADIUS);
-
             if (strength <= 0) {
                 continue;
             }
-
-            Vec3 motion = center.subtract(entityPos)
-                    .normalize()
-                    .scale(0.5D * strength);
-
-            if (entity instanceof Player player){
-                if(player.isCreative() || player.isSpectator()){
+            Vec3 motion = center.subtract(entityPos).normalize().scale(0.5D * strength);
+            if (entity instanceof Player player) {
+                if (player.isCreative() || player.isSpectator()) {
                     break;
                 }
-                entity.setDeltaMovement(
-                        entity.getDeltaMovement().add(motion)
-                );
-            }else{
-                entity.setDeltaMovement(
-                        entity.getDeltaMovement().add(motion)
-                );
+                entity.setDeltaMovement(entity.getDeltaMovement().add(motion));
+            } else {
+                entity.setDeltaMovement(entity.getDeltaMovement().add(motion));
             }
-
             entity.hurtMarked = true;
-
-            // Центр сингулярности
             if (distance <= 1.5D) {
-
                 if (entity instanceof ItemEntity itemEntity) {
                     itemEntity.discard();
                 }
-
                 if (entity instanceof Player player) {
 
-                    player.hurt(
-                            level.damageSources().magic(),
-                            4.0F
-                    );
+                    player.hurt(level.damageSources().magic(), 4.0F);
                 }
             }
         }

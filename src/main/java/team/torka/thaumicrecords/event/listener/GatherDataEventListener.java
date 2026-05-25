@@ -16,6 +16,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.registries.DataPackRegistriesHooks;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.datagen.BlockLootGenerator;
@@ -35,14 +36,6 @@ import java.util.concurrent.CompletableFuture;
 
 @EventBusSubscriber
 public class GatherDataEventListener {
-
-    private static final RegistrySetBuilder CONFIGURED_FEATURE_BUILDER = new RegistrySetBuilder().add(Registries.CONFIGURED_FEATURE,
-            ConfiguredFeatures::bootstrap);
-
-    private static final RegistrySetBuilder PLACED_FEATURE_BUILDER = new RegistrySetBuilder().add(Registries.PLACED_FEATURE,
-            PlacedFeatures::bootstrap);
-//    private static final RegistrySetBuilder BIOME_MODIFIRE_BUILDER = new RegistrySetBuilder().add(BuiltInRegistries.Bio,
-//            PlacedFeatures::bootstrap);
 
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent event) {
@@ -72,20 +65,12 @@ public class GatherDataEventListener {
         generator.addProvider(event.includeServer(), new RecipeGenerator(packOutput, lookupProvider));
 
         // feature
-//        generator.addProvider(event.includeServer(),
-//                new DatapackBuiltinEntriesProvider(packOutput, lookupProvider, CONFIGURED_FEATURE_BUILDER, Set.of(ThaumicRecords.MOD_ID)));
-
-
-//        generator.addProvider(event.includeServer(),
-//                new DatapackBuiltinEntriesProvider(packOutput, lookupProvider, PLACED_FEATURE_BUILDER, Set.of(ThaumicRecords.MOD_ID)));
-//
         CompletableFuture<RegistrySetBuilder.PatchedRegistries> patchedProvider = CompletableFuture.supplyAsync(GatherDataEventListener::getProvider);
-        generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(
-                packOutput, patchedProvider, Set.of(ThaumicRecords.MOD_ID)));
+        generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(packOutput, patchedProvider, Set.of(ThaumicRecords.MOD_ID)));
 
     }
 
-    public static RegistrySetBuilder.PatchedRegistries getProvider(){
+    public static RegistrySetBuilder.PatchedRegistries getProvider() {
         final RegistrySetBuilder registryBuilder = new RegistrySetBuilder();
         registryBuilder.add(Registries.CONFIGURED_FEATURE, ConfiguredFeatures::bootstrap);
         registryBuilder.add(Registries.PLACED_FEATURE, PlacedFeatures::bootstrap);
@@ -94,7 +79,7 @@ public class GatherDataEventListener {
 
         RegistryAccess.Frozen regAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
         Cloner.Factory cloner$factory = new Cloner.Factory();
-        net.neoforged.neoforge.registries.DataPackRegistriesHooks.getDataPackRegistriesWithDimensions().forEach(data -> data.runWithArguments(cloner$factory::addCodec));
+        DataPackRegistriesHooks.getDataPackRegistriesWithDimensions().forEach(data -> data.runWithArguments(cloner$factory::addCodec));
         return registryBuilder.buildPatch(regAccess, VanillaRegistries.createLookup(), cloner$factory);
     }
 }
