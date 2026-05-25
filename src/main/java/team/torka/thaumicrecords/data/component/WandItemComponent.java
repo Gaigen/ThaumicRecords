@@ -100,9 +100,9 @@ public record WandItemComponent(ResourceLocation rod, ResourceLocation cap, Aspe
         }
         int max = wandRod.getCapacity();
         List<ResourceLocation> result = new ArrayList<>();
-        this.aspects.forEach((k, v) -> {
-            if (v < max) {
-                result.add(k);
+        Aspect.getPrimalList().forEach(rl -> {
+            if (this.aspects.get(rl) < max) {
+                result.add(rl);
             }
         });
         return result;
