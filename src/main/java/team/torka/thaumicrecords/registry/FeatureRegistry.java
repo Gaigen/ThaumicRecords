@@ -18,5 +18,4 @@ public class FeatureRegistry {
 
     public static final DeferredHolder<Feature<?>, GreatwoodTreeFeature> GREATWOOD_TREE = REGISTRAR.register("greatwood_tree",
             () -> new GreatwoodTreeFeature(NoneFeatureConfiguration.CODEC));
-
 }

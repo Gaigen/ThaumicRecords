@@ -26,8 +26,11 @@ import team.torka.thaumicrecords.registry.NodeTypeRegistry;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 public class AuraNodeBlockEntity extends BlockEntity {
+    private static final Random RANDOM = new Random();
+
     private ResourceLocation type;
     private ResourceLocation modifier;
     private final AspectList limit = new AspectList();
@@ -38,8 +41,13 @@ public class AuraNodeBlockEntity extends BlockEntity {
 
     public AuraNodeBlockEntity(BlockPos pos, BlockState blockState) {
         super(BlockEntityRegistry.AURA_NODE.get(), pos, blockState);
-        type = NodeTypeRegistry.NORMAL.getId();
-        modifier = NodeModifierRegistry.NORMAL.getId();
+
+        var registeredTypes = NodeTypeRegistry.REGISTRAR.getEntries().stream().toList();
+        type = registeredTypes.get(RANDOM.nextInt(registeredTypes.size())).getId();
+
+        var registeredModifiers = NodeModifierRegistry.REGISTRAR.getEntries().stream().toList();
+        modifier = registeredModifiers.get(RANDOM.nextInt(registeredModifiers.size())).getId();
+
         limit.put(AspectRegistry.AER.getId(), 20);
         limit.put(AspectRegistry.IGNIS.getId(), 20);
         limit.put(AspectRegistry.AQUA.getId(), 20);
