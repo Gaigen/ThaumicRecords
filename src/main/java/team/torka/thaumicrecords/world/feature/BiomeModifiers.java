@@ -15,18 +15,18 @@ import team.torka.thaumicrecords.ThaumicRecords;
 
 public class BiomeModifiers {
 
-    protected static final ResourceKey<BiomeModifier> ADD_AER_ORE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-            ThaumicRecords.createRl("add_aer_ore"));
-    protected static final ResourceKey<BiomeModifier> ADD_IGNIS_ORE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-            ThaumicRecords.createRl("add_ignis_ore"));
-    protected static final ResourceKey<BiomeModifier> ADD_TERRA_ORE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-            ThaumicRecords.createRl("add_terra_ore"));
-    protected static final ResourceKey<BiomeModifier> ADD_AQUA_ORE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-            ThaumicRecords.createRl("add_aqua_ore"));
-    protected static final ResourceKey<BiomeModifier> ADD_ORDO_ORE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-            ThaumicRecords.createRl("add_ordo_ore"));
-    protected static final ResourceKey<BiomeModifier> ADD_PERDITIO_ORE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-            ThaumicRecords.createRl("add_perdito_ore"));
+    protected static final ResourceKey<BiomeModifier> ADD_AER_INFUSED_STONE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+            ThaumicRecords.createRl("add_aer_infused_stone"));
+    protected static final ResourceKey<BiomeModifier> ADD_IGNIS_INFUSED_STONE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+            ThaumicRecords.createRl("add_ignis_infused_stone"));
+    protected static final ResourceKey<BiomeModifier> ADD_TERRA_INFUSED_STONE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+            ThaumicRecords.createRl("add_terra_infused_stone"));
+    protected static final ResourceKey<BiomeModifier> ADD_AQUA_INFUSED_STONE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+            ThaumicRecords.createRl("add_aqua_infused_stone"));
+    protected static final ResourceKey<BiomeModifier> ADD_ORDO_INFUSED_STONE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+            ThaumicRecords.createRl("add_ordo_infused_stone"));
+    protected static final ResourceKey<BiomeModifier> ADD_PERDITIO_INFUSED_STONE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+            ThaumicRecords.createRl("add_perdito_infused_stone"));
     protected static final ResourceKey<BiomeModifier> ADD_AMBER_ORE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
             ThaumicRecords.createRl("add_amber_ore"));
     protected static final ResourceKey<BiomeModifier> ADD_CINNABAR_ORE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
@@ -38,22 +38,22 @@ public class BiomeModifiers {
 
         HolderSet.Named<Biome> overworldHolder = biomeGetter.getOrThrow(BiomeTags.IS_OVERWORLD);
 
-        context.register(ADD_AER_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
+        context.register(ADD_AER_INFUSED_STONE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
                 HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_AER_INFUSED_STONE)), GenerationStep.Decoration.UNDERGROUND_ORES));
 
-        context.register(ADD_IGNIS_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
+        context.register(ADD_IGNIS_INFUSED_STONE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
                 HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_IGNIS_INFUSED_STONE)), GenerationStep.Decoration.UNDERGROUND_ORES));
 
-        context.register(ADD_TERRA_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
+        context.register(ADD_TERRA_INFUSED_STONE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
                 HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_TERRA_INFUSED_STONE)), GenerationStep.Decoration.UNDERGROUND_ORES));
 
-        context.register(ADD_AQUA_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
+        context.register(ADD_AQUA_INFUSED_STONE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
                 HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_AQUA_INFUSED_STONE)), GenerationStep.Decoration.UNDERGROUND_ORES));
 
-        context.register(ADD_ORDO_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
+        context.register(ADD_ORDO_INFUSED_STONE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
                 HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_ORDO_INFUSED_STONE)), GenerationStep.Decoration.UNDERGROUND_ORES));
 
-        context.register(ADD_PERDITIO_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
+        context.register(ADD_PERDITIO_INFUSED_STONE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
                 HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_PERDITIO_INFUSED_STONE)), GenerationStep.Decoration.UNDERGROUND_ORES));
 
         context.register(ADD_AMBER_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
