@@ -3,6 +3,7 @@ package team.torka.thaumicrecords.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import team.torka.thaumicrecords.ThaumicRecords;
@@ -26,5 +27,6 @@ public class ItemTagsGenerator extends ItemTagsProvider {
                 ItemRegistry.BALANCED_SHARD.get());
         this.tag(ModTags.SHOW_NODE_WHEN_EQUIPPED).add(ItemRegistry.GOGGLES.get()).add(ItemRegistry.FORTRESS_HELMET.get());
         this.tag(ModTags.SHOW_NODE_WHEN_HELD).add(ItemRegistry.THAUMOMETER.get());
+        this.tag(ItemTags.DYEABLE).add(ItemRegistry.ROBE_CHESTPLATE.get(), ItemRegistry.ROBE_LEGGINGS.get(), ItemRegistry.ROBE_BOOTS.get());
     }
 }

@@ -19,6 +19,7 @@ import team.torka.thaumicrecords.item.FortressArmorItem;
 import team.torka.thaumicrecords.item.GogglesItem;
 import team.torka.thaumicrecords.item.PrimordialPearItem;
 import team.torka.thaumicrecords.item.ResearchNotesItem;
+import team.torka.thaumicrecords.item.RobeArmorItem;
 import team.torka.thaumicrecords.item.ScribingToolsItem;
 import team.torka.thaumicrecords.item.ThaumiumArmorItem;
 import team.torka.thaumicrecords.item.ThaumometerItem;
@@ -83,6 +84,14 @@ public class ItemRegistry {
             () -> new VoidArmorItem(ArmorItem.Type.LEGGINGS, ArmorMaterialRegistry.VOID));
     public static final DeferredItem<VoidArmorItem> VOID_BOOTS = REGISTRAR.register("void_boots",
             () -> new VoidArmorItem(ArmorItem.Type.BOOTS, ArmorMaterialRegistry.VOID));
+
+    // Robe Armor
+    public static final DeferredItem<RobeArmorItem> ROBE_CHESTPLATE = REGISTRAR.register("robe_chestplate",
+            () -> new RobeArmorItem(ArmorItem.Type.CHESTPLATE, ArmorMaterialRegistry.ROBE));
+    public static final DeferredItem<RobeArmorItem> ROBE_LEGGINGS = REGISTRAR.register("robe_leggings",
+            () -> new RobeArmorItem(ArmorItem.Type.LEGGINGS, ArmorMaterialRegistry.ROBE));
+    public static final DeferredItem<RobeArmorItem> ROBE_BOOTS = REGISTRAR.register("robe_boots",
+            () -> new RobeArmorItem(ArmorItem.Type.BOOTS, ArmorMaterialRegistry.ROBE));
 
     public static final DeferredItem<Item> WAND_CAP_IRON = REGISTRAR.registerSimpleItem("wand_cap_iron");
     public static final DeferredItem<Item> WAND_CAP_GOLD = REGISTRAR.registerSimpleItem("wand_cap_gold");
@@ -193,6 +202,9 @@ public class ItemRegistry {
         output.accept(VOID_CHESTPLATE);
         output.accept(VOID_LEGGINGS);
         output.accept(VOID_BOOTS);
+        output.accept(ROBE_CHESTPLATE);
+        output.accept(ROBE_LEGGINGS);
+        output.accept(ROBE_BOOTS);
         output.accept(BOOTS_TRAVELLER);
         output.accept(TABLE);
         output.accept(SCRIBING_TOOLS);

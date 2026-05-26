@@ -51,6 +51,12 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.VOID_CHESTPLATE.get());
         basicItem(ItemRegistry.VOID_LEGGINGS.get());
         basicItem(ItemRegistry.VOID_BOOTS.get());
+        withExistingParent(ItemRegistry.ROBE_CHESTPLATE.getId().getPath(), mcLoc("item/generated")).texture("layer0", modLoc("item/robe_chestplate_overlay"))
+                .texture("layer1", modLoc("item/robe_chestplate"));
+        withExistingParent(ItemRegistry.ROBE_LEGGINGS.getId().getPath(), mcLoc("item/generated")).texture("layer0", modLoc("item/robe_leggings_overlay"))
+                .texture("layer1", modLoc("item/robe_leggings"));
+        withExistingParent(ItemRegistry.ROBE_BOOTS.getId().getPath(), mcLoc("item/generated")).texture("layer0", modLoc("item/robe_boots_overlay")).texture(
+                "layer1", modLoc("item/robe_boots"));
         basicItem(ItemRegistry.WISP_ESSENCE.get());
         basicItem(ItemRegistry.SCRIBING_TOOLS.get());
         withExistingParent(ItemRegistry.SILVERWOOD_SAPLING.getId().getPath(), mcLoc("item/generated")).texture("layer0", modLoc("block/silverwood_sapling"));
