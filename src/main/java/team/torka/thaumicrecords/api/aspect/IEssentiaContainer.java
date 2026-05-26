@@ -1,5 +1,6 @@
 package team.torka.thaumicrecords.api.aspect;
 
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public interface IEssentiaContainer {
@@ -14,5 +15,11 @@ public interface IEssentiaContainer {
 
     int capacity();
 
-    void onEmpty(ItemStack stack);
+    void onEmpty(ItemStack stack, Player player);
+
+    void wasPoured(ItemStack stack, Player player, int amount);
+
+    boolean canBePartiallyPoured();
+
+    boolean canHoldMultipleAspects();
 }

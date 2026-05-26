@@ -2,6 +2,7 @@ package team.torka.thaumicrecords.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -68,8 +69,23 @@ public class WispEssenceItem extends Item implements IEssentiaContainerItem {
     }
 
     @Override
-    public void onEmpty(ItemStack stack) {
+    public void onEmpty(ItemStack stack, Player player) {
 
+    }
+
+    @Override
+    public void wasPoured(ItemStack stack, Player player, int amount) {
+
+    }
+
+    @Override
+    public boolean canBePartiallyPoured() {
+        return false;
+    }
+
+    @Override
+    public boolean canHoldMultipleAspects() {
+        return false;
     }
 
 }

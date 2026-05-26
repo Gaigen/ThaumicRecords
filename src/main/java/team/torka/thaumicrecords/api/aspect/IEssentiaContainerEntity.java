@@ -7,6 +7,7 @@ public interface IEssentiaContainerEntity extends IEssentiaContainer {
 
     AspectList getAspects();
 
-    // Если нужно модифицировать существующий список (добавить аспект)
-    void addAspect(ResourceLocation aspect, int amount);
+    // to add aspects to container (container must hold logic by itself, so bool is indicator of success)
+    // true->aspects was consumed and added, false, aspects wasnt consumed and was not added
+    boolean addAspect(ResourceLocation aspect, int amount);
 }

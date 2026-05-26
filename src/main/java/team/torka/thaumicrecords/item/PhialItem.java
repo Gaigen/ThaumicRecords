@@ -2,6 +2,7 @@ package team.torka.thaumicrecords.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -12,6 +13,7 @@ import team.torka.thaumicrecords.api.aspect.IEssentiaContainerItem;
 import team.torka.thaumicrecords.data.component.AspectListComponent;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
+import team.torka.thaumicrecords.registry.ItemRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -68,7 +70,27 @@ public class PhialItem extends Item implements IEssentiaContainerItem {
     }
 
     @Override
-    public void onEmpty(ItemStack stack) {
+    public void onEmpty(ItemStack stack, Player player) {
+        stack.shrink(1);
+        ItemStack emptyPhial = ItemRegistry.PHIAL.toStack();
+        emptyPhial.setCount(1);
+        if (!player.getInventory().add(emptyPhial)) {
+            player.drop(emptyPhial, false);
+        }
+    }
 
+    @Override
+    public void wasPoured(ItemStack stack, Player player, int amount) {
+//        onEmpty(stack, player);
+    }
+
+    @Override
+    public boolean canBePartiallyPoured() {
+        return false;
+    }
+
+    @Override
+    public boolean canHoldMultipleAspects() {
+        return false;
     }
 }
