@@ -1,6 +1,7 @@
 package team.torka.thaumicrecords.registry;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -13,6 +14,7 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.data.component.AspectListComponent;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
+import team.torka.thaumicrecords.item.FortressArmorItem;
 import team.torka.thaumicrecords.item.GogglesItem;
 import team.torka.thaumicrecords.item.PrimordialPearItem;
 import team.torka.thaumicrecords.item.ResearchNotesItem;
@@ -42,6 +44,14 @@ public class ItemRegistry {
     public static final DeferredItem<Item> SALIS_MUNDUS = REGISTRAR.registerSimpleItem("salis_mundus");
     public static final DeferredItem<Item> PRIMORDIAL_PEARL=REGISTRAR.registerItem("primordial_pearl", PrimordialPearItem::new, itemProp(1));
     public static final DeferredItem<GogglesItem> GOGGLES=REGISTRAR.register("goggles",GogglesItem::new);
+
+    // Fortress Armor
+    public static final DeferredItem<FortressArmorItem> FORTRESS_HELMET = REGISTRAR.register("fortress_helmet",
+            () -> new FortressArmorItem(ArmorItem.Type.HELMET, ArmorMaterialRegistry.FORTRESS));
+    public static final DeferredItem<FortressArmorItem> FORTRESS_CHESTPLATE = REGISTRAR.register("fortress_chestplate",
+            () -> new FortressArmorItem(ArmorItem.Type.CHESTPLATE, ArmorMaterialRegistry.FORTRESS));
+    public static final DeferredItem<FortressArmorItem> FORTRESS_LEGGINGS = REGISTRAR.register("fortress_leggings",
+            () -> new FortressArmorItem(ArmorItem.Type.LEGGINGS, ArmorMaterialRegistry.FORTRESS));
 
     public static final DeferredItem<Item> WAND_CAP_IRON = REGISTRAR.registerSimpleItem("wand_cap_iron");
     public static final DeferredItem<Item> WAND_CAP_GOLD = REGISTRAR.registerSimpleItem("wand_cap_gold");
@@ -142,6 +152,9 @@ public class ItemRegistry {
         output.accept(WAND_ROD_GREATWOOD);
         output.accept(WAND_ROD_SILVERWOOD);
         output.accept(GOGGLES);
+        output.accept(FORTRESS_HELMET);
+        output.accept(FORTRESS_CHESTPLATE);
+        output.accept(FORTRESS_LEGGINGS);
         output.accept(TABLE);
         output.accept(SCRIBING_TOOLS);
         output.accept(ARCANE_WORKBENCH);

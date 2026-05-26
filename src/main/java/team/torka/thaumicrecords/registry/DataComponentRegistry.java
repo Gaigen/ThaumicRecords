@@ -1,7 +1,9 @@
 package team.torka.thaumicrecords.registry;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
@@ -28,4 +30,10 @@ public class DataComponentRegistry {
                     .persistent(ResearchNoteComponent.CODEC)
                     .networkSynchronized(ResearchNoteComponent.STREAM_CODEC)
                     .build());
+
+    // Fortress Armor components
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> FORTRESS_MASK = REGISTRAR.register("fortress_mask",
+            () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> FORTRESS_GOGGLES = REGISTRAR.register("fortress_goggles",
+            () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
 }
