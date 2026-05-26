@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.api.block.AspectRenderable;
 import team.torka.thaumicrecords.api.node.NodeModifier;
 import team.torka.thaumicrecords.api.node.NodeType;
 import team.torka.thaumicrecords.registry.AspectRegistry;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 
-public class AuraNodeBlockEntity extends BlockEntity {
+public class AuraNodeBlockEntity extends BlockEntity implements AspectRenderable {
     private String id;
     private ResourceLocation type;
     private ResourceLocation modifier;
@@ -214,6 +215,16 @@ public class AuraNodeBlockEntity extends BlockEntity {
             this.setChanged();
             return toDrain;
         }
+        return 0;
+    }
+
+    @Override
+    public AspectList getAspectRendered() {
+        return getCurrentAspect();
+    }
+
+    @Override
+    public float getRenderYOffset() {
         return 0;
     }
 }

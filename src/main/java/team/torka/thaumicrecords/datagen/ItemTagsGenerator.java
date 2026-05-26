@@ -25,5 +25,6 @@ public class ItemTagsGenerator extends ItemTagsProvider {
                 ItemRegistry.ORDO_SHARD.get(), ItemRegistry.PERDITIO_SHARD.get(), ItemRegistry.BALANCED_SHARD.get());
         this.tag(ModTags.SHOW_NODE_WHEN_EQUIPPED).add(ItemRegistry.GOGGLES.get());
         this.tag(ModTags.SHOW_NODE_WHEN_HELD).add(ItemRegistry.THAUMOMETER.get());
+        this.tag(ModTags.SHOW_ASPECT_WHEN_EQUIPPED).add(ItemRegistry.GOGGLES.get());
     }
 }

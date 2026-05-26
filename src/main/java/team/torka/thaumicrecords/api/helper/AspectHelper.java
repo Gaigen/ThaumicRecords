@@ -2,6 +2,7 @@ package team.torka.thaumicrecords.api.helper;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -79,7 +80,7 @@ public class AspectHelper {
         }
     }
 
-    public static boolean isAspectDiscovered(ServerPlayer player, ResourceLocation aspect) {
+    public static boolean isAspectDiscovered(Player player, ResourceLocation aspect) {
         AspectDiscovery oldData = player.getData(AttachmentRegistry.ASPECT_DISCOVERY);
         return oldData.discovered().contains(aspect);
     }
