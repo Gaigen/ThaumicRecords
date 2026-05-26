@@ -2,6 +2,7 @@ package team.torka.thaumicrecords.menu;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -9,6 +10,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.block.entity.ThaumatoriumBlockEntity;
 import team.torka.thaumicrecords.recipe.CrucibleRecipe;
@@ -106,7 +108,7 @@ public class ThaumatoriumMenu extends AbstractContainerMenu {
         ItemStack inputStack = cachedSlotStack;
 
         if (!inputStack.isEmpty() || !blockEntity.recipeIds.isEmpty()) {
-            net.minecraft.world.item.crafting.RecipeManager recipeManager = blockEntity.getLevel() != null ? blockEntity.getLevel().getRecipeManager() : null;
+            RecipeManager recipeManager = blockEntity.getLevel() != null ? blockEntity.getLevel().getRecipeManager() : null;
             if (recipeManager == null) {
                 return;
             }
@@ -156,7 +158,7 @@ public class ThaumatoriumMenu extends AbstractContainerMenu {
 
     @Override
     @ParametersAreNonnullByDefault
-    public void slotsChanged(net.minecraft.world.Container container) {
+    public void slotsChanged(Container container) {
         super.slotsChanged(container);
         updateRecipes();
     }

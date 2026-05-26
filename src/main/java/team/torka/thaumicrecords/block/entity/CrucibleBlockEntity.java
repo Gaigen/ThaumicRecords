@@ -1,5 +1,6 @@
 package team.torka.thaumicrecords.block.entity;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -7,6 +8,8 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
@@ -29,6 +32,7 @@ import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
 import team.torka.thaumicrecords.registry.SoundRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.awt.Color;
 import java.util.Objects;
 
 public class CrucibleBlockEntity extends BlockEntity {
@@ -158,14 +162,14 @@ public class CrucibleBlockEntity extends BlockEntity {
         fluidLevel = 0;
         int spillCount = tagAmount() / 2;
 
-        net.minecraft.resources.ResourceLocation[] aspectKeys = aspects.keySet().toArray(new net.minecraft.resources.ResourceLocation[0]);
+        ResourceLocation[] aspectKeys = aspects.keySet().toArray(new ResourceLocation[0]);
 
         aspects.clear();
 
         if (level != null && !level.isClientSide) {
-            level.playSound(null, worldPosition, SoundRegistry.SPILL.get(), net.minecraft.sounds.SoundSource.BLOCKS, 0.2f, 1.0f);
+            level.playSound(null, worldPosition, SoundRegistry.SPILL.get(), SoundSource.BLOCKS, 0.2f, 1.0f);
 
-            if (level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            if (level instanceof ServerLevel serverLevel) {
                 for (int i = 0; i < 10; i++) {
                     float bx = (float) (worldPosition.getX() + 0.2 + level.random.nextFloat() * 0.6);
                     float by = (float) (worldPosition.getY() + 1.0);
@@ -300,7 +304,9 @@ public class CrucibleBlockEntity extends BlockEntity {
         }
 
         if (hadCraft) {
+
         } else if (hadDissolve) {
+
         }
 
         if (remaining <= 0) {
@@ -441,7 +447,7 @@ public class CrucibleBlockEntity extends BlockEntity {
         if (!level.isClientSide) {
             return;
         }
-        if (!(level instanceof net.minecraft.client.multiplayer.ClientLevel clientLevel)) {
+        if (!(level instanceof ClientLevel clientLevel)) {
             return;
         }
         if (!crucible.hasFluid()) {
@@ -471,7 +477,7 @@ public class CrucibleBlockEntity extends BlockEntity {
             ResourceLocation randomKey = keys[level.random.nextInt(keys.length)];
             Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(randomKey);
             if (aspect != null) {
-                java.awt.Color c = new java.awt.Color(aspect.getARGBColor());
+                Color c = new Color(aspect.getARGBColor());
                 float r = c.getRed() / 255.0f;
                 float g = c.getGreen() / 255.0f;
                 float b = c.getBlue() / 255.0f;
@@ -519,15 +525,14 @@ public class CrucibleBlockEntity extends BlockEntity {
         if (id == 2 && level != null && level.isClientSide) {
 
             level.playLocalSound(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, SoundRegistry.SPILL.get(),
-                    net.minecraft.sounds.SoundSource.BLOCKS, 0.2f, 1.0f, false);
+                    SoundSource.BLOCKS, 0.2f, 1.0f, false);
 
             for (int q = 0; q < 10; q++) {
                 float bx = worldPosition.getX() + 0.2f + level.random.nextFloat() * 0.6f;
                 float by = worldPosition.getY() + 0.1f + getFluidHeight();
                 float bz = worldPosition.getZ() + 0.2f + level.random.nextFloat() * 0.6f;
 
-                CrucibleBubbleParticle bubble = CrucibleBubbleParticle.create((net.minecraft.client.multiplayer.ClientLevel) level, bx, by, bz, 3)
-                        .setBubbleSpeed(0.003 * type);
+                CrucibleBubbleParticle bubble = CrucibleBubbleParticle.create((ClientLevel) level, bx, by, bz, 3).setBubbleSpeed(0.003 * type);
 
                 if (aspects.isEmpty()) {
                     bubble.setRGB(1.0f, 1.0f, 1.0f);
@@ -553,7 +558,7 @@ public class CrucibleBlockEntity extends BlockEntity {
         }
     }
 
-    private void playSound(net.minecraft.sounds.SoundEvent sound) {
+    private void playSound(SoundEvent sound) {
         if (Objects.nonNull(level) && !level.isClientSide) {
             level.playSound(null, worldPosition, sound, SoundSource.BLOCKS, 1.0F, 1.0F);
         }

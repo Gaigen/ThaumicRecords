@@ -12,6 +12,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -144,8 +145,7 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
         }
         BlockPos below = worldPosition.below(2);
         BlockState belowState = level.getBlockState(below);
-        return belowState.is(Blocks.LAVA) || belowState.is(Blocks.FIRE) || belowState.is(Blocks.SOUL_FIRE) || belowState.getFluidState().is(
-                net.minecraft.tags.FluidTags.LAVA);
+        return belowState.is(Blocks.LAVA) || belowState.is(Blocks.FIRE) || belowState.is(Blocks.SOUL_FIRE) || belowState.getFluidState().is(FluidTags.LAVA);
     }
 
     public boolean gettingPower() {
@@ -395,7 +395,7 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
             inputStack = ItemStack.EMPTY;
         }
 
-        if (tag.contains("Essentia", net.minecraft.nbt.Tag.TAG_COMPOUND) || tag.contains("Essentia", net.minecraft.nbt.Tag.TAG_LIST)) {
+        if (tag.contains("Essentia", Tag.TAG_COMPOUND) || tag.contains("Essentia", net.minecraft.nbt.Tag.TAG_LIST)) {
             essentia.readFromNBT(tag.get("Essentia"));
         } else {
             essentia.clear();
