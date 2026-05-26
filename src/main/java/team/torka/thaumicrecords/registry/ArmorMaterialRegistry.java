@@ -63,6 +63,33 @@ public class ArmorMaterialRegistry {
                     List.of(new ArmorMaterial.Layer(ThaumicRecords.createRl("robes"), "", true),
                             new ArmorMaterial.Layer(ThaumicRecords.createRl("robes"), "_overlay", false)), 0.0F, 0.0F));
 
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CULTIST_CLOTH = REGISTRAR.register("cultist_cloth",
+            () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                map.put(ArmorItem.Type.HELMET, 2);
+                map.put(ArmorItem.Type.CHESTPLATE, 5);
+                map.put(ArmorItem.Type.LEGGINGS, 6);
+                map.put(ArmorItem.Type.BOOTS, 2);
+            }), 9, SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(Items.IRON_INGOT),
+                    List.of(new ArmorMaterial.Layer(ThaumicRecords.createRl("crimson_robe_armor"))), 0.0F, 0.0F));
+
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CULTIST_PLATE = REGISTRAR.register("cultist_plate",
+            () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                map.put(ArmorItem.Type.HELMET, 2);
+                map.put(ArmorItem.Type.CHESTPLATE, 5);
+                map.put(ArmorItem.Type.LEGGINGS, 6);
+                map.put(ArmorItem.Type.BOOTS, 2);
+            }), 9, SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(Items.IRON_INGOT),
+                    List.of(new ArmorMaterial.Layer(ThaumicRecords.createRl("crimson_plate_armor"))), 0.0F, 0.0F));
+
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CULTIST_LEADER = REGISTRAR.register("cultist_leader",
+            () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                map.put(ArmorItem.Type.HELMET, 3);
+                map.put(ArmorItem.Type.CHESTPLATE, 7);
+                map.put(ArmorItem.Type.LEGGINGS, 6);
+                map.put(ArmorItem.Type.BOOTS, 3);
+            }), 25, SoundEvents.ARMOR_EQUIP_DIAMOND, () -> Ingredient.of(Items.IRON_INGOT),
+                    List.of(new ArmorMaterial.Layer(ThaumicRecords.createRl("crimson_leader_armor"))), 0.0F, 0.0F));
+
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> TRAVELLER = REGISTRAR.register("traveller",
             () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
                 map.put(ArmorItem.Type.HELMET, 1);

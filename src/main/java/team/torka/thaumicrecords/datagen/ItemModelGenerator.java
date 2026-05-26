@@ -51,6 +51,16 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.VOID_CHESTPLATE.get());
         basicItem(ItemRegistry.VOID_LEGGINGS.get());
         basicItem(ItemRegistry.VOID_BOOTS.get());
+        basicItem(ItemRegistry.CRIMSON_ROBE_HELMET.get());
+        basicItem(ItemRegistry.CRIMSON_ROBE_CHESTPLATE.get());
+        basicItem(ItemRegistry.CRIMSON_ROBE_LEGGINGS.get());
+        basicItem(ItemRegistry.CRIMSON_PLATE_HELMET.get());
+        basicItem(ItemRegistry.CRIMSON_PLATE_CHESTPLATE.get());
+        basicItem(ItemRegistry.CRIMSON_PLATE_LEGGINGS.get());
+        basicItem(ItemRegistry.CRIMSON_LEADER_HELMET.get());
+        basicItem(ItemRegistry.CRIMSON_LEADER_CHESTPLATE.get());
+        basicItem(ItemRegistry.CRIMSON_LEADER_LEGGINGS.get());
+        basicItem(ItemRegistry.CRIMSON_BOOTS.get());
         withExistingParent(ItemRegistry.ROBE_CHESTPLATE.getId().getPath(), mcLoc("item/generated")).texture("layer0", modLoc("item/robe_chestplate_overlay"))
                 .texture("layer1", modLoc("item/robe_chestplate"));
         withExistingParent(ItemRegistry.ROBE_LEGGINGS.getId().getPath(), mcLoc("item/generated")).texture("layer0", modLoc("item/robe_leggings_overlay"))

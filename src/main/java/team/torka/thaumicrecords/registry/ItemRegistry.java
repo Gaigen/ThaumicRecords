@@ -15,6 +15,10 @@ import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.data.component.AspectListComponent;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.item.BootsTravellerItem;
+import team.torka.thaumicrecords.item.CultistBootsItem;
+import team.torka.thaumicrecords.item.CultistLeaderArmorItem;
+import team.torka.thaumicrecords.item.CultistPlateArmorItem;
+import team.torka.thaumicrecords.item.CultistRobeArmorItem;
 import team.torka.thaumicrecords.item.FortressArmorItem;
 import team.torka.thaumicrecords.item.GogglesItem;
 import team.torka.thaumicrecords.item.PrimordialPearItem;
@@ -60,6 +64,34 @@ public class ItemRegistry {
     // Boots of the Traveller
     public static final DeferredItem<BootsTravellerItem> BOOTS_TRAVELLER = REGISTRAR.register("boots_traveller",
             () -> new BootsTravellerItem(ArmorItem.Type.BOOTS, ArmorMaterialRegistry.TRAVELLER));
+
+    // Crimson Cultist Robe Armor
+    public static final DeferredItem<CultistRobeArmorItem> CRIMSON_ROBE_HELMET = REGISTRAR.register("crimson_robe_helmet",
+            () -> new CultistRobeArmorItem(ArmorMaterialRegistry.CULTIST_CLOTH, ArmorItem.Type.HELMET));
+    public static final DeferredItem<CultistRobeArmorItem> CRIMSON_ROBE_CHESTPLATE = REGISTRAR.register("crimson_robe_chestplate",
+            () -> new CultistRobeArmorItem(ArmorMaterialRegistry.CULTIST_CLOTH, ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<CultistRobeArmorItem> CRIMSON_ROBE_LEGGINGS = REGISTRAR.register("crimson_robe_leggings",
+            () -> new CultistRobeArmorItem(ArmorMaterialRegistry.CULTIST_CLOTH, ArmorItem.Type.LEGGINGS));
+
+    // Crimson Cultist Plate Armor
+    public static final DeferredItem<CultistPlateArmorItem> CRIMSON_PLATE_HELMET = REGISTRAR.register("crimson_plate_helmet",
+            () -> new CultistPlateArmorItem(ArmorMaterialRegistry.CULTIST_PLATE, ArmorItem.Type.HELMET));
+    public static final DeferredItem<CultistPlateArmorItem> CRIMSON_PLATE_CHESTPLATE = REGISTRAR.register("crimson_plate_chestplate",
+            () -> new CultistPlateArmorItem(ArmorMaterialRegistry.CULTIST_PLATE, ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<CultistPlateArmorItem> CRIMSON_PLATE_LEGGINGS = REGISTRAR.register("crimson_plate_leggings",
+            () -> new CultistPlateArmorItem(ArmorMaterialRegistry.CULTIST_PLATE, ArmorItem.Type.LEGGINGS));
+
+    // Crimson Cultist Leader Armor
+    public static final DeferredItem<CultistLeaderArmorItem> CRIMSON_LEADER_HELMET = REGISTRAR.register("crimson_leader_helmet",
+            () -> new CultistLeaderArmorItem(ArmorMaterialRegistry.CULTIST_LEADER, ArmorItem.Type.HELMET));
+    public static final DeferredItem<CultistLeaderArmorItem> CRIMSON_LEADER_CHESTPLATE = REGISTRAR.register("crimson_leader_chestplate",
+            () -> new CultistLeaderArmorItem(ArmorMaterialRegistry.CULTIST_LEADER, ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<CultistLeaderArmorItem> CRIMSON_LEADER_LEGGINGS = REGISTRAR.register("crimson_leader_leggings",
+            () -> new CultistLeaderArmorItem(ArmorMaterialRegistry.CULTIST_LEADER, ArmorItem.Type.LEGGINGS));
+
+    // Crimson Cultist Boots
+    public static final DeferredItem<CultistBootsItem> CRIMSON_BOOTS = REGISTRAR.register("crimson_boots",
+            () -> new CultistBootsItem(ArmorMaterialRegistry.CULTIST_CLOTH, ArmorItem.Type.BOOTS));
 
     // Ingots
     public static final DeferredItem<Item> THAUMIUM_INGOT = REGISTRAR.registerSimpleItem("thaumium_ingot");
@@ -205,6 +237,16 @@ public class ItemRegistry {
         output.accept(ROBE_CHESTPLATE);
         output.accept(ROBE_LEGGINGS);
         output.accept(ROBE_BOOTS);
+        output.accept(CRIMSON_ROBE_HELMET);
+        output.accept(CRIMSON_ROBE_CHESTPLATE);
+        output.accept(CRIMSON_ROBE_LEGGINGS);
+        output.accept(CRIMSON_PLATE_HELMET);
+        output.accept(CRIMSON_PLATE_CHESTPLATE);
+        output.accept(CRIMSON_PLATE_LEGGINGS);
+        output.accept(CRIMSON_LEADER_HELMET);
+        output.accept(CRIMSON_LEADER_CHESTPLATE);
+        output.accept(CRIMSON_LEADER_LEGGINGS);
+        output.accept(CRIMSON_BOOTS);
         output.accept(BOOTS_TRAVELLER);
         output.accept(TABLE);
         output.accept(SCRIBING_TOOLS);
