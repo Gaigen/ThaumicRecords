@@ -158,6 +158,8 @@ public class ItemRegistry {
     }
 
     public static void putInPhialCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
+        ItemStack emptyPhial = new ItemStack(ItemRegistry.PHIAL.get());
+        output.accept(emptyPhial);
         AspectRegistry.ASPECT_REGISTRY.forEach(aspect -> {
             ItemStack stack = new ItemStack(ItemRegistry.PHIAL.get());
             if (stack.getItem() instanceof PhialItem item) {
