@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import team.torka.thaumicrecords.block.entity.CrucibleBlockEntity;
@@ -31,7 +32,7 @@ public class CrucibleRenderer implements BlockEntityRenderer<CrucibleBlockEntity
 
         float fluidHeight = blockEntity.getFluidHeight();
 
-        TextureAtlasSprite waterSprite = Minecraft.getInstance().getTextureAtlas(net.minecraft.client.renderer.texture.TextureAtlas.LOCATION_BLOCKS).apply(
+        TextureAtlasSprite waterSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(
                 ResourceLocation.withDefaultNamespace("block/water_still"));
 
         IClientFluidTypeExtensions fluidExt = IClientFluidTypeExtensions.of(Fluids.WATER.defaultFluidState());
