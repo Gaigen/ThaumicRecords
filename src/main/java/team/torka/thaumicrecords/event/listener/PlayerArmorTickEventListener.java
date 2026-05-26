@@ -14,7 +14,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.item.BootsTravellerItem;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber
 public class PlayerArmorTickEventListener {
 
     private static final ResourceLocation STEP_HEIGHT_ID = ThaumicRecords.createRl("boots_traveller_step");
@@ -25,7 +25,7 @@ public class PlayerArmorTickEventListener {
         Player player = event.getEntity();
         ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
         if (boots.getItem() instanceof BootsTravellerItem) {
-            handleBootsEffects(player, boots);
+            handleBootsEffects(player);
         } else {
             removeStepBoost(player);
         }
@@ -43,7 +43,7 @@ public class PlayerArmorTickEventListener {
         }
     }
 
-    private static void handleBootsEffects(Player player, ItemStack boots) {
+    private static void handleBootsEffects(Player player) {
         // Only apply speed when not flying and moving forward
         if (!player.getAbilities().flying && player.zza > 0.0F) {
             // Step height boost (client-side only)
