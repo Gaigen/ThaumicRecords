@@ -8,11 +8,11 @@ import team.torka.thaumicrecords.client.model.ArcaneWorkbenchModel;
 import team.torka.thaumicrecords.client.model.ResearchTableModel;
 import team.torka.thaumicrecords.client.model.TableModel;
 import team.torka.thaumicrecords.client.renderer.CustomModelLayer;
-import team.torka.thaumicrecords.client.renderer.blockentity.ArcanePedestalBlockEntityRenderer;
+import team.torka.thaumicrecords.client.renderer.blockentity.ArcanePedestalRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ArcaneWorkbenchRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.AuraNodeRenderer;
-import team.torka.thaumicrecords.client.renderer.blockentity.CrucibleBlockEntityRenderer;
-import team.torka.thaumicrecords.client.renderer.blockentity.ResearchTableBlockEntityRenderer;
+import team.torka.thaumicrecords.client.renderer.blockentity.CrucibleRenderer;
+import team.torka.thaumicrecords.client.renderer.blockentity.ResearchTableRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.TableRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ThaumatoriumRenderer;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
@@ -24,9 +24,9 @@ public class EntityRenderersEventListener {
         event.registerBlockEntityRenderer(BlockEntityRegistry.AURA_NODE.get(), AuraNodeRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.ARCANE_WORKBENCH.get(), ArcaneWorkbenchRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.TABLE.get(), TableRenderer::new);
-        event.registerBlockEntityRenderer(BlockEntityRegistry.RESEARCH_TABLE.get(), ResearchTableBlockEntityRenderer::new);
-        event.registerBlockEntityRenderer(BlockEntityRegistry.ARCANE_PEDESTAL.get(), ArcanePedestalBlockEntityRenderer::new);
-        event.registerBlockEntityRenderer(BlockEntityRegistry.CRUCIBLE.get(), CrucibleBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(BlockEntityRegistry.RESEARCH_TABLE.get(), ResearchTableRenderer::new);
+        event.registerBlockEntityRenderer(BlockEntityRegistry.ARCANE_PEDESTAL.get(), ArcanePedestalRenderer::new);
+        event.registerBlockEntityRenderer(BlockEntityRegistry.CRUCIBLE.get(), CrucibleRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.THAUMATORIUM.get(), ThaumatoriumRenderer::new);
     }
 

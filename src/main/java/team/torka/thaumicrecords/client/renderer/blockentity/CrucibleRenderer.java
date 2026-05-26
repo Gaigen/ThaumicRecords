@@ -15,9 +15,9 @@ import team.torka.thaumicrecords.block.entity.CrucibleBlockEntity;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-public class CrucibleBlockEntityRenderer implements BlockEntityRenderer<CrucibleBlockEntity> {
+public class CrucibleRenderer implements BlockEntityRenderer<CrucibleBlockEntity> {
 
-    public CrucibleBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
+    public CrucibleRenderer(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
