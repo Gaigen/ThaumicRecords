@@ -32,8 +32,26 @@ public class ArmorMaterialRegistry {
                 map.put(ArmorItem.Type.CHESTPLATE, 9);
                 map.put(ArmorItem.Type.LEGGINGS, 7);
                 map.put(ArmorItem.Type.BOOTS, 4);
-            }), 35, SoundEvents.ARMOR_EQUIP_NETHERITE, () -> Ingredient.of(Items.NETHERITE_INGOT),
+            }), 35, SoundEvents.ARMOR_EQUIP_NETHERITE, () -> Ingredient.of(ItemRegistry.THAUMIUM_INGOT.get()),
                     List.of(new ArmorMaterial.Layer(ThaumicRecords.createRl("fortress"))), 2.0F, 0.1F));
+
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> THAUMIUM = REGISTRAR.register("thaumium",
+            () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                map.put(ArmorItem.Type.HELMET, 2);
+                map.put(ArmorItem.Type.CHESTPLATE, 5);
+                map.put(ArmorItem.Type.LEGGINGS, 6);
+                map.put(ArmorItem.Type.BOOTS, 2);
+            }), 25, SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ItemRegistry.THAUMIUM_INGOT.get()),
+                    List.of(new ArmorMaterial.Layer(ThaumicRecords.createRl("thaumium"))), 0.0F, 0.0F));
+
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> VOID = REGISTRAR.register("void",
+            () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                map.put(ArmorItem.Type.HELMET, 3);
+                map.put(ArmorItem.Type.CHESTPLATE, 6);
+                map.put(ArmorItem.Type.LEGGINGS, 7);
+                map.put(ArmorItem.Type.BOOTS, 3);
+            }), 10, SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ItemRegistry.VOID_INGOT.get()),
+                    List.of(new ArmorMaterial.Layer(ThaumicRecords.createRl("void"))), 0.0F, 0.0F));
 
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> TRAVELLER = REGISTRAR.register("traveller",
             () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {

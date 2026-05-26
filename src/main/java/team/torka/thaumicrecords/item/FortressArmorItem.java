@@ -73,11 +73,6 @@ public class FortressArmorItem extends ArmorItem implements IRunicArmor {
         return stack;
     }
 
-    @Override
-    public boolean isValidRepairItem(@NotNull ItemStack toRepair, @NotNull ItemStack repair) {
-        return repair.is(net.minecraft.world.item.Items.NETHERITE_INGOT) || super.isValidRepairItem(toRepair, repair);
-    }
-
     private static int getMaxDurability(Type type) {
         return switch (type) {
             case HELMET -> 462;

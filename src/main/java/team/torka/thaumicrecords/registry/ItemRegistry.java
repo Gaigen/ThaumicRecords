@@ -20,7 +20,9 @@ import team.torka.thaumicrecords.item.GogglesItem;
 import team.torka.thaumicrecords.item.PrimordialPearItem;
 import team.torka.thaumicrecords.item.ResearchNotesItem;
 import team.torka.thaumicrecords.item.ScribingToolsItem;
+import team.torka.thaumicrecords.item.ThaumiumArmorItem;
 import team.torka.thaumicrecords.item.ThaumometerItem;
+import team.torka.thaumicrecords.item.VoidArmorItem;
 import team.torka.thaumicrecords.item.WandItem;
 import team.torka.thaumicrecords.item.WispEssenceItem;
 
@@ -57,6 +59,30 @@ public class ItemRegistry {
     // Boots of the Traveller
     public static final DeferredItem<BootsTravellerItem> BOOTS_TRAVELLER = REGISTRAR.register("boots_traveller",
             () -> new BootsTravellerItem(ArmorItem.Type.BOOTS, ArmorMaterialRegistry.TRAVELLER));
+
+    // Ingots
+    public static final DeferredItem<Item> THAUMIUM_INGOT = REGISTRAR.registerSimpleItem("thaumium_ingot");
+    public static final DeferredItem<Item> VOID_INGOT = REGISTRAR.registerSimpleItem("void_ingot");
+
+    // Thaumium Armor
+    public static final DeferredItem<ThaumiumArmorItem> THAUMIUM_HELMET = REGISTRAR.register("thaumium_helmet",
+            () -> new ThaumiumArmorItem(ArmorItem.Type.HELMET, ArmorMaterialRegistry.THAUMIUM));
+    public static final DeferredItem<ThaumiumArmorItem> THAUMIUM_CHESTPLATE = REGISTRAR.register("thaumium_chestplate",
+            () -> new ThaumiumArmorItem(ArmorItem.Type.CHESTPLATE, ArmorMaterialRegistry.THAUMIUM));
+    public static final DeferredItem<ThaumiumArmorItem> THAUMIUM_LEGGINGS = REGISTRAR.register("thaumium_leggings",
+            () -> new ThaumiumArmorItem(ArmorItem.Type.LEGGINGS, ArmorMaterialRegistry.THAUMIUM));
+    public static final DeferredItem<ThaumiumArmorItem> THAUMIUM_BOOTS = REGISTRAR.register("thaumium_boots",
+            () -> new ThaumiumArmorItem(ArmorItem.Type.BOOTS, ArmorMaterialRegistry.THAUMIUM));
+
+    // Void Armor
+    public static final DeferredItem<VoidArmorItem> VOID_HELMET = REGISTRAR.register("void_helmet",
+            () -> new VoidArmorItem(ArmorItem.Type.HELMET, ArmorMaterialRegistry.VOID));
+    public static final DeferredItem<VoidArmorItem> VOID_CHESTPLATE = REGISTRAR.register("void_chestplate",
+            () -> new VoidArmorItem(ArmorItem.Type.CHESTPLATE, ArmorMaterialRegistry.VOID));
+    public static final DeferredItem<VoidArmorItem> VOID_LEGGINGS = REGISTRAR.register("void_leggings",
+            () -> new VoidArmorItem(ArmorItem.Type.LEGGINGS, ArmorMaterialRegistry.VOID));
+    public static final DeferredItem<VoidArmorItem> VOID_BOOTS = REGISTRAR.register("void_boots",
+            () -> new VoidArmorItem(ArmorItem.Type.BOOTS, ArmorMaterialRegistry.VOID));
 
     public static final DeferredItem<Item> WAND_CAP_IRON = REGISTRAR.registerSimpleItem("wand_cap_iron");
     public static final DeferredItem<Item> WAND_CAP_GOLD = REGISTRAR.registerSimpleItem("wand_cap_gold");
@@ -157,6 +183,16 @@ public class ItemRegistry {
         output.accept(FORTRESS_HELMET);
         output.accept(FORTRESS_CHESTPLATE);
         output.accept(FORTRESS_LEGGINGS);
+        output.accept(THAUMIUM_INGOT);
+        output.accept(THAUMIUM_HELMET);
+        output.accept(THAUMIUM_CHESTPLATE);
+        output.accept(THAUMIUM_LEGGINGS);
+        output.accept(THAUMIUM_BOOTS);
+        output.accept(VOID_INGOT);
+        output.accept(VOID_HELMET);
+        output.accept(VOID_CHESTPLATE);
+        output.accept(VOID_LEGGINGS);
+        output.accept(VOID_BOOTS);
         output.accept(BOOTS_TRAVELLER);
         output.accept(TABLE);
         output.accept(SCRIBING_TOOLS);

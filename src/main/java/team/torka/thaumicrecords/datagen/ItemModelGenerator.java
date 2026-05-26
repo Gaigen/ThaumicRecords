@@ -41,6 +41,16 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.FORTRESS_CHESTPLATE.get());
         basicItem(ItemRegistry.FORTRESS_LEGGINGS.get());
         basicItem(ItemRegistry.BOOTS_TRAVELLER.get());
+        basicItem(ItemRegistry.THAUMIUM_INGOT.get());
+        basicItem(ItemRegistry.THAUMIUM_HELMET.get());
+        basicItem(ItemRegistry.THAUMIUM_CHESTPLATE.get());
+        basicItem(ItemRegistry.THAUMIUM_LEGGINGS.get());
+        basicItem(ItemRegistry.THAUMIUM_BOOTS.get());
+        basicItem(ItemRegistry.VOID_INGOT.get());
+        basicItem(ItemRegistry.VOID_HELMET.get());
+        basicItem(ItemRegistry.VOID_CHESTPLATE.get());
+        basicItem(ItemRegistry.VOID_LEGGINGS.get());
+        basicItem(ItemRegistry.VOID_BOOTS.get());
         basicItem(ItemRegistry.WISP_ESSENCE.get());
         basicItem(ItemRegistry.SCRIBING_TOOLS.get());
         withExistingParent(ItemRegistry.SILVERWOOD_SAPLING.getId().getPath(), mcLoc("item/generated")).texture("layer0", modLoc("block/silverwood_sapling"));
