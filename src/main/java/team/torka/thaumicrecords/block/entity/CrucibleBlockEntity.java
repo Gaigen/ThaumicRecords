@@ -15,11 +15,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import team.torka.thaumicrecords.api.ModTags;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.helper.AspectHelper;
@@ -358,8 +358,7 @@ public class CrucibleBlockEntity extends BlockEntity {
             return false;
         }
         BlockState below = level.getBlockState(worldPosition.below());
-        return below.is(Blocks.FIRE) || below.is(Blocks.SOUL_FIRE) || below.is(Blocks.LAVA) || below.is(Blocks.MAGMA_BLOCK) || below.is(
-                Blocks.CAMPFIRE) || below.is(Blocks.SOUL_CAMPFIRE);
+        return below.is(ModTags.CRUCIBLE_HEAT_SOURCE);
     }
 
 

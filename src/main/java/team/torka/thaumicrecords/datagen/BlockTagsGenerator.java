@@ -3,9 +3,11 @@ package team.torka.thaumicrecords.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.api.ModTags;
 import team.torka.thaumicrecords.registry.BlockRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -46,5 +48,7 @@ public class BlockTagsGenerator extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_HOE).add(BlockRegistry.GREATWOOD_LEAVES.get());
         this.tag(BlockTags.SAPLINGS).add(BlockRegistry.GREATWOOD_SAPLING.get());
         this.tag(BlockTags.LOGS_THAT_BURN).add(BlockRegistry.GREATWOOD_LOG.get());
+
+        this.tag(ModTags.CRUCIBLE_HEAT_SOURCE).add(Blocks.FIRE, Blocks.SOUL_FIRE, Blocks.LAVA, Blocks.MAGMA_BLOCK, Blocks.CAMPFIRE, Blocks.SOUL_CAMPFIRE);
     }
 }
