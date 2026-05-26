@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.Random;
 
 public class AuraNodeBlockEntity extends BlockEntity {
+    private String id;
     private ResourceLocation type;
     private ResourceLocation modifier;
     private final AspectList limit = new AspectList();
@@ -108,6 +109,18 @@ public class AuraNodeBlockEntity extends BlockEntity {
         ResourceLocation regenAspect = toRegenAspects.get(level.random.nextInt(toRegenAspects.size()));
         current.add(regenAspect, 1);
         this.setChanged();
+    }
+
+    public String getId() {
+        if (Objects.isNull(id)) {
+            if (Objects.nonNull(level)) {
+                BlockPos blockPos = getBlockPos();
+                this.id = level.dimension().location() + "|" + blockPos.getX() + "," + blockPos.getY() + "," + blockPos.getZ();
+            } else {
+                return "unloaded|0,0,0";
+            }
+        }
+        return id;
     }
 
     @NotNull

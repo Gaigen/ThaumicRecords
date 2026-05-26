@@ -3,13 +3,17 @@ package team.torka.thaumicrecords.client.event.listener;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.helper.AspectHelper;
+import team.torka.thaumicrecords.attachment.ScanHistory;
 import team.torka.thaumicrecords.client.tooltip.AspectTooltipComponent;
+import team.torka.thaumicrecords.registry.AttachmentRegistry;
 
 import java.util.Objects;
 
@@ -18,10 +22,15 @@ public class RenderTooltipEventListener {
 
     @SubscribeEvent
     public static void onGatherComponentsEvent(RenderTooltipEvent.GatherComponents event) {
-        if (Objects.isNull(Minecraft.getInstance().level) || event.getItemStack().isEmpty()) {
+        if (Objects.isNull(Minecraft.getInstance().level) || Objects.isNull(Minecraft.getInstance().player) || event.getItemStack().isEmpty()) {
             return;
         }
         if (Screen.hasShiftDown()) {
+            ScanHistory scanHistory = Minecraft.getInstance().player.getData(AttachmentRegistry.SCAN_HISTORY);
+            ResourceLocation itemRl = BuiltInRegistries.ITEM.getKey(event.getItemStack().getItem());
+            if (!scanHistory.hasScannedItem(itemRl)) {
+                return;
+            }
             AspectList aspects = AspectHelper.getAspects(event.getItemStack());
             if (!aspects.isEmpty()) {
                 event.getTooltipElements().add(Either.right(new AspectTooltipComponent(aspects)));
