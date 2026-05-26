@@ -1,0 +1,9 @@
+{
+  "flip_v": true,
+  "loader": "neoforge:obj",
+  "model": "thaumicrecords:models/block/thaumatorium.obj",
+  "textures": {
+    "particle": "thaumicrecords:block/thaumatorium",
+    "thaumatorium": "thaumicrecords:block/thaumatorium"
+  }
+}

@@ -8,6 +8,8 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.block.entity.ArcanePedestalBlockEntity;
 import team.torka.thaumicrecords.block.entity.ArcaneWorkbenchBlockEntity;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
+import team.torka.thaumicrecords.block.entity.CrucibleBlockEntity;
+import team.torka.thaumicrecords.block.entity.ThaumatoriumBlockEntity;
 import team.torka.thaumicrecords.block.entity.ResearchTableBlockEntity;
 import team.torka.thaumicrecords.block.entity.TableBlockEntity;
 
@@ -29,4 +31,10 @@ public class BlockEntityRegistry {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcanePedestalBlockEntity>> ARCANE_PEDESTAL = REGISTRAR.register("arcane_pedestal",
             () -> BlockEntityType.Builder.of(ArcanePedestalBlockEntity::new, BlockRegistry.ARCANE_PEDESTAL.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CrucibleBlockEntity>> CRUCIBLE = REGISTRAR.register("crucible",
+            () -> BlockEntityType.Builder.of(CrucibleBlockEntity::new, BlockRegistry.CRUCIBLE.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ThaumatoriumBlockEntity>> THAUMATORIUM = REGISTRAR.register("thaumatorium",
+            () -> BlockEntityType.Builder.of(ThaumatoriumBlockEntity::new, BlockRegistry.THAUMATORIUM.get()).build(null));
 }

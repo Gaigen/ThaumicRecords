@@ -2,11 +2,13 @@ package team.torka.thaumicrecords.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -15,7 +17,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
@@ -23,9 +28,13 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.api.item.WandRod;
+import team.torka.thaumicrecords.block.ThaumatoriumBlock;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
+import team.torka.thaumicrecords.block.entity.CrucibleBlockEntity;
+import team.torka.thaumicrecords.block.part.ThaumatoriumPart;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.registry.AspectRegistry;
+import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 import team.torka.thaumicrecords.registry.WandCapRegistry;
@@ -129,6 +138,83 @@ public class WandItem extends Item {
         ItemStack itemstack = player.getItemInHand(hand);
         player.startUsingItem(hand);
         return InteractionResultHolder.consume(itemstack);
+    }
+
+    /**
+     *
+     */
+    @Override
+    @NotNull
+    @ParametersAreNonnullByDefault
+    public InteractionResult useOn(UseOnContext context) {
+        Level level = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        Player player = context.getPlayer();
+
+        if (player == null) {
+            return InteractionResult.PASS;
+        }
+
+        BlockState state = level.getBlockState(pos);
+
+        if (state.is(Blocks.CAULDRON)) {
+            if (!level.isClientSide) {
+                BlockState crucibleState = BlockRegistry.CRUCIBLE.get().defaultBlockState();
+                level.setBlock(pos, crucibleState, 3);
+                level.playSound(null, pos, team.torka.thaumicrecords.registry.SoundRegistry.WAND.get(), net.minecraft.sounds.SoundSource.BLOCKS, 0.5F, 1.0F);
+            }
+            return InteractionResult.SUCCESS;
+        }
+
+        if (state.is(BlockRegistry.CRUCIBLE.get())) {
+            if (player.isShiftKeyDown() && !level.isClientSide) {
+                if (level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible) {
+                    crucible.spillRemnants();
+                }
+            }
+            return InteractionResult.SUCCESS;
+        }
+
+        if (state.is(BlockRegistry.ALCHEMICAL_CONSTRUCT.get())) {
+            BlockPos posBelow = pos.below();
+            BlockState stateBelow = level.getBlockState(posBelow);
+            BlockPos posAbove = pos.above();
+            BlockState stateAbove = level.getBlockState(posAbove);
+            BlockPos cruciblePos = posBelow.below();
+            BlockState crucibleState = level.getBlockState(cruciblePos);
+
+            BlockPos bottomPos = null;
+            BlockPos topPos = null;
+
+            if (stateBelow.is(BlockRegistry.ALCHEMICAL_CONSTRUCT.get()) && crucibleState.is(BlockRegistry.CRUCIBLE.get())) {
+                bottomPos = posBelow;
+                topPos = pos;
+            } else if (stateAbove.is(BlockRegistry.ALCHEMICAL_CONSTRUCT.get()) && stateBelow.is(BlockRegistry.CRUCIBLE.get())) {
+                bottomPos = pos;
+                topPos = posAbove;
+            }
+
+            if (bottomPos != null && topPos != null) {
+                if (!level.isClientSide) {
+                    level.setBlock(bottomPos, BlockRegistry.THAUMATORIUM.get().defaultBlockState().setValue(ThaumatoriumBlock.PART, ThaumatoriumPart.BOTTOM),
+                            3);
+                    level.setBlock(topPos, BlockRegistry.THAUMATORIUM.get().defaultBlockState().setValue(ThaumatoriumBlock.PART, ThaumatoriumPart.TOP), 3);
+
+                    if (level.getBlockEntity(bottomPos) instanceof team.torka.thaumicrecords.block.entity.ThaumatoriumBlockEntity thaum) {
+                        thaum.facing = player.getDirection().getOpposite();
+                        thaum.syncToClient();
+                        thaum.setChanged();
+                    }
+
+                    level.playSound(null, topPos, team.torka.thaumicrecords.registry.SoundRegistry.WAND.get(), net.minecraft.sounds.SoundSource.BLOCKS, 0.5F,
+                            1.0F);
+                }
+                return InteractionResult.SUCCESS;
+            }
+            return InteractionResult.PASS;
+        }
+
+        return InteractionResult.PASS;
     }
 
     @Override

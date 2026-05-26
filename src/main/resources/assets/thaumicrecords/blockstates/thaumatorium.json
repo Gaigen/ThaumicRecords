@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "part=bottom": {
+      "model": "thaumicrecords:block/thaumatorium_bottom"
+    },
+    "part=top": {
+      "model": "thaumicrecords:block/thaumatorium_top"
+    }
+  }
+}

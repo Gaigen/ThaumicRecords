@@ -11,8 +11,10 @@ import team.torka.thaumicrecords.client.renderer.CustomModelLayer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ArcanePedestalBlockEntityRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ArcaneWorkbenchRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.AuraNodeRenderer;
+import team.torka.thaumicrecords.client.renderer.blockentity.CrucibleBlockEntityRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ResearchTableBlockEntityRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.TableRenderer;
+import team.torka.thaumicrecords.client.renderer.blockentity.ThaumatoriumRenderer;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 
 @EventBusSubscriber(value = Dist.CLIENT)
@@ -24,6 +26,8 @@ public class EntityRenderersEventListener {
         event.registerBlockEntityRenderer(BlockEntityRegistry.TABLE.get(), TableRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.RESEARCH_TABLE.get(), ResearchTableBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.ARCANE_PEDESTAL.get(), ArcanePedestalBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(BlockEntityRegistry.CRUCIBLE.get(), CrucibleBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(BlockEntityRegistry.THAUMATORIUM.get(), ThaumatoriumRenderer::new);
     }
 
     @SubscribeEvent

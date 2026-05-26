@@ -11,4 +11,6 @@ public class ParticleRegistry {
     public static final DeferredRegister<ParticleType<?>> REGISTRAR = DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, ThaumicRecords.MOD_ID);
 
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> NODE_BREAK = REGISTRAR.register("node_break", () -> new SimpleParticleType(false));
+
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CRUCIBLE_BUBBLE = REGISTRAR.register("crucible_bubble", () -> new SimpleParticleType(false));
 }

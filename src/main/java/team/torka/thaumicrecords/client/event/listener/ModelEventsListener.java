@@ -12,5 +12,6 @@ public class ModelEventsListener {
     @SubscribeEvent
     public static void onRegisterAdditionalEvent(ModelEvent.RegisterAdditional event) {
         event.register(ModelResourceLocation.standalone(ThaumicRecords.createRl("item/thaumometer_obj")));
+        event.register(ModelResourceLocation.standalone(ThaumicRecords.createRl("block/thaumatorium_obj")));
     }
 }

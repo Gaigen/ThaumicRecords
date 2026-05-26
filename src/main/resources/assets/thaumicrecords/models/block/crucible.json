@@ -1,0 +1,143 @@
+{
+  "comment": "Котёл Thaumcraft",
+  "ambientocclusion": false,
+  "render_type": "cutout",
+  "textures": {
+    "particle": "thaumicrecords:block/crucible_side",
+    "top": "thaumicrecords:block/crucible_top",
+    "bottom": "thaumicrecords:block/crucible_bottom",
+    "side": "thaumicrecords:block/crucible_side",
+    "inside": "thaumicrecords:block/crucible_inside",
+    "inner_bottom": "thaumicrecords:block/crucible_inner_bottom"
+  },
+  "elements": [
+    {
+      "comment": "Внешнее дно",
+      "from": [0, 0, 0],
+      "to": [16, 4, 16],
+      "faces": {
+        "down": { "texture": "#bottom", "cullface": "down", "uv": [0, 0, 16, 16] },
+        "north": { "texture": "#side", "uv": [0, 12, 16, 16] },
+        "south": { "texture": "#side", "uv": [0, 12, 16, 16] },
+        "west":  { "texture": "#side", "uv": [0, 12, 16, 16] },
+        "east":  { "texture": "#side", "uv": [0, 12, 16, 16] }
+      }
+    },
+    {
+      "comment": "Внутренний пол (плоскость на Y=4)",
+      "from": [0, 4, 0],
+      "to": [16, 4, 16],
+      "faces": {
+        "up": { "texture": "#inner_bottom", "uv": [0, 0, 16, 16] },
+        "down": { "texture": "#inner_bottom", "uv": [0, 0, 16, 16] }
+      }
+    },
+    {
+      "comment": "Стенка WEST (X=0..2)",
+      "from": [0, 3, 0],
+      "to": [2, 16, 16],
+      "faces": {
+        "west":  { "texture": "#side", "cullface": "west", "uv": [0, 0, 16, 13] },
+        "east":  { "texture": "#inside", "uv": [0, 0, 16, 13] },
+        "north": { "texture": "#side", "cullface": "north", "uv": [0, 0, 2, 13] },
+        "south": { "texture": "#side", "cullface": "south", "uv": [14, 0, 16, 13] },
+        "up":    { "texture": "#top", "cullface": "up", "uv": [0, 0, 2, 16] },
+        "down":  { "texture": "#side", "uv": [0, 0, 2, 16] }
+      }
+    },
+    {
+      "comment": "Стенка EAST (X=14..16)",
+      "from": [14, 3, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "east":  { "texture": "#side", "cullface": "east", "uv": [0, 0, 16, 13] },
+        "west":  { "texture": "#inside", "uv": [0, 0, 16, 13] },
+        "north": { "texture": "#side", "cullface": "north", "uv": [14, 0, 16, 13] },
+        "south": { "texture": "#side", "cullface": "south", "uv": [0, 0, 2, 13] },
+        "up":    { "texture": "#top", "cullface": "up", "uv": [14, 0, 16, 16] },
+        "down":  { "texture": "#side", "uv": [0, 0, 2, 16] }
+      }
+    },
+    {
+      "comment": "Стенка NORTH (Z=0..2)",
+      "from": [2, 3, 0],
+      "to": [14, 16, 2],
+      "faces": {
+        "north": { "texture": "#side", "cullface": "north", "uv": [2, 0, 14, 13] },
+        "south": { "texture": "#inside", "uv": [2, 0, 14, 13] },
+        "up":    { "texture": "#top", "cullface": "up", "uv": [2, 0, 14, 2] },
+        "down":  { "texture": "#side", "uv": [2, 0, 14, 2] }
+      }
+    },
+    {
+      "comment": "Стенка SOUTH (Z=14..16)",
+      "from": [2, 3, 14],
+      "to": [14, 16, 16],
+      "faces": {
+        "south": { "texture": "#side", "cullface": "south", "uv": [2, 0, 14, 13] },
+        "north": { "texture": "#inside", "uv": [2, 0, 14, 13] },
+        "up":    { "texture": "#top", "cullface": "up", "uv": [2, 14, 14, 16] },
+        "down":  { "texture": "#side", "uv": [2, 14, 14, 16] }
+      }
+    },
+    {
+      "comment": "Внутренняя сторона WEST",
+      "from": [1.9, 3, 0],
+      "to": [2, 16, 16],
+      "faces": {
+        "east": { "texture": "#inside", "uv": [0, 0, 16, 13] }
+      }
+    },
+    {
+      "comment": "Внутренняя сторона EAST",
+      "from": [14, 3, 0],
+      "to": [14.1, 16, 16],
+      "faces": {
+        "west": { "texture": "#inside", "uv": [0, 0, 16, 13] }
+      }
+    },
+    {
+      "comment": "Внутренняя сторона NORTH",
+      "from": [2, 3, 1.9],
+      "to": [14, 16, 2],
+      "faces": {
+        "south": { "texture": "#inside", "uv": [2, 0, 14, 13] }
+      }
+    },
+    {
+      "comment": "Внутренняя сторона SOUTH",
+      "from": [2, 3, 14],
+      "to": [14, 16, 14.1],
+      "faces": {
+        "north": { "texture": "#inside", "uv": [2, 0, 14, 13] }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [30, 225, 0],
+      "translation": [0, 0, 0],
+      "scale": [0.625, 0.625, 0.625]
+    },
+    "ground": {
+      "rotation": [0, 0, 0],
+      "translation": [0, 3, 0],
+      "scale": [0.25, 0.25, 0.25]
+    },
+    "fixed": {
+      "rotation": [0, 0, 0],
+      "translation": [0, 0, 0],
+      "scale": [0.5, 0.5, 0.5]
+    },
+    "thirdperson_righthand": {
+      "rotation": [75, 45, 0],
+      "translation": [0, 2.5, 0],
+      "scale": [0.375, 0.375, 0.375]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, 45, 0],
+      "translation": [0, 0, 0],
+      "scale": [0.4, 0.4, 0.4]
+    }
+  }
+}

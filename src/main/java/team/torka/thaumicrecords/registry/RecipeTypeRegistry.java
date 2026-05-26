@@ -8,6 +8,7 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingWandRecipe;
 import team.torka.thaumicrecords.recipe.AspectRecipe;
+import team.torka.thaumicrecords.recipe.CrucibleRecipe;
 
 public class RecipeTypeRegistry {
     public static final DeferredRegister<RecipeType<?>> REGISTRAR = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, ThaumicRecords.MOD_ID);
@@ -19,6 +20,9 @@ public class RecipeTypeRegistry {
             "arcane_crafting_shaped", () -> new RecipeType<>() {
             });
     public static final DeferredHolder<RecipeType<?>, RecipeType<ArcaneCraftingWandRecipe>> ARCANE_CRAFTING_WAND = REGISTRAR.register("arcane_crafting_wand",
+            () -> new RecipeType<>() {
+            });
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleRecipe>> CRUCIBLE = REGISTRAR.register("crucible",
             () -> new RecipeType<>() {
             });
 

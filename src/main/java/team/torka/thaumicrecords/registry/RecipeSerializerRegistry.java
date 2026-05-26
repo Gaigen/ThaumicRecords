@@ -10,6 +10,7 @@ import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingWandRecipe;
 import team.torka.thaumicrecords.recipe.AspectRecipe;
 import team.torka.thaumicrecords.recipe.serializer.AspectRecipeSerializer;
+import team.torka.thaumicrecords.recipe.serializer.CrucibleRecipeSerializer;
 import team.torka.thaumicrecords.recipe.serializer.ShapedArcaneCraftingRecipeSerializer;
 
 public class RecipeSerializerRegistry {
@@ -24,4 +25,6 @@ public class RecipeSerializerRegistry {
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ArcaneCraftingWandRecipe>> ARCANE_CRAFTING_WAND = REGISTRAR.register(
             "arcane_crafting_wand", () -> new SimpleCraftingRecipeSerializer<>(ArcaneCraftingWandRecipe::new));
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<team.torka.thaumicrecords.recipe.CrucibleRecipe>> CRUCIBLE = REGISTRAR.register(
+            "crucible", CrucibleRecipeSerializer::new);
 }
