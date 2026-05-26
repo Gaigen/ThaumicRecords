@@ -60,14 +60,18 @@ public class ThaumatoriumScreen extends AbstractContainerScreen<ThaumatoriumMenu
             index = menu.recipes.size() - 1;
         }
 
-        if (menu.recipes.isEmpty()) return;
+        if (menu.recipes.isEmpty()) {
+            return;
+        }
 
         if (lastSize != menu.recipes.size()) {
             lastSize = menu.recipes.size();
             refreshIndex();
         }
 
-        if (index < 0) index = 0;
+        if (index < 0) {
+            index = 0;
+        }
 
         CrucibleRecipe currentRecipe = menu.recipes.get(index);
 
@@ -148,9 +152,13 @@ public class ThaumatoriumScreen extends AbstractContainerScreen<ThaumatoriumMenu
     }
 
     private void drawAspectBars(GuiGraphics guiGraphics, int x, int y, CrucibleRecipe recipe) {
-        if (recipe == null) return;
+        if (recipe == null) {
+            return;
+        }
         AspectList needed = recipe.aspects();
-        if (needed == null || needed.size() == 0) return;
+        if (needed == null || needed.size() == 0) {
+            return;
+        }
 
         boolean isAssigned = false;
         for (int i = 0; i < menu.recipes.size() && i < menu.recipeIds.size(); i++) {
@@ -188,7 +196,9 @@ public class ThaumatoriumScreen extends AbstractContainerScreen<ThaumatoriumMenu
                     pos++;
                 }
                 count++;
-                if (count >= 6 + startAspect) break;
+                if (count >= 6 + startAspect) {
+                    break;
+                }
             }
         }
 
@@ -203,12 +213,16 @@ public class ThaumatoriumScreen extends AbstractContainerScreen<ThaumatoriumMenu
                 pos++;
             }
             count++;
-            if (count >= 6 + startAspect) break;
+            if (count >= 6 + startAspect) {
+                break;
+            }
         }
     }
 
     private void drawAspectTag(GuiGraphics guiGraphics, int x, int y, team.torka.thaumicrecords.api.aspect.Aspect aspect, int amount) {
-        if (aspect == null) return;
+        if (aspect == null) {
+            return;
+        }
         ResourceLocation aspectTex = aspect.getImage();
         if (aspectTex != null) {
 
@@ -235,9 +249,13 @@ public class ThaumatoriumScreen extends AbstractContainerScreen<ThaumatoriumMenu
     }
 
     private void drawOutput(GuiGraphics guiGraphics, int guiLeft, int guiTop, int mouseX, int mouseY, CrucibleRecipe recipe) {
-        if (recipe == null) return;
+        if (recipe == null) {
+            return;
+        }
         ItemStack output = recipe.getResultItem(Minecraft.getInstance().level.registryAccess());
-        if (output.isEmpty()) return;
+        if (output.isEmpty()) {
+            return;
+        }
 
         int slotX = guiLeft + 112;
         int slotY = guiTop + 16;
@@ -289,7 +307,9 @@ public class ThaumatoriumScreen extends AbstractContainerScreen<ThaumatoriumMenu
         int gx = (this.width - this.imageWidth) / 2;
         int gy = (this.height - this.imageHeight) / 2;
 
-        if (menu.recipes.isEmpty() || index < 0 || index >= menu.recipes.size()) return false;
+        if (menu.recipes.isEmpty() || index < 0 || index >= menu.recipes.size()) {
+            return false;
+        }
 
         int rx = (int) (mouseX - gx);
         int ry = (int) (mouseY - gy);

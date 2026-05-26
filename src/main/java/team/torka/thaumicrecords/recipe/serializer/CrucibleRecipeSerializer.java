@@ -14,16 +14,12 @@ import team.torka.thaumicrecords.recipe.CrucibleRecipe;
 public class CrucibleRecipeSerializer implements RecipeSerializer<CrucibleRecipe> {
 
     private static final MapCodec<CrucibleRecipe> CODEC = RecordCodecBuilder.mapCodec(
-            inst -> inst.group(
-                    Ingredient.CODEC.fieldOf("catalyst").forGetter(CrucibleRecipe::catalyst),
+            inst -> inst.group(Ingredient.CODEC.fieldOf("catalyst").forGetter(CrucibleRecipe::catalyst),
                     AspectList.CODEC.fieldOf("required_aspects").forGetter(CrucibleRecipe::requiredAspects),
-                    ItemStack.CODEC.fieldOf("result").forGetter(CrucibleRecipe::result)
-            ).apply(inst, CrucibleRecipe::new));
+                    ItemStack.CODEC.fieldOf("result").forGetter(CrucibleRecipe::result)).apply(inst, CrucibleRecipe::new));
 
-    private static final StreamCodec<RegistryFriendlyByteBuf, CrucibleRecipe> STREAM_CODEC = StreamCodec.composite(
-            Ingredient.CONTENTS_STREAM_CODEC, CrucibleRecipe::catalyst,
-            AspectList.STREAM_CODEC, CrucibleRecipe::requiredAspects,
-            ItemStack.STREAM_CODEC, CrucibleRecipe::result,
+    private static final StreamCodec<RegistryFriendlyByteBuf, CrucibleRecipe> STREAM_CODEC = StreamCodec.composite(Ingredient.CONTENTS_STREAM_CODEC,
+            CrucibleRecipe::catalyst, AspectList.STREAM_CODEC, CrucibleRecipe::requiredAspects, ItemStack.STREAM_CODEC, CrucibleRecipe::result,
             CrucibleRecipe::new);
 
     @NotNull

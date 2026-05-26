@@ -9,14 +9,14 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.helper.AspectHelper;
@@ -49,13 +49,28 @@ public class CrucibleBlockEntity extends BlockEntity {
     }
 
 
-    public int getFluidLevel() { return fluidLevel; }
-    public short getHeat() { return heat; }
-    public AspectList getAspects() { return aspects; }
-    public boolean hasFluid() { return fluidLevel > 0; }
-    public boolean isBoiling() { return heat >= HEAT_BOILING && hasFluid(); }
+    public int getFluidLevel() {
+        return fluidLevel;
+    }
+
+    public short getHeat() {
+        return heat;
+    }
+
+    public AspectList getAspects() {
+        return aspects;
+    }
+
+    public boolean hasFluid() {
+        return fluidLevel > 0;
+    }
+
+    public boolean isBoiling() {
+        return heat >= HEAT_BOILING && hasFluid();
+    }
 
     /**
+     *
      */
     public int tagAmount() {
         int total = 0;
@@ -66,10 +81,13 @@ public class CrucibleBlockEntity extends BlockEntity {
     }
 
     /**
+     *
      */
     public float getRecolor() {
         float recolor = tagAmount() / 100.0f;
-        if (recolor > 0.0f) recolor = 0.5f + recolor / 2.0f;
+        if (recolor > 0.0f) {
+            recolor = 0.5f + recolor / 2.0f;
+        }
         return Math.min(recolor, 1.9f);
     }
 
@@ -82,14 +100,20 @@ public class CrucibleBlockEntity extends BlockEntity {
     public float getFluidHeight() {
         float base = 0.3f + 0.5f * fluidLevel / (float) MAX_FLUID;
         float out = base + tagAmount() / 100.0f * (1.0f - base);
-        if (out > 1.0f) out = 1.001f;
-        if (out == 1.0f) out = 0.9999f;
+        if (out > 1.0f) {
+            out = 1.001f;
+        }
+        if (out == 1.0f) {
+            out = 0.9999f;
+        }
         return out;
     }
 
 
     public boolean fillWithWater() {
-        if (fluidLevel >= MAX_FLUID) return false;
+        if (fluidLevel >= MAX_FLUID) {
+            return false;
+        }
         fluidLevel = MAX_FLUID;
         setChanged();
         syncToClient();
@@ -98,7 +122,9 @@ public class CrucibleBlockEntity extends BlockEntity {
     }
 
     public boolean fillWithBottle() {
-        if (fluidLevel >= MAX_FLUID) return false;
+        if (fluidLevel >= MAX_FLUID) {
+            return false;
+        }
         fluidLevel = Math.min(fluidLevel + BOTTLE_AMOUNT, MAX_FLUID);
         setChanged();
         syncToClient();
@@ -107,7 +133,9 @@ public class CrucibleBlockEntity extends BlockEntity {
     }
 
     public boolean drainToBucket() {
-        if (fluidLevel <= 0) return false;
+        if (fluidLevel <= 0) {
+            return false;
+        }
         fluidLevel = 0;
         aspects.clear();
         setChanged();
@@ -118,13 +146,15 @@ public class CrucibleBlockEntity extends BlockEntity {
 
     /**
      *
-     *   this.tank.setFluid(null);
-     *   for (int a = 0; a < this.aspects.visSize() / 2; a++) spill();
-     *   this.aspects = new AspectList();
+     * this.tank.setFluid(null);
+     * for (int a = 0; a < this.aspects.visSize() / 2; a++) spill();
+     * this.aspects = new AspectList();
      *
      */
     public void spillRemnants() {
-        if (fluidLevel <= 0 && tagAmount() <= 0) return;
+        if (fluidLevel <= 0 && tagAmount() <= 0) {
+            return;
+        }
         fluidLevel = 0;
         int spillCount = tagAmount() / 2;
 
@@ -133,23 +163,15 @@ public class CrucibleBlockEntity extends BlockEntity {
         aspects.clear();
 
         if (level != null && !level.isClientSide) {
-            level.playSound(null, worldPosition,
-                    SoundRegistry.SPILL.get(),
-                    net.minecraft.sounds.SoundSource.BLOCKS, 0.2f, 1.0f);
+            level.playSound(null, worldPosition, SoundRegistry.SPILL.get(), net.minecraft.sounds.SoundSource.BLOCKS, 0.2f, 1.0f);
 
             if (level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
                 for (int i = 0; i < 10; i++) {
-                    float bx = (float)(worldPosition.getX() + 0.2 + level.random.nextFloat() * 0.6);
-                    float by = (float)(worldPosition.getY() + 1.0);
-                    float bz = (float)(worldPosition.getZ() + 0.2 + level.random.nextFloat() * 0.6);
+                    float bx = (float) (worldPosition.getX() + 0.2 + level.random.nextFloat() * 0.6);
+                    float by = (float) (worldPosition.getY() + 1.0);
+                    float bz = (float) (worldPosition.getZ() + 0.2 + level.random.nextFloat() * 0.6);
 
-                    serverLevel.sendParticles(
-                            ParticleRegistry.CRUCIBLE_BUBBLE.get(),
-                            bx, by, bz,
-                            1,
-                            0.0, 0.0, 0.0,
-                            0.01
-                    );
+                    serverLevel.sendParticles(ParticleRegistry.CRUCIBLE_BUBBLE.get(), bx, by, bz, 1, 0.0, 0.0, 0.0, 0.01);
                 }
             }
         }
@@ -159,7 +181,9 @@ public class CrucibleBlockEntity extends BlockEntity {
     }
 
     public void addRain() {
-        if (fluidLevel >= MAX_FLUID) return;
+        if (fluidLevel >= MAX_FLUID) {
+            return;
+        }
         fluidLevel = Math.min(fluidLevel + RAIN_AMOUNT, MAX_FLUID);
         setChanged();
         syncToClient();
@@ -173,6 +197,7 @@ public class CrucibleBlockEntity extends BlockEntity {
     }
 
     /**
+     *
      */
     public AspectList takeRandomFromSource() {
         AspectList output = new AspectList();
@@ -193,6 +218,7 @@ public class CrucibleBlockEntity extends BlockEntity {
     }
 
     /**
+     *
      */
     public void removeAspect(ResourceLocation aspectKey) {
         removeAspect(aspectKey, true);
@@ -213,6 +239,7 @@ public class CrucibleBlockEntity extends BlockEntity {
 
 
     /**
+     *
      */
     public static class SmeltResult {
         public ItemStack remainingOut = ItemStack.EMPTY;
@@ -289,15 +316,20 @@ public class CrucibleBlockEntity extends BlockEntity {
     }
 
     /**
+     *
      */
     @Nullable
     private CrucibleRecipe findMatchingRecipe(ItemStack catalyst) {
-        if (level == null) return null;
+        if (level == null) {
+            return null;
+        }
 
         var recipes = level.getRecipeManager().getAllRecipesFor(RecipeTypeRegistry.CRUCIBLE.get());
         for (var holder : recipes) {
             CrucibleRecipe recipe = holder.value();
-            if (!recipe.catalyst().test(catalyst)) continue;
+            if (!recipe.catalyst().test(catalyst)) {
+                continue;
+            }
 
             boolean aspectsMatch = true;
             for (var entry : recipe.requiredAspects().entrySet()) {
@@ -307,26 +339,28 @@ public class CrucibleBlockEntity extends BlockEntity {
                     break;
                 }
             }
-            if (aspectsMatch) return recipe;
+            if (aspectsMatch) {
+                return recipe;
+            }
         }
         return null;
     }
 
 
     private boolean hasHeatSource() {
-        if (level == null) return false;
+        if (level == null) {
+            return false;
+        }
         BlockState below = level.getBlockState(worldPosition.below());
-        return below.is(Blocks.FIRE)
-                || below.is(Blocks.SOUL_FIRE)
-                || below.is(Blocks.LAVA)
-                || below.is(Blocks.MAGMA_BLOCK)
-                || below.is(Blocks.CAMPFIRE)
-                || below.is(Blocks.SOUL_CAMPFIRE);
+        return below.is(Blocks.FIRE) || below.is(Blocks.SOUL_FIRE) || below.is(Blocks.LAVA) || below.is(Blocks.MAGMA_BLOCK) || below.is(
+                Blocks.CAMPFIRE) || below.is(Blocks.SOUL_CAMPFIRE);
     }
 
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, CrucibleBlockEntity crucible) {
-        if (level.isClientSide) return;
+        if (level.isClientSide) {
+            return;
+        }
 
         crucible.counter++;
 
@@ -349,8 +383,7 @@ public class CrucibleBlockEntity extends BlockEntity {
             crucible.heat--;
         }
 
-        if ((prevHeat < HEAT_BOILING && crucible.heat >= HEAT_BOILING)
-                || (prevHeat >= HEAT_BOILING && crucible.heat < HEAT_BOILING)) {
+        if ((prevHeat < HEAT_BOILING && crucible.heat >= HEAT_BOILING) || (prevHeat >= HEAT_BOILING && crucible.heat < HEAT_BOILING)) {
             crucible.setChanged();
             crucible.syncToClient();
         }
@@ -387,10 +420,7 @@ public class CrucibleBlockEntity extends BlockEntity {
                         Aspect[] comps = a.getComponents();
                         if (comps != null && comps.length == 2) {
                             Aspect chosen = level.random.nextBoolean() ? comps[0] : comps[1];
-                            ResourceLocation compKey = AspectRegistry.ASPECT_REGISTRY
-                                    .getResourceKey(chosen)
-                                    .map(k -> k.location())
-                                    .orElse(null);
+                            ResourceLocation compKey = AspectRegistry.ASPECT_REGISTRY.getResourceKey(chosen).map(k -> k.location()).orElse(null);
                             if (compKey != null) {
                                 crucible.aspects.merge(compKey, 1, Integer::sum);
                             }
@@ -408,32 +438,30 @@ public class CrucibleBlockEntity extends BlockEntity {
 
 
     public static void clientTick(Level level, BlockPos pos, BlockState state, CrucibleBlockEntity crucible) {
-        if (!level.isClientSide) return;
-        if (!(level instanceof net.minecraft.client.multiplayer.ClientLevel clientLevel)) return;
-        if (!crucible.hasFluid()) return;
+        if (!level.isClientSide) {
+            return;
+        }
+        if (!(level instanceof net.minecraft.client.multiplayer.ClientLevel clientLevel)) {
+            return;
+        }
+        if (!crucible.hasFluid()) {
+            return;
+        }
 
         if (crucible.heat > HEAT_BOILING) {
-            CrucibleBubbleParticle.create(clientLevel,
-                            pos.getX() + 0.2 + level.random.nextFloat() * 0.6,
-                            pos.getY() + crucible.getFluidHeight(),
-                            pos.getZ() + 0.2 + level.random.nextFloat() * 0.6,
-                            -4)
-                    .setFroth().setRGB(0.5f, 0.5f, 0.7f);
+            CrucibleBubbleParticle.create(clientLevel, pos.getX() + 0.2 + level.random.nextFloat() * 0.6, pos.getY() + crucible.getFluidHeight(),
+                    pos.getZ() + 0.2 + level.random.nextFloat() * 0.6, -4).setFroth().setRGB(0.5f, 0.5f, 0.7f);
 
             if (crucible.tagAmount() > 100) {
                 for (int a = 0; a < 2; a++) {
-                    CrucibleBubbleParticle.create(clientLevel,
-                            pos.getX(), pos.getY() + 1, pos.getZ() + level.random.nextFloat(),
-                            -4).setFroth2().setRGB(0.5f, 0.5f, 0.7f);
-                    CrucibleBubbleParticle.create(clientLevel,
-                            pos.getX() + 1, pos.getY() + 1, pos.getZ() + level.random.nextFloat(),
-                            -4).setFroth2().setRGB(0.5f, 0.5f, 0.7f);
-                    CrucibleBubbleParticle.create(clientLevel,
-                            pos.getX() + level.random.nextFloat(), pos.getY() + 1, pos.getZ(),
-                            -4).setFroth2().setRGB(0.5f, 0.5f, 0.7f);
-                    CrucibleBubbleParticle.create(clientLevel,
-                            pos.getX() + level.random.nextFloat(), pos.getY() + 1, pos.getZ() + 1,
-                            -4).setFroth2().setRGB(0.5f, 0.5f, 0.7f);
+                    CrucibleBubbleParticle.create(clientLevel, pos.getX(), pos.getY() + 1, pos.getZ() + level.random.nextFloat(), -4).setFroth2().setRGB(0.5f,
+                            0.5f, 0.7f);
+                    CrucibleBubbleParticle.create(clientLevel, pos.getX() + 1, pos.getY() + 1, pos.getZ() + level.random.nextFloat(), -4).setFroth2().setRGB(
+                            0.5f, 0.5f, 0.7f);
+                    CrucibleBubbleParticle.create(clientLevel, pos.getX() + level.random.nextFloat(), pos.getY() + 1, pos.getZ(), -4).setFroth2().setRGB(0.5f,
+                            0.5f, 0.7f);
+                    CrucibleBubbleParticle.create(clientLevel, pos.getX() + level.random.nextFloat(), pos.getY() + 1, pos.getZ() + 1, -4).setFroth2().setRGB(
+                            0.5f, 0.5f, 0.7f);
                 }
             }
         }
@@ -451,12 +479,8 @@ public class CrucibleBlockEntity extends BlockEntity {
                 int px = 5 + level.random.nextInt(22);
                 int pz = 5 + level.random.nextInt(22);
 
-                CrucibleBubbleParticle.create(clientLevel,
-                        pos.getX() + px / 32.0f + 0.015625f,
-                        pos.getY() + 0.05f + crucible.getFluidHeight(),
-                        pos.getZ() + pz / 32.0f + 0.015625f,
-                        1
-                ).setRGB(r, g, b);
+                CrucibleBubbleParticle.create(clientLevel, pos.getX() + px / 32.0f + 0.015625f, pos.getY() + 0.05f + crucible.getFluidHeight(),
+                        pos.getZ() + pz / 32.0f + 0.015625f, 1).setRGB(r, g, b);
             }
         }
     }
@@ -493,9 +517,8 @@ public class CrucibleBlockEntity extends BlockEntity {
     @ParametersAreNonnullByDefault
     public boolean triggerEvent(int id, int type) {
         if (id == 2 && level != null && level.isClientSide) {
-            
-            level.playLocalSound(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5,
-                    SoundRegistry.SPILL.get(),
+
+            level.playLocalSound(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, SoundRegistry.SPILL.get(),
                     net.minecraft.sounds.SoundSource.BLOCKS, 0.2f, 1.0f, false);
 
             for (int q = 0; q < 10; q++) {
@@ -503,9 +526,8 @@ public class CrucibleBlockEntity extends BlockEntity {
                 float by = worldPosition.getY() + 0.1f + getFluidHeight();
                 float bz = worldPosition.getZ() + 0.2f + level.random.nextFloat() * 0.6f;
 
-                CrucibleBubbleParticle bubble = CrucibleBubbleParticle.create(
-                        (net.minecraft.client.multiplayer.ClientLevel) level, bx, by, bz, 3
-                ).setBubbleSpeed(0.003 * type);
+                CrucibleBubbleParticle bubble = CrucibleBubbleParticle.create((net.minecraft.client.multiplayer.ClientLevel) level, bx, by, bz, 3)
+                        .setBubbleSpeed(0.003 * type);
 
                 if (aspects.isEmpty()) {
                     bubble.setRGB(1.0f, 1.0f, 1.0f);
@@ -562,6 +584,7 @@ public class CrucibleBlockEntity extends BlockEntity {
 
 
     /**
+     *
      */
     public boolean onWandRightClick(ItemStack wandStack, Player player) {
         System.out.println("[CRUCIBLE] onWandRightClick called, sneaking=" + player.isShiftKeyDown());

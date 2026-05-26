@@ -18,8 +18,7 @@ import team.torka.thaumicrecords.block.entity.ThaumatoriumBlockEntity;
 
 public class ThaumatoriumRenderer implements BlockEntityRenderer<ThaumatoriumBlockEntity> {
 
-    private static final ModelResourceLocation MODEL = ModelResourceLocation.standalone(
-            ThaumicRecords.createRl("block/thaumatorium_obj"));
+    private static final ModelResourceLocation MODEL = ModelResourceLocation.standalone(ThaumicRecords.createRl("block/thaumatorium_obj"));
 
     private final ItemRenderer itemRenderer;
 
@@ -28,8 +27,8 @@ public class ThaumatoriumRenderer implements BlockEntityRenderer<ThaumatoriumBlo
     }
 
     @Override
-    public void render(@NotNull ThaumatoriumBlockEntity be, float partialTick, PoseStack poseStack,
-                       MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
+    public void render(@NotNull ThaumatoriumBlockEntity be, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight,
+                       int packedOverlay) {
         Minecraft mc = Minecraft.getInstance();
 
         poseStack.pushPose();
@@ -40,21 +39,19 @@ public class ThaumatoriumRenderer implements BlockEntityRenderer<ThaumatoriumBlo
         switch (be.getFacing()) {
             case NORTH -> poseStack.mulPose(Axis.ZP.rotationDegrees(270.0F));
             case SOUTH -> poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
-            case EAST  -> poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+            case EAST -> poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
             // WEST = default (no rotation)
         }
 
         BakedModel objModel = mc.getModelManager().getModel(MODEL);
         var vc = bufferSource.getBuffer(RenderType.cutout());
-        mc.getBlockRenderer().getModelRenderer().renderModel(
-                poseStack.last(), vc, mc.level != null ? be.getBlockState() : null, objModel,
-                1.0F, 1.0F, 1.0F, packedLight, packedOverlay);
+        mc.getBlockRenderer().getModelRenderer().renderModel(poseStack.last(), vc, mc.level != null ? be.getBlockState() : null, objModel, 1.0F, 1.0F, 1.0F,
+                packedLight, packedOverlay);
 
         poseStack.popPose();
 
         if (be.getRecipeHashSize() > 0) {
-            int stackIdx = (int) ((mc.level != null ? mc.level.getGameTime() : 0) / 40
-                    % Math.max(1, be.getRecipeHashSize()));
+            int stackIdx = (int) ((mc.level != null ? mc.level.getGameTime() : 0) / 40 % Math.max(1, be.getRecipeHashSize()));
             ItemStack output = be.getOutputForCycle(stackIdx);
             if (!output.isEmpty()) {
                 poseStack.pushPose();
@@ -64,14 +61,13 @@ public class ThaumatoriumRenderer implements BlockEntityRenderer<ThaumatoriumBlo
 
                 switch (be.getFacing()) {
                     case NORTH -> poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-                    case EAST  -> poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
-                    case WEST  -> poseStack.mulPose(Axis.YP.rotationDegrees(270.0F));
+                    case EAST -> poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
+                    case WEST -> poseStack.mulPose(Axis.YP.rotationDegrees(270.0F));
                     // SOUTH = default (no rotation)
                 }
 
                 poseStack.scale(0.75F, 0.75F, 0.75F);
-                this.itemRenderer.renderStatic(output, ItemDisplayContext.GROUND,
-                        packedLight, packedOverlay, poseStack, bufferSource, be.getLevel(), 0);
+                this.itemRenderer.renderStatic(output, ItemDisplayContext.GROUND, packedLight, packedOverlay, poseStack, bufferSource, be.getLevel(), 0);
                 poseStack.popPose();
             }
         }

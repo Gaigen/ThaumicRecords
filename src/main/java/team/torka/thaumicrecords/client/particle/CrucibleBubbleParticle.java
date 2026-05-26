@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
+ *
  */
 public class CrucibleBubbleParticle extends TextureSheetParticle {
 
@@ -54,7 +55,9 @@ public class CrucibleBubbleParticle extends TextureSheetParticle {
         this.quadSize *= 0.75f;
         this.lifetime = 4 + random.nextInt(3);
         this.bubbleSpeed = -0.001;
-        this.xd /= 5.0; this.yd /= 10.0; this.zd /= 5.0;
+        this.xd /= 5.0;
+        this.yd /= 10.0;
+        this.zd /= 5.0;
         return this;
     }
 
@@ -62,12 +65,16 @@ public class CrucibleBubbleParticle extends TextureSheetParticle {
         this.quadSize *= 0.75f;
         this.lifetime = 12 + random.nextInt(12);
         this.bubbleSpeed = -0.005;
-        this.xd /= 5.0; this.yd /= 10.0; this.zd /= 5.0;
+        this.xd /= 5.0;
+        this.yd /= 10.0;
+        this.zd /= 5.0;
         return this;
     }
 
     public CrucibleBubbleParticle setRGB(float r, float g, float b) {
-        this.rCol = r; this.gCol = g; this.bCol = b;
+        this.rCol = r;
+        this.gCol = g;
+        this.bCol = b;
         return this;
     }
 
@@ -79,10 +86,10 @@ public class CrucibleBubbleParticle extends TextureSheetParticle {
     public static CrucibleBubbleParticle create(ClientLevel level, double x, double y, double z, int age) {
         CrucibleBubbleParticle p = new CrucibleBubbleParticle(level, x, y, z);
         if (age == 3) {
-            p.lifetime = (age + 2) + (int)(8.0 / (p.random.nextDouble() * 0.8 + 0.2));
+            p.lifetime = (age + 2) + (int) (8.0 / (p.random.nextDouble() * 0.8 + 0.2));
             p.bubbleSpeed = 0.002;
         } else if (age > 0) {
-            p.lifetime = (age + 2) + (int)(8.0 / (p.random.nextDouble() * 0.8 + 0.2));
+            p.lifetime = (age + 2) + (int) (8.0 / (p.random.nextDouble() * 0.8 + 0.2));
             p.bubbleSpeed = 0.002;
         }
         Minecraft.getInstance().particleEngine.add(p);
@@ -92,15 +99,22 @@ public class CrucibleBubbleParticle extends TextureSheetParticle {
     @Override
     @ParametersAreNonnullByDefault
     public void tick() {
-        this.xo = x; this.yo = y; this.zo = z;
-        if (this.age++ >= this.lifetime) { remove(); return; }
+        this.xo = x;
+        this.yo = y;
+        this.zo = z;
+        if (this.age++ >= this.lifetime) {
+            remove();
+            return;
+        }
         this.yd += bubbleSpeed;
         if (bubbleSpeed > 0) {
             this.xd += (random.nextFloat() - random.nextFloat()) * 0.01;
             this.zd += (random.nextFloat() - random.nextFloat()) * 0.01;
         }
         move(xd, yd, zd);
-        this.xd *= 0.85; this.yd *= 0.85; this.zd *= 0.85;
+        this.xd *= 0.85;
+        this.yd *= 0.85;
+        this.zd *= 0.85;
         if (lifetime - age <= 2) {
             this.alpha = Math.max(0, this.alpha - 0.3f);
         }
@@ -119,10 +133,8 @@ public class CrucibleBubbleParticle extends TextureSheetParticle {
 
         @Override
         @ParametersAreNonnullByDefault
-        public Particle createParticle(SimpleParticleType type, ClientLevel level,
-                                       double x, double y, double z, double vx, double vy, double vz) {
-            return new CrucibleBubbleParticle(level, x, y, z)
-                    .setBubbleSpeed(vz > 0 ? 0.003 * vz : 0.002);
+        public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double vx, double vy, double vz) {
+            return new CrucibleBubbleParticle(level, x, y, z).setBubbleSpeed(vz > 0 ? 0.003 * vz : 0.002);
         }
     }
 }

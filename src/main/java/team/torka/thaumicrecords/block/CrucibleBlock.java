@@ -13,7 +13,6 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import team.torka.thaumicrecords.item.WandItem;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -38,13 +37,8 @@ public class CrucibleBlock extends BaseEntityBlock {
 
     private int delay = 0;
 
-    private static final VoxelShape SHAPE = Shapes.or(
-            Block.box(0, 0, 0, 16, 4, 16),
-            Block.box(0, 4, 0, 2, 16, 16),
-            Block.box(14, 4, 0, 16, 16, 16),
-            Block.box(2, 4, 0, 14, 16, 2),
-            Block.box(2, 4, 14, 14, 16, 16)
-    );
+    private static final VoxelShape SHAPE = Shapes.or(Block.box(0, 0, 0, 16, 4, 16), Block.box(0, 4, 0, 2, 16, 16), Block.box(14, 4, 0, 16, 16, 16),
+            Block.box(2, 4, 0, 14, 16, 2), Block.box(2, 4, 14, 14, 16, 16));
 
     public CrucibleBlock(Properties properties) {
         super(properties);
@@ -73,8 +67,7 @@ public class CrucibleBlock extends BaseEntityBlock {
     @Nullable
     @Override
     @ParametersAreNonnullByDefault
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
-                                                                   BlockEntityType<T> blockEntityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
         if (level.isClientSide) {
             return createTickerHelper(blockEntityType, BlockEntityRegistry.CRUCIBLE.get(), CrucibleBlockEntity::clientTick);
         }
@@ -97,6 +90,7 @@ public class CrucibleBlock extends BaseEntityBlock {
     }
 
     /**
+     *
      */
     @Override
     @ParametersAreNonnullByDefault
@@ -112,29 +106,33 @@ public class CrucibleBlock extends BaseEntityBlock {
     @Override
     @ParametersAreNonnullByDefault
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        if (level.isClientSide) return;
-        if (!(level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible)) return;
+        if (level.isClientSide) {
+            return;
+        }
+        if (!(level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible)) {
+            return;
+        }
 
         if (entity instanceof ItemEntity itemEntity) {
-            if (itemEntity.getPersistentData().getBoolean("thaumicrecords:craft_result")) return;
+            if (itemEntity.getPersistentData().getBoolean("thaumicrecords:craft_result")) {
+                return;
+            }
 
-            if (!crucible.isBoiling()) return;
+            if (!crucible.isBoiling()) {
+                return;
+            }
 
             ItemStack stack = itemEntity.getItem();
-            if (stack.isEmpty()) return;
+            if (stack.isEmpty()) {
+                return;
+            }
 
             CrucibleBlockEntity.SmeltResult result = crucible.attemptSmelt(stack);
 
             if (result.bounced) {
-                itemEntity.setDeltaMovement(
-                        (level.random.nextFloat() - level.random.nextFloat()) * 0.2,
-                        0.35,
-                        (level.random.nextFloat() - level.random.nextFloat()) * 0.2
-                );
-                level.playSound(null, pos,
-                        net.minecraft.sounds.SoundEvents.ITEM_PICKUP,
-                        net.minecraft.sounds.SoundSource.NEUTRAL,
-                        0.2F,
+                itemEntity.setDeltaMovement((level.random.nextFloat() - level.random.nextFloat()) * 0.2, 0.35,
+                        (level.random.nextFloat() - level.random.nextFloat()) * 0.2);
+                level.playSound(null, pos, net.minecraft.sounds.SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.NEUTRAL, 0.2F,
                         ((level.random.nextFloat() - level.random.nextFloat()) * 0.7F) + 1.0F);
                 return;
             }
@@ -147,32 +145,29 @@ public class CrucibleBlock extends BaseEntityBlock {
 
             if (!result.craftOut.isEmpty()) {
                 ejectItem(level, pos, result.craftOut);
-                level.playSound(null, pos,
-                        team.torka.thaumicrecords.registry.SoundRegistry.BUBBLE.get(),
-                        net.minecraft.sounds.SoundSource.BLOCKS,
-                        0.2F, 1.0F + level.random.nextFloat() * 0.4F);
+                level.playSound(null, pos, team.torka.thaumicrecords.registry.SoundRegistry.BUBBLE.get(), net.minecraft.sounds.SoundSource.BLOCKS, 0.2F,
+                        1.0F + level.random.nextFloat() * 0.4F);
                 level.blockEvent(pos, state.getBlock(), 2, 5);
             } else {
-                level.playSound(null, pos,
-                        team.torka.thaumicrecords.registry.SoundRegistry.BUBBLE.get(),
-                        net.minecraft.sounds.SoundSource.BLOCKS,
-                        0.2F, 1.0F + level.random.nextFloat() * 0.4F);
+                level.playSound(null, pos, team.torka.thaumicrecords.registry.SoundRegistry.BUBBLE.get(), net.minecraft.sounds.SoundSource.BLOCKS, 0.2F,
+                        1.0F + level.random.nextFloat() * 0.4F);
                 level.blockEvent(pos, state.getBlock(), 2, 1);
             }
             return;
         }
 
         delay++;
-        if (delay < 10) return;
+        if (delay < 10) {
+            return;
+        }
         delay = 0;
         if (crucible.isBoiling()) {
             entity.hurt(level.damageSources().inFire(), 1.0F);
-            level.playSound(null, pos,
-                    net.minecraft.sounds.SoundEvents.LAVA_EXTINGUISH,
-                    net.minecraft.sounds.SoundSource.BLOCKS,
-                    0.4F, 2.0F + level.random.nextFloat() * 0.4F);
+            level.playSound(null, pos, net.minecraft.sounds.SoundEvents.LAVA_EXTINGUISH, net.minecraft.sounds.SoundSource.BLOCKS, 0.4F,
+                    2.0F + level.random.nextFloat() * 0.4F);
         }
     }
+
     // =========================================================================
     // =========================================================================
     public static void ejectItem(Level level, BlockPos pos, ItemStack items) {
@@ -185,18 +180,9 @@ public class CrucibleBlock extends BaseEntityBlock {
             }
             remaining.shrink(spitout.getCount());
 
-            ItemEntity entityitem = new ItemEntity(
-                    level,
-                    pos.getX() + 0.5,
-                    pos.getY() + 0.71,
-                    pos.getZ() + 0.5,
-                    spitout
-            );
-            entityitem.setDeltaMovement(
-                    first ? 0 : (level.random.nextFloat() - level.random.nextFloat()) * 0.01,
-                    0.10000000149011612,
-                    first ? 0 : (level.random.nextFloat() - level.random.nextFloat()) * 0.01
-            );
+            ItemEntity entityitem = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.71, pos.getZ() + 0.5, spitout);
+            entityitem.setDeltaMovement(first ? 0 : (level.random.nextFloat() - level.random.nextFloat()) * 0.01, 0.10000000149011612,
+                    first ? 0 : (level.random.nextFloat() - level.random.nextFloat()) * 0.01);
 
             entityitem.getPersistentData().putBoolean("thaumicrecords:craft_result", true);
 
@@ -211,24 +197,19 @@ public class CrucibleBlock extends BaseEntityBlock {
     @NotNull
     @Override
     @ParametersAreNonnullByDefault
-    protected ItemInteractionResult useItemOn(ItemStack heldItem, BlockState state, Level level,
-                                               BlockPos pos, Player player, InteractionHand hand,
-                                               BlockHitResult hitResult) {
+    protected ItemInteractionResult useItemOn(ItemStack heldItem, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+                                              BlockHitResult hitResult) {
         if (!(level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible)) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
         if (heldItem.isEmpty() && !level.isClientSide) {
             int fluid = crucible.getFluidLevel();
-            int tags  = crucible.tagAmount();
-            int heat  = crucible.getHeat();
+            int tags = crucible.tagAmount();
+            int heat = crucible.getHeat();
             player.sendSystemMessage(net.minecraft.network.chat.Component.literal(
-                    "[Crucible] Heat: " + heat + "/" + CrucibleBlockEntity.HEAT_BOILING +
-                    " | Fluid: " + fluid + "/" + CrucibleBlockEntity.MAX_FLUID +
-                    " | Aspects: " + tags));
-            crucible.getAspects().forEach((key, amount) ->
-                    player.sendSystemMessage(net.minecraft.network.chat.Component.literal(
-                            "  " + key + " x" + amount)));
+                    "[Crucible] Heat: " + heat + "/" + CrucibleBlockEntity.HEAT_BOILING + " | Fluid: " + fluid + "/" + CrucibleBlockEntity.MAX_FLUID + " | " + "Aspects: " + tags));
+            crucible.getAspects().forEach((key, amount) -> player.sendSystemMessage(net.minecraft.network.chat.Component.literal("  " + key + " x" + amount)));
             return ItemInteractionResult.SUCCESS;
         }
 

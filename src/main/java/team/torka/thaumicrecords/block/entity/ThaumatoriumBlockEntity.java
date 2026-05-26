@@ -7,14 +7,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -24,14 +23,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.menu.ThaumatoriumMenu;
 import team.torka.thaumicrecords.recipe.CrucibleRecipe;
-import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
 
@@ -70,7 +66,9 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
     // ========== TICK ==========
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, ThaumatoriumBlockEntity be) {
-        if (level.isClientSide) return;
+        if (level.isClientSide) {
+            return;
+        }
 
         // Every ~2 seconds: check heat + upgrades
         if (be.counter == 0 || be.counter % 40 == 0) {
@@ -80,8 +78,7 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
         be.counter++;
 
         // If heated, no redstone, has recipes, every ~0.25s
-        if (be.heated && !be.gettingPower() && be.counter % 5 == 0
-                && !be.recipeIds.isEmpty()) {
+        if (be.heated && !be.gettingPower() && be.counter % 5 == 0 && !be.recipeIds.isEmpty()) {
 
             if (be.inputStack.isEmpty()) {
                 be.currentSuction = null;
@@ -89,13 +86,13 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
             }
 
             // Find matching recipe for input
-            if (be.currentCraft < 0 || be.currentCraft >= be.recipeIds.size()
-                    || be.currentRecipe == null
-                    || !be.currentRecipe.catalyst().test(be.inputStack)) {
+            if (be.currentCraft < 0 || be.currentCraft >= be.recipeIds.size() || be.currentRecipe == null || !be.currentRecipe.catalyst().test(be.inputStack)) {
                 be.findMatchingRecipe();
             }
 
-            if (be.currentCraft < 0 || be.currentCraft >= be.recipeIds.size()) return;
+            if (be.currentCraft < 0 || be.currentCraft >= be.recipeIds.size()) {
+                return;
+            }
 
             boolean canOutput = false;
             if (be.level != null) {
@@ -124,7 +121,9 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
     }
 
     public static void clientTick(Level level, BlockPos pos, BlockState state, ThaumatoriumBlockEntity be) {
-        if (!level.isClientSide) return;
+        if (!level.isClientSide) {
+            return;
+        }
         if (be.venting > 0) {
             be.venting--;
             float fx = 0.1F - level.random.nextFloat() * 0.2F;
@@ -140,27 +139,32 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
 
 
     public boolean checkHeat() {
-        if (level == null) return false;
+        if (level == null) {
+            return false;
+        }
         BlockPos below = worldPosition.below(2);
         BlockState belowState = level.getBlockState(below);
-        return belowState.is(Blocks.LAVA) || belowState.is(Blocks.FIRE)
-                || belowState.is(Blocks.SOUL_FIRE)
-                || belowState.getFluidState().is(net.minecraft.tags.FluidTags.LAVA);
+        return belowState.is(Blocks.LAVA) || belowState.is(Blocks.FIRE) || belowState.is(Blocks.SOUL_FIRE) || belowState.getFluidState().is(
+                net.minecraft.tags.FluidTags.LAVA);
     }
 
     public boolean gettingPower() {
-        if (level == null) return false;
-        return level.hasNeighborSignal(worldPosition)
-                || level.hasNeighborSignal(worldPosition.below())
-                || level.hasNeighborSignal(worldPosition.above());
+        if (level == null) {
+            return false;
+        }
+        return level.hasNeighborSignal(worldPosition) || level.hasNeighborSignal(worldPosition.below()) || level.hasNeighborSignal(worldPosition.above());
     }
 
     public void getUpgrades() {
-        if (level == null) return;
+        if (level == null) {
+            return;
+        }
         int mr = 1;
         for (int yy = 0; yy <= 1; yy++) {
             for (Direction dir : Direction.values()) {
-                if (dir == Direction.DOWN || dir == facing) continue;
+                if (dir == Direction.DOWN || dir == facing) {
+                    continue;
+                }
                 BlockPos checkPos = worldPosition.offset(dir.getStepX(), yy + dir.getStepY(), dir.getStepZ());
                 // TC4: check for Brainbox (TileBrainbox) — not yet implemented in TR
                 // For now: check if it's a specific upgrade block
@@ -177,7 +181,9 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
     }
 
     public void findMatchingRecipe() {
-        if (level == null || inputStack.isEmpty()) return;
+        if (level == null || inputStack.isEmpty()) {
+            return;
+        }
         for (int a = 0; a < recipeIds.size(); a++) {
             CrucibleRecipe recipe = findRecipeById(recipeIds.get(a));
             if (recipe != null && recipe.catalystMatches(inputStack)) {
@@ -191,11 +197,17 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
     }
 
     public void completeRecipe() {
-        if (currentRecipe == null || currentCraft < 0 || currentCraft >= recipeIds.size()) return;
-        if (level == null || inputStack.isEmpty()) return;
+        if (currentRecipe == null || currentCraft < 0 || currentCraft >= recipeIds.size()) {
+            return;
+        }
+        if (level == null || inputStack.isEmpty()) {
+            return;
+        }
 
         // Check recipe match
-        if (!currentRecipe.matches(essentia, inputStack)) return;
+        if (!currentRecipe.matches(essentia, inputStack)) {
+            return;
+        }
 
         // Consume input
         inputStack = ItemStack.EMPTY;
@@ -206,7 +218,9 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
 
         // Get output
         ItemStack output = currentRecipe.getResultItem(level.registryAccess());
-        if (output.isEmpty()) return;
+        if (output.isEmpty()) {
+            return;
+        }
 
         // Try to put into adjacent inventory (facing direction)
         // TC4: InventoryUtils.placeItemStackIntoInventory + eject remaining
@@ -219,19 +233,14 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
             double ey = worldPosition.getY() + 0.33D;
             double ez = worldPosition.getZ() + 0.5D + facing.getStepZ() * 0.66D;
             ItemEntity ei = new ItemEntity(level, ex, ey, ez, remaining.copy());
-            ei.setDeltaMovement(
-                    0.075F * facing.getStepX(),
-                    0.02500000037252903D,
-                    0.075F * facing.getStepZ()
-            );
+            ei.setDeltaMovement(0.075F * facing.getStepX(), 0.02500000037252903D, 0.075F * facing.getStepZ());
             level.addFreshEntity(ei);
             level.blockEvent(worldPosition, getBlockState().getBlock(), 0, 0);
         }
 
         // Sound — TC4: random.fizz
-        level.playSound(null, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5,
-                SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS,
-                0.25F, 2.6F + (level.random.nextFloat() - level.random.nextFloat()) * 0.8F);
+        level.playSound(null, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, SoundEvents.FIRE_EXTINGUISH,
+                SoundSource.BLOCKS, 0.25F, 2.6F + (level.random.nextFloat() - level.random.nextFloat()) * 0.8F);
 
         currentCraft = -1;
         syncToClient();
@@ -239,8 +248,9 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
     }
 
     public void fill() {
-        if (level == null || currentSuction == null || currentCraft < 0
-                || currentCraft >= recipeEssentia.size()) return;
+        if (level == null || currentSuction == null || currentCraft < 0 || currentCraft >= recipeEssentia.size()) {
+            return;
+        }
 
         // TC4: check adjacent for IEssentiaTransport at y and y+1
         // Since essentia transport isn't in TR yet, this does nothing
@@ -248,10 +258,13 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
     }
 
     public int addToContainer(ResourceLocation tt, int am) {
-        if (currentRecipe == null || currentCraft < 0 || currentCraft >= recipeEssentia.size())
+        if (currentRecipe == null || currentCraft < 0 || currentCraft >= recipeEssentia.size()) {
             return am;
+        }
         int ce = recipeEssentia.get(currentCraft).getOrDefault(tt, 0) - essentia.getOrDefault(tt, 0);
-        if (ce <= 0) return am;
+        if (ce <= 0) {
+            return am;
+        }
         int add = Math.min(ce, am);
         essentia.add(tt, add);
         syncToClient();
@@ -267,7 +280,9 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
 
     @Nullable
     private CrucibleRecipe findRecipeById(ResourceLocation id) {
-        if (level == null) return null;
+        if (level == null) {
+            return null;
+        }
         var recipes = level.getRecipeManager().getAllRecipesFor(RecipeTypeRegistry.CRUCIBLE.get());
         for (var holder : recipes) {
             if (holder.id().equals(id) && holder.value() instanceof CrucibleRecipe cr) {
@@ -284,14 +299,18 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
             recipeIds.remove(idx);
             recipeEssentia.remove(idx);
             recipePlayers.remove(idx);
-            if (currentCraft >= recipeIds.size()) currentCraft = -1;
+            if (currentCraft >= recipeIds.size()) {
+                currentCraft = -1;
+            }
             syncToClient();
             setChanged();
             return;
         }
 
         // Check if we have room
-        if (recipeIds.size() >= maxRecipes) return;
+        if (recipeIds.size() >= maxRecipes) {
+            return;
+        }
 
         // Add
         CrucibleRecipe recipe = findRecipeById(recipeId);
@@ -310,9 +329,13 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
 
     @Nullable
     public ItemStack getOutputForCycle(int index) {
-        if (index < 0 || index >= recipeIds.size()) return ItemStack.EMPTY;
+        if (index < 0 || index >= recipeIds.size()) {
+            return ItemStack.EMPTY;
+        }
         CrucibleRecipe recipe = findRecipeById(recipeIds.get(index));
-        if (recipe == null) return ItemStack.EMPTY;
+        if (recipe == null) {
+            return ItemStack.EMPTY;
+        }
         ItemStack out = recipe.getResultItem(level != null ? level.registryAccess() : null);
         return out.isEmpty() ? ItemStack.EMPTY : out.copy();
     }
@@ -372,8 +395,7 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
             inputStack = ItemStack.EMPTY;
         }
 
-        if (tag.contains("Essentia", net.minecraft.nbt.Tag.TAG_COMPOUND)
-                || tag.contains("Essentia", net.minecraft.nbt.Tag.TAG_LIST)) {
+        if (tag.contains("Essentia", net.minecraft.nbt.Tag.TAG_COMPOUND) || tag.contains("Essentia", net.minecraft.nbt.Tag.TAG_LIST)) {
             essentia.readFromNBT(tag.get("Essentia"));
         } else {
             essentia.clear();
@@ -381,7 +403,9 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
 
         facing = Direction.from3DDataValue(tag.getByte("Facing"));
         maxRecipes = tag.getByte("MaxRecipes");
-        if (maxRecipes < 1) maxRecipes = 1;
+        if (maxRecipes < 1) {
+            maxRecipes = 1;
+        }
 
         recipeIds.clear();
         recipeEssentia.clear();
@@ -481,7 +505,9 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
 
     @Override
     public ItemStack removeItem(int slot, int amount) {
-        if (slot != 0 || inputStack.isEmpty()) return ItemStack.EMPTY;
+        if (slot != 0 || inputStack.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
         ItemStack result = inputStack.split(amount);
         if (inputStack.isEmpty()) {
             inputStack = ItemStack.EMPTY;
@@ -492,7 +518,9 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
 
     @Override
     public ItemStack removeItemNoUpdate(int slot) {
-        if (slot != 0) return ItemStack.EMPTY;
+        if (slot != 0) {
+            return ItemStack.EMPTY;
+        }
         ItemStack result = inputStack;
         inputStack = ItemStack.EMPTY;
         setChanged();
@@ -509,7 +537,9 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements MenuProvider
 
     @Override
     public boolean stillValid(Player player) {
-        if (level == null) return false;
+        if (level == null) {
+            return false;
+        }
         return player.distanceToSqr(worldPosition.getX() + 0.5D, worldPosition.getY() + 0.5D, worldPosition.getZ() + 0.5D) <= 64.0D;
     }
 

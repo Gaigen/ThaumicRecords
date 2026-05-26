@@ -22,17 +22,17 @@ public class CrucibleBlockEntityRenderer implements BlockEntityRenderer<Crucible
 
     @Override
     @ParametersAreNonnullByDefault
-    public void render(CrucibleBlockEntity blockEntity, float partialTick,
-                       PoseStack poseStack, MultiBufferSource bufferSource,
-                       int packedLight, int packedOverlay) {
+    public void render(CrucibleBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight,
+                       int packedOverlay) {
 
-        if (!blockEntity.hasFluid()) return;
+        if (!blockEntity.hasFluid()) {
+            return;
+        }
 
         float fluidHeight = blockEntity.getFluidHeight();
 
-        TextureAtlasSprite waterSprite = Minecraft.getInstance()
-                .getTextureAtlas(net.minecraft.client.renderer.texture.TextureAtlas.LOCATION_BLOCKS)
-                .apply(ResourceLocation.withDefaultNamespace("block/water_still"));
+        TextureAtlasSprite waterSprite = Minecraft.getInstance().getTextureAtlas(net.minecraft.client.renderer.texture.TextureAtlas.LOCATION_BLOCKS).apply(
+                ResourceLocation.withDefaultNamespace("block/water_still"));
 
         IClientFluidTypeExtensions fluidExt = IClientFluidTypeExtensions.of(Fluids.WATER.defaultFluidState());
         int tintColor = fluidExt.getTintColor();
@@ -75,15 +75,8 @@ public class CrucibleBlockEntityRenderer implements BlockEntityRenderer<Crucible
         poseStack.popPose();
     }
 
-    private void addVertex(VertexConsumer consumer, PoseStack poseStack,
-                           float x, float y, float z,
-                           float u, float v,
-                           float r, float g, float b, float a,
+    private void addVertex(VertexConsumer consumer, PoseStack poseStack, float x, float y, float z, float u, float v, float r, float g, float b, float a,
                            int packedLight) {
-        consumer.addVertex(poseStack.last().pose(), x, y, z)
-                .setColor(r, g, b, a)
-                .setUv(u, v)
-                .setLight(packedLight)
-                .setNormal(0, 1, 0);
+        consumer.addVertex(poseStack.last().pose(), x, y, z).setColor(r, g, b, a).setUv(u, v).setLight(packedLight).setNormal(0, 1, 0);
     }
 }

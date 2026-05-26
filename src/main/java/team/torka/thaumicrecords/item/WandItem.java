@@ -28,15 +28,15 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.api.item.WandRod;
-import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.block.ThaumatoriumBlock;
+import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
+import team.torka.thaumicrecords.block.entity.CrucibleBlockEntity;
 import team.torka.thaumicrecords.block.part.ThaumatoriumPart;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
-import team.torka.thaumicrecords.block.entity.CrucibleBlockEntity;
 import team.torka.thaumicrecords.registry.WandCapRegistry;
 import team.torka.thaumicrecords.registry.WandRodRegistry;
 
@@ -141,6 +141,7 @@ public class WandItem extends Item {
     }
 
     /**
+     *
      */
     @Override
     @NotNull
@@ -150,7 +151,9 @@ public class WandItem extends Item {
         BlockPos pos = context.getClickedPos();
         Player player = context.getPlayer();
 
-        if (player == null) return InteractionResult.PASS;
+        if (player == null) {
+            return InteractionResult.PASS;
+        }
 
         BlockState state = level.getBlockState(pos);
 
@@ -158,9 +161,7 @@ public class WandItem extends Item {
             if (!level.isClientSide) {
                 BlockState crucibleState = BlockRegistry.CRUCIBLE.get().defaultBlockState();
                 level.setBlock(pos, crucibleState, 3);
-                level.playSound(null, pos,
-                        team.torka.thaumicrecords.registry.SoundRegistry.WAND.get(),
-                        net.minecraft.sounds.SoundSource.BLOCKS, 0.5F, 1.0F);
+                level.playSound(null, pos, team.torka.thaumicrecords.registry.SoundRegistry.WAND.get(), net.minecraft.sounds.SoundSource.BLOCKS, 0.5F, 1.0F);
             }
             return InteractionResult.SUCCESS;
         }
@@ -188,18 +189,16 @@ public class WandItem extends Item {
             if (stateBelow.is(BlockRegistry.ALCHEMICAL_CONSTRUCT.get()) && crucibleState.is(BlockRegistry.CRUCIBLE.get())) {
                 bottomPos = posBelow;
                 topPos = pos;
-            }
-            else if (stateAbove.is(BlockRegistry.ALCHEMICAL_CONSTRUCT.get()) && stateBelow.is(BlockRegistry.CRUCIBLE.get())) {
+            } else if (stateAbove.is(BlockRegistry.ALCHEMICAL_CONSTRUCT.get()) && stateBelow.is(BlockRegistry.CRUCIBLE.get())) {
                 bottomPos = pos;
                 topPos = posAbove;
             }
 
             if (bottomPos != null && topPos != null) {
                 if (!level.isClientSide) {
-                    level.setBlock(bottomPos, BlockRegistry.THAUMATORIUM.get().defaultBlockState()
-                            .setValue(ThaumatoriumBlock.PART, ThaumatoriumPart.BOTTOM), 3);
-                    level.setBlock(topPos, BlockRegistry.THAUMATORIUM.get().defaultBlockState()
-                            .setValue(ThaumatoriumBlock.PART, ThaumatoriumPart.TOP), 3);
+                    level.setBlock(bottomPos, BlockRegistry.THAUMATORIUM.get().defaultBlockState().setValue(ThaumatoriumBlock.PART, ThaumatoriumPart.BOTTOM),
+                            3);
+                    level.setBlock(topPos, BlockRegistry.THAUMATORIUM.get().defaultBlockState().setValue(ThaumatoriumBlock.PART, ThaumatoriumPart.TOP), 3);
 
                     if (level.getBlockEntity(bottomPos) instanceof team.torka.thaumicrecords.block.entity.ThaumatoriumBlockEntity thaum) {
                         thaum.facing = player.getDirection().getOpposite();
@@ -207,9 +206,8 @@ public class WandItem extends Item {
                         thaum.setChanged();
                     }
 
-                    level.playSound(null, topPos,
-                            team.torka.thaumicrecords.registry.SoundRegistry.WAND.get(),
-                            net.minecraft.sounds.SoundSource.BLOCKS, 0.5F, 1.0F);
+                    level.playSound(null, topPos, team.torka.thaumicrecords.registry.SoundRegistry.WAND.get(), net.minecraft.sounds.SoundSource.BLOCKS, 0.5F,
+                            1.0F);
                 }
                 return InteractionResult.SUCCESS;
             }

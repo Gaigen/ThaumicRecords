@@ -2,7 +2,11 @@ package team.torka.thaumicrecords.recipe;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.api.aspect.AspectList;
@@ -12,6 +16,7 @@ import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
+ *
  */
 public record CrucibleRecipe(Ingredient catalyst, AspectList requiredAspects, ItemStack result) implements Recipe<RecipeInput> {
 
@@ -20,29 +25,40 @@ public record CrucibleRecipe(Ingredient catalyst, AspectList requiredAspects, It
     }
 
     /**
+     *
      */
     public boolean matches(AspectList availableAspects, ItemStack catalystStack) {
-        if (!catalyst.test(catalystStack)) return false;
+        if (!catalyst.test(catalystStack)) {
+            return false;
+        }
         for (var entry : requiredAspects.entrySet()) {
             int available = availableAspects.getOrDefault(entry.getKey(), 0);
-            if (available < entry.getValue()) return false;
+            if (available < entry.getValue()) {
+                return false;
+            }
         }
         return true;
     }
 
     /**
+     *
      */
     public boolean catalystMatches(ItemStack stack) {
         return catalyst.test(stack);
     }
 
     /**
+     *
      */
     public boolean matches(ItemStack inputItem, AspectList availableAspects) {
-        if (!catalyst.test(inputItem)) return false;
+        if (!catalyst.test(inputItem)) {
+            return false;
+        }
         for (var entry : requiredAspects.entrySet()) {
             int available = availableAspects.getOrDefault(entry.getKey(), 0);
-            if (available < entry.getValue()) return false;
+            if (available < entry.getValue()) {
+                return false;
+            }
         }
         return true;
     }

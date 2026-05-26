@@ -53,7 +53,9 @@ public class ThaumatoriumMenu extends AbstractContainerMenu {
 
             @Override
             public ItemStack remove(int amount) {
-                if (cachedSlotStack.isEmpty()) return ItemStack.EMPTY;
+                if (cachedSlotStack.isEmpty()) {
+                    return ItemStack.EMPTY;
+                }
                 ItemStack result = cachedSlotStack.split(amount);
                 if (cachedSlotStack.isEmpty()) {
                     cachedSlotStack = ItemStack.EMPTY;
@@ -88,6 +90,7 @@ public class ThaumatoriumMenu extends AbstractContainerMenu {
     }
 
     /**
+     *
      */
     @Override
     @ParametersAreNonnullByDefault
@@ -103,17 +106,16 @@ public class ThaumatoriumMenu extends AbstractContainerMenu {
         ItemStack inputStack = cachedSlotStack;
 
         if (!inputStack.isEmpty() || !blockEntity.recipeIds.isEmpty()) {
-            net.minecraft.world.item.crafting.RecipeManager recipeManager = blockEntity.getLevel() != null
-                    ? blockEntity.getLevel().getRecipeManager()
-                    : null;
-            if (recipeManager == null) return;
+            net.minecraft.world.item.crafting.RecipeManager recipeManager = blockEntity.getLevel() != null ? blockEntity.getLevel().getRecipeManager() : null;
+            if (recipeManager == null) {
+                return;
+            }
             var allRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegistry.CRUCIBLE.get());
             for (var holder : allRecipes) {
                 CrucibleRecipe recipe = holder.value();
                 if (recipe != null) {
                     boolean assigned = blockEntity.recipeIds.contains(holder.id());
-                    boolean matchesInput = !inputStack.isEmpty()
-                            && recipe.catalystMatches(inputStack);
+                    boolean matchesInput = !inputStack.isEmpty() && recipe.catalystMatches(inputStack);
                     if (matchesInput || assigned) {
                         recipes.add(recipe);
                         recipeIds.add(holder.id());
@@ -128,10 +130,14 @@ public class ThaumatoriumMenu extends AbstractContainerMenu {
      */
     @Override
     public boolean clickMenuButton(@NotNull Player player, int button) {
-        if (button < 0 || button >= recipes.size()) return false;
+        if (button < 0 || button >= recipes.size()) {
+            return false;
+        }
 
         CrucibleRecipe recipe = recipes.get(button);
-        if (blockEntity.getLevel() == null) return false;
+        if (blockEntity.getLevel() == null) {
+            return false;
+        }
         var allRecipes = blockEntity.getLevel().getRecipeManager().getAllRecipesFor(RecipeTypeRegistry.CRUCIBLE.get());
         ResourceLocation targetId = null;
         for (var holder : allRecipes) {
@@ -140,7 +146,9 @@ public class ThaumatoriumMenu extends AbstractContainerMenu {
                 break;
             }
         }
-        if (targetId == null) return false;
+        if (targetId == null) {
+            return false;
+        }
 
         blockEntity.toggleRecipe(targetId, player.getScoreboardName());
         return true;
@@ -158,15 +166,21 @@ public class ThaumatoriumMenu extends AbstractContainerMenu {
     @ParametersAreNonnullByDefault
     public ItemStack quickMoveStack(Player player, int slotIndex) {
         Slot slot = this.slots.get(slotIndex);
-        if (!slot.hasItem()) return ItemStack.EMPTY;
+        if (!slot.hasItem()) {
+            return ItemStack.EMPTY;
+        }
 
         ItemStack stack = slot.getItem();
         ItemStack original = stack.copy();
 
         if (slotIndex == 0) {
-            if (!moveItemStackTo(stack, 1, 37, true)) return ItemStack.EMPTY;
+            if (!moveItemStackTo(stack, 1, 37, true)) {
+                return ItemStack.EMPTY;
+            }
         } else {
-            if (!moveItemStackTo(stack, 0, 1, false)) return ItemStack.EMPTY;
+            if (!moveItemStackTo(stack, 0, 1, false)) {
+                return ItemStack.EMPTY;
+            }
         }
 
         if (stack.isEmpty()) {

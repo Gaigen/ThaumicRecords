@@ -74,7 +74,9 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
     @Override
     @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        if (state.getValue(PART) != ThaumatoriumPart.BOTTOM) return null;
+        if (state.getValue(PART) != ThaumatoriumPart.BOTTOM) {
+            return null;
+        }
         if (level.isClientSide) {
             return createTickerHelper(blockEntityType, BlockEntityRegistry.THAUMATORIUM.get(),
                     (lvl, pos, st, be) -> ThaumatoriumBlockEntity.clientTick(lvl, pos, st, be));
@@ -120,9 +122,11 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
     @NotNull
     @Override
     @ParametersAreNonnullByDefault
-    protected ItemInteractionResult useItemOn(ItemStack heldItem, BlockState state, Level level, BlockPos pos,
-                                               Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (level.isClientSide) return ItemInteractionResult.SUCCESS;
+    protected ItemInteractionResult useItemOn(ItemStack heldItem, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+                                              BlockHitResult hitResult) {
+        if (level.isClientSide) {
+            return ItemInteractionResult.SUCCESS;
+        }
 
         BlockPos bottomPos = state.getValue(PART) == ThaumatoriumPart.BOTTOM ? pos : pos.below();
         BlockEntity be = level.getBlockEntity(bottomPos);
@@ -135,8 +139,7 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
                 return ItemInteractionResult.SUCCESS;
             }
 
-            player.openMenu(new SimpleMenuProvider((id, inv, p) -> new ThaumatoriumMenu(id, inv, thaum),
-                    thaum.getDisplayName()), bottomPos);
+            player.openMenu(new SimpleMenuProvider((id, inv, p) -> new ThaumatoriumMenu(id, inv, thaum), thaum.getDisplayName()), bottomPos);
         }
         return ItemInteractionResult.SUCCESS;
     }
