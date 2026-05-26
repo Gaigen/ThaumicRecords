@@ -40,6 +40,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.FORTRESS_HELMET.get());
         basicItem(ItemRegistry.FORTRESS_CHESTPLATE.get());
         basicItem(ItemRegistry.FORTRESS_LEGGINGS.get());
+        basicItem(ItemRegistry.BOOTS_TRAVELLER.get());
         basicItem(ItemRegistry.WISP_ESSENCE.get());
         basicItem(ItemRegistry.SCRIBING_TOOLS.get());
         withExistingParent(ItemRegistry.SILVERWOOD_SAPLING.getId().getPath(), mcLoc("item/generated")).texture("layer0", modLoc("block/silverwood_sapling"));

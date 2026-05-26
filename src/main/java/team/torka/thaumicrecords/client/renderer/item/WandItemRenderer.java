@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -60,10 +59,10 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
 
         poseStack.pushPose();
         poseStack.scale(1.2f, 1.0f, 1.2f);
-        model.cap.render(poseStack, capBuf, LightTexture.FULL_BRIGHT, packedOverlay);
+        model.cap.render(poseStack, capBuf, packedLight, packedOverlay);
 
         poseStack.pushPose();
-        model.capBottom.render(poseStack, capBuf, LightTexture.FULL_BRIGHT, packedOverlay);
+        model.capBottom.render(poseStack, capBuf, packedLight, packedOverlay);
         poseStack.popPose();
 
         poseStack.popPose();

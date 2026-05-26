@@ -14,6 +14,7 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.data.component.AspectListComponent;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
+import team.torka.thaumicrecords.item.BootsTravellerItem;
 import team.torka.thaumicrecords.item.FortressArmorItem;
 import team.torka.thaumicrecords.item.GogglesItem;
 import team.torka.thaumicrecords.item.PrimordialPearItem;
@@ -52,6 +53,10 @@ public class ItemRegistry {
             () -> new FortressArmorItem(ArmorItem.Type.CHESTPLATE, ArmorMaterialRegistry.FORTRESS));
     public static final DeferredItem<FortressArmorItem> FORTRESS_LEGGINGS = REGISTRAR.register("fortress_leggings",
             () -> new FortressArmorItem(ArmorItem.Type.LEGGINGS, ArmorMaterialRegistry.FORTRESS));
+
+    // Boots of the Traveller
+    public static final DeferredItem<BootsTravellerItem> BOOTS_TRAVELLER = REGISTRAR.register("boots_traveller",
+            () -> new BootsTravellerItem(ArmorItem.Type.BOOTS, ArmorMaterialRegistry.TRAVELLER));
 
     public static final DeferredItem<Item> WAND_CAP_IRON = REGISTRAR.registerSimpleItem("wand_cap_iron");
     public static final DeferredItem<Item> WAND_CAP_GOLD = REGISTRAR.registerSimpleItem("wand_cap_gold");
@@ -152,6 +157,7 @@ public class ItemRegistry {
         output.accept(FORTRESS_HELMET);
         output.accept(FORTRESS_CHESTPLATE);
         output.accept(FORTRESS_LEGGINGS);
+        output.accept(BOOTS_TRAVELLER);
         output.accept(TABLE);
         output.accept(SCRIBING_TOOLS);
         output.accept(ARCANE_WORKBENCH);
