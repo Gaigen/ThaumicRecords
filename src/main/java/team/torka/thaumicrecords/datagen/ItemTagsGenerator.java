@@ -21,9 +21,8 @@ public class ItemTagsGenerator extends ItemTagsProvider {
     @Override
     @ParametersAreNonnullByDefault
     protected void addTags(HolderLookup.Provider provider) {
-        this.tag(ModTags.SHARD).add(ItemRegistry.AER_SHARD.get()).add(ItemRegistry.IGNIS_SHARD.get()).add(ItemRegistry.AQUA_SHARD.get()).add(
-                ItemRegistry.TERRA_SHARD.get()).add(ItemRegistry.ORDO_SHARD.get()).add(ItemRegistry.PERDITIO_SHARD.get()).add(
-                ItemRegistry.BALANCED_SHARD.get());
+        this.tag(ModTags.SHARD).add(ItemRegistry.AER_SHARD.get(), ItemRegistry.IGNIS_SHARD.get(), ItemRegistry.AQUA_SHARD.get(), ItemRegistry.TERRA_SHARD.get(),
+                ItemRegistry.ORDO_SHARD.get(), ItemRegistry.PERDITIO_SHARD.get(), ItemRegistry.BALANCED_SHARD.get());
         this.tag(ModTags.SHOW_NODE_WHEN_EQUIPPED).add(ItemRegistry.GOGGLES.get());
         this.tag(ModTags.SHOW_NODE_WHEN_HELD).add(ItemRegistry.THAUMOMETER.get());
     }
