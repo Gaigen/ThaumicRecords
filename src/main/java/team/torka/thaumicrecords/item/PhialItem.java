@@ -66,4 +66,9 @@ public class PhialItem extends Item implements IEssentiaContainerItem {
     public int capacity() {
         return 8;
     }
+
+    @Override
+    public void onEmpty(ItemStack stack) {
+
+    }
 }

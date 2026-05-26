@@ -67,4 +67,9 @@ public class WispEssenceItem extends Item implements IEssentiaContainerItem {
         return 2;
     }
 
+    @Override
+    public void onEmpty(ItemStack stack) {
+
+    }
+
 }
