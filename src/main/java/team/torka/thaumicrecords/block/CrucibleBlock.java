@@ -2,6 +2,10 @@ package team.torka.thaumicrecords.block;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -132,7 +136,7 @@ public class CrucibleBlock extends BaseEntityBlock {
             if (result.bounced) {
                 itemEntity.setDeltaMovement((level.random.nextFloat() - level.random.nextFloat()) * 0.2, 0.35,
                         (level.random.nextFloat() - level.random.nextFloat()) * 0.2);
-                level.playSound(null, pos, net.minecraft.sounds.SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.NEUTRAL, 0.2F,
+                level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.2F,
                         ((level.random.nextFloat() - level.random.nextFloat()) * 0.7F) + 1.0F);
                 return;
             }
@@ -145,11 +149,11 @@ public class CrucibleBlock extends BaseEntityBlock {
 
             if (!result.craftOut.isEmpty()) {
                 ejectItem(level, pos, result.craftOut);
-                level.playSound(null, pos, team.torka.thaumicrecords.registry.SoundRegistry.BUBBLE.get(), net.minecraft.sounds.SoundSource.BLOCKS, 0.2F,
+                level.playSound(null, pos, team.torka.thaumicrecords.registry.SoundRegistry.BUBBLE.get(), SoundSource.BLOCKS, 0.2F,
                         1.0F + level.random.nextFloat() * 0.4F);
                 level.blockEvent(pos, state.getBlock(), 2, 5);
             } else {
-                level.playSound(null, pos, team.torka.thaumicrecords.registry.SoundRegistry.BUBBLE.get(), net.minecraft.sounds.SoundSource.BLOCKS, 0.2F,
+                level.playSound(null, pos, team.torka.thaumicrecords.registry.SoundRegistry.BUBBLE.get(), SoundSource.BLOCKS, 0.2F,
                         1.0F + level.random.nextFloat() * 0.4F);
                 level.blockEvent(pos, state.getBlock(), 2, 1);
             }
@@ -163,8 +167,7 @@ public class CrucibleBlock extends BaseEntityBlock {
         delay = 0;
         if (crucible.isBoiling()) {
             entity.hurt(level.damageSources().inFire(), 1.0F);
-            level.playSound(null, pos, net.minecraft.sounds.SoundEvents.LAVA_EXTINGUISH, net.minecraft.sounds.SoundSource.BLOCKS, 0.4F,
-                    2.0F + level.random.nextFloat() * 0.4F);
+            level.playSound(null, pos, SoundEvents.LAVA_EXTINGUISH, SoundSource.BLOCKS, 0.4F, 2.0F + level.random.nextFloat() * 0.4F);
         }
     }
 
@@ -207,9 +210,9 @@ public class CrucibleBlock extends BaseEntityBlock {
             int fluid = crucible.getFluidLevel();
             int tags = crucible.tagAmount();
             int heat = crucible.getHeat();
-            player.sendSystemMessage(net.minecraft.network.chat.Component.literal(
+            player.sendSystemMessage(Component.literal(
                     "[Crucible] Heat: " + heat + "/" + CrucibleBlockEntity.HEAT_BOILING + " | Fluid: " + fluid + "/" + CrucibleBlockEntity.MAX_FLUID + " | " + "Aspects: " + tags));
-            crucible.getAspects().forEach((key, amount) -> player.sendSystemMessage(net.minecraft.network.chat.Component.literal("  " + key + " x" + amount)));
+            crucible.getAspects().forEach((key, amount) -> player.sendSystemMessage(Component.literal("  " + key + " x" + amount)));
             return ItemInteractionResult.SUCCESS;
         }
 
@@ -234,7 +237,7 @@ public class CrucibleBlock extends BaseEntityBlock {
         }
 
         if (heldItem.is(Items.POTION)) {
-            PotionContents contents = heldItem.get(net.minecraft.core.component.DataComponents.POTION_CONTENTS);
+            PotionContents contents = heldItem.get(DataComponents.POTION_CONTENTS);
             if (contents != null && contents.is(Potions.WATER)) {
                 if (!level.isClientSide && crucible.fillWithBottle()) {
                     if (!player.getAbilities().instabuild) {

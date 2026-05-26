@@ -15,11 +15,11 @@ import team.torka.thaumicrecords.block.entity.ArcanePedestalBlockEntity;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
-public class ArcanePedestalBlockEntityRenderer implements BlockEntityRenderer<ArcanePedestalBlockEntity> {
+public class ArcanePedestalRenderer implements BlockEntityRenderer<ArcanePedestalBlockEntity> {
 
     private final ItemRenderer itemRenderer;
 
-    public ArcanePedestalBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
+    public ArcanePedestalRenderer(BlockEntityRendererProvider.Context context) {
         this.itemRenderer = context.getItemRenderer();
     }
 

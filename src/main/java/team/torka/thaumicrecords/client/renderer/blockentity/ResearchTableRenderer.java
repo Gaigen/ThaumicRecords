@@ -22,7 +22,7 @@ import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
-public class ResearchTableBlockEntityRenderer implements BlockEntityRenderer<ResearchTableBlockEntity> {
+public class ResearchTableRenderer implements BlockEntityRenderer<ResearchTableBlockEntity> {
 
     private static final ResourceLocation TEXTURE = ThaumicRecords.createRl("textures/block/research_table.png");
     private static final ResourceLocation SCROLL = ThaumicRecords.createRl("textures/block/research_table_scroll.png");
@@ -30,7 +30,7 @@ public class ResearchTableBlockEntityRenderer implements BlockEntityRenderer<Res
     private static final ResourceLocation QUILL = ThaumicRecords.createRl("textures/misc/quill.png");
     private final ResearchTableModel model;
 
-    public ResearchTableBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
+    public ResearchTableRenderer(BlockEntityRendererProvider.Context context) {
         this.model = new ResearchTableModel(context.bakeLayer(CustomModelLayer.RESEARCH_TABLE));
     }
 

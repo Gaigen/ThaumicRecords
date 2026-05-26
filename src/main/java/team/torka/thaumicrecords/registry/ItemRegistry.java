@@ -100,9 +100,6 @@ public class ItemRegistry {
     public static final DeferredItem<BlockItem> CRUCIBLE = REGISTRAR.register("crucible",
             () -> new BlockItem(BlockRegistry.CRUCIBLE.get(), new Item.Properties()));
 
-    public static final DeferredItem<BlockItem> THAUMATORIUM = REGISTRAR.register("thaumatorium",
-            () -> new BlockItem(BlockRegistry.THAUMATORIUM.get(), new Item.Properties()));
-
     public static final DeferredItem<BlockItem> ALCHEMICAL_CONSTRUCT = REGISTRAR.register("alchemical_construct",
             () -> new BlockItem(BlockRegistry.ALCHEMICAL_CONSTRUCT.get(), new Item.Properties()));
     public static final DeferredItem<Item> SILVERWOOD_SAPLING = ItemRegistry.REGISTRAR.register("silverwood_sapling",
@@ -166,11 +163,7 @@ public class ItemRegistry {
         output.accept(GREATWOOD_LEAVES);
         output.accept(ARCANE_PEDESTAL);
         output.accept(CRUCIBLE);
-        output.accept(THAUMATORIUM);
         output.accept(ALCHEMICAL_CONSTRUCT);
-    }
-
-    public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(PRIMORDIAL_PEARL);
         output.accept(AURA_NODE);
     }

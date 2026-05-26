@@ -1,7 +1,6 @@
 {
   "creative_mode_tab.thaumicrecords.tab": "神秘记录",
   "creative_mode_tab.thaumicrecords.wisp_essence": "天域之华",
-  "creative_mode_tab.thaumicrecords.wip_tab": "[WIP]神秘记录",
   "tooltip.thaumicrecords.wand.bad_component": "未知数据",
   "tooltip.thaumicrecords.wand.capacity": "容量 %1$s",
   "tooltip.thaumicrecords.wand.average_modifier": "(%1$s%% 平均魔力消耗)",
@@ -61,7 +60,7 @@
   "block.thaumicrecords.greatwood_log": "宏伟之木原木",
   "block.thaumicrecords.greatwood_leaves": "宏伟之木树叶",
   "block.thaumicrecords.arcane_pedestal": "奥术基座",
-  "sound.thaumicrecords.node_break": "灵气节点被破坏",
+  "sound.thaumicrecords.craft_fail": "合成失败",
   "wand_cap.thaumicrecords.iron": "铁杖端",
   "wand_cap.thaumicrecords.gold": "金杖端",
   "wand_cap.thaumicrecords.thaumium": "神秘杖端",
