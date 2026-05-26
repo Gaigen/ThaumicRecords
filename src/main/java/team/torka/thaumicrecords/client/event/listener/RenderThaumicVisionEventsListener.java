@@ -30,7 +30,7 @@ public class RenderThaumicVisionEventsListener {
     }
 
     @SubscribeEvent
-    public static void onNodeEvent(RenderThaumicVisionEvent.Aspect event) {
+    public static void onAspectEvent(RenderThaumicVisionEvent.Aspect event) {
         Player player = event.getPlayer();
         if (Objects.isNull(player)) {
             return;
