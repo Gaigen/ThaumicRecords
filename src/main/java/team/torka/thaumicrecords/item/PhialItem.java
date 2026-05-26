@@ -1,22 +1,69 @@
 package team.torka.thaumicrecords.item;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.aspect.IEssentiaContainerItem;
+import team.torka.thaumicrecords.data.component.AspectListComponent;
+import team.torka.thaumicrecords.registry.AspectRegistry;
+import team.torka.thaumicrecords.registry.DataComponentRegistry;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
+import java.util.Objects;
 
 public class PhialItem extends Item implements IEssentiaContainerItem {
-    public PhialItem(Properties properties) {
-        super(properties);
+    public PhialItem() {
+        super(new Properties());
     }
 
     @Override
-    public AspectList getAspects(ItemStack paramItemStack) {
-        return null;
+    @ParametersAreNonnullByDefault
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
+        AspectList aspects = getAspects(stack);
+        if (!aspects.isEmpty()) {
+            aspects.forEach((aspect, amount) -> {
+                Aspect aspect1 = AspectRegistry.ASPECT_REGISTRY.get(aspect);
+                if (!Objects.isNull(aspect1)) {
+                    tooltip.add(Component.translatable(aspect1.getNameTranslationKey()).append(" x" + amount).withStyle(ChatFormatting.GRAY));
+                } else {
+                    tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "unknown_aspect")));
+                }
+            });
+        }
+    }
+
+    public AspectList getAspects(ItemStack stack) {
+        return stack.getOrDefault(DataComponentRegistry.ASPECT_LIST.get(), new AspectListComponent(AspectList.empty())).getAspects();
     }
 
     @Override
-    public void setAspects(ItemStack paramItemStack, AspectList paramAspectList) {
+    public void setAspects(ItemStack stack, AspectList paramAspectList) {
+        stack.set(DataComponentRegistry.ASPECT_LIST.get(), new AspectListComponent(paramAspectList));
+    }
 
+    @Override
+    public boolean isVariable() {
+        return false;
+    }
+
+    @Override
+    public boolean isLiquid() {
+        return true;
+    }
+
+    @Override
+    public int poursBy() {
+        return 8;
+    }
+
+    @Override
+    public int capacity() {
+        return 8;
     }
 }

@@ -8,6 +8,7 @@ import net.minecraft.world.item.TooltipFlag;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.api.aspect.IEssentiaContainerItem;
 import team.torka.thaumicrecords.data.component.AspectListComponent;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
@@ -16,7 +17,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
 
-public class WispEssenceItem extends Item {
+public class WispEssenceItem extends Item implements IEssentiaContainerItem {
     public WispEssenceItem() {
         super(new Properties());
     }
@@ -39,6 +40,31 @@ public class WispEssenceItem extends Item {
 
     public AspectList getAspects(ItemStack stack) {
         return stack.getOrDefault(DataComponentRegistry.ASPECT_LIST.get(), new AspectListComponent(AspectList.empty())).getAspects();
+    }
+
+    @Override
+    public void setAspects(ItemStack stack, AspectList paramAspectList) {
+        stack.set(DataComponentRegistry.ASPECT_LIST.get(), new AspectListComponent(paramAspectList));
+    }
+
+    @Override
+    public boolean isVariable() {
+        return false;
+    }
+
+    @Override
+    public boolean isLiquid() {
+        return false;
+    }
+
+    @Override
+    public int poursBy() {
+        return 0;
+    }
+
+    @Override
+    public int capacity() {
+        return 2;
     }
 
 }

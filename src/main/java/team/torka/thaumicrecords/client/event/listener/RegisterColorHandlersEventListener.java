@@ -9,6 +9,7 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
+import team.torka.thaumicrecords.item.PhialItem;
 import team.torka.thaumicrecords.item.WispEssenceItem;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.BlockRegistry;
@@ -35,6 +36,7 @@ public class RegisterColorHandlersEventListener {
                 }
                 return aspect.getARGBColor();
             } else {
+                // Wisp Essence blinking for creative tab
                 int registrySize = AspectRegistry.ASPECT_REGISTRY.size();
                 if (registrySize == 0) {
                     return -1;
@@ -43,6 +45,22 @@ public class RegisterColorHandlersEventListener {
                 return AspectRegistry.ASPECT_REGISTRY.stream().skip(index).findFirst().map(Aspect::getARGBColor).orElse(-1);
             }
         }, ItemRegistry.WISP_ESSENCE.get());
+
+        event.register((stack, tintIndex) -> {
+            if (tintIndex != 1) {
+                return -1;
+            }
+            PhialItem item = (PhialItem) stack.getItem();
+            AspectList aspects = item.getAspects(stack);
+            if (!aspects.isEmpty()) {
+                Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(aspects.firstEntry().getKey());
+                if (Objects.isNull(aspect)) {
+                    return -1;
+                }
+                return aspect.getARGBColor();
+            }
+            return -1;
+        }, ItemRegistry.PHIAL.get());
 
         event.register((stack, tintIndex) -> {
             if (tintIndex == 1) {

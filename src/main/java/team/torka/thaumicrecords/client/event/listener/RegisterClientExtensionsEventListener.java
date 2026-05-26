@@ -11,7 +11,13 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import team.torka.thaumicrecords.client.renderer.item.*;
+import team.torka.thaumicrecords.client.renderer.item.ArcaneWorkbenchItemRenderer;
+import team.torka.thaumicrecords.client.renderer.item.AuraNodeItemRenderer;
+import team.torka.thaumicrecords.client.renderer.item.JarItemRenderer;
+import team.torka.thaumicrecords.client.renderer.item.PhialItemRenderer;
+import team.torka.thaumicrecords.client.renderer.item.TableItemRenderer;
+import team.torka.thaumicrecords.client.renderer.item.ThaumometerItemRenderer;
+import team.torka.thaumicrecords.client.renderer.item.WandItemRenderer;
 import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 import team.torka.thaumicrecords.registry.ParticleRegistry;
@@ -35,6 +41,7 @@ public class RegisterClientExtensionsEventListener {
         event.registerItem(TableItemRenderer.INSTANCE.getExtensions(), ItemRegistry.TABLE.get());
         event.registerItem(ThaumometerItemRenderer.INSTANCE.getExtensions(), ItemRegistry.THAUMOMETER.get());
         event.registerItem(JarItemRenderer.INSTANCE.getExtensions(), ItemRegistry.JAR.get());
+        event.registerItem(PhialItemRenderer.INSTANCE.getExtensions(), ItemRegistry.PHIAL.get());
     }
 
     private static void registerBlockExtensions(RegisterClientExtensionsEvent event) {
