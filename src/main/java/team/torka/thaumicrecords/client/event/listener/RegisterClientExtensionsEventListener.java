@@ -45,7 +45,6 @@ public class RegisterClientExtensionsEventListener {
         event.registerItem(TableItemRenderer.INSTANCE.getExtensions(), ItemRegistry.TABLE.get());
         event.registerItem(ThaumometerItemRenderer.INSTANCE.getExtensions(), ItemRegistry.THAUMOMETER.get());
         event.registerItem(JarItemRenderer.INSTANCE.getExtensions(), ItemRegistry.JAR.get());
-//        event.registerItem(PhialItemRenderer.INSTANCE.getExtensions(), ItemRegistry.PHIAL.get());
         event.registerItem(FortressArmorItem.getExtensions(), ItemRegistry.FORTRESS_HELMET.get());
         event.registerItem(FortressArmorItem.getExtensions(), ItemRegistry.FORTRESS_CHESTPLATE.get());
         event.registerItem(FortressArmorItem.getExtensions(), ItemRegistry.FORTRESS_LEGGINGS.get());
