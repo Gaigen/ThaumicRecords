@@ -250,6 +250,8 @@ public class ItemRegistry {
         output.accept(PRIMAL_CHARM);
         output.accept(ENCHANTED_FABRIC);
         output.accept(COIN);
+        output.accept(PRIMORDIAL_PEARL);
+        output.accept(AURA_NODE);
         output.accept(AER_SHARD);
         output.accept(IGNIS_SHARD);
         output.accept(AQUA_SHARD);
@@ -334,11 +336,6 @@ public class ItemRegistry {
             }
             output.accept(stack);
         });
-    }
-
-    public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
-        output.accept(PRIMORDIAL_PEARL);
-        output.accept(AURA_NODE);
     }
 
     public static void putInWispEssenceCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
