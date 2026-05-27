@@ -42,6 +42,8 @@ public class BlockStateGenerator extends BlockStateProvider {
                 .texture("all", modLoc("block/greatwood_leaves"))
                 .renderType("cutout"));
         simpleBlock(BlockRegistry.GREATWOOD_SAPLING.get(), models().cross("greatwood_sapling", modLoc("block/greatwood_sapling")).renderType("cutout"));
+        simpleBlock(BlockRegistry.PAVING_STONE_OF_TRAVEL.get(), models().cubeAll("paving_stone_of_travel", modLoc("block/paving_stone_of_travel")));
+        simpleBlock(BlockRegistry.PAVING_STONE_OF_WARDING.get(), models().cubeAll("paving_stone_of_warding", modLoc("block/paving_stone_of_warding")));
     }
 
     private ModelBuilder<BlockModelBuilder> multiLayersCubeAll(String name, ResourceLocation layer0, ResourceLocation layer1) {

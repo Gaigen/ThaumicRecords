@@ -91,6 +91,8 @@ public class ItemModelGenerator extends ItemModelProvider {
         simpleBlockItem(BlockRegistry.SILVERWOOD_LOG.get());
         simpleBlockItem(BlockRegistry.GREATWOOD_LEAVES.get());
         simpleBlockItem(BlockRegistry.GREATWOOD_LOG.get());
+        simpleBlockItem(BlockRegistry.PAVING_STONE_OF_TRAVEL.get());
+        simpleBlockItem(BlockRegistry.PAVING_STONE_OF_WARDING.get());
         withExistingParent(ItemRegistry.ARCANE_PEDESTAL.getId().getPath(), modLoc("block/arcane_pedestal"));
 
         // Thaumium Tools

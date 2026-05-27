@@ -201,6 +201,10 @@ public class ItemRegistry {
     public static final DeferredItem<ResearchNotesItem> RESEARCH_NOTES=REGISTRAR.register("research_notes",ResearchNotesItem::new);
 
     // Block Items
+    public static final DeferredItem<BlockItem> PAVING_STONE_OF_TRAVEL = REGISTRAR.register("paving_stone_of_travel",
+            () -> new BlockItem(BlockRegistry.PAVING_STONE_OF_TRAVEL.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> PAVING_STONE_OF_WARDING = REGISTRAR.register("paving_stone_of_warding",
+            () -> new BlockItem(BlockRegistry.PAVING_STONE_OF_WARDING.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> AER_INFUSED_STONE = REGISTRAR.register("aer_infused_stone",
             () -> new BlockItem(BlockRegistry.AER_INFUSED_STONE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> IGNIS_INFUSED_STONE = REGISTRAR.register("ignis_infused_stone",
@@ -339,6 +343,10 @@ public class ItemRegistry {
         output.accept(CRUCIBLE);
         output.accept(ALCHEMICAL_CONSTRUCT);
         output.accept(JAR);
+        output.accept(PRIMORDIAL_PEARL);
+        output.accept(AURA_NODE);
+        output.accept(PAVING_STONE_OF_TRAVEL);
+        output.accept(PAVING_STONE_OF_WARDING);
     }
 
     public static void putInPhialCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {

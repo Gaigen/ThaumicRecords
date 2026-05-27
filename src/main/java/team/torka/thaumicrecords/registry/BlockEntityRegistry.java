@@ -13,6 +13,7 @@ import team.torka.thaumicrecords.block.entity.JarBlockEntity;
 import team.torka.thaumicrecords.block.entity.ResearchTableBlockEntity;
 import team.torka.thaumicrecords.block.entity.TableBlockEntity;
 import team.torka.thaumicrecords.block.entity.ThaumatoriumBlockEntity;
+import team.torka.thaumicrecords.block.entity.WardingStoneBlockEntity;
 
 public class BlockEntityRegistry {
 
@@ -41,4 +42,7 @@ public class BlockEntityRegistry {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<JarBlockEntity>> JAR = REGISTRAR.register("jar",
             () -> BlockEntityType.Builder.of(JarBlockEntity::new, BlockRegistry.JAR.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WardingStoneBlockEntity>> WARDING_STONE = REGISTRAR.register("warding_stone",
+            () -> BlockEntityType.Builder.of(WardingStoneBlockEntity::new, BlockRegistry.PAVING_STONE_OF_WARDING.get()).build(null));
 }

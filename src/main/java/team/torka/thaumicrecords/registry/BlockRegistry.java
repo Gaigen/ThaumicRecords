@@ -24,6 +24,9 @@ import team.torka.thaumicrecords.block.JarBlock;
 import team.torka.thaumicrecords.block.ResearchTableBlock;
 import team.torka.thaumicrecords.block.TableBlock;
 import team.torka.thaumicrecords.block.ThaumatoriumBlock;
+import team.torka.thaumicrecords.block.PavingStoneOfTravelBlock;
+import team.torka.thaumicrecords.block.PavingStoneOfWardingBlock;
+import team.torka.thaumicrecords.block.WardingBarrierBlock;
 import team.torka.thaumicrecords.world.tree.TreeGrowers;
 
 
@@ -166,4 +169,27 @@ public class BlockRegistry {
             () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LOG)));
     public static final DeferredBlock<Block> GREATWOOD_LEAVES = REGISTRAR.register("greatwood_leaves",
             () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).lightLevel(state -> 7)));
+
+    public static final DeferredBlock<PavingStoneOfTravelBlock> PAVING_STONE_OF_TRAVEL = REGISTRAR.register("paving_stone_of_travel",
+            () -> new PavingStoneOfTravelBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(2.0F, 10.0F)
+                    .lightLevel(state -> 9)
+                    .sound(SoundType.STONE)));
+
+    public static final DeferredBlock<PavingStoneOfWardingBlock> PAVING_STONE_OF_WARDING = REGISTRAR.register("paving_stone_of_warding",
+            () -> new PavingStoneOfWardingBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(2.0F, 10.0F)
+                    .sound(SoundType.STONE)));
+
+    public static final DeferredBlock<WardingBarrierBlock> WARDING_BARRIER = REGISTRAR.register("warding_barrier",
+            () -> new WardingBarrierBlock(BlockBehaviour.Properties.of()
+                    .replaceable()
+                    .noCollission()
+                    .strength(-1.0F, 3600000.0F)
+                    .noLootTable()
+                    .pushReaction(PushReaction.BLOCK)));
 }
