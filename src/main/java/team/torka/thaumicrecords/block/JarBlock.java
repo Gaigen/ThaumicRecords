@@ -17,8 +17,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import team.torka.thaumicrecords.api.aspect.AspectList;
-import team.torka.thaumicrecords.api.aspect.IEssentiaContainerEntity;
 import team.torka.thaumicrecords.api.aspect.IEssentiaContainerItem;
 import team.torka.thaumicrecords.block.entity.JarBlockEntity;
 
@@ -38,26 +36,28 @@ public class JarBlock extends BaseEntityBlock {
             }
             if (!level.isClientSide) {
                 BlockEntity be = level.getBlockEntity(pos);
-                if (be instanceof IEssentiaContainerEntity jarBlockEntity) {
-                    AspectList aspectList = itemContainer.getAspects(stack);
-                    ResourceLocation aspectResourceKey = aspectList.firstEntry().getKey();
-                    int itemContainerAmount = aspectList.get(aspectList.firstEntry().getKey());
+
+                if (be instanceof JarBlockEntity jarBlockEntity) {
+
+                    int itemContainerAmount = itemContainer.storedAmount(stack);
+                    ResourceLocation aspectResourceKey = itemContainer.getStoredAspectResource(stack);
+
                     if (itemContainer.canBePartiallyPoured()) {
-                        int pouringAmount = Math.min(itemContainerAmount, itemContainer.poursBy()); //that thing
-                        if (jarBlockEntity.addAspect(aspectResourceKey, pouringAmount)) {
+//                          NOT IMPLEMENTED
+//                        int pouringAmount = Math.min(itemContainerAmount, itemContainer.poursBy()); //that thing
+//                        if (jarBlockEntity.addAspect(itemContainer, pouringAmount)) {
 //                            aspectList.put(aspectResourceKey, itemContainerAmount - pouringAmount);
-                            itemContainer.wasPoured(stack, player, pouringAmount);
-                            return ItemInteractionResult.SUCCESS;
-                        } else {
-                            return ItemInteractionResult.FAIL;
-                        }
+//                            itemContainer.wasPoured(stack, player, pouringAmount);
+//                            return ItemInteractionResult.SUCCESS;
+//                        } else {
+//                            return ItemInteractionResult.FAIL;
+//                        }
                     } else {
                         if (itemContainer.poursBy() != itemContainerAmount) {
                             return ItemInteractionResult.FAIL;
                         }
                         int pouringAmount = itemContainer.poursBy();
                         if (jarBlockEntity.addAspect(aspectResourceKey, pouringAmount)) {
-//                            aspectList.put(aspectResourceKey, itemContainerAmount - pouringAmount);
                             itemContainer.onEmpty(stack, player);
                             return ItemInteractionResult.SUCCESS;
                         } else {

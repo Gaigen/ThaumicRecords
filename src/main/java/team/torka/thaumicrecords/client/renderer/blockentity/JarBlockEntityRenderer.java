@@ -46,9 +46,9 @@ public class JarBlockEntityRenderer implements BlockEntityRenderer<JarBlockEntit
             float v0 = (float) frame / totalFrames;
             float v1 = (float) (frame + 1) / totalFrames;
 
-            float fillPercent = blockEntity.storedAmount() / blockEntity.capacity();
+            float fillPercent = ((float) blockEntity.storedAmount()) / ((float) blockEntity.capacity());
 
-            Aspect aspect = blockEntity.getMainAspect();
+            Aspect aspect = blockEntity.getStoredAspect();
             int color = aspect.getARGBColor();
             float r = ((color >> 16) & 0xFF) / 255f;
             float g = ((color >> 8) & 0xFF) / 255f;

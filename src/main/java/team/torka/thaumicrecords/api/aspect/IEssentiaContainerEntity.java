@@ -14,7 +14,10 @@ public interface IEssentiaContainerEntity extends IEssentiaContainer {
     boolean addAspect(ResourceLocation aspect, int amount);
 
     @Nullable
-    Aspect getMainAspect();
+    Aspect getStoredAspect();
+
+    @Nullable
+    ResourceLocation getStoredAspectResource();
 
     int storedAmount();
 }

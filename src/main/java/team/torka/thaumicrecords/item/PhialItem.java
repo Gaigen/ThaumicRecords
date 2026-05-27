@@ -2,10 +2,12 @@ package team.torka.thaumicrecords.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
@@ -50,6 +52,42 @@ public class PhialItem extends Item implements IEssentiaContainerItem {
     }
 
     @Override
+    public @Nullable Aspect getStoredAspect(ItemStack paramItemStack) {
+        if (paramItemStack.getItem() instanceof PhialItem item) {
+            AspectList list = getAspects(paramItemStack);
+            if (list.isEmpty()) {
+                return null;
+            }
+            return AspectRegistry.ASPECT_REGISTRY.get(getAspects(paramItemStack).firstEntry().getKey());
+        }
+        return null;
+    }
+
+    @Override
+    public @Nullable ResourceLocation getStoredAspectResource(ItemStack paramItemStack) {
+        if (paramItemStack.getItem() instanceof PhialItem item) {
+            AspectList list = getAspects(paramItemStack);
+            if (list.isEmpty()) {
+                return null;
+            }
+            return getAspects(paramItemStack).firstEntry().getKey();
+        }
+        return null;
+    }
+
+    @Override
+    public int storedAmount(ItemStack paramItemStack) {
+        if (paramItemStack.getItem() instanceof PhialItem item) {
+            AspectList list = getAspects(paramItemStack);
+            if (list.isEmpty()) {
+                return 0;
+            }
+            return list.get(getAspects(paramItemStack).firstEntry().getKey());
+        }
+        return 0;
+    }
+
+    @Override
     public boolean isVariable() {
         return false;
     }
@@ -71,11 +109,13 @@ public class PhialItem extends Item implements IEssentiaContainerItem {
 
     @Override
     public void onEmpty(ItemStack stack, Player player) {
-        stack.shrink(1);
-        ItemStack emptyPhial = ItemRegistry.PHIAL.toStack();
-        emptyPhial.setCount(1);
-        if (!player.getInventory().add(emptyPhial)) {
-            player.drop(emptyPhial, false);
+        if (stack.getItem() instanceof PhialItem) {
+            stack.shrink(1);
+            ItemStack emptyPhial = ItemRegistry.PHIAL.toStack();
+            emptyPhial.setCount(1);
+            if (!player.getInventory().add(emptyPhial)) {
+                player.drop(emptyPhial, false);
+            }
         }
     }
 
