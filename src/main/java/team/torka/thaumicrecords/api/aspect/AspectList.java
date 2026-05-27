@@ -110,5 +110,9 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
     public Integer getOrZero(ResourceLocation rl) {
         return getOrDefault(rl, 0);
     }
+
+    public boolean isAspectEmpty() {
+        return values().stream().allMatch(e -> e == 0);
+    }
 }
 

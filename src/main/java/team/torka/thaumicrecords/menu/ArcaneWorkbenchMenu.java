@@ -28,7 +28,6 @@ import team.torka.thaumicrecords.registry.MenuRegistry;
 import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
 import team.torka.thaumicrecords.registry.WandCapRegistry;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
@@ -148,7 +147,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
         return this.getSlot(SLOT_WAND).getItem();
     }
 
-    @Nullable
+    @NotNull
     public AspectList getCachedAspect() {
         if (this.isDirty) {
             this.cachedAspect = this.getCurrentRecipeAspect();
@@ -228,6 +227,13 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
             }
         }
         return false;
+    }
+
+    public boolean canCraft() {
+        if (Objects.isNull(getCachedAspect()) || getCachedAspect().isAspectEmpty()) {
+            return true;
+        }
+        return !isVisInsufficient();
     }
 
     public void markDirty() {

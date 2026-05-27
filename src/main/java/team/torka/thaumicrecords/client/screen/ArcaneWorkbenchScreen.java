@@ -129,7 +129,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     @ParametersAreNonnullByDefault
     protected void renderSlot(GuiGraphics guiGraphics, Slot slot) {
         boolean isResultSlot = slot.index == ArcaneWorkbenchMenu.SLOT_CRAFT_RESULT;
-        if (isResultSlot && this.menu.isVisInsufficient() && slot.hasItem()) {
+        if (isResultSlot && !this.menu.getCachedAspect().isAspectEmpty() && slot.hasItem()) {
             int slotX = slot.x;
             int slotY = slot.y;
             ItemStack stack = slot.getItem();

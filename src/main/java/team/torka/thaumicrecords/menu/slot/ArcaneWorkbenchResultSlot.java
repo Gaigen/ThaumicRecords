@@ -69,6 +69,6 @@ public class ArcaneWorkbenchResultSlot extends SlotItemHandler {
     @Override
     @ParametersAreNonnullByDefault
     public boolean mayPickup(Player player) {
-        return !this.menu.isVisInsufficient();
+        return this.menu.canCraft();
     }
 }
