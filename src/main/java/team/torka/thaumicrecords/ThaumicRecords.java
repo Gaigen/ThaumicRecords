@@ -12,6 +12,7 @@ import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.CreativeTabRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
+import team.torka.thaumicrecords.registry.EntityRegistry;
 import team.torka.thaumicrecords.registry.FeatureRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 import team.torka.thaumicrecords.registry.MenuRegistry;
@@ -49,6 +50,7 @@ public class ThaumicRecords {
         MenuRegistry.REGISTRAR.register(modEventBus);
         AttachmentRegistry.REGISTRAR.register(modEventBus);
         FeatureRegistry.REGISTRAR.register(modEventBus);
+        EntityRegistry.REGISTRAR.register(modEventBus);
 
     }
 

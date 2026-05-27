@@ -26,7 +26,19 @@ import team.torka.thaumicrecords.item.ResearchNotesItem;
 import team.torka.thaumicrecords.item.RobeArmorItem;
 import team.torka.thaumicrecords.item.ScribingToolsItem;
 import team.torka.thaumicrecords.item.ThaumiumArmorItem;
+import team.torka.thaumicrecords.item.ThaumiumAxeItem;
+import team.torka.thaumicrecords.item.ThaumiumHoeItem;
+import team.torka.thaumicrecords.item.ThaumiumPickaxeItem;
+import team.torka.thaumicrecords.item.ThaumiumShovelItem;
+import team.torka.thaumicrecords.item.ThaumiumSwordItem;
 import team.torka.thaumicrecords.item.ThaumometerItem;
+import team.torka.thaumicrecords.item.CrimsonBladeItem;
+import team.torka.thaumicrecords.item.PrimalCrusherItem;
+import team.torka.thaumicrecords.item.VoidAxeItem;
+import team.torka.thaumicrecords.item.VoidHoeItem;
+import team.torka.thaumicrecords.item.VoidPickaxeItem;
+import team.torka.thaumicrecords.item.VoidShovelItem;
+import team.torka.thaumicrecords.item.VoidSwordItem;
 import team.torka.thaumicrecords.item.VoidArmorItem;
 import team.torka.thaumicrecords.item.VoidRobeArmorItem;
 import team.torka.thaumicrecords.item.WandItem;
@@ -125,6 +137,26 @@ public class ItemRegistry {
             () -> new VoidArmorItem(ArmorItem.Type.LEGGINGS, ArmorMaterialRegistry.VOID));
     public static final DeferredItem<VoidArmorItem> VOID_BOOTS = REGISTRAR.register("void_boots",
             () -> new VoidArmorItem(ArmorItem.Type.BOOTS, ArmorMaterialRegistry.VOID));
+
+    // Thaumium Tools
+    public static final DeferredItem<ThaumiumPickaxeItem> THAUMIUM_PICKAXE = REGISTRAR.register("thaumium_pickaxe", ThaumiumPickaxeItem::new);
+    public static final DeferredItem<ThaumiumSwordItem> THAUMIUM_SWORD = REGISTRAR.register("thaumium_sword", ThaumiumSwordItem::new);
+    public static final DeferredItem<ThaumiumAxeItem> THAUMIUM_AXE = REGISTRAR.register("thaumium_axe", ThaumiumAxeItem::new);
+    public static final DeferredItem<ThaumiumShovelItem> THAUMIUM_SHOVEL = REGISTRAR.register("thaumium_shovel", ThaumiumShovelItem::new);
+    public static final DeferredItem<ThaumiumHoeItem> THAUMIUM_HOE = REGISTRAR.register("thaumium_hoe", ThaumiumHoeItem::new);
+
+    // Void Tools
+    public static final DeferredItem<VoidPickaxeItem> VOID_PICKAXE = REGISTRAR.register("void_pickaxe", VoidPickaxeItem::new);
+    public static final DeferredItem<VoidSwordItem> VOID_SWORD = REGISTRAR.register("void_sword", VoidSwordItem::new);
+    public static final DeferredItem<VoidAxeItem> VOID_AXE = REGISTRAR.register("void_axe", VoidAxeItem::new);
+    public static final DeferredItem<VoidShovelItem> VOID_SHOVEL = REGISTRAR.register("void_shovel", VoidShovelItem::new);
+    public static final DeferredItem<VoidHoeItem> VOID_HOE = REGISTRAR.register("void_hoe", VoidHoeItem::new);
+
+    // Crimson Blade
+    public static final DeferredItem<CrimsonBladeItem> CRIMSON_BLADE = REGISTRAR.register("crimson_blade", CrimsonBladeItem::new);
+
+    // Primal Crusher
+    public static final DeferredItem<PrimalCrusherItem> PRIMAL_CRUSHER = REGISTRAR.register("primal_crusher", PrimalCrusherItem::new);
 
     // Robe Armor
     public static final DeferredItem<RobeArmorItem> ROBE_CHESTPLATE = REGISTRAR.register("robe_chestplate",
@@ -243,6 +275,18 @@ public class ItemRegistry {
         output.accept(VOID_CHESTPLATE);
         output.accept(VOID_LEGGINGS);
         output.accept(VOID_BOOTS);
+        output.accept(THAUMIUM_PICKAXE);
+        output.accept(THAUMIUM_SWORD);
+        output.accept(THAUMIUM_AXE);
+        output.accept(THAUMIUM_SHOVEL);
+        output.accept(THAUMIUM_HOE);
+        output.accept(VOID_PICKAXE);
+        output.accept(VOID_SWORD);
+        output.accept(VOID_AXE);
+        output.accept(VOID_SHOVEL);
+        output.accept(VOID_HOE);
+        output.accept(CRIMSON_BLADE);
+        output.accept(PRIMAL_CRUSHER);
         output.accept(ROBE_CHESTPLATE);
         output.accept(ROBE_LEGGINGS);
         output.accept(ROBE_BOOTS);

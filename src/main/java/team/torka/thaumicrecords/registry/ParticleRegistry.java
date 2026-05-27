@@ -12,5 +12,8 @@ public class ParticleRegistry {
 
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> NODE_BREAK = REGISTRAR.register("node_break", () -> new SimpleParticleType(false));
 
-    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CRUCIBLE_BUBBLE = REGISTRAR.register("crucible_bubble", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CRUCIBLE_BUBBLE = REGISTRAR.register("crucible_bubble",
+            () -> new SimpleParticleType(false));
+
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SPARKLE = REGISTRAR.register("sparkle", () -> new SimpleParticleType(false));
 }
