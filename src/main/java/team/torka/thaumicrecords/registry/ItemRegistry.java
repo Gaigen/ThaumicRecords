@@ -223,6 +223,12 @@ public class ItemRegistry {
             () -> new BlockItem(BlockRegistry.CINNABAR_ORE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> AURA_NODE = REGISTRAR.register("aura_node",
             () -> new BlockItem(BlockRegistry.AURA_NODE.get(), new Item.Properties()));
+
+    // Ore Clusters
+    public static final DeferredItem<Item> CLUSTER_IRON = REGISTRAR.registerSimpleItem("cluster_iron");
+    public static final DeferredItem<Item> CLUSTER_GOLD = REGISTRAR.registerSimpleItem("cluster_gold");
+    public static final DeferredItem<Item> CLUSTER_COPPER = REGISTRAR.registerSimpleItem("cluster_copper");
+    public static final DeferredItem<Item> CLUSTER_CINNABAR = REGISTRAR.registerSimpleItem("cluster_cinnabar");
     public static final DeferredItem<BlockItem> ARCANE_WORKBENCH = REGISTRAR.register("arcane_workbench",
             () -> new BlockItem(BlockRegistry.ARCANE_WORKBENCH.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> TABLE = REGISTRAR.register("table",
@@ -347,6 +353,10 @@ public class ItemRegistry {
         output.accept(AURA_NODE);
         output.accept(PAVING_STONE_OF_TRAVEL);
         output.accept(PAVING_STONE_OF_WARDING);
+        output.accept(CLUSTER_IRON);
+        output.accept(CLUSTER_GOLD);
+        output.accept(CLUSTER_COPPER);
+        output.accept(CLUSTER_CINNABAR);
     }
 
     public static void putInPhialCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
