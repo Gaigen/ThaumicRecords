@@ -15,14 +15,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
-import team.torka.thaumicrecords.block.AlchemicalConstructBlock;
-import team.torka.thaumicrecords.block.ArcanePedestalBlock;
-import team.torka.thaumicrecords.block.ArcaneWorkbenchBlock;
-import team.torka.thaumicrecords.block.AuraNodeBlock;
-import team.torka.thaumicrecords.block.CrucibleBlock;
-import team.torka.thaumicrecords.block.ResearchTableBlock;
-import team.torka.thaumicrecords.block.TableBlock;
-import team.torka.thaumicrecords.block.ThaumatoriumBlock;
+import team.torka.thaumicrecords.block.*;
 import team.torka.thaumicrecords.world.tree.TreeGrowers;
 
 
@@ -87,6 +80,12 @@ public class BlockRegistry {
                     .strength(3.0F, 25.0F)
                     .noOcclusion()
                     .sound(SoundType.STONE)));
+    public static final DeferredBlock<JarBlock> JAR = REGISTRAR.register("jar",
+            () -> new JarBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.NONE)
+                    .strength(0.3F)
+                    .sound(SoundType.GLASS)
+                    .noOcclusion()));
 
     public static final DeferredBlock<ThaumatoriumBlock> THAUMATORIUM = REGISTRAR.register("thaumatorium",
             () -> new ThaumatoriumBlock(BlockBehaviour.Properties.of()

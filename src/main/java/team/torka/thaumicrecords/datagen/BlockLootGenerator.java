@@ -66,6 +66,10 @@ public class BlockLootGenerator extends BlockLootSubProvider {
         this.dropSelf(BlockRegistry.GREATWOOD_LOG.get());
         this.dropSelf(BlockRegistry.GREATWOOD_SAPLING.get());
         this.add(BlockRegistry.GREATWOOD_LEAVES.get(), block -> createLeavesDrops(block, BlockRegistry.SILVERWOOD_SAPLING.get(), 0.005F));
+        this.add(BlockRegistry.PERDITIO_INFUSED_STONE.get(),
+                block -> createSilkTouchDispatchTable(block, this.applyExplosionCondition(block, LootItem.lootTableItem(ItemRegistry.PERDITIO_SHARD)
+                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))
+                        .apply(ApplyBonusCount.addOreBonusCount(enchantmentLookup.getOrThrow(Enchantments.FORTUNE))))));
 
     }
 

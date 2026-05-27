@@ -24,4 +24,14 @@ public class CreativeTabRegistry {
             .displayItems(ItemRegistry::putInWispEssenceCreativeTab)
             .build());
 
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> PHIAL = REGISTRAR.register("phial", () -> CreativeModeTab.builder()
+            .title(Component.translatable(ThaumicRecords.createTranslationKey("creative_mode_tab", "phial")))
+            .withTabsBefore(CreativeTabRegistry.WISP_ESSENCE.getId())
+            .icon(() -> new ItemStack(ItemRegistry.PHIAL.get()))
+            .displayItems(ItemRegistry::putInPhialCreativeTab)
+            .build());
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> WIP = REGISTRAR.register("wip_tab", () -> CreativeModeTab.builder().title(
+            Component.translatable(ThaumicRecords.createTranslationKey("creative_mode_tab", "wip_tab"))).withTabsBefore(CreativeModeTabs.COMBAT).icon(
+            () -> new ItemStack(ItemRegistry.PRIMAL_CHARM.get())).displayItems(ItemRegistry::putInWipCreativeTab).build());
 }

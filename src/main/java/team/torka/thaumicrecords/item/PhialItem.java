@@ -15,13 +15,14 @@ import team.torka.thaumicrecords.api.aspect.IEssentiaContainerItem;
 import team.torka.thaumicrecords.data.component.AspectListComponent;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
+import team.torka.thaumicrecords.registry.ItemRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
 
-public class WispEssenceItem extends Item implements IEssentiaContainerItem {
-    public WispEssenceItem() {
+public class PhialItem extends Item implements IEssentiaContainerItem {
+    public PhialItem() {
         super(new Properties());
     }
 
@@ -52,7 +53,7 @@ public class WispEssenceItem extends Item implements IEssentiaContainerItem {
 
     @Override
     public @Nullable Aspect getStoredAspect(ItemStack paramItemStack) {
-        if (paramItemStack.getItem() instanceof WispEssenceItem item) {
+        if (paramItemStack.getItem() instanceof PhialItem item) {
             AspectList list = getAspects(paramItemStack);
             if (list.isEmpty()) {
                 return null;
@@ -64,7 +65,7 @@ public class WispEssenceItem extends Item implements IEssentiaContainerItem {
 
     @Override
     public @Nullable ResourceLocation getStoredAspectResource(ItemStack paramItemStack) {
-        if (paramItemStack.getItem() instanceof WispEssenceItem item) {
+        if (paramItemStack.getItem() instanceof PhialItem item) {
             AspectList list = getAspects(paramItemStack);
             if (list.isEmpty()) {
                 return null;
@@ -76,7 +77,7 @@ public class WispEssenceItem extends Item implements IEssentiaContainerItem {
 
     @Override
     public int storedAmount(ItemStack paramItemStack) {
-        if (paramItemStack.getItem() instanceof WispEssenceItem item) {
+        if (paramItemStack.getItem() instanceof PhialItem item) {
             AspectList list = getAspects(paramItemStack);
             if (list.isEmpty()) {
                 return 0;
@@ -93,27 +94,34 @@ public class WispEssenceItem extends Item implements IEssentiaContainerItem {
 
     @Override
     public boolean isLiquid() {
-        return false;
+        return true;
     }
 
     @Override
     public int poursBy() {
-        return 0;
+        return 8;
     }
 
     @Override
     public int capacity() {
-        return 2;
+        return 8;
     }
 
     @Override
     public void onEmpty(ItemStack stack, Player player) {
-
+        if (stack.getItem() instanceof PhialItem) {
+            stack.shrink(1);
+            ItemStack emptyPhial = ItemRegistry.PHIAL.toStack();
+            emptyPhial.setCount(1);
+            if (!player.getInventory().add(emptyPhial)) {
+                player.drop(emptyPhial, false);
+            }
+        }
     }
 
     @Override
     public void wasPoured(ItemStack stack, Player player, int amount) {
-
+        onEmpty(stack, player);
     }
 
     @Override
@@ -125,5 +133,4 @@ public class WispEssenceItem extends Item implements IEssentiaContainerItem {
     public boolean canHoldMultipleAspects() {
         return false;
     }
-
 }

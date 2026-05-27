@@ -1,0 +1,6 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "thaumicrecords:block/animated_glow"
+  }
+}
