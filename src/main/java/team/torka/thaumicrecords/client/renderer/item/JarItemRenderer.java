@@ -9,7 +9,9 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
+import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.block.entity.JarBlockEntity;
+import team.torka.thaumicrecords.item.JarBlockItem;
 import team.torka.thaumicrecords.registry.BlockRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -27,6 +29,10 @@ public class JarItemRenderer extends BlockEntityWithoutLevelRenderer {
     @ParametersAreNonnullByDefault
     public void renderByItem(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource buffer, int combinedLight,
                              int combinedOverlay) {
+        if (stack.getItem() instanceof JarBlockItem jar) {
+            AspectList jarItemAspects = jar.getAspects(stack);
+            fakeBE.setAspects(jarItemAspects);
+        }
         Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(this.fakeBE, poseStack, buffer, combinedLight, combinedOverlay);
     }
 

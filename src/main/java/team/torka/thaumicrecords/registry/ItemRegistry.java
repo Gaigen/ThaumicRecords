@@ -13,6 +13,7 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.item.GogglesItem;
+import team.torka.thaumicrecords.item.JarBlockItem;
 import team.torka.thaumicrecords.item.PhialItem;
 import team.torka.thaumicrecords.item.PrimordialPearItem;
 import team.torka.thaumicrecords.item.ResearchNotesItem;
@@ -105,8 +106,7 @@ public class ItemRegistry {
             () -> new BlockItem(BlockRegistry.GREATWOOD_LOG.get(), new Item.Properties()));
     public static final DeferredItem<Item> GREATWOOD_LEAVES = ItemRegistry.REGISTRAR.register("greatwood_leaves",
             () -> new BlockItem(BlockRegistry.GREATWOOD_LEAVES.get(), new Item.Properties()));
-    public static final DeferredItem<Item> JAR = ItemRegistry.REGISTRAR.register("jar",
-            () -> new BlockItem(BlockRegistry.JAR.get(), new Item.Properties()));
+    public static final DeferredItem<Item> JAR = ItemRegistry.REGISTRAR.register("jar", ()-> new JarBlockItem(BlockRegistry.JAR.get(),new Item.Properties()));
     // @formatter:on
     public static void putInCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(ironCappedWoodWand());
