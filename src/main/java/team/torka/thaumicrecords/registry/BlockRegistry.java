@@ -22,6 +22,7 @@ import team.torka.thaumicrecords.block.ArcanePedestalBlock;
 import team.torka.thaumicrecords.block.ArcaneWorkbenchBlock;
 import team.torka.thaumicrecords.block.AuraNodeBlock;
 import team.torka.thaumicrecords.block.CrucibleBlock;
+import team.torka.thaumicrecords.block.DeconstructionTableBlock;
 import team.torka.thaumicrecords.block.JarBlock;
 import team.torka.thaumicrecords.block.PavingStoneOfTravelBlock;
 import team.torka.thaumicrecords.block.PavingStoneOfWardingBlock;
@@ -263,4 +264,12 @@ public class BlockRegistry {
             () -> new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
     public static final DeferredBlock<SlabBlock> SILVERWOOD_SLAB = REGISTRAR.register("silverwood_slab",
             () -> new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+
+    // Deconstruction Table
+    public static final DeferredBlock<DeconstructionTableBlock> DECONSTRUCTION_TABLE = REGISTRAR.register("deconstruction_table",
+            () -> new DeconstructionTableBlock(BlockBehaviour.Properties.of()
+                    .strength(2.5F, 3.0F)
+                    .noOcclusion()
+                    .sound(SoundType.WOOD)
+                    .pushReaction(PushReaction.BLOCK)));
 }

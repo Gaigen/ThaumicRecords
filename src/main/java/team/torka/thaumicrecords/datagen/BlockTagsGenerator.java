@@ -47,6 +47,7 @@ public class BlockTagsGenerator extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.ARCANE_STONE.get());
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.ARCANE_STONE_BRICK.get());
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.FLESH_BLOCK.get());
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.DECONSTRUCTION_TABLE.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.GREATWOOD_PLANKS.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.SILVERWOOD_PLANKS.get());
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.ARCANE_STONE_STAIRS.get());
