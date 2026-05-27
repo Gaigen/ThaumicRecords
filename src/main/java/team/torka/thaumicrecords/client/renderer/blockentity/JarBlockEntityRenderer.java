@@ -59,6 +59,7 @@ public class JarBlockEntityRenderer implements BlockEntityRenderer<JarBlockEntit
 
         // Рендер тела и крышки (всегда)
         VertexConsumer glassConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(TEXTURE));
+//        VertexConsumer glassConsumer = bufferSource.getBuffer(CustomRenderType.entit(TEXTURE));
         model.getBody().render(poseStack, glassConsumer, packedLight, packedOverlay);
         model.getLid().render(poseStack, glassConsumer, packedLight, packedOverlay);
 

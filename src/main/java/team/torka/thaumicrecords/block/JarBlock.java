@@ -65,6 +65,9 @@ public class JarBlock extends BaseEntityBlock {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
                                               BlockHitResult hitResult) {
+        if (player.isShiftKeyDown()) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
         if (!level.isClientSide) {
             ItemStack itemstack = player.getItemInHand(hand);
             if (stack.getItem() instanceof IEssentiaContainerItem itemContainer) {
@@ -78,24 +81,23 @@ public class JarBlock extends BaseEntityBlock {
 
                     int itemContainerAmount = itemContainer.storedAmount(stack);
                     ResourceLocation aspectResourceKey = itemContainer.getStoredAspectResource(stack);
+                    int spaceLeft = jarBlockEntity.capacity() - jarBlockEntity.storedAmount();
 
                     if (itemContainer.canBePartiallyPoured()) {
-//                          NOT IMPLEMENTED
-//                        int pouringAmount = Math.min(itemContainerAmount, itemContainer.poursBy()); //that thing
-//                        if (jarBlockEntity.addAspect(itemContainer, pouringAmount)) {
-//                            aspectList.put(aspectResourceKey, itemContainerAmount - pouringAmount);
-//                            itemContainer.wasPoured(stack, player, pouringAmount);
-//                            return ItemInteractionResult.SUCCESS;
-//                        } else {
-//                            return ItemInteractionResult.FAIL;
-//                        }
+                        int pouringAmount = Math.min(Math.min(itemContainerAmount, itemContainer.poursBy()), spaceLeft); //that thing
+                        if (jarBlockEntity.addAspect(aspectResourceKey, pouringAmount)) {
+                            itemContainer.wasPoured(stack, player, pouringAmount);
+                            return ItemInteractionResult.SUCCESS;
+                        } else {
+                            return ItemInteractionResult.FAIL;
+                        }
                     } else {
                         if (itemContainer.poursBy() != itemContainerAmount) {
                             return ItemInteractionResult.FAIL;
                         }
                         int pouringAmount = itemContainer.poursBy();
                         if (jarBlockEntity.addAspect(aspectResourceKey, pouringAmount)) {
-                            itemContainer.onEmpty(stack, player);
+                            itemContainer.wasPoured(stack, player, pouringAmount);
                             return ItemInteractionResult.SUCCESS;
                         } else {
                             return ItemInteractionResult.FAIL;

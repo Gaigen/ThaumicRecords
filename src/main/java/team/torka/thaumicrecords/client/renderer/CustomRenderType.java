@@ -51,6 +51,22 @@ public class CustomRenderType {
                 .setDepthTestState(RenderStateShard.DepthTestStateShard.NO_DEPTH_TEST)
                 .setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE)
                 .createCompositeState(false);
-        return RenderType.create("translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 1536, false, true, compositeState);
+
+
+        return RenderType.create("translucent_no_depth", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 1536, false, true, compositeState);
+    }
+
+    public static RenderType translucentGlass(ResourceLocation texture) {
+        RenderType.CompositeState state = RenderType.CompositeState.builder()
+                .setShaderState(RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
+                .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                .setCullState(RenderStateShard.NO_CULL)          // отключаем отсечение граней
+                .setLightmapState(RenderStateShard.LIGHTMAP)
+                .setOverlayState(RenderStateShard.OVERLAY)
+                .setDepthTestState(RenderStateShard.LEQUAL_DEPTH_TEST) // проверка глубины
+                .setWriteMaskState(RenderStateShard.COLOR_WRITE)       // НЕ пишем в глубину
+                .createCompositeState(true);                    // сортировка на GPU
+        return RenderType.create("translucent_glass", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, state);
     }
 }

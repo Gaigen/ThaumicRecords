@@ -1,19 +1,24 @@
 package team.torka.thaumicrecords.item;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.aspect.IEssentiaContainerItem;
+import team.torka.thaumicrecords.block.JarBlock;
 import team.torka.thaumicrecords.data.component.AspectListComponent;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
@@ -46,6 +51,23 @@ public class JarBlockItem extends BlockItem implements IEssentiaContainerItem {
         }
     }
 
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        Level level = context.getLevel();
+        BlockPos clickedPos = context.getClickedPos();
+        Player player = context.getPlayer();
+
+        // Prevent placing jar when using on another jar without shift pressed, cuz we have behavior of pouring from one jar to another with click
+        if (level.getBlockState(clickedPos).getBlock() instanceof JarBlock && player != null && !player.isShiftKeyDown()) {
+            // Не разрешаем установку
+            return InteractionResult.FAIL;
+        }
+
+        // Иначе – стандартная установка (вызов super)
+        return super.useOn(context);
+    }
+
+    @Override
     public AspectList getAspects(ItemStack stack) {
         return stack.getOrDefault(DataComponentRegistry.ASPECT_LIST.get(), new AspectListComponent(AspectList.empty())).getAspects();
     }
@@ -115,22 +137,50 @@ public class JarBlockItem extends BlockItem implements IEssentiaContainerItem {
     public void onEmpty(ItemStack stack, Player player) {
         if (stack.getItem() instanceof JarBlockItem) {
             stack.shrink(1);
-            ItemStack emptyPhial = ItemRegistry.PHIAL.toStack();
-            emptyPhial.setCount(1);
-            if (!player.getInventory().add(emptyPhial)) {
-                player.drop(emptyPhial, false);
+            ItemStack emptyJar = ItemRegistry.JAR.toStack();
+            emptyJar.setCount(1);
+            if (!player.getInventory().add(emptyJar)) {
+                player.drop(emptyJar, false);
             }
         }
     }
 
     @Override
     public void wasPoured(ItemStack stack, Player player, int amount) {
-//        onEmpty(stack, player);
+        if (stack.getItem() instanceof JarBlockItem item) {
+            AspectList aspectList = item.getAspects(stack).copy();
+            ResourceLocation aspectResource = item.getStoredAspectResource(stack);
+            int storedAmount = item.storedAmount(stack);
+            if (storedAmount - amount < 0) {
+                return; //todo: some sort of error propagation
+            }
+            if (storedAmount == amount) {
+                onEmpty(stack, player);
+                return;
+            }
+            int jarsInStack = stack.getCount();
+            if (jarsInStack == 1) {
+                aspectList.put(aspectResource, storedAmount - amount);
+                item.setAspects(stack, aspectList);
+                return;
+            } else {
+                stack.shrink(1);
+
+                ItemStack emptyJar = ItemRegistry.JAR.toStack();
+                emptyJar.setCount(1);
+                aspectList.put(aspectResource, storedAmount - amount);
+                item.setAspects(emptyJar, aspectList);
+                if (!player.getInventory().add(emptyJar)) {
+                    player.drop(emptyJar, false);
+                }
+                return;
+            }
+        }
     }
 
     @Override
     public boolean canBePartiallyPoured() {
-        return false;
+        return true;
     }
 
     @Override

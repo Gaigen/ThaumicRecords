@@ -121,7 +121,7 @@ public class PhialItem extends Item implements IEssentiaContainerItem {
 
     @Override
     public void wasPoured(ItemStack stack, Player player, int amount) {
-//        onEmpty(stack, player);
+        onEmpty(stack, player);
     }
 
     @Override

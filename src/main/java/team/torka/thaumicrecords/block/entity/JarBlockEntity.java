@@ -59,11 +59,12 @@ public class JarBlockEntity extends BlockEntity implements IEssentiaContainerEnt
     @Override
     public boolean addAspect(ResourceLocation aspect, int amount) {
         if (!isLiquid()) {
-            return false; // just because we have implemented isLiquid :)
+            return false;
         }
 
         ResourceLocation storedAspect = getStoredAspectResource();
-        if (storedAspect != null && storedAspect != aspect) {
+
+        if (storedAspect != null && !aspect.equals(storedAspect)) {
             return false;
         }
 
