@@ -135,9 +135,9 @@ public class RenderHighlightEventsListener {
 
                 poseStack.pushPose();
                 poseStack.scale(0.04F, 0.04F, 0.04F);
-                poseStack.translate(0.0F, 6.0F, -0.1F);
+                poseStack.translate(0.0F, 6.0F, 0.0F);
                 font.drawInBatch(am, 14.0F - sw, 1.0F, 0x111111, false, poseStack.last().pose(), bufferSource, Font.DisplayMode.SEE_THROUGH, 0, bright);
-                poseStack.translate(0.0F, 0.0F, -0.1F);
+                poseStack.translate(0.0F, 0.0F, -0.5F);
                 font.drawInBatch(am, 13.0F - sw, 0.0F, 0xFFFFFF, false, poseStack.last().pose(), bufferSource, Font.DisplayMode.SEE_THROUGH, 0, bright);
                 poseStack.popPose();
             }
