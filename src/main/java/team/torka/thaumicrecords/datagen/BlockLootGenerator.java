@@ -32,6 +32,8 @@ public class BlockLootGenerator extends BlockLootSubProvider {
         this.dropSelf(BlockRegistry.ARCANE_PEDESTAL.get());
         this.dropSelf(BlockRegistry.PAVING_STONE_OF_TRAVEL.get());
         this.dropSelf(BlockRegistry.PAVING_STONE_OF_WARDING.get());
+        this.dropSelf(BlockRegistry.THAUMIUM_BLOCK.get());
+        this.dropSelf(BlockRegistry.VOID_BLOCK.get());
         // 琥珀矿石
         HolderLookup.RegistryLookup<Enchantment> enchantmentLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
         this.add(BlockRegistry.AMBER_ORE.get(), block -> createSilkTouchDispatchTable(block, this.applyExplosionCondition(block, LootItem.lootTableItem(
@@ -98,6 +100,8 @@ public class BlockLootGenerator extends BlockLootSubProvider {
         blocks.add(BlockRegistry.ARCANE_PEDESTAL.get());
         blocks.add(BlockRegistry.PAVING_STONE_OF_TRAVEL.get());
         blocks.add(BlockRegistry.PAVING_STONE_OF_WARDING.get());
+        blocks.add(BlockRegistry.THAUMIUM_BLOCK.get());
+        blocks.add(BlockRegistry.VOID_BLOCK.get());
         return blocks;
     }
 

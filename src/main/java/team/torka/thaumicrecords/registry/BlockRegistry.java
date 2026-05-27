@@ -21,11 +21,11 @@ import team.torka.thaumicrecords.block.ArcaneWorkbenchBlock;
 import team.torka.thaumicrecords.block.AuraNodeBlock;
 import team.torka.thaumicrecords.block.CrucibleBlock;
 import team.torka.thaumicrecords.block.JarBlock;
+import team.torka.thaumicrecords.block.PavingStoneOfTravelBlock;
+import team.torka.thaumicrecords.block.PavingStoneOfWardingBlock;
 import team.torka.thaumicrecords.block.ResearchTableBlock;
 import team.torka.thaumicrecords.block.TableBlock;
 import team.torka.thaumicrecords.block.ThaumatoriumBlock;
-import team.torka.thaumicrecords.block.PavingStoneOfTravelBlock;
-import team.torka.thaumicrecords.block.PavingStoneOfWardingBlock;
 import team.torka.thaumicrecords.block.WardingBarrierBlock;
 import team.torka.thaumicrecords.world.tree.TreeGrowers;
 
@@ -192,4 +192,10 @@ public class BlockRegistry {
                     .strength(-1.0F, 3600000.0F)
                     .noLootTable()
                     .pushReaction(PushReaction.BLOCK)));
+
+    // Metal Blocks
+    public static final DeferredBlock<Block> THAUMIUM_BLOCK = REGISTRAR.registerSimpleBlock("thaumium_block", BlockBehaviour.Properties.of().mapColor(
+            MapColor.METAL).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(4.0F, 10.0F).sound(SoundType.METAL));
+    public static final DeferredBlock<Block> VOID_BLOCK = REGISTRAR.registerSimpleBlock("void_block", BlockBehaviour.Properties.of().mapColor(
+            MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(4.0F, 10.0F).sound(SoundType.METAL));
 }

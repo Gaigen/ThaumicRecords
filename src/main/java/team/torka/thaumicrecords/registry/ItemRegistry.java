@@ -1,6 +1,9 @@
 package team.torka.thaumicrecords.registry;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -126,6 +129,29 @@ public class ItemRegistry {
     public static final DeferredItem<Item> THAUMIUM_INGOT = REGISTRAR.registerSimpleItem("thaumium_ingot");
     public static final DeferredItem<Item> VOID_INGOT = REGISTRAR.registerSimpleItem("void_ingot");
 
+    // Metal Nuggets
+    public static final DeferredItem<Item> NUGGET_THAUMIUM = REGISTRAR.registerSimpleItem("nugget_thaumium");
+    public static final DeferredItem<Item> NUGGET_VOID = REGISTRAR.registerSimpleItem("nugget_void");
+    public static final DeferredItem<Item> NUGGET_QUICKSILVER = REGISTRAR.registerSimpleItem("nugget_quicksilver");
+
+    // Edible Nuggets (food: 1 nutrition, 0.3 saturation)
+    private static final FoodProperties NUGGET_FOOD = new FoodProperties.Builder().nutrition(1).saturationModifier(0.3f).build();
+    public static final DeferredItem<Item> NUGGET_CHICKEN = REGISTRAR.register("nugget_chicken",
+            () -> new Item(new Item.Properties().food(NUGGET_FOOD)));
+    public static final DeferredItem<Item> NUGGET_BEEF = REGISTRAR.register("nugget_beef",
+            () -> new Item(new Item.Properties().food(NUGGET_FOOD)));
+    public static final DeferredItem<Item> NUGGET_PORK = REGISTRAR.register("nugget_pork",
+            () -> new Item(new Item.Properties().food(NUGGET_FOOD)));
+    public static final DeferredItem<Item> NUGGET_FISH = REGISTRAR.register("nugget_fish",
+            () -> new Item(new Item.Properties().food(NUGGET_FOOD)));
+
+    // Triple Meat Treat (food: 6 nutrition, 0.8 saturation, always edible, regeneration)
+    private static final FoodProperties TRIPLE_MEAT_TREAT_FOOD = new FoodProperties.Builder()
+            .nutrition(6).saturationModifier(0.8f).alwaysEdible()
+            .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 100, 0), 0.66f).build();
+    public static final DeferredItem<Item> TRIPLE_MEAT_TREAT = REGISTRAR.register("triple_meat_treat",
+            () -> new Item(new Item.Properties().food(TRIPLE_MEAT_TREAT_FOOD)));
+
     // Thaumium Armor
     public static final DeferredItem<ThaumiumArmorItem> THAUMIUM_HELMET = REGISTRAR.register("thaumium_helmet",
             () -> new ThaumiumArmorItem(ArmorItem.Type.HELMET, ArmorMaterialRegistry.THAUMIUM));
@@ -229,6 +255,10 @@ public class ItemRegistry {
     public static final DeferredItem<Item> CLUSTER_GOLD = REGISTRAR.registerSimpleItem("cluster_gold");
     public static final DeferredItem<Item> CLUSTER_COPPER = REGISTRAR.registerSimpleItem("cluster_copper");
     public static final DeferredItem<Item> CLUSTER_CINNABAR = REGISTRAR.registerSimpleItem("cluster_cinnabar");
+    public static final DeferredItem<Item> CLUSTER_TIN = REGISTRAR.registerSimpleItem("cluster_tin");
+    public static final DeferredItem<Item> CLUSTER_SILVER = REGISTRAR.registerSimpleItem("cluster_silver");
+    public static final DeferredItem<Item> CLUSTER_LEAD = REGISTRAR.registerSimpleItem("cluster_lead");
+    public static final DeferredItem<Item> CLUSTER_QUARTZ = REGISTRAR.registerSimpleItem("cluster_quartz");
     public static final DeferredItem<BlockItem> ARCANE_WORKBENCH = REGISTRAR.register("arcane_workbench",
             () -> new BlockItem(BlockRegistry.ARCANE_WORKBENCH.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> TABLE = REGISTRAR.register("table",
@@ -237,6 +267,10 @@ public class ItemRegistry {
             () -> new BlockItem(BlockRegistry.ARCANE_PEDESTAL.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> CRUCIBLE = REGISTRAR.register("crucible",
             () -> new BlockItem(BlockRegistry.CRUCIBLE.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> THAUMIUM_BLOCK = REGISTRAR.register("thaumium_block",
+            () -> new BlockItem(BlockRegistry.THAUMIUM_BLOCK.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> VOID_BLOCK = REGISTRAR.register("void_block",
+            () -> new BlockItem(BlockRegistry.VOID_BLOCK.get(), new Item.Properties()));
 
     public static final DeferredItem<BlockItem> ALCHEMICAL_CONSTRUCT = REGISTRAR.register("alchemical_construct",
             () -> new BlockItem(BlockRegistry.ALCHEMICAL_CONSTRUCT.get(), new Item.Properties()));
@@ -294,6 +328,14 @@ public class ItemRegistry {
         output.accept(FORTRESS_CHESTPLATE);
         output.accept(FORTRESS_LEGGINGS);
         output.accept(THAUMIUM_INGOT);
+        output.accept(NUGGET_THAUMIUM);
+        output.accept(NUGGET_VOID);
+        output.accept(NUGGET_QUICKSILVER);
+        output.accept(NUGGET_CHICKEN);
+        output.accept(NUGGET_BEEF);
+        output.accept(NUGGET_PORK);
+        output.accept(NUGGET_FISH);
+        output.accept(TRIPLE_MEAT_TREAT);
         output.accept(THAUMIUM_HELMET);
         output.accept(THAUMIUM_CHESTPLATE);
         output.accept(THAUMIUM_LEGGINGS);
@@ -357,6 +399,12 @@ public class ItemRegistry {
         output.accept(CLUSTER_GOLD);
         output.accept(CLUSTER_COPPER);
         output.accept(CLUSTER_CINNABAR);
+        output.accept(CLUSTER_TIN);
+        output.accept(CLUSTER_SILVER);
+        output.accept(CLUSTER_LEAD);
+        output.accept(CLUSTER_QUARTZ);
+        output.accept(THAUMIUM_BLOCK);
+        output.accept(VOID_BLOCK);
     }
 
     public static void putInPhialCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {

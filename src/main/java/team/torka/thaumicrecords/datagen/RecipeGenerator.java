@@ -58,6 +58,23 @@ public class RecipeGenerator extends RecipeProvider {
                 .save(output, ThaumicRecords.createRl("scribing_tools_fill_ink"));
 
         burningRecipe(output);
+        tripleMeatTreatRecipes(output);
+    }
+
+    private void tripleMeatTreatRecipes(RecipeOutput output) {
+        // Sugar + any 3 of 4 meat nuggets → Triple Meat Treat
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, ItemRegistry.TRIPLE_MEAT_TREAT).requires(Items.SUGAR).requires(ItemRegistry.NUGGET_BEEF).requires(
+                ItemRegistry.NUGGET_CHICKEN).requires(ItemRegistry.NUGGET_PORK).unlockedBy("has_nugget", has(ItemRegistry.NUGGET_BEEF)).save(output,
+                ThaumicRecords.createRl("triple_meat_treat_beef_chicken_pork"));
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, ItemRegistry.TRIPLE_MEAT_TREAT).requires(Items.SUGAR).requires(ItemRegistry.NUGGET_BEEF).requires(
+                ItemRegistry.NUGGET_CHICKEN).requires(ItemRegistry.NUGGET_FISH).unlockedBy("has_nugget", has(ItemRegistry.NUGGET_BEEF)).save(output,
+                ThaumicRecords.createRl("triple_meat_treat_beef_chicken_fish"));
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, ItemRegistry.TRIPLE_MEAT_TREAT).requires(Items.SUGAR).requires(ItemRegistry.NUGGET_BEEF).requires(
+                ItemRegistry.NUGGET_FISH).requires(ItemRegistry.NUGGET_PORK).unlockedBy("has_nugget", has(ItemRegistry.NUGGET_BEEF)).save(output,
+                ThaumicRecords.createRl("triple_meat_treat_beef_fish_pork"));
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, ItemRegistry.TRIPLE_MEAT_TREAT).requires(Items.SUGAR).requires(ItemRegistry.NUGGET_FISH).requires(
+                ItemRegistry.NUGGET_CHICKEN).requires(ItemRegistry.NUGGET_PORK).unlockedBy("has_nugget", has(ItemRegistry.NUGGET_FISH)).save(output,
+                ThaumicRecords.createRl("triple_meat_treat_fish_chicken_pork"));
     }
 
     private void burningRecipe(RecipeOutput output) {
