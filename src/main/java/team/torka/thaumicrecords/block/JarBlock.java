@@ -35,11 +35,13 @@ public class JarBlock extends BaseEntityBlock {
 
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @org.jetbrains.annotations.Nullable LivingEntity placer, ItemStack stack) {
-        if (stack.getItem() instanceof JarBlockItem item) {
-            BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof JarBlockEntity jarBlockEntity) {
-                AspectList itemAspectList = item.getAspects(stack);
-                jarBlockEntity.setAspects(itemAspectList);
+        if (!level.isClientSide()) {
+            if (stack.getItem() instanceof JarBlockItem item) {
+                BlockEntity be = level.getBlockEntity(pos);
+                if (be instanceof JarBlockEntity jarBlockEntity) {
+                    AspectList itemAspectList = item.getAspects(stack);
+                    jarBlockEntity.setAspects(itemAspectList);
+                }
             }
         }
         super.setPlacedBy(level, pos, state, placer, stack);
@@ -47,25 +49,29 @@ public class JarBlock extends BaseEntityBlock {
 
     @Override
     public @NotNull ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+//      if (!level.isClientSide()) { //if i uncomment this - block cloning to default state
         if (level.getBlockEntity(pos) instanceof JarBlockEntity jar) {
             ItemStack stack = new ItemStack(ItemRegistry.JAR.get());
             stack.setCount(1);
             JarBlockItem jarBlockItem = (JarBlockItem) ItemRegistry.JAR.get();
             jarBlockItem.setAspects(stack, jar.getAspects());
             return stack;
+        } else {
+            return super.getCloneItemStack(state, target, level, pos, player);
         }
-        return super.getCloneItemStack(state, target, level, pos, player);
+//      }
     }
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
                                               BlockHitResult hitResult) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        if (stack.getItem() instanceof IEssentiaContainerItem itemContainer) {
-            if (!itemContainer.isLiquid()) {
-                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-            }
-            if (!level.isClientSide) {
+        if (!level.isClientSide) {
+            ItemStack itemstack = player.getItemInHand(hand);
+            if (stack.getItem() instanceof IEssentiaContainerItem itemContainer) {
+                if (!itemContainer.isLiquid()) {
+                    return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                }
+
                 BlockEntity be = level.getBlockEntity(pos);
 
                 if (be instanceof JarBlockEntity jarBlockEntity) {
