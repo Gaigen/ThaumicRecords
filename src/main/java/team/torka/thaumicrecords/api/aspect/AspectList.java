@@ -61,6 +61,11 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
         return this;
     }
 
+    public AspectList take(ResourceLocation aspect, int amount) {
+        this.put(aspect, this.getOrZero(aspect) - amount);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

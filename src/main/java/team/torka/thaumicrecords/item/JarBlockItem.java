@@ -73,6 +73,14 @@ public class JarBlockItem extends BlockItem implements IEssentiaContainerItem {
     }
 
     @Override
+    public boolean addAspect(Player player, ItemStack stack, ResourceLocation aspect, int amount) {
+        if (canBePartiallyPoured()) {
+            return false;
+        }
+        return false;
+    }
+
+    @Override
     public void setAspects(ItemStack stack, AspectList paramAspectList) {
         stack.set(DataComponentRegistry.ASPECT_LIST.get(), new AspectListComponent(paramAspectList));
     }

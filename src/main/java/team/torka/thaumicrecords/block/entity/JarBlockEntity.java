@@ -79,6 +79,28 @@ public class JarBlockEntity extends BlockEntity implements IEssentiaContainerEnt
     }
 
     @Override
+    public boolean takeAspects(ResourceLocation aspect, int amount) {
+        if (!isLiquid()) {
+            return false;
+        }
+
+        ResourceLocation storedAspect = getStoredAspectResource();
+
+        if (storedAspect != null && !aspect.equals(storedAspect)) {
+            return false;
+        }
+
+        int storedAmount = storedAmount();
+        if (storedAmount - amount < 0) {
+            return false;
+        }
+        AspectList list = getAspects().copy();   // копируем текущий список
+        list.take(aspect, amount);
+        setAspects(list);
+        return true;
+    }
+
+    @Override
     public boolean isVariable() {
         return true;
     }
@@ -105,7 +127,24 @@ public class JarBlockEntity extends BlockEntity implements IEssentiaContainerEnt
 
     @Override
     public void wasPoured(ItemStack stack, Player player, int amount) {
+        if (!isLiquid()) {
+            return false;
+        }
 
+        ResourceLocation storedAspect = getStoredAspectResource();
+
+        if (storedAspect != null && !aspect.equals(storedAspect)) {
+            return false;
+        }
+
+        int storedAmount = storedAmount();
+        if (storedAmount - amount < 0) {
+            return false;
+        }
+        AspectList list = getAspects().copy();   // копируем текущий список
+        list.take(aspect, amount);
+        setAspects(list);
+        return true;
     }
 
     @Override

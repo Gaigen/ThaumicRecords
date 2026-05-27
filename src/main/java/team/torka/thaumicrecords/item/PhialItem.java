@@ -47,6 +47,39 @@ public class PhialItem extends Item implements IEssentiaContainerItem {
     }
 
     @Override
+    public boolean addAspect(Player player, ItemStack stack, ResourceLocation aspect, int amount) {
+        if (!isLiquid()) {
+            return false;
+        }
+        if (canBePartiallyPoured()) {
+            return false;
+        }
+        if (amount != poursBy()) {
+            return false;
+        }
+        if (stack.getItem() instanceof PhialItem item) {
+            AspectList aspects = getAspects(stack);
+            if (!aspects.isEmpty()) {
+                return false;
+            }
+
+            stack.shrink(1);
+            ItemStack phial = ItemRegistry.PHIAL.toStack();
+            phial.setCount(1);
+            AspectList newAspectList = new AspectList();
+            newAspectList.put(aspect, amount);
+            item.setAspects(phial, newAspectList);
+            if (!player.getInventory().add(phial)) {
+                player.drop(phial, false);
+            }
+
+        }
+        return false;
+
+
+    }
+
+    @Override
     public void setAspects(ItemStack stack, AspectList paramAspectList) {
         stack.set(DataComponentRegistry.ASPECT_LIST.get(), new AspectListComponent(paramAspectList));
     }
