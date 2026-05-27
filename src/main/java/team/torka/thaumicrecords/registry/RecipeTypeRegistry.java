@@ -22,8 +22,7 @@ public class RecipeTypeRegistry {
     public static final DeferredHolder<RecipeType<?>, RecipeType<ArcaneCraftingWandRecipe>> ARCANE_CRAFTING_WAND = REGISTRAR.register("arcane_crafting_wand",
             () -> new RecipeType<>() {
             });
-    public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleRecipe>> CRUCIBLE = REGISTRAR.register("crucible",
-            () -> new RecipeType<>() {
-            });
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleRecipe>> CRUCIBLE = REGISTRAR.register("crucible", () -> new RecipeType<>() {
+    });
 
 }
