@@ -29,5 +29,6 @@ public class ItemTagsGenerator extends ItemTagsProvider {
         this.tag(ModTags.SHOW_NODE_WHEN_HELD).add(ItemRegistry.THAUMOMETER.get());
         this.tag(ItemTags.DYEABLE).add(ItemRegistry.ROBE_CHESTPLATE.get(), ItemRegistry.ROBE_LEGGINGS.get(), ItemRegistry.ROBE_BOOTS.get(),
                 ItemRegistry.VOID_ROBE_HELMET.get(), ItemRegistry.VOID_ROBE_CHESTPLATE.get(), ItemRegistry.VOID_ROBE_LEGGINGS.get());
+        this.tag(ModTags.SHOW_ASPECT_WHEN_EQUIPPED).add(ItemRegistry.GOGGLES.get());
     }
 }
