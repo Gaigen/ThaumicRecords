@@ -27,6 +27,7 @@ public class ItemTagsGenerator extends ItemTagsProvider {
                 ItemRegistry.BALANCED_SHARD.get());
         this.tag(ModTags.SHOW_NODE_WHEN_EQUIPPED).add(ItemRegistry.GOGGLES.get()).add(ItemRegistry.FORTRESS_HELMET.get());
         this.tag(ModTags.SHOW_NODE_WHEN_HELD).add(ItemRegistry.THAUMOMETER.get());
-        this.tag(ItemTags.DYEABLE).add(ItemRegistry.ROBE_CHESTPLATE.get(), ItemRegistry.ROBE_LEGGINGS.get(), ItemRegistry.ROBE_BOOTS.get());
+        this.tag(ItemTags.DYEABLE).add(ItemRegistry.ROBE_CHESTPLATE.get(), ItemRegistry.ROBE_LEGGINGS.get(), ItemRegistry.ROBE_BOOTS.get(),
+                ItemRegistry.VOID_ROBE_HELMET.get(), ItemRegistry.VOID_ROBE_CHESTPLATE.get(), ItemRegistry.VOID_ROBE_LEGGINGS.get());
     }
 }

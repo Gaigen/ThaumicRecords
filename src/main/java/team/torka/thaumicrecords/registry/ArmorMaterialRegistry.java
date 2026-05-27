@@ -63,6 +63,16 @@ public class ArmorMaterialRegistry {
                     List.of(new ArmorMaterial.Layer(ThaumicRecords.createRl("robes"), "", true),
                             new ArmorMaterial.Layer(ThaumicRecords.createRl("robes"), "_overlay", false)), 0.0F, 0.0F));
 
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> VOID_ROBE = REGISTRAR.register("void_robe",
+            () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                map.put(ArmorItem.Type.HELMET, 3);
+                map.put(ArmorItem.Type.CHESTPLATE, 6);
+                map.put(ArmorItem.Type.LEGGINGS, 7);
+                map.put(ArmorItem.Type.BOOTS, 3);
+            }), 10, SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ItemRegistry.VOID_INGOT.get()),
+                    List.of(new ArmorMaterial.Layer(ThaumicRecords.createRl("void_robe_armor"), "_overlay", true),
+                            new ArmorMaterial.Layer(ThaumicRecords.createRl("void_robe_armor"), "", false)), 0.0F, 0.0F));
+
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CULTIST_CLOTH = REGISTRAR.register("cultist_cloth",
             () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
                 map.put(ArmorItem.Type.HELMET, 2);

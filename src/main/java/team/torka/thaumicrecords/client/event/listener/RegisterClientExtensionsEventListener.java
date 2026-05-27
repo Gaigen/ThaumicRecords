@@ -20,6 +20,7 @@ import team.torka.thaumicrecords.item.CultistLeaderArmorItem;
 import team.torka.thaumicrecords.item.CultistPlateArmorItem;
 import team.torka.thaumicrecords.item.CultistRobeArmorItem;
 import team.torka.thaumicrecords.item.FortressArmorItem;
+import team.torka.thaumicrecords.item.VoidRobeArmorItem;
 import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 import team.torka.thaumicrecords.registry.ParticleRegistry;
@@ -54,6 +55,9 @@ public class RegisterClientExtensionsEventListener {
         event.registerItem(CultistLeaderArmorItem.getExtensions(), ItemRegistry.CRIMSON_LEADER_HELMET.get());
         event.registerItem(CultistLeaderArmorItem.getExtensions(), ItemRegistry.CRIMSON_LEADER_CHESTPLATE.get());
         event.registerItem(CultistLeaderArmorItem.getExtensions(), ItemRegistry.CRIMSON_LEADER_LEGGINGS.get());
+        event.registerItem(VoidRobeArmorItem.getExtensions(), ItemRegistry.VOID_ROBE_HELMET.get());
+        event.registerItem(VoidRobeArmorItem.getExtensions(), ItemRegistry.VOID_ROBE_CHESTPLATE.get());
+        event.registerItem(VoidRobeArmorItem.getExtensions(), ItemRegistry.VOID_ROBE_LEGGINGS.get());
     }
 
     private static void registerBlockExtensions(RegisterClientExtensionsEvent event) {

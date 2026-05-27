@@ -74,6 +74,15 @@ public class RegisterColorHandlersEventListener {
             }
             return -1;
         }, ItemRegistry.ROBE_CHESTPLATE.get(), ItemRegistry.ROBE_LEGGINGS.get(), ItemRegistry.ROBE_BOOTS.get());
+
+        // Void Robe dye
+        event.register((stack, tintIndex) -> {
+            if (tintIndex == 1) {
+                return net.minecraft.world.item.component.DyedItemColor.getOrDefault(stack,
+                        net.minecraft.world.item.component.DyedItemColor.LEATHER_COLOR) | 0xFF000000;
+            }
+            return -1;
+        }, ItemRegistry.VOID_ROBE_HELMET.get(), ItemRegistry.VOID_ROBE_CHESTPLATE.get(), ItemRegistry.VOID_ROBE_LEGGINGS.get());
     }
 
     @SubscribeEvent

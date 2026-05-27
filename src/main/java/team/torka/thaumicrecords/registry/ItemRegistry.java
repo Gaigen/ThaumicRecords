@@ -28,6 +28,7 @@ import team.torka.thaumicrecords.item.ScribingToolsItem;
 import team.torka.thaumicrecords.item.ThaumiumArmorItem;
 import team.torka.thaumicrecords.item.ThaumometerItem;
 import team.torka.thaumicrecords.item.VoidArmorItem;
+import team.torka.thaumicrecords.item.VoidRobeArmorItem;
 import team.torka.thaumicrecords.item.WandItem;
 import team.torka.thaumicrecords.item.WispEssenceItem;
 
@@ -92,6 +93,14 @@ public class ItemRegistry {
     // Crimson Cultist Boots
     public static final DeferredItem<CultistBootsItem> CRIMSON_BOOTS = REGISTRAR.register("crimson_boots",
             () -> new CultistBootsItem(ArmorMaterialRegistry.CULTIST_CLOTH, ArmorItem.Type.BOOTS));
+
+    // Void Robe Armor
+    public static final DeferredItem<VoidRobeArmorItem> VOID_ROBE_HELMET = REGISTRAR.register("void_robe_helmet",
+            () -> new VoidRobeArmorItem(ArmorMaterialRegistry.VOID_ROBE, ArmorItem.Type.HELMET));
+    public static final DeferredItem<VoidRobeArmorItem> VOID_ROBE_CHESTPLATE = REGISTRAR.register("void_robe_chestplate",
+            () -> new VoidRobeArmorItem(ArmorMaterialRegistry.VOID_ROBE, ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<VoidRobeArmorItem> VOID_ROBE_LEGGINGS = REGISTRAR.register("void_robe_leggings",
+            () -> new VoidRobeArmorItem(ArmorMaterialRegistry.VOID_ROBE, ArmorItem.Type.LEGGINGS));
 
     // Ingots
     public static final DeferredItem<Item> THAUMIUM_INGOT = REGISTRAR.registerSimpleItem("thaumium_ingot");
@@ -247,6 +256,9 @@ public class ItemRegistry {
         output.accept(CRIMSON_LEADER_CHESTPLATE);
         output.accept(CRIMSON_LEADER_LEGGINGS);
         output.accept(CRIMSON_BOOTS);
+        output.accept(VOID_ROBE_HELMET);
+        output.accept(VOID_ROBE_CHESTPLATE);
+        output.accept(VOID_ROBE_LEGGINGS);
         output.accept(BOOTS_TRAVELLER);
         output.accept(TABLE);
         output.accept(SCRIBING_TOOLS);
