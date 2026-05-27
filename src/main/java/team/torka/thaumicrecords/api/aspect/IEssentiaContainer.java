@@ -22,4 +22,6 @@ public interface IEssentiaContainer {
     boolean canBePartiallyPoured();
 
     boolean canHoldMultipleAspects();
+
+
 }

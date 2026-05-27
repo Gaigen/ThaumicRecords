@@ -22,6 +22,7 @@ public class JarBlockEntity extends BlockEntity implements IEssentiaContainerEnt
         super(BlockEntityRegistry.JAR.get(), pos, state);
     }
 
+    @Override
     public int storedAmount() {
         int myAmount = 0;
         AspectList list = getAspects();   // копируем текущий список
@@ -34,7 +35,7 @@ public class JarBlockEntity extends BlockEntity implements IEssentiaContainerEnt
     }
 
     @Nullable
-    public ResourceLocation storedAspect() {
+    public ResourceLocation storedAspectResource() {
         AspectList list = getAspects();   // копируем текущий список
         if (!list.isEmpty()) {
             Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(list.firstEntry().getKey());
@@ -60,7 +61,7 @@ public class JarBlockEntity extends BlockEntity implements IEssentiaContainerEnt
         if (!isLiquid()) {
             return false; // just because we have implemented isLiquid :)
         }
-        ResourceLocation storedAspect = storedAspect();
+        ResourceLocation storedAspect = storedAspectResource();
         if (storedAspect != null && storedAspect != aspect) {
             return false;
         }
@@ -113,5 +114,15 @@ public class JarBlockEntity extends BlockEntity implements IEssentiaContainerEnt
     @Override
     public boolean canHoldMultipleAspects() {
         return false;
+    }
+
+    @Override
+    public Aspect getMainAspect() {
+        AspectList list = getAspects();   // копируем текущий список
+        if (!list.isEmpty()) {
+            Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(list.firstEntry().getKey());
+            return aspect;
+        }
+        return null;
     }
 }
