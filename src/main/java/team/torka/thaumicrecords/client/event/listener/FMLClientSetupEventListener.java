@@ -31,5 +31,13 @@ public class FMLClientSetupEventListener {
             fireBlock.setFlammable(BlockRegistry.GREATWOOD_LOG.get(), 5, 5);
             fireBlock.setFlammable(BlockRegistry.GREATWOOD_LEAVES.get(), 30, 60);
         });
+        event.enqueueWork(
+                () -> ItemProperties.register(ItemRegistry.PHIAL.get(), ThaumicRecords.createRl("has_aspect"), (itemStack, clientLevel, livingEntity, seed) -> {
+                    var component = itemStack.get(DataComponentRegistry.ASPECT_LIST);
+                    if (component != null && !component.getAspects().isAspectEmpty()) {
+                        return 1.0F;
+                    }
+                    return 0.0F;
+                }));
     }
 }

@@ -1,3 +1,14 @@
 {
-  "parent": "builtin/entity"
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "thaumicrecords:item/phial"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "thaumicrecords:has_aspect": 1.0
+      },
+      "model": "thaumicrecords:item/phial_filled"
+    }
+  ]
 }

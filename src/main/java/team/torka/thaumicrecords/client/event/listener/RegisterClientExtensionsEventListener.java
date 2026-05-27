@@ -14,7 +14,6 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import team.torka.thaumicrecords.client.renderer.item.ArcaneWorkbenchItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.AuraNodeItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.JarItemRenderer;
-import team.torka.thaumicrecords.client.renderer.item.PhialItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.TableItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.ThaumometerItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.WandItemRenderer;
@@ -46,7 +45,7 @@ public class RegisterClientExtensionsEventListener {
         event.registerItem(TableItemRenderer.INSTANCE.getExtensions(), ItemRegistry.TABLE.get());
         event.registerItem(ThaumometerItemRenderer.INSTANCE.getExtensions(), ItemRegistry.THAUMOMETER.get());
         event.registerItem(JarItemRenderer.INSTANCE.getExtensions(), ItemRegistry.JAR.get());
-        event.registerItem(PhialItemRenderer.INSTANCE.getExtensions(), ItemRegistry.PHIAL.get());
+//        event.registerItem(PhialItemRenderer.INSTANCE.getExtensions(), ItemRegistry.PHIAL.get());
         event.registerItem(FortressArmorItem.getExtensions(), ItemRegistry.FORTRESS_HELMET.get());
         event.registerItem(FortressArmorItem.getExtensions(), ItemRegistry.FORTRESS_CHESTPLATE.get());
         event.registerItem(FortressArmorItem.getExtensions(), ItemRegistry.FORTRESS_LEGGINGS.get());

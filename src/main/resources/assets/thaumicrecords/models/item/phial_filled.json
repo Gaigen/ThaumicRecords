@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "thaumicrecords:item/phial",
-    "layer1": "thaumicrecords:item/essence"
-  }
-}
