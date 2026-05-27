@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,5 +34,45 @@ public record ScanHistory(Set<String> items, Set<String> entities, Set<String> n
 
     private static ScanHistory defaultScanHistory() {
         return new ScanHistory(new HashSet<>(), new HashSet<>(), new HashSet<>());
+    }
+
+    public boolean hasScannedItem(String itemIdentifier) {
+        return this.items.contains(itemIdentifier);
+    }
+
+    public boolean hasScannedItem(ResourceLocation itemRl) {
+        return hasScannedItem(itemRl.toString());
+    }
+
+    public void addScannedItem(String itemIdentifier) {
+        this.items.add(itemIdentifier);
+    }
+
+    public void addScannedItem(ResourceLocation itemRl) {
+        addScannedItem(itemRl.toString());
+    }
+
+    public boolean hasScannedEntity(String entityIdentifier) {
+        return this.entities.contains(entityIdentifier);
+    }
+
+    public boolean hasScannedEntity(ResourceLocation entityRl) {
+        return hasScannedEntity(entityRl.toString());
+    }
+
+    public void addScannedEntity(String entityIdentifier) {
+        this.entities.add(entityIdentifier);
+    }
+
+    public void addScannedEntity(ResourceLocation entityRl) {
+        addScannedEntity(entityRl.toString());
+    }
+
+    public boolean hasScannedNode(String nodeId) {
+        return this.nodes.contains(nodeId);
+    }
+
+    public void addScannedNode(String nodeId) {
+        this.nodes.add(nodeId);
     }
 }

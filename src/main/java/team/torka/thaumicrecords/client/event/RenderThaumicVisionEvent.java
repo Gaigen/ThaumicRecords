@@ -44,8 +44,8 @@ public abstract class RenderThaumicVisionEvent extends Event {
     /**
      * 是否渲染方块要素悬浮 如节点，坩埚
      */
-    public static class Aspects extends RenderThaumicVisionEvent {
-        public Aspects(Player player, Level level) {
+    public static class Aspect extends RenderThaumicVisionEvent {
+        public Aspect(Player player, Level level) {
             super(player, level, false);
         }
     }

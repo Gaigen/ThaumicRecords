@@ -35,4 +35,15 @@ public class RenderThaumicVisionEventsListener {
             event.setVisible(true);
         }
     }
+
+    @SubscribeEvent
+    public static void onAspectEvent(RenderThaumicVisionEvent.Aspect event) {
+        Player player = event.getPlayer();
+        if (Objects.isNull(player)) {
+            return;
+        }
+        if (player.getItemBySlot(EquipmentSlot.HEAD).is(ModTags.SHOW_ASPECT_WHEN_EQUIPPED)) {
+            event.setVisible(true);
+        }
+    }
 }

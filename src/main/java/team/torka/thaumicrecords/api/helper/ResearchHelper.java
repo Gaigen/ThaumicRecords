@@ -6,6 +6,7 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.research.Research;
 import team.torka.thaumicrecords.attachment.ResearchPoint;
 import team.torka.thaumicrecords.attachment.ResearchUnlocked;
+import team.torka.thaumicrecords.attachment.ScanHistory;
 import team.torka.thaumicrecords.registry.AttachmentRegistry;
 import team.torka.thaumicrecords.registry.ResearchRegistry;
 
@@ -25,6 +26,12 @@ public class ResearchHelper {
         });
         ResearchPoint newData = new ResearchPoint(points);
         player.setData(AttachmentRegistry.RESEARCH_POINT, newData);
+    }
+
+    public static void addScannedItem(ServerPlayer player, ResourceLocation itemRl) {
+        ScanHistory scanHistory = player.getData(AttachmentRegistry.SCAN_HISTORY);
+        scanHistory.addScannedItem(itemRl);
+        player.setData(AttachmentRegistry.SCAN_HISTORY, scanHistory);
     }
 
     public static void unlockResearch(ServerPlayer player, ResourceLocation research) {

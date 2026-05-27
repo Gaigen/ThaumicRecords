@@ -9,6 +9,7 @@ import team.torka.thaumicrecords.ThaumicRecords;
 public class ModTags {
 
     public static final TagKey<Item> SHOW_NODE_WHEN_EQUIPPED = TagKey.create(Registries.ITEM, ThaumicRecords.createRl("show_node_when_equipped"));
+    public static final TagKey<Item> SHOW_ASPECT_WHEN_EQUIPPED = TagKey.create(Registries.ITEM, ThaumicRecords.createRl("show_aspect_when_equipped"));
     public static final TagKey<Item> SHOW_NODE_WHEN_HELD = TagKey.create(Registries.ITEM, ThaumicRecords.createRl("show_node_when_held"));
     public static final TagKey<Item> SHARD = TagKey.create(Registries.ITEM, ThaumicRecords.createRl("shard"));
 
