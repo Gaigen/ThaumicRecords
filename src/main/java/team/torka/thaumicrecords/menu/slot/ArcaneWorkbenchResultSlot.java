@@ -45,7 +45,7 @@ public class ArcaneWorkbenchResultSlot extends SlotItemHandler {
             return;
         }
         AspectList cachedAspect = this.menu.getCachedAspect();
-        if (Objects.isNull(cachedAspect)) {
+        if (cachedAspect.isAspectEmpty()) {
             this.menu.consumeCraftingMaterials(1);
             this.menu.updateResultSlot();
             return;

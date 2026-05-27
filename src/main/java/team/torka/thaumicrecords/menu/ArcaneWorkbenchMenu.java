@@ -203,9 +203,6 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
     public boolean isVisInsufficient() {
         ItemStack wand = getWandStack();
         AspectList cachedCost = getCachedAspect();
-        if (Objects.isNull(cachedCost)) {
-            return false;
-        }
         WandItemComponent data = wand.get(DataComponentRegistry.WAND_ITEM_DATA.get());
         if (Objects.isNull(data)) {
             return true;
@@ -230,7 +227,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
     }
 
     public boolean canCraft() {
-        if (Objects.isNull(getCachedAspect()) || getCachedAspect().isAspectEmpty()) {
+        if (getCachedAspect().isAspectEmpty()) {
             return true;
         }
         return !isVisInsufficient();

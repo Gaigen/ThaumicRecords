@@ -27,7 +27,7 @@ import java.util.Objects;
 public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkbenchMenu> {
     private static final ResourceLocation GUI_TEXTURE = ThaumicRecords.createRl("textures/gui/arcane_workbench_gui.png");
     // AER, IGNIS, AQUA, TERRA, ORDO, PERDITIO
-    private int[][] aspectLocations = new int[][]{{72, 21}, {24, 102}, {72, 124}, {24, 43}, {120, 102}, {120, 43}};
+    private final int[][] aspectLocations = new int[][]{{72, 21}, {24, 102}, {72, 124}, {24, 43}, {120, 102}, {120, 43}};
 
     public ArcaneWorkbenchScreen(ArcaneWorkbenchMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -62,7 +62,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     private void renderAspects(GuiGraphics guiGraphics, int guiX, int guiY) {
         float ticks = (System.currentTimeMillis() % 10000) / 50.0F;
         AspectList cost = this.menu.getCachedAspect();
-        if (Objects.isNull(cost) || cost.isEmpty()) {
+        if (cost.isAspectEmpty()) {
             return;
         }
         ItemStack wand = this.menu.getWandStack();
