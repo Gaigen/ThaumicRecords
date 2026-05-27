@@ -86,15 +86,17 @@ public class JarBlock extends BaseEntityBlock {
                     if (itemContainerAspectList.isEmpty() && !jarBlockEntity.getAspects().isEmpty()) {
                         if (!itemContainer.canBePartiallyPoured()) {
                             int storedAmount = jarBlockEntity.storedAmount();
+                            ResourceLocation storedAspect = jarBlockEntity.getStoredAspectResource();
                             int amount = itemContainer.poursBy();
                             if (storedAmount < amount) {
                                 return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
                             }
-                            if (itemContainer.addAspect(player, stack, jarBlockEntity.getStoredAspectResource(), amount)) {
-                                jarBlockEntity.wasPoured();
+                            if (itemContainer.addAspect(player, stack, storedAspect, amount)) {
+                                jarBlockEntity.wasPoured(storedAspect, amount);
                             }
+                        } else {
+                            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
                         }
-                        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
                     }
                     int spaceLeft = jarBlockEntity.capacity() - jarBlockEntity.storedAmount();
 

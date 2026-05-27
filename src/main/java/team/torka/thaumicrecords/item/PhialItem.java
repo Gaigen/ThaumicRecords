@@ -72,11 +72,9 @@ public class PhialItem extends Item implements IEssentiaContainerItem {
             if (!player.getInventory().add(phial)) {
                 player.drop(phial, false);
             }
-
+            return true;
         }
         return false;
-
-
     }
 
     @Override

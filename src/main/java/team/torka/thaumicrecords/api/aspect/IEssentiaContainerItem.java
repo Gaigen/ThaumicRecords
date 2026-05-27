@@ -22,4 +22,8 @@ public interface IEssentiaContainerItem extends IEssentiaContainer {
     ResourceLocation getStoredAspectResource(ItemStack paramItemStack);
 
     int storedAmount(ItemStack paramItemStack);
+
+    void onEmpty(ItemStack stack, Player player);
+
+    void wasPoured(ItemStack stack, Player player, int amount);
 }
