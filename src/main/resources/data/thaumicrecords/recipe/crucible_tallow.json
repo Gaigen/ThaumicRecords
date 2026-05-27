@@ -1,0 +1,8 @@
+{
+  "type": "thaumicrecords:crucible",
+  "catalyst": {"item": "minecraft:rotten_flesh"},
+  "required_aspects": {
+    "thaumicrecords:praecantatio": 2
+  },
+  "result": {"id": "thaumicrecords:tallow", "count": 1}
+}

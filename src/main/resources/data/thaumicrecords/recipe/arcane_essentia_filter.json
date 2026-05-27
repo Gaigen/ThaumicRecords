@@ -1,0 +1,14 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": ["GWG"],
+  "key": {
+    "G": {"item": "minecraft:gold_ingot"},
+    "W": {"item": "thaumicrecords:silverwood_planks"}
+  },
+  "result": {"id": "thaumicrecords:essentia_filter", "count": 2},
+  "baseVisCost": {
+    "thaumicrecords:ordo": 5,
+    "thaumicrecords:aqua": 5
+  },
+  "requiredResearch": []
+}

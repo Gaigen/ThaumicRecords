@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=bottom": { "model": "thaumicrecords:block/silverwood_slab" },
+    "type=double": { "model": "thaumicrecords:block/silverwood_planks" },
+    "type=top": { "model": "thaumicrecords:block/silverwood_slab_top" }
+  }
+}

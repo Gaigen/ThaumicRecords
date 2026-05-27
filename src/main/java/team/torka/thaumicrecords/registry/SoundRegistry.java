@@ -48,4 +48,7 @@ public class SoundRegistry {
     public static final DeferredHolder<SoundEvent, SoundEvent> WAND_FAIL = REGISTRAR.register("wand_fail",
             () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("wand_fail")));
 
+    public static final DeferredHolder<SoundEvent, SoundEvent> GORE = REGISTRAR.register("gore",
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("gore")));
+
 }

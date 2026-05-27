@@ -22,6 +22,10 @@ public class ItemTagsGenerator extends ItemTagsProvider {
     @Override
     @ParametersAreNonnullByDefault
     protected void addTags(HolderLookup.Provider provider) {
+        // Planks & slabs (for table recipe and vanilla compatibility)
+        this.tag(ItemTags.PLANKS).add(ItemRegistry.GREATWOOD_PLANKS.get()).add(ItemRegistry.SILVERWOOD_PLANKS.get());
+        this.tag(ItemTags.SLABS).add(ItemRegistry.GREATWOOD_SLAB.get()).add(ItemRegistry.SILVERWOOD_SLAB.get());
+
         this.tag(ModTags.SHARD).add(ItemRegistry.AER_SHARD.get()).add(ItemRegistry.IGNIS_SHARD.get()).add(ItemRegistry.AQUA_SHARD.get()).add(
                 ItemRegistry.TERRA_SHARD.get()).add(ItemRegistry.ORDO_SHARD.get()).add(ItemRegistry.PERDITIO_SHARD.get()).add(
                 ItemRegistry.BALANCED_SHARD.get());

@@ -90,5 +90,13 @@
     "sounds": [
       "thaumicrecords:wand_fail"
     ]
+  },
+  "gore": {
+    "category": "block",
+    "subtitle": "sound.thaumicrecords.gore",
+    "sounds": [
+      "thaumicrecords:gore1",
+      "thaumicrecords:gore2"
+    ]
   }
 }

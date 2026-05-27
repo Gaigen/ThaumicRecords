@@ -4,6 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
@@ -34,6 +35,23 @@ public class BlockLootGenerator extends BlockLootSubProvider {
         this.dropSelf(BlockRegistry.PAVING_STONE_OF_WARDING.get());
         this.dropSelf(BlockRegistry.THAUMIUM_BLOCK.get());
         this.dropSelf(BlockRegistry.VOID_BLOCK.get());
+        this.dropSelf(BlockRegistry.AMBER_BLOCK.get());
+        this.dropSelf(BlockRegistry.AMBER_BRICK.get());
+        this.dropSelf(BlockRegistry.OBSIDIAN_TILE.get());
+        this.dropSelf(BlockRegistry.TALLOW_BLOCK.get());
+        this.dropSelf(BlockRegistry.ARCANE_STONE.get());
+        this.dropSelf(BlockRegistry.ARCANE_STONE_BRICK.get());
+        // Flesh Block: silk touch → block, otherwise → 9 rotten flesh
+        this.add(BlockRegistry.FLESH_BLOCK.get(), block -> createSilkTouchDispatchTable(block, this.applyExplosionCondition(block,
+                LootItem.lootTableItem(Items.ROTTEN_FLESH).apply(SetItemCountFunction.setCount(UniformGenerator.between(9.0F, 9.0F))))));
+        this.dropSelf(BlockRegistry.GREATWOOD_PLANKS.get());
+        this.dropSelf(BlockRegistry.SILVERWOOD_PLANKS.get());
+        this.dropSelf(BlockRegistry.ARCANE_STONE_STAIRS.get());
+        this.dropSelf(BlockRegistry.GREATWOOD_STAIRS.get());
+        this.dropSelf(BlockRegistry.SILVERWOOD_STAIRS.get());
+        this.dropSelf(BlockRegistry.ARCANE_STONE_SLAB.get());
+        this.dropSelf(BlockRegistry.GREATWOOD_SLAB.get());
+        this.dropSelf(BlockRegistry.SILVERWOOD_SLAB.get());
         // 琥珀矿石
         HolderLookup.RegistryLookup<Enchantment> enchantmentLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
         this.add(BlockRegistry.AMBER_ORE.get(), block -> createSilkTouchDispatchTable(block, this.applyExplosionCondition(block, LootItem.lootTableItem(
@@ -102,6 +120,21 @@ public class BlockLootGenerator extends BlockLootSubProvider {
         blocks.add(BlockRegistry.PAVING_STONE_OF_WARDING.get());
         blocks.add(BlockRegistry.THAUMIUM_BLOCK.get());
         blocks.add(BlockRegistry.VOID_BLOCK.get());
+        blocks.add(BlockRegistry.AMBER_BLOCK.get());
+        blocks.add(BlockRegistry.AMBER_BRICK.get());
+        blocks.add(BlockRegistry.OBSIDIAN_TILE.get());
+        blocks.add(BlockRegistry.TALLOW_BLOCK.get());
+        blocks.add(BlockRegistry.ARCANE_STONE.get());
+        blocks.add(BlockRegistry.ARCANE_STONE_BRICK.get());
+        blocks.add(BlockRegistry.FLESH_BLOCK.get());
+        blocks.add(BlockRegistry.GREATWOOD_PLANKS.get());
+        blocks.add(BlockRegistry.SILVERWOOD_PLANKS.get());
+        blocks.add(BlockRegistry.ARCANE_STONE_STAIRS.get());
+        blocks.add(BlockRegistry.GREATWOOD_STAIRS.get());
+        blocks.add(BlockRegistry.SILVERWOOD_STAIRS.get());
+        blocks.add(BlockRegistry.ARCANE_STONE_SLAB.get());
+        blocks.add(BlockRegistry.GREATWOOD_SLAB.get());
+        blocks.add(BlockRegistry.SILVERWOOD_SLAB.get());
         return blocks;
     }
 

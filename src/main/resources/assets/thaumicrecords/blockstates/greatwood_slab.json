@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=bottom": { "model": "thaumicrecords:block/greatwood_slab" },
+    "type=double": { "model": "thaumicrecords:block/greatwood_planks" },
+    "type=top": { "model": "thaumicrecords:block/greatwood_slab_top" }
+  }
+}

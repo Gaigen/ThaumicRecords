@@ -51,6 +51,14 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.NUGGET_PORK.get());
         basicItem(ItemRegistry.NUGGET_FISH.get());
         basicItem(ItemRegistry.TRIPLE_MEAT_TREAT.get());
+        basicItem(ItemRegistry.TALLOW.get());
+        basicItem(ItemRegistry.VOID_SEED.get());
+        basicItem(ItemRegistry.ZOMBIE_BRAIN.get());
+        basicItem(ItemRegistry.KNOWLEDGE_FRAGMENT.get());
+        basicItem(ItemRegistry.ESSENTIA_FILTER.get());
+        basicItem(ItemRegistry.MIRROR_GLASS.get());
+        basicItem(ItemRegistry.TAINT_SLIME.get());
+        basicItem(ItemRegistry.TAINT_TENDRIL.get());
         basicItem(ItemRegistry.THAUMIUM_HELMET.get());
         basicItem(ItemRegistry.THAUMIUM_CHESTPLATE.get());
         basicItem(ItemRegistry.THAUMIUM_LEGGINGS.get());

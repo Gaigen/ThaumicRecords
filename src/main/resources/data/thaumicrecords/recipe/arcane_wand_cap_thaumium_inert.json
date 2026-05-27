@@ -1,0 +1,22 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    "NNN",
+    "N N"
+  ],
+  "key": {
+    "N": {
+      "item": "thaumicrecords:nugget_thaumium"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:wand_cap_thaumium_inert",
+    "count": 1
+  },
+  "baseVisCost": {
+    "thaumicrecords:ordo": 10,
+    "thaumicrecords:ignis": 10,
+    "thaumicrecords:aer": 10
+  },
+  "requiredResearch": []
+}

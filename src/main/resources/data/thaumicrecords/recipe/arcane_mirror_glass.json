@@ -1,0 +1,14 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": ["QG"],
+  "key": {
+    "Q": {"item": "thaumicrecords:quicksilver"},
+    "G": {"item": "minecraft:glass_pane"}
+  },
+  "result": {"id": "thaumicrecords:mirror_glass", "count": 1},
+  "baseVisCost": {
+    "thaumicrecords:ignis": 10,
+    "thaumicrecords:terra": 10
+  },
+  "requiredResearch": []
+}

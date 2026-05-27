@@ -1,0 +1,14 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": ["SSS", "SCS", "SSS"],
+  "key": {
+    "S": {"item": "minecraft:stone"},
+    "C": {"tag": "thaumicrecords:shard"}
+  },
+  "result": {"id": "thaumicrecords:arcane_stone", "count": 9},
+  "baseVisCost": {
+    "thaumicrecords:terra": 1,
+    "thaumicrecords:ignis": 1
+  },
+  "requiredResearch": []
+}

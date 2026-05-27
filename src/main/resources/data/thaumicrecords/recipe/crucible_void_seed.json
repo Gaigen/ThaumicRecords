@@ -1,0 +1,10 @@
+{
+  "type": "thaumicrecords:crucible",
+  "catalyst": {"item": "minecraft:wheat_seeds"},
+  "required_aspects": {
+    "thaumicrecords:tenebrae": 8,
+    "thaumicrecords:vacuos": 8,
+    "thaumicrecords:alienis": 2
+  },
+  "result": {"id": "thaumicrecords:void_seed", "count": 1}
+}

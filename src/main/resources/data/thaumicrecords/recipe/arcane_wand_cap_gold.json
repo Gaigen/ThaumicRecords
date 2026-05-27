@@ -1,0 +1,22 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    "NNN",
+    "N N"
+  ],
+  "key": {
+    "N": {
+      "item": "minecraft:gold_nugget"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:wand_cap_gold",
+    "count": 1
+  },
+  "baseVisCost": {
+    "thaumicrecords:ordo": 10,
+    "thaumicrecords:ignis": 10,
+    "thaumicrecords:aer": 10
+  },
+  "requiredResearch": []
+}

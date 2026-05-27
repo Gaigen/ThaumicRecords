@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "thaumicrecords:block/silverwood_planks",
+    "top": "thaumicrecords:block/silverwood_planks",
+    "side": "thaumicrecords:block/silverwood_planks"
+  }
+}
