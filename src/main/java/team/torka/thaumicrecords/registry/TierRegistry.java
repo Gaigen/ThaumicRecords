@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 public enum TierRegistry implements Tier {
     THAUMIUM(400, 7.0F, 2.0F, 22, BlockTags.NEEDS_DIAMOND_TOOL, () -> Ingredient.of(ItemRegistry.THAUMIUM_INGOT.get())),
     VOID(150, 8.0F, 3.0F, 10, BlockTags.NEEDS_DIAMOND_TOOL, () -> Ingredient.of(ItemRegistry.VOID_INGOT.get())),
+    ELEMENTAL(1500, 10.0F, 3.0F, 18, BlockTags.NEEDS_DIAMOND_TOOL, () -> Ingredient.of(ItemRegistry.THAUMIUM_INGOT.get())),
     PRIMAL_VOID(500, 8.0F, 3.0F, 20, BlockTags.NEEDS_DIAMOND_TOOL, () -> Ingredient.of(ItemRegistry.VOID_INGOT.get())),
     CRIMSON_VOID(200, 8.0F, 3.5F, 20, BlockTags.NEEDS_DIAMOND_TOOL, () -> Ingredient.of(ItemRegistry.VOID_INGOT.get()));
 

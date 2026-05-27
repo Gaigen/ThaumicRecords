@@ -110,6 +110,12 @@ public class ItemModelGenerator extends ItemModelProvider {
         // Crimson Blade & Primal Crusher
         handheldItem(ItemRegistry.CRIMSON_BLADE);
         handheldItem(ItemRegistry.PRIMAL_CRUSHER);
+
+        // Elemental Tools
+        handheldItem(ItemRegistry.ELEMENTAL_SHOVEL);
+        handheldItem(ItemRegistry.ELEMENTAL_PICKAXE);
+        handheldItem(ItemRegistry.ELEMENTAL_AXE);
+        handheldItem(ItemRegistry.ELEMENTAL_HOE);
     }
 
     private void handheldItem(net.neoforged.neoforge.registries.DeferredItem<?> item) {

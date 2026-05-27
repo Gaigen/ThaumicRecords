@@ -35,6 +35,12 @@ import team.torka.thaumicrecords.item.ThaumiumPickaxeItem;
 import team.torka.thaumicrecords.item.ThaumiumShovelItem;
 import team.torka.thaumicrecords.item.ThaumiumSwordItem;
 import team.torka.thaumicrecords.item.ThaumometerItem;
+import team.torka.thaumicrecords.item.CrimsonBladeItem;
+import team.torka.thaumicrecords.item.ElementalAxeItem;
+import team.torka.thaumicrecords.item.ElementalHoeItem;
+import team.torka.thaumicrecords.item.ElementalPickaxeItem;
+import team.torka.thaumicrecords.item.ElementalShovelItem;
+import team.torka.thaumicrecords.item.PrimalCrusherItem;
 import team.torka.thaumicrecords.item.VoidArmorItem;
 import team.torka.thaumicrecords.item.VoidAxeItem;
 import team.torka.thaumicrecords.item.VoidHoeItem;
@@ -159,6 +165,13 @@ public class ItemRegistry {
 
     // Primal Crusher
     public static final DeferredItem<PrimalCrusherItem> PRIMAL_CRUSHER = REGISTRAR.register("primal_crusher", PrimalCrusherItem::new);
+
+    // Elemental Tools
+    public static final DeferredItem<ElementalShovelItem> ELEMENTAL_SHOVEL = REGISTRAR.register("elemental_shovel", ElementalShovelItem::new);
+    public static final DeferredItem<ElementalPickaxeItem> ELEMENTAL_PICKAXE = REGISTRAR.register("elemental_pickaxe", ElementalPickaxeItem::new);
+    public static final DeferredItem<ElementalAxeItem> ELEMENTAL_AXE = REGISTRAR.register("elemental_axe", ElementalAxeItem::new);
+
+    public static final DeferredItem<ElementalHoeItem> ELEMENTAL_HOE = REGISTRAR.register("elemental_hoe", ElementalHoeItem::new);
 
     // Robe Armor
     public static final DeferredItem<RobeArmorItem> ROBE_CHESTPLATE = REGISTRAR.register("robe_chestplate",
@@ -292,6 +305,10 @@ public class ItemRegistry {
         output.accept(VOID_HOE);
         output.accept(CRIMSON_BLADE);
         output.accept(PRIMAL_CRUSHER);
+        output.accept(ELEMENTAL_SHOVEL);
+        output.accept(ELEMENTAL_PICKAXE);
+        output.accept(ELEMENTAL_AXE);
+        output.accept(ELEMENTAL_HOE);
         output.accept(ROBE_CHESTPLATE);
         output.accept(ROBE_LEGGINGS);
         output.accept(ROBE_BOOTS);

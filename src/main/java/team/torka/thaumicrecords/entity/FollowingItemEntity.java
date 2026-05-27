@@ -15,6 +15,7 @@ import team.torka.thaumicrecords.registry.EntityRegistry;
 
 public class FollowingItemEntity extends ItemEntity {
     private static final EntityDataAccessor<Integer> DATA_TARGET_ID = SynchedEntityData.defineId(FollowingItemEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_COLOR_TYPE = SynchedEntityData.defineId(FollowingItemEntity.class, EntityDataSerializers.INT);
 
     private int ticksInState = 20;
 
@@ -29,16 +30,22 @@ public class FollowingItemEntity extends ItemEntity {
     }
 
     public FollowingItemEntity(Level level, double x, double y, double z, ItemStack stack, Player target) {
+        this(level, x, y, z, stack, target, 2);
+    }
+
+    public FollowingItemEntity(Level level, double x, double y, double z, ItemStack stack, Player target, int particleColorType) {
         this(EntityRegistry.FOLLOWING_ITEM.get(), level);
         this.setPos(x, y, z);
         this.setItem(stack);
         this.setFollowingTarget(target);
+        this.entityData.set(DATA_COLOR_TYPE, particleColorType);
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_TARGET_ID, -1);
+        builder.define(DATA_COLOR_TYPE, 2); // default blue
     }
 
     @Override
@@ -71,12 +78,13 @@ public class FollowingItemEntity extends ItemEntity {
             this.setDeltaMovement(getDeltaMovement().add(0, -0.04, 0));
         }
 
-        // Client-side sparkle particles (blue, type=2)
+        // Client-side sparkle particles
         if (level().isClientSide && getFollowingTarget() != null) {
+            int colorType = this.entityData.get(DATA_COLOR_TYPE);
             double px = xo + (random.nextFloat() - random.nextFloat()) * 0.125;
             double py = yo + getBbHeight() / 2.0 + (random.nextFloat() - random.nextFloat()) * 0.125;
             double pz = zo + (random.nextFloat() - random.nextFloat()) * 0.125;
-            SparkleParticle sparkle = SparkleParticle.createDirect((net.minecraft.client.multiplayer.ClientLevel) level(), px, py, pz, 1.5F, 2, 6);
+            SparkleParticle sparkle = SparkleParticle.createDirect((net.minecraft.client.multiplayer.ClientLevel) level(), px, py, pz, 1.5F, colorType, 6);
             sparkle.setNoClip(true);
             net.minecraft.client.Minecraft.getInstance().particleEngine.add(sparkle);
         }
@@ -97,6 +105,7 @@ public class FollowingItemEntity extends ItemEntity {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("TargetId", this.entityData.get(DATA_TARGET_ID));
+        tag.putInt("ColorType", this.entityData.get(DATA_COLOR_TYPE));
     }
 
     @Override
@@ -104,6 +113,9 @@ public class FollowingItemEntity extends ItemEntity {
         super.readAdditionalSaveData(tag);
         if (tag.contains("TargetId")) {
             this.entityData.set(DATA_TARGET_ID, tag.getInt("TargetId"));
+        }
+        if (tag.contains("ColorType")) {
+            this.entityData.set(DATA_COLOR_TYPE, tag.getInt("ColorType"));
         }
     }
 }
