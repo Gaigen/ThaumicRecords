@@ -18,6 +18,11 @@ import team.torka.thaumicrecords.client.renderer.item.PhialItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.TableItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.ThaumometerItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.WandItemRenderer;
+import team.torka.thaumicrecords.item.CultistLeaderArmorItem;
+import team.torka.thaumicrecords.item.CultistPlateArmorItem;
+import team.torka.thaumicrecords.item.CultistRobeArmorItem;
+import team.torka.thaumicrecords.item.FortressArmorItem;
+import team.torka.thaumicrecords.item.VoidRobeArmorItem;
 import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 import team.torka.thaumicrecords.registry.ParticleRegistry;
@@ -42,6 +47,21 @@ public class RegisterClientExtensionsEventListener {
         event.registerItem(ThaumometerItemRenderer.INSTANCE.getExtensions(), ItemRegistry.THAUMOMETER.get());
         event.registerItem(JarItemRenderer.INSTANCE.getExtensions(), ItemRegistry.JAR.get());
         event.registerItem(PhialItemRenderer.INSTANCE.getExtensions(), ItemRegistry.PHIAL.get());
+        event.registerItem(FortressArmorItem.getExtensions(), ItemRegistry.FORTRESS_HELMET.get());
+        event.registerItem(FortressArmorItem.getExtensions(), ItemRegistry.FORTRESS_CHESTPLATE.get());
+        event.registerItem(FortressArmorItem.getExtensions(), ItemRegistry.FORTRESS_LEGGINGS.get());
+        event.registerItem(CultistRobeArmorItem.getExtensions(), ItemRegistry.CRIMSON_ROBE_HELMET.get());
+        event.registerItem(CultistRobeArmorItem.getExtensions(), ItemRegistry.CRIMSON_ROBE_CHESTPLATE.get());
+        event.registerItem(CultistRobeArmorItem.getExtensions(), ItemRegistry.CRIMSON_ROBE_LEGGINGS.get());
+        event.registerItem(CultistPlateArmorItem.getExtensions(), ItemRegistry.CRIMSON_PLATE_HELMET.get());
+        event.registerItem(CultistPlateArmorItem.getExtensions(), ItemRegistry.CRIMSON_PLATE_CHESTPLATE.get());
+        event.registerItem(CultistPlateArmorItem.getExtensions(), ItemRegistry.CRIMSON_PLATE_LEGGINGS.get());
+        event.registerItem(CultistLeaderArmorItem.getExtensions(), ItemRegistry.CRIMSON_LEADER_HELMET.get());
+        event.registerItem(CultistLeaderArmorItem.getExtensions(), ItemRegistry.CRIMSON_LEADER_CHESTPLATE.get());
+        event.registerItem(CultistLeaderArmorItem.getExtensions(), ItemRegistry.CRIMSON_LEADER_LEGGINGS.get());
+        event.registerItem(VoidRobeArmorItem.getExtensions(), ItemRegistry.VOID_ROBE_HELMET.get());
+        event.registerItem(VoidRobeArmorItem.getExtensions(), ItemRegistry.VOID_ROBE_CHESTPLATE.get());
+        event.registerItem(VoidRobeArmorItem.getExtensions(), ItemRegistry.VOID_ROBE_LEGGINGS.get());
     }
 
     private static void registerBlockExtensions(RegisterClientExtensionsEvent event) {

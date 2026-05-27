@@ -3,6 +3,7 @@ package team.torka.thaumicrecords.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import team.torka.thaumicrecords.ThaumicRecords;
@@ -21,10 +22,12 @@ public class ItemTagsGenerator extends ItemTagsProvider {
     @Override
     @ParametersAreNonnullByDefault
     protected void addTags(HolderLookup.Provider provider) {
-        this.tag(ModTags.SHARD).add(ItemRegistry.AER_SHARD.get(), ItemRegistry.IGNIS_SHARD.get(), ItemRegistry.AQUA_SHARD.get(), ItemRegistry.TERRA_SHARD.get(),
-                ItemRegistry.ORDO_SHARD.get(), ItemRegistry.PERDITIO_SHARD.get(), ItemRegistry.BALANCED_SHARD.get());
-        this.tag(ModTags.SHOW_NODE_WHEN_EQUIPPED).add(ItemRegistry.GOGGLES.get());
+        this.tag(ModTags.SHARD).add(ItemRegistry.AER_SHARD.get()).add(ItemRegistry.IGNIS_SHARD.get()).add(ItemRegistry.AQUA_SHARD.get()).add(
+                ItemRegistry.TERRA_SHARD.get()).add(ItemRegistry.ORDO_SHARD.get()).add(ItemRegistry.PERDITIO_SHARD.get()).add(
+                ItemRegistry.BALANCED_SHARD.get());
+        this.tag(ModTags.SHOW_NODE_WHEN_EQUIPPED).add(ItemRegistry.GOGGLES.get()).add(ItemRegistry.FORTRESS_HELMET.get());
         this.tag(ModTags.SHOW_NODE_WHEN_HELD).add(ItemRegistry.THAUMOMETER.get());
-        this.tag(ModTags.SHOW_ASPECT_WHEN_EQUIPPED).add(ItemRegistry.GOGGLES.get());
+        this.tag(ItemTags.DYEABLE).add(ItemRegistry.ROBE_CHESTPLATE.get(), ItemRegistry.ROBE_LEGGINGS.get(), ItemRegistry.ROBE_BOOTS.get(),
+                ItemRegistry.VOID_ROBE_HELMET.get(), ItemRegistry.VOID_ROBE_CHESTPLATE.get(), ItemRegistry.VOID_ROBE_LEGGINGS.get());
     }
 }

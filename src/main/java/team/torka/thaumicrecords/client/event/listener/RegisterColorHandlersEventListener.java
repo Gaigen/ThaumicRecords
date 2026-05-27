@@ -83,6 +83,24 @@ public class RegisterColorHandlersEventListener {
         event.register((stack, tintIndex) -> tintIndex == 1 ? 40960 | 0xFF000000 : -1, BlockRegistry.TERRA_INFUSED_STONE.get());
         event.register((stack, tintIndex) -> tintIndex == 1 ? 15650047 | 0xFF000000 : -1, BlockRegistry.ORDO_INFUSED_STONE.get());
         event.register((stack, tintIndex) -> tintIndex == 1 ? 5592439 | 0xFF000000 : -1, BlockRegistry.PERDITIO_INFUSED_STONE.get());
+
+        // Robe armor dye
+        event.register((stack, tintIndex) -> {
+            if (tintIndex == 1) {
+                return net.minecraft.world.item.component.DyedItemColor.getOrDefault(stack,
+                        net.minecraft.world.item.component.DyedItemColor.LEATHER_COLOR) | 0xFF000000;
+            }
+            return -1;
+        }, ItemRegistry.ROBE_CHESTPLATE.get(), ItemRegistry.ROBE_LEGGINGS.get(), ItemRegistry.ROBE_BOOTS.get());
+
+        // Void Robe dye
+        event.register((stack, tintIndex) -> {
+            if (tintIndex == 1) {
+                return net.minecraft.world.item.component.DyedItemColor.getOrDefault(stack,
+                        net.minecraft.world.item.component.DyedItemColor.LEATHER_COLOR) | 0xFF000000;
+            }
+            return -1;
+        }, ItemRegistry.VOID_ROBE_HELMET.get(), ItemRegistry.VOID_ROBE_CHESTPLATE.get(), ItemRegistry.VOID_ROBE_LEGGINGS.get());
     }
 
     @SubscribeEvent
