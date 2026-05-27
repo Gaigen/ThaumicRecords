@@ -36,6 +36,8 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 // Default run configurations.
 // These can be tweaked, removed, or duplicated as needed.
+
+
 runs {
     // applies to all the run configs below
     configureEach {
@@ -171,5 +173,18 @@ idea {
     module {
         downloadSources = true
         downloadJavadoc = true
+    }
+}
+
+afterEvaluate {
+    if (tasks.findByName('runClient') != null && tasks.findByName('runData') != null) {
+        tasks.register('generateAndRunClient') {
+            dependsOn tasks.named('runData'), tasks.named('runClient')
+        }
+        tasks.named('runClient') {
+            mustRunAfter tasks.named('runData')
+        }
+    } else {
+        logger.warn("Tasks runClient or runData not found, skip generateAndRunClient setup")
     }
 }

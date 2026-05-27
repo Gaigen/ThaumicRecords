@@ -12,7 +12,6 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.item.WandRod;
-import team.torka.thaumicrecords.data.component.AspectListComponent;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.item.BootsTravellerItem;
 import team.torka.thaumicrecords.item.CultistBootsItem;
@@ -21,6 +20,8 @@ import team.torka.thaumicrecords.item.CultistPlateArmorItem;
 import team.torka.thaumicrecords.item.CultistRobeArmorItem;
 import team.torka.thaumicrecords.item.FortressArmorItem;
 import team.torka.thaumicrecords.item.GogglesItem;
+import team.torka.thaumicrecords.item.JarBlockItem;
+import team.torka.thaumicrecords.item.PhialItem;
 import team.torka.thaumicrecords.item.PrimordialPearItem;
 import team.torka.thaumicrecords.item.ResearchNotesItem;
 import team.torka.thaumicrecords.item.RobeArmorItem;
@@ -53,6 +54,7 @@ public class ItemRegistry {
     public static final DeferredItem<Item> QUICKSILVER = REGISTRAR.registerSimpleItem("quicksilver");
     public static final DeferredItem<Item> BATH_SALTS = REGISTRAR.registerSimpleItem("bath_salts");
     public static final DeferredItem<Item> PRIMAL_CHARM = REGISTRAR.registerSimpleItem("primal_charm");
+    public static final DeferredItem<Item> PHIAL = REGISTRAR.register("phial",PhialItem::new);
     public static final DeferredItem<Item> ENCHANTED_FABRIC = REGISTRAR.registerSimpleItem("enchanted_fabric");
     public static final DeferredItem<Item> COIN = REGISTRAR.registerSimpleItem("coin");
     public static final DeferredItem<Item> AER_SHARD = REGISTRAR.registerSimpleItem("aer_shard");
@@ -227,6 +229,7 @@ public class ItemRegistry {
             () -> new BlockItem(BlockRegistry.GREATWOOD_LOG.get(), new Item.Properties()));
     public static final DeferredItem<Item> GREATWOOD_LEAVES = ItemRegistry.REGISTRAR.register("greatwood_leaves",
             () -> new BlockItem(BlockRegistry.GREATWOOD_LEAVES.get(), new Item.Properties()));
+    public static final DeferredItem<Item> JAR = ItemRegistry.REGISTRAR.register("jar", ()-> new JarBlockItem(BlockRegistry.JAR.get(),new Item.Properties()));
     // @formatter:on
     public static void putInCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(ironCappedWoodWand());
@@ -316,6 +319,24 @@ public class ItemRegistry {
         output.accept(ARCANE_PEDESTAL);
         output.accept(CRUCIBLE);
         output.accept(ALCHEMICAL_CONSTRUCT);
+        output.accept(JAR);
+    }
+
+    public static void putInPhialCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
+        ItemStack emptyPhial = new ItemStack(ItemRegistry.PHIAL.get());
+        output.accept(emptyPhial);
+        AspectRegistry.ASPECT_REGISTRY.forEach(aspect -> {
+            ItemStack stack = new ItemStack(ItemRegistry.PHIAL.get());
+            if (stack.getItem() instanceof PhialItem item) {
+                AspectList list = new AspectList();
+                list.put(AspectRegistry.ASPECT_REGISTRY.getKey(aspect), 8);
+                item.setAspects(stack, list);
+            }
+            output.accept(stack);
+        });
+    }
+
+    public static void putInWipCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         output.accept(PRIMORDIAL_PEARL);
         output.accept(AURA_NODE);
     }
@@ -323,9 +344,11 @@ public class ItemRegistry {
     public static void putInWispEssenceCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
         AspectRegistry.ASPECT_REGISTRY.forEach(aspect -> {
             ItemStack stack = new ItemStack(ItemRegistry.WISP_ESSENCE.get());
-            AspectList list = new AspectList();
-            list.put(AspectRegistry.ASPECT_REGISTRY.getKey(aspect), 2);
-            stack.set(DataComponentRegistry.ASPECT_LIST.get(), new AspectListComponent(list));
+            if (stack.getItem() instanceof WispEssenceItem item) {
+                AspectList list = new AspectList();
+                list.put(AspectRegistry.ASPECT_REGISTRY.getKey(aspect), 2);
+                item.setAspects(stack, list);
+            }
             output.accept(stack);
         });
     }

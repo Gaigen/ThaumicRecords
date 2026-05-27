@@ -11,6 +11,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.api.aspect.IEssentiaContainerItem;
 import team.torka.thaumicrecords.attachment.AspectDiscovery;
 import team.torka.thaumicrecords.recipe.AspectRecipe;
 import team.torka.thaumicrecords.registry.AspectRegistry;
@@ -37,6 +38,10 @@ public class AspectHelper {
         AspectList cached = ITEM_ASPECTS_CACHE.get(item);
         if (Objects.nonNull(cached)) {
             return cached;
+        }
+        if (item instanceof IEssentiaContainerItem essentiaContainer) {
+            AspectList readed = essentiaContainer.getAspects(stack);
+            return readed;
         }
         return AspectList.empty();
     }

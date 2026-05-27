@@ -5,13 +5,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
-import team.torka.thaumicrecords.block.entity.ArcanePedestalBlockEntity;
-import team.torka.thaumicrecords.block.entity.ArcaneWorkbenchBlockEntity;
-import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
-import team.torka.thaumicrecords.block.entity.CrucibleBlockEntity;
-import team.torka.thaumicrecords.block.entity.ThaumatoriumBlockEntity;
-import team.torka.thaumicrecords.block.entity.ResearchTableBlockEntity;
-import team.torka.thaumicrecords.block.entity.TableBlockEntity;
+import team.torka.thaumicrecords.block.JarBlock;
+import team.torka.thaumicrecords.block.entity.*;
 
 public class BlockEntityRegistry {
 
@@ -37,4 +32,7 @@ public class BlockEntityRegistry {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ThaumatoriumBlockEntity>> THAUMATORIUM = REGISTRAR.register("thaumatorium",
             () -> BlockEntityType.Builder.of(ThaumatoriumBlockEntity::new, BlockRegistry.THAUMATORIUM.get()).build(null));
+    
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<JarBlockEntity>> JAR = REGISTRAR.register("jar",
+            () -> BlockEntityType.Builder.of(JarBlockEntity::new, BlockRegistry.JAR.get()).build(null));
 }
