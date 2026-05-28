@@ -16,13 +16,14 @@ import team.torka.thaumicrecords.client.model.TableModel;
 import team.torka.thaumicrecords.client.renderer.CustomModelLayer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ArcanePedestalRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ArcaneWorkbenchRenderer;
-import team.torka.thaumicrecords.client.renderer.blockentity.DeconstructionTableRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.AuraNodeRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.CrucibleRenderer;
+import team.torka.thaumicrecords.client.renderer.blockentity.DeconstructionTableRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.JarBlockEntityRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ResearchTableRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.TableRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ThaumatoriumRenderer;
+import team.torka.thaumicrecords.client.renderer.entity.SpecialItemRenderer;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 import team.torka.thaumicrecords.registry.EntityRegistry;
 
@@ -40,6 +41,7 @@ public class EntityRenderersEventListener {
         event.registerBlockEntityRenderer(BlockEntityRegistry.JAR.get(), JarBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.DECONSTRUCTION_TABLE.get(), DeconstructionTableRenderer::new);
         event.registerEntityRenderer(EntityRegistry.FOLLOWING_ITEM.get(), ItemEntityRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.SPECIAL_ITEM.get(), SpecialItemRenderer::new);
     }
 
     @SubscribeEvent

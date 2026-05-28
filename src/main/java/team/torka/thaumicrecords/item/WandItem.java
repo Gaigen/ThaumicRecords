@@ -7,10 +7,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,6 +25,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
@@ -31,12 +35,16 @@ import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.block.ThaumatoriumBlock;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.block.entity.CrucibleBlockEntity;
+import team.torka.thaumicrecords.block.entity.ThaumatoriumBlockEntity;
 import team.torka.thaumicrecords.block.part.ThaumatoriumPart;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
+import team.torka.thaumicrecords.entity.SpecialItemEntity;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
+import team.torka.thaumicrecords.registry.EntityRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
+import team.torka.thaumicrecords.registry.SoundRegistry;
 import team.torka.thaumicrecords.registry.WandCapRegistry;
 import team.torka.thaumicrecords.registry.WandRodRegistry;
 
@@ -161,7 +169,7 @@ public class WandItem extends Item {
             if (!level.isClientSide) {
                 BlockState crucibleState = BlockRegistry.CRUCIBLE.get().defaultBlockState();
                 level.setBlock(pos, crucibleState, 3);
-                level.playSound(null, pos, team.torka.thaumicrecords.registry.SoundRegistry.WAND.get(), net.minecraft.sounds.SoundSource.BLOCKS, 0.5F, 1.0F);
+                level.playSound(null, pos, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
             }
             return InteractionResult.SUCCESS;
         }
@@ -200,20 +208,29 @@ public class WandItem extends Item {
                             3);
                     level.setBlock(topPos, BlockRegistry.THAUMATORIUM.get().defaultBlockState().setValue(ThaumatoriumBlock.PART, ThaumatoriumPart.TOP), 3);
 
-                    if (level.getBlockEntity(bottomPos) instanceof team.torka.thaumicrecords.block.entity.ThaumatoriumBlockEntity thaum) {
+                    if (level.getBlockEntity(bottomPos) instanceof ThaumatoriumBlockEntity thaum) {
                         thaum.facing = player.getDirection().getOpposite();
                         thaum.syncToClient();
                         thaum.setChanged();
                     }
 
-                    level.playSound(null, topPos, team.torka.thaumicrecords.registry.SoundRegistry.WAND.get(), net.minecraft.sounds.SoundSource.BLOCKS, 0.5F,
-                            1.0F);
+                    level.playSound(null, topPos, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
                 }
                 return InteractionResult.SUCCESS;
             }
             return InteractionResult.PASS;
         }
 
+        if (state.is(Tags.Blocks.BOOKSHELVES)) {
+            level.removeBlock(pos, false);
+            ItemStack itemStack = new ItemStack(ItemRegistry.THAUMONOMICON.get(), 1);
+            ItemEntity entityItem = new SpecialItemEntity(EntityRegistry.SPECIAL_ITEM.get(), level, pos.getX() + 0.5D, pos.getY() + 0.3D, pos.getZ() + 0.5D,
+                    itemStack);
+            entityItem.setDeltaMovement(Vec3.ZERO);
+            level.addFreshEntity(entityItem);
+            level.playSound(null, pos, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
         return InteractionResult.PASS;
     }
 

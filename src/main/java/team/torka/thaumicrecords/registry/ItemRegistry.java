@@ -43,6 +43,7 @@ import team.torka.thaumicrecords.item.ThaumiumPickaxeItem;
 import team.torka.thaumicrecords.item.ThaumiumShovelItem;
 import team.torka.thaumicrecords.item.ThaumiumSwordItem;
 import team.torka.thaumicrecords.item.ThaumometerItem;
+import team.torka.thaumicrecords.item.ThaumonomiconItem;
 import team.torka.thaumicrecords.item.VoidArmorItem;
 import team.torka.thaumicrecords.item.VoidAxeItem;
 import team.torka.thaumicrecords.item.VoidHoeItem;
@@ -73,8 +74,9 @@ public class ItemRegistry {
     public static final DeferredItem<Item> PERDITIO_SHARD = REGISTRAR.registerSimpleItem("perditio_shard");
     public static final DeferredItem<Item> BALANCED_SHARD = REGISTRAR.registerSimpleItem("balanced_shard");
     public static final DeferredItem<Item> SALIS_MUNDUS = REGISTRAR.registerSimpleItem("salis_mundus");
-    public static final DeferredItem<Item> PRIMORDIAL_PEARL=REGISTRAR.registerItem("primordial_pearl", PrimordialPearItem::new, itemProp(1));
-    public static final DeferredItem<GogglesItem> GOGGLES=REGISTRAR.register("goggles",GogglesItem::new);
+    public static final DeferredItem<Item> PRIMORDIAL_PEARL = REGISTRAR.registerItem("primordial_pearl", PrimordialPearItem::new, itemProp(1));
+    public static final DeferredItem<GogglesItem> GOGGLES = REGISTRAR.register("goggles",GogglesItem::new);
+    public static final DeferredItem<ThaumonomiconItem> THAUMONOMICON = REGISTRAR.register("thaumonomicon",ThaumonomiconItem::new);
 
     // Fortress Armor
     public static final DeferredItem<FortressArmorItem> FORTRESS_HELMET = REGISTRAR.register("fortress_helmet",
@@ -338,6 +340,7 @@ public class ItemRegistry {
         output.accept(goldCappedGreatwoodWand());
         output.accept(thaumiumCappedSilverwoodWand());
         output.accept(THAUMOMETER);
+        output.accept(THAUMONOMICON);
         output.accept(AER_INFUSED_STONE);
         output.accept(IGNIS_INFUSED_STONE);
         output.accept(AQUA_INFUSED_STONE);
