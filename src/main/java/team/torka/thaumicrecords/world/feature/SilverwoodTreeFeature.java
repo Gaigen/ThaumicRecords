@@ -137,7 +137,35 @@ public class SilverwoodTreeFeature extends Feature<NoneFeatureConfiguration> {
         world.setBlock(pos.offset(2, height - 4, 0), BlockRegistry.SILVERWOOD_LOG.get().defaultBlockState(), 3);
         world.setBlock(pos.offset(0, height - 4, -2), BlockRegistry.SILVERWOOD_LOG.get().defaultBlockState(), 3);
         world.setBlock(pos.offset(0, height - 4, 2), BlockRegistry.SILVERWOOD_LOG.get().defaultBlockState(), 3);
-        // TODO 自然生成时候生成水银花
+
+        int cinderpearlLimit = 18; //froom original thaumcraft
+        float cinderPearlSpawnChance = 0.05F;
+        int xzRadius = 9;
+        int yRadius = 4;
+
+        for (int dx = -xzRadius; dx < xzRadius && cinderpearlLimit > 0; dx++) {
+            for (int dz = -xzRadius; dz < xzRadius && cinderpearlLimit > 0; dz++) {
+                for (int dy = -xzRadius; dy < yRadius && cinderpearlLimit > 0; dy++) {
+                    var testingPosition = pos.offset(dx, dy, dz);
+                    var belowPosition = testingPosition.below();
+                    if (!world.getBlockState(belowPosition).is(BlockTags.DIRT)) {
+                        continue;
+                    }
+                    if (!world.getBlockState(testingPosition).isAir()) {
+                        continue;
+                    }
+                    float combinedChance = (((xzRadius - Math.abs(dx)) / (float) xzRadius) + ((xzRadius - Math.abs(
+                            dz)) / (float) xzRadius)) * cinderPearlSpawnChance / 2f;
+                    if (random.nextFloat() > combinedChance) {
+                        continue;
+                    }
+                    world.setBlock(testingPosition, BlockRegistry.SHIMMERLEAF.get().defaultBlockState(), 3);
+                    cinderpearlLimit--;
+
+                }
+            }
+        }
+
         return true;
     }
 
