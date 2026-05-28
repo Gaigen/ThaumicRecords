@@ -100,7 +100,7 @@ public class AuraNodeBlockEntity extends BlockEntity implements AspectRenderable
     private void handleNodeRegen(Level level) {
         ArrayList<ResourceLocation> toRegenAspects = new ArrayList<>();
         for (var aspect : limit.keySet()) {
-            if (current.containsKey(aspect) && current.getOrZero(aspect) < limit.getOrZero(aspect)) {
+            if (current.getOrZero(aspect) < limit.getOrZero(aspect)) {
                 toRegenAspects.add(aspect);
             }
         }
