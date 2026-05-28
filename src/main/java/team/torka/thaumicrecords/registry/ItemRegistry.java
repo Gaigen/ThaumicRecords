@@ -1,6 +1,9 @@
 package team.torka.thaumicrecords.registry;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -35,6 +38,13 @@ import team.torka.thaumicrecords.item.ThaumiumPickaxeItem;
 import team.torka.thaumicrecords.item.ThaumiumShovelItem;
 import team.torka.thaumicrecords.item.ThaumiumSwordItem;
 import team.torka.thaumicrecords.item.ThaumometerItem;
+import team.torka.thaumicrecords.item.CrimsonBladeItem;
+import team.torka.thaumicrecords.item.ElementalAxeItem;
+import team.torka.thaumicrecords.item.ElementalHoeItem;
+import team.torka.thaumicrecords.item.ElementalPickaxeItem;
+import team.torka.thaumicrecords.item.ElementalShovelItem;
+import team.torka.thaumicrecords.item.KnowledgeFragmentItem;
+import team.torka.thaumicrecords.item.PrimalCrusherItem;
 import team.torka.thaumicrecords.item.VoidArmorItem;
 import team.torka.thaumicrecords.item.VoidAxeItem;
 import team.torka.thaumicrecords.item.VoidHoeItem;
@@ -120,6 +130,41 @@ public class ItemRegistry {
     public static final DeferredItem<Item> THAUMIUM_INGOT = REGISTRAR.registerSimpleItem("thaumium_ingot");
     public static final DeferredItem<Item> VOID_INGOT = REGISTRAR.registerSimpleItem("void_ingot");
 
+    // Metal Nuggets
+    public static final DeferredItem<Item> NUGGET_THAUMIUM = REGISTRAR.registerSimpleItem("nugget_thaumium");
+    public static final DeferredItem<Item> NUGGET_VOID = REGISTRAR.registerSimpleItem("nugget_void");
+    public static final DeferredItem<Item> NUGGET_QUICKSILVER = REGISTRAR.registerSimpleItem("nugget_quicksilver");
+    public static final DeferredItem<Item> TALLOW = REGISTRAR.registerSimpleItem("tallow");
+    public static final DeferredItem<Item> VOID_SEED = REGISTRAR.registerSimpleItem("void_seed");
+    public static final DeferredItem<Item> ZOMBIE_BRAIN = REGISTRAR.register("zombie_brain",
+            () -> new Item(new Item.Properties().food(new FoodProperties.Builder()
+                    .nutrition(4).saturationModifier(0.2f)
+                    .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 600, 0), 0.8f).build())));
+    public static final DeferredItem<KnowledgeFragmentItem> KNOWLEDGE_FRAGMENT = REGISTRAR.register("knowledge_fragment",
+            () -> new KnowledgeFragmentItem());
+    public static final DeferredItem<Item> ESSENTIA_FILTER = REGISTRAR.registerSimpleItem("essentia_filter");
+    public static final DeferredItem<Item> MIRROR_GLASS = REGISTRAR.registerSimpleItem("mirror_glass");
+    public static final DeferredItem<Item> TAINT_SLIME = REGISTRAR.registerSimpleItem("taint_slime");
+    public static final DeferredItem<Item> TAINT_TENDRIL = REGISTRAR.registerSimpleItem("taint_tendril");
+
+    // Edible Nuggets (food: 1 nutrition, 0.3 saturation)
+    private static final FoodProperties NUGGET_FOOD = new FoodProperties.Builder().nutrition(1).saturationModifier(0.3f).build();
+    public static final DeferredItem<Item> NUGGET_CHICKEN = REGISTRAR.register("nugget_chicken",
+            () -> new Item(new Item.Properties().food(NUGGET_FOOD)));
+    public static final DeferredItem<Item> NUGGET_BEEF = REGISTRAR.register("nugget_beef",
+            () -> new Item(new Item.Properties().food(NUGGET_FOOD)));
+    public static final DeferredItem<Item> NUGGET_PORK = REGISTRAR.register("nugget_pork",
+            () -> new Item(new Item.Properties().food(NUGGET_FOOD)));
+    public static final DeferredItem<Item> NUGGET_FISH = REGISTRAR.register("nugget_fish",
+            () -> new Item(new Item.Properties().food(NUGGET_FOOD)));
+
+    // Triple Meat Treat (food: 6 nutrition, 0.8 saturation, always edible, regeneration)
+    private static final FoodProperties TRIPLE_MEAT_TREAT_FOOD = new FoodProperties.Builder()
+            .nutrition(6).saturationModifier(0.8f).alwaysEdible()
+            .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 100, 0), 0.66f).build();
+    public static final DeferredItem<Item> TRIPLE_MEAT_TREAT = REGISTRAR.register("triple_meat_treat",
+            () -> new Item(new Item.Properties().food(TRIPLE_MEAT_TREAT_FOOD)));
+
     // Thaumium Armor
     public static final DeferredItem<ThaumiumArmorItem> THAUMIUM_HELMET = REGISTRAR.register("thaumium_helmet",
             () -> new ThaumiumArmorItem(ArmorItem.Type.HELMET, ArmorMaterialRegistry.THAUMIUM));
@@ -160,6 +205,13 @@ public class ItemRegistry {
     // Primal Crusher
     public static final DeferredItem<PrimalCrusherItem> PRIMAL_CRUSHER = REGISTRAR.register("primal_crusher", PrimalCrusherItem::new);
 
+    // Elemental Tools
+    public static final DeferredItem<ElementalShovelItem> ELEMENTAL_SHOVEL = REGISTRAR.register("elemental_shovel", ElementalShovelItem::new);
+    public static final DeferredItem<ElementalPickaxeItem> ELEMENTAL_PICKAXE = REGISTRAR.register("elemental_pickaxe", ElementalPickaxeItem::new);
+    public static final DeferredItem<ElementalAxeItem> ELEMENTAL_AXE = REGISTRAR.register("elemental_axe", ElementalAxeItem::new);
+
+    public static final DeferredItem<ElementalHoeItem> ELEMENTAL_HOE = REGISTRAR.register("elemental_hoe", ElementalHoeItem::new);
+
     // Robe Armor
     public static final DeferredItem<RobeArmorItem> ROBE_CHESTPLATE = REGISTRAR.register("robe_chestplate",
             () -> new RobeArmorItem(ArmorItem.Type.CHESTPLATE, ArmorMaterialRegistry.ROBE));
@@ -188,6 +240,10 @@ public class ItemRegistry {
     public static final DeferredItem<ResearchNotesItem> RESEARCH_NOTES=REGISTRAR.register("research_notes",ResearchNotesItem::new);
 
     // Block Items
+    public static final DeferredItem<BlockItem> PAVING_STONE_OF_TRAVEL = REGISTRAR.register("paving_stone_of_travel",
+            () -> new BlockItem(BlockRegistry.PAVING_STONE_OF_TRAVEL.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> PAVING_STONE_OF_WARDING = REGISTRAR.register("paving_stone_of_warding",
+            () -> new BlockItem(BlockRegistry.PAVING_STONE_OF_WARDING.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> AER_INFUSED_STONE = REGISTRAR.register("aer_infused_stone",
             () -> new BlockItem(BlockRegistry.AER_INFUSED_STONE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> IGNIS_INFUSED_STONE = REGISTRAR.register("ignis_infused_stone",
@@ -206,14 +262,60 @@ public class ItemRegistry {
             () -> new BlockItem(BlockRegistry.CINNABAR_ORE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> AURA_NODE = REGISTRAR.register("aura_node",
             () -> new BlockItem(BlockRegistry.AURA_NODE.get(), new Item.Properties()));
+
+    // Ore Clusters
+    public static final DeferredItem<Item> CLUSTER_IRON = REGISTRAR.registerSimpleItem("cluster_iron");
+    public static final DeferredItem<Item> CLUSTER_GOLD = REGISTRAR.registerSimpleItem("cluster_gold");
+    public static final DeferredItem<Item> CLUSTER_COPPER = REGISTRAR.registerSimpleItem("cluster_copper");
+    public static final DeferredItem<Item> CLUSTER_CINNABAR = REGISTRAR.registerSimpleItem("cluster_cinnabar");
+    public static final DeferredItem<Item> CLUSTER_TIN = REGISTRAR.registerSimpleItem("cluster_tin");
+    public static final DeferredItem<Item> CLUSTER_SILVER = REGISTRAR.registerSimpleItem("cluster_silver");
+    public static final DeferredItem<Item> CLUSTER_LEAD = REGISTRAR.registerSimpleItem("cluster_lead");
+    public static final DeferredItem<Item> CLUSTER_QUARTZ = REGISTRAR.registerSimpleItem("cluster_quartz");
     public static final DeferredItem<BlockItem> ARCANE_WORKBENCH = REGISTRAR.register("arcane_workbench",
             () -> new BlockItem(BlockRegistry.ARCANE_WORKBENCH.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> TABLE = REGISTRAR.register("table",
             () -> new BlockItem(BlockRegistry.TABLE.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> DECONSTRUCTION_TABLE = REGISTRAR.register("deconstruction_table",
+            () -> new BlockItem(BlockRegistry.DECONSTRUCTION_TABLE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> ARCANE_PEDESTAL = REGISTRAR.register("arcane_pedestal",
             () -> new BlockItem(BlockRegistry.ARCANE_PEDESTAL.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> CRUCIBLE = REGISTRAR.register("crucible",
             () -> new BlockItem(BlockRegistry.CRUCIBLE.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> THAUMIUM_BLOCK = REGISTRAR.register("thaumium_block",
+            () -> new BlockItem(BlockRegistry.THAUMIUM_BLOCK.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> VOID_BLOCK = REGISTRAR.register("void_block",
+            () -> new BlockItem(BlockRegistry.VOID_BLOCK.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> AMBER_BLOCK = REGISTRAR.register("amber_block",
+            () -> new BlockItem(BlockRegistry.AMBER_BLOCK.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> AMBER_BRICK = REGISTRAR.register("amber_brick",
+            () -> new BlockItem(BlockRegistry.AMBER_BRICK.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> OBSIDIAN_TILE = REGISTRAR.register("obsidian_tile",
+            () -> new BlockItem(BlockRegistry.OBSIDIAN_TILE.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> TALLOW_BLOCK = REGISTRAR.register("tallow_block",
+            () -> new BlockItem(BlockRegistry.TALLOW_BLOCK.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> ARCANE_STONE = REGISTRAR.register("arcane_stone",
+            () -> new BlockItem(BlockRegistry.ARCANE_STONE.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> ARCANE_STONE_BRICK = REGISTRAR.register("arcane_stone_brick",
+            () -> new BlockItem(BlockRegistry.ARCANE_STONE_BRICK.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> FLESH_BLOCK = REGISTRAR.register("flesh_block",
+            () -> new BlockItem(BlockRegistry.FLESH_BLOCK.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> GREATWOOD_PLANKS = REGISTRAR.register("greatwood_planks",
+            () -> new BlockItem(BlockRegistry.GREATWOOD_PLANKS.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> SILVERWOOD_PLANKS = REGISTRAR.register("silverwood_planks",
+            () -> new BlockItem(BlockRegistry.SILVERWOOD_PLANKS.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> ARCANE_STONE_STAIRS = REGISTRAR.register("arcane_stone_stairs",
+            () -> new BlockItem(BlockRegistry.ARCANE_STONE_STAIRS.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> GREATWOOD_STAIRS = REGISTRAR.register("greatwood_stairs",
+            () -> new BlockItem(BlockRegistry.GREATWOOD_STAIRS.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> SILVERWOOD_STAIRS = REGISTRAR.register("silverwood_stairs",
+            () -> new BlockItem(BlockRegistry.SILVERWOOD_STAIRS.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> ARCANE_STONE_SLAB = REGISTRAR.register("arcane_stone_slab",
+            () -> new BlockItem(BlockRegistry.ARCANE_STONE_SLAB.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> GREATWOOD_SLAB = REGISTRAR.register("greatwood_slab",
+            () -> new BlockItem(BlockRegistry.GREATWOOD_SLAB.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> SILVERWOOD_SLAB = REGISTRAR.register("silverwood_slab",
+            () -> new BlockItem(BlockRegistry.SILVERWOOD_SLAB.get(), new Item.Properties()));
 
     public static final DeferredItem<BlockItem> ALCHEMICAL_CONSTRUCT = REGISTRAR.register("alchemical_construct",
             () -> new BlockItem(BlockRegistry.ALCHEMICAL_CONSTRUCT.get(), new Item.Properties()));
@@ -271,6 +373,22 @@ public class ItemRegistry {
         output.accept(FORTRESS_CHESTPLATE);
         output.accept(FORTRESS_LEGGINGS);
         output.accept(THAUMIUM_INGOT);
+        output.accept(NUGGET_THAUMIUM);
+        output.accept(NUGGET_VOID);
+        output.accept(NUGGET_QUICKSILVER);
+        output.accept(TALLOW);
+        output.accept(VOID_SEED);
+        output.accept(ZOMBIE_BRAIN);
+        output.accept(KNOWLEDGE_FRAGMENT);
+        output.accept(ESSENTIA_FILTER);
+        output.accept(MIRROR_GLASS);
+        output.accept(TAINT_SLIME);
+        output.accept(TAINT_TENDRIL);
+        output.accept(NUGGET_CHICKEN);
+        output.accept(NUGGET_BEEF);
+        output.accept(NUGGET_PORK);
+        output.accept(NUGGET_FISH);
+        output.accept(TRIPLE_MEAT_TREAT);
         output.accept(THAUMIUM_HELMET);
         output.accept(THAUMIUM_CHESTPLATE);
         output.accept(THAUMIUM_LEGGINGS);
@@ -292,6 +410,10 @@ public class ItemRegistry {
         output.accept(VOID_HOE);
         output.accept(CRIMSON_BLADE);
         output.accept(PRIMAL_CRUSHER);
+        output.accept(ELEMENTAL_SHOVEL);
+        output.accept(ELEMENTAL_PICKAXE);
+        output.accept(ELEMENTAL_AXE);
+        output.accept(ELEMENTAL_HOE);
         output.accept(ROBE_CHESTPLATE);
         output.accept(ROBE_LEGGINGS);
         output.accept(ROBE_BOOTS);
@@ -310,6 +432,7 @@ public class ItemRegistry {
         output.accept(VOID_ROBE_LEGGINGS);
         output.accept(BOOTS_TRAVELLER);
         output.accept(TABLE);
+        output.accept(DECONSTRUCTION_TABLE);
         output.accept(SCRIBING_TOOLS);
         output.accept(ARCANE_WORKBENCH);
         output.accept(SILVERWOOD_SAPLING);
@@ -322,6 +445,35 @@ public class ItemRegistry {
         output.accept(CRUCIBLE);
         output.accept(ALCHEMICAL_CONSTRUCT);
         output.accept(JAR);
+        output.accept(PRIMORDIAL_PEARL);
+        output.accept(AURA_NODE);
+        output.accept(PAVING_STONE_OF_TRAVEL);
+        output.accept(PAVING_STONE_OF_WARDING);
+        output.accept(CLUSTER_IRON);
+        output.accept(CLUSTER_GOLD);
+        output.accept(CLUSTER_COPPER);
+        output.accept(CLUSTER_CINNABAR);
+        output.accept(CLUSTER_TIN);
+        output.accept(CLUSTER_SILVER);
+        output.accept(CLUSTER_LEAD);
+        output.accept(CLUSTER_QUARTZ);
+        output.accept(THAUMIUM_BLOCK);
+        output.accept(VOID_BLOCK);
+        output.accept(AMBER_BLOCK);
+        output.accept(AMBER_BRICK);
+        output.accept(OBSIDIAN_TILE);
+        output.accept(TALLOW_BLOCK);
+        output.accept(ARCANE_STONE);
+        output.accept(ARCANE_STONE_BRICK);
+        output.accept(FLESH_BLOCK);
+        output.accept(GREATWOOD_PLANKS);
+        output.accept(SILVERWOOD_PLANKS);
+        output.accept(ARCANE_STONE_STAIRS);
+        output.accept(GREATWOOD_STAIRS);
+        output.accept(SILVERWOOD_STAIRS);
+        output.accept(ARCANE_STONE_SLAB);
+        output.accept(GREATWOOD_SLAB);
+        output.accept(SILVERWOOD_SLAB);
     }
 
     public static void putInPhialCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {

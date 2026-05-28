@@ -1,0 +1,21 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    "SSS",
+    " S ",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "thaumicrecords:arcane_stone"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:arcane_pedestal",
+    "count": 2
+  },
+  "baseVisCost": {
+    "thaumicrecords:aer": 5
+  },
+  "requiredResearch": []
+}

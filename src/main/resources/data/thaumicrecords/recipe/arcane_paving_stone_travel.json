@@ -1,0 +1,27 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    "SAS",
+    "SBS"
+  ],
+  "key": {
+    "S": {
+      "item": "thaumicrecords:arcane_stone_brick"
+    },
+    "A": {
+      "item": "thaumicrecords:aer_shard"
+    },
+    "B": {
+      "item": "thaumicrecords:ignis_shard"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:paving_stone_of_travel",
+    "count": 4
+  },
+  "baseVisCost": {
+    "thaumicrecords:terra": 10,
+    "thaumicrecords:aer": 10
+  },
+  "requiredResearch": []
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "thaumicrecords:cluster_cinnabar"
+  },
+  "result": {
+    "id": "thaumicrecords:quicksilver",
+    "count": 2
+  },
+  "experience": 0.7,
+  "cookingtime": 200
+}

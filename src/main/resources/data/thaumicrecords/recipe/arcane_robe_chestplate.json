@@ -1,0 +1,21 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    "I I",
+    "III",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "item": "thaumicrecords:enchanted_fabric"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:robe_chestplate",
+    "count": 1
+  },
+  "baseVisCost": {
+    "thaumicrecords:aer": 5
+  },
+  "requiredResearch": []
+}

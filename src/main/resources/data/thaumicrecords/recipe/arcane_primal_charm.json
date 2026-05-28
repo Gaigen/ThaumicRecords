@@ -1,0 +1,47 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    "123",
+    "ISI",
+    "456"
+  ],
+  "key": {
+    "S": {
+      "item": "thaumicrecords:balanced_shard"
+    },
+    "I": {
+      "item": "minecraft:gold_ingot"
+    },
+    "1": {
+      "item": "thaumicrecords:aer_shard"
+    },
+    "2": {
+      "item": "thaumicrecords:ignis_shard"
+    },
+    "3": {
+      "item": "thaumicrecords:aqua_shard"
+    },
+    "4": {
+      "item": "thaumicrecords:terra_shard"
+    },
+    "5": {
+      "item": "thaumicrecords:ordo_shard"
+    },
+    "6": {
+      "item": "thaumicrecords:perditio_shard"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:primal_charm",
+    "count": 1
+  },
+  "baseVisCost": {
+    "thaumicrecords:aer": 25,
+    "thaumicrecords:terra": 25,
+    "thaumicrecords:ignis": 25,
+    "thaumicrecords:aqua": 25,
+    "thaumicrecords:ordo": 25,
+    "thaumicrecords:perditio": 25
+  },
+  "requiredResearch": []
+}

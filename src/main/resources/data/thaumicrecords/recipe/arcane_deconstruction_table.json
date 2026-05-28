@@ -1,0 +1,29 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    " S ",
+    "ATP"
+  ],
+  "key": {
+    "S": {
+      "item": "thaumicrecords:thaumometer"
+    },
+    "A": {
+      "item": "minecraft:golden_axe"
+    },
+    "P": {
+      "item": "minecraft:golden_pickaxe"
+    },
+    "T": {
+      "item": "thaumicrecords:table"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:deconstruction_table",
+    "count": 1
+  },
+  "baseVisCost": {
+    "thaumicrecords:perditio": 20
+  },
+  "requiredResearch": []
+}

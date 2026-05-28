@@ -1,0 +1,21 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    "III",
+    "I I",
+    "I I"
+  ],
+  "key": {
+    "I": {
+      "item": "thaumicrecords:enchanted_fabric"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:robe_leggings",
+    "count": 1
+  },
+  "baseVisCost": {
+    "thaumicrecords:aqua": 5
+  },
+  "requiredResearch": []
+}

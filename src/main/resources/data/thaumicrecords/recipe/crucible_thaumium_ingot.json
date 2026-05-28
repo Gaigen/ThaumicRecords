@@ -1,0 +1,13 @@
+{
+  "type": "thaumicrecords:crucible",
+  "catalyst": {
+    "item": "minecraft:iron_ingot"
+  },
+  "required_aspects": {
+    "thaumicrecords:praecantatio": 4
+  },
+  "result": {
+    "id": "thaumicrecords:thaumium_ingot",
+    "count": 1
+  }
+}

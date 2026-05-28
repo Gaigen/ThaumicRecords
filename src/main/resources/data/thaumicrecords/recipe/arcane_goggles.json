@@ -1,0 +1,32 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    "LGL",
+    "L L",
+    "TGT"
+  ],
+  "key": {
+    "T": {
+      "item": "thaumicrecords:thaumometer"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:goggles",
+    "count": 1
+  },
+  "baseVisCost": {
+    "thaumicrecords:aer": 5,
+    "thaumicrecords:ignis": 5,
+    "thaumicrecords:aqua": 5,
+    "thaumicrecords:terra": 5,
+    "thaumicrecords:perditio": 3,
+    "thaumicrecords:ordo": 3
+  },
+  "requiredResearch": []
+}

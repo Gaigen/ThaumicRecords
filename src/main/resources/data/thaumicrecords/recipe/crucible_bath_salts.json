@@ -1,0 +1,16 @@
+{
+  "type": "thaumicrecords:crucible",
+  "catalyst": {
+    "item": "thaumicrecords:salis_mundus"
+  },
+  "required_aspects": {
+    "thaumicrecords:cognitio": 6,
+    "thaumicrecords:auram": 6,
+    "thaumicrecords:ordo": 6,
+    "thaumicrecords:victus": 6
+  },
+  "result": {
+    "id": "thaumicrecords:bath_salts",
+    "count": 1
+  }
+}

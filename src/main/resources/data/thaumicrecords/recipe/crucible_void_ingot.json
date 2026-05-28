@@ -1,0 +1,8 @@
+{
+  "type": "thaumicrecords:crucible",
+  "catalyst": {"item": "thaumicrecords:void_seed"},
+  "required_aspects": {
+    "thaumicrecords:metallum": 8
+  },
+  "result": {"id": "thaumicrecords:void_ingot", "count": 1}
+}

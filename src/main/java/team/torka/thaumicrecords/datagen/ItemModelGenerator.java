@@ -43,6 +43,22 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.FORTRESS_LEGGINGS.get());
         basicItem(ItemRegistry.BOOTS_TRAVELLER.get());
         basicItem(ItemRegistry.THAUMIUM_INGOT.get());
+        basicItem(ItemRegistry.NUGGET_THAUMIUM.get());
+        basicItem(ItemRegistry.NUGGET_VOID.get());
+        basicItem(ItemRegistry.NUGGET_QUICKSILVER.get());
+        basicItem(ItemRegistry.NUGGET_CHICKEN.get());
+        basicItem(ItemRegistry.NUGGET_BEEF.get());
+        basicItem(ItemRegistry.NUGGET_PORK.get());
+        basicItem(ItemRegistry.NUGGET_FISH.get());
+        basicItem(ItemRegistry.TRIPLE_MEAT_TREAT.get());
+        basicItem(ItemRegistry.TALLOW.get());
+        basicItem(ItemRegistry.VOID_SEED.get());
+        basicItem(ItemRegistry.ZOMBIE_BRAIN.get());
+        basicItem(ItemRegistry.KNOWLEDGE_FRAGMENT.get());
+        basicItem(ItemRegistry.ESSENTIA_FILTER.get());
+        basicItem(ItemRegistry.MIRROR_GLASS.get());
+        basicItem(ItemRegistry.TAINT_SLIME.get());
+        basicItem(ItemRegistry.TAINT_TENDRIL.get());
         basicItem(ItemRegistry.THAUMIUM_HELMET.get());
         basicItem(ItemRegistry.THAUMIUM_CHESTPLATE.get());
         basicItem(ItemRegistry.THAUMIUM_LEGGINGS.get());
@@ -91,6 +107,8 @@ public class ItemModelGenerator extends ItemModelProvider {
         simpleBlockItem(BlockRegistry.SILVERWOOD_LOG.get());
         simpleBlockItem(BlockRegistry.GREATWOOD_LEAVES.get());
         simpleBlockItem(BlockRegistry.GREATWOOD_LOG.get());
+        simpleBlockItem(BlockRegistry.PAVING_STONE_OF_TRAVEL.get());
+        simpleBlockItem(BlockRegistry.PAVING_STONE_OF_WARDING.get());
         withExistingParent(ItemRegistry.ARCANE_PEDESTAL.getId().getPath(), modLoc("block/arcane_pedestal"));
 
         // Thaumium Tools
@@ -110,6 +128,12 @@ public class ItemModelGenerator extends ItemModelProvider {
         // Crimson Blade & Primal Crusher
         handheldItem(ItemRegistry.CRIMSON_BLADE);
         handheldItem(ItemRegistry.PRIMAL_CRUSHER);
+
+        // Elemental Tools
+        handheldItem(ItemRegistry.ELEMENTAL_SHOVEL);
+        handheldItem(ItemRegistry.ELEMENTAL_PICKAXE);
+        handheldItem(ItemRegistry.ELEMENTAL_AXE);
+        handheldItem(ItemRegistry.ELEMENTAL_HOE);
     }
 
     private void handheldItem(net.neoforged.neoforge.registries.DeferredItem<?> item) {

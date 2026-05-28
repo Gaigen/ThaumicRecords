@@ -1,0 +1,29 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    " S ",
+    "SCS",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:string"
+    },
+    "C": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:enchanted_fabric",
+    "count": 1
+  },
+  "baseVisCost": {
+    "thaumicrecords:aer": 1,
+    "thaumicrecords:terra": 1,
+    "thaumicrecords:ignis": 1,
+    "thaumicrecords:aqua": 1,
+    "thaumicrecords:ordo": 1,
+    "thaumicrecords:perditio": 1
+  },
+  "requiredResearch": []
+}

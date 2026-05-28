@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.menu.ArcaneWorkbenchMenu;
+import team.torka.thaumicrecords.menu.DeconstructionTableMenu;
 import team.torka.thaumicrecords.menu.ResearchTableMenu;
 import team.torka.thaumicrecords.menu.ThaumatoriumMenu;
 
@@ -23,4 +24,8 @@ public class MenuRegistry {
 
     public static final DeferredHolder<MenuType<?>, MenuType<ThaumatoriumMenu>> THAUMATORIUM = REGISTRAR.register("thaumatorium",
             () -> IMenuTypeExtension.create(ThaumatoriumMenu::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<DeconstructionTableMenu>> DECONSTRUCTION_TABLE = REGISTRAR.register(
+            "deconstruction_table",
+            () -> IMenuTypeExtension.create(DeconstructionTableMenu::new));
 }

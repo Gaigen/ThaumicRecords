@@ -1,0 +1,27 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    "SAS",
+    "SBS"
+  ],
+  "key": {
+    "S": {
+      "item": "thaumicrecords:arcane_stone_brick"
+    },
+    "A": {
+      "item": "thaumicrecords:ignis_shard"
+    },
+    "B": {
+      "item": "thaumicrecords:perditio_shard"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:paving_stone_of_warding",
+    "count": 4
+  },
+  "baseVisCost": {
+    "thaumicrecords:ignis": 10,
+    "thaumicrecords:ordo": 10
+  },
+  "requiredResearch": []
+}

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=bottom": { "model": "thaumicrecords:block/arcane_stone_slab" },
+    "type=double": { "model": "thaumicrecords:block/arcane_stone_brick" },
+    "type=top": { "model": "thaumicrecords:block/arcane_stone_slab_top" }
+  }
+}

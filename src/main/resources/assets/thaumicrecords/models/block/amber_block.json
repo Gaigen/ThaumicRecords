@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "thaumicrecords:block/amber_block_top",
+    "side": "thaumicrecords:block/amber_block"
+  }
+}

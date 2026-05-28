@@ -16,6 +16,7 @@ import team.torka.thaumicrecords.client.model.TableModel;
 import team.torka.thaumicrecords.client.renderer.CustomModelLayer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ArcanePedestalRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ArcaneWorkbenchRenderer;
+import team.torka.thaumicrecords.client.renderer.blockentity.DeconstructionTableRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.AuraNodeRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.CrucibleRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.JarBlockEntityRenderer;
@@ -37,6 +38,7 @@ public class EntityRenderersEventListener {
         event.registerBlockEntityRenderer(BlockEntityRegistry.CRUCIBLE.get(), CrucibleRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.THAUMATORIUM.get(), ThaumatoriumRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.JAR.get(), JarBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(BlockEntityRegistry.DECONSTRUCTION_TABLE.get(), DeconstructionTableRenderer::new);
         event.registerEntityRenderer(EntityRegistry.FOLLOWING_ITEM.get(), ItemEntityRenderer::new);
     }
 

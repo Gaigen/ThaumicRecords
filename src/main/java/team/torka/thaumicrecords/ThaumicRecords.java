@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
 import team.torka.thaumicrecords.registry.ArmorMaterialRegistry;
 import team.torka.thaumicrecords.registry.AspectRegistry;
@@ -13,6 +14,7 @@ import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.CreativeTabRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.EntityRegistry;
+import team.torka.thaumicrecords.registry.OreClusterRegistry;
 import team.torka.thaumicrecords.registry.FeatureRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 import team.torka.thaumicrecords.registry.MenuRegistry;
@@ -52,8 +54,12 @@ public class ThaumicRecords {
         FeatureRegistry.REGISTRAR.register(modEventBus);
         EntityRegistry.REGISTRAR.register(modEventBus);
 
+        modEventBus.addListener(this::commonSetup);
     }
 
+    private void commonSetup(FMLCommonSetupEvent event) {
+        OreClusterRegistry.init();
+    }
 
     public static String createTranslationKey(String prefix, String path) {
         return prefix + "." + MOD_ID + "." + path;

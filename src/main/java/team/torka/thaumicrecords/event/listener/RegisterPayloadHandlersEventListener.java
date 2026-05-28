@@ -4,9 +4,11 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import team.torka.thaumicrecords.network.handler.OreScanPayloadHandler;
 import team.torka.thaumicrecords.network.handler.PlayerCombineAspectHandler;
 import team.torka.thaumicrecords.network.handler.PlayerEraseNoteHandler;
 import team.torka.thaumicrecords.network.handler.PlayerWriteNoteHandler;
+import team.torka.thaumicrecords.network.payload.OreScanPayload;
 import team.torka.thaumicrecords.network.payload.PlayerCombineAspectPayload;
 import team.torka.thaumicrecords.network.payload.PlayerEraseNotePayload;
 import team.torka.thaumicrecords.network.payload.PlayerWriteNotePayload;
@@ -20,5 +22,6 @@ public class RegisterPayloadHandlersEventListener {
         registrar.playToServer(PlayerCombineAspectPayload.TYPE, PlayerCombineAspectPayload.STREAM_CODEC, PlayerCombineAspectHandler::handle);
         registrar.playToServer(PlayerWriteNotePayload.TYPE, PlayerWriteNotePayload.STREAM_CODEC, PlayerWriteNoteHandler::handle);
         registrar.playToServer(PlayerEraseNotePayload.TYPE, PlayerEraseNotePayload.STREAM_CODEC, PlayerEraseNoteHandler::handle);
+        registrar.playToClient(OreScanPayload.TYPE, OreScanPayload.STREAM_CODEC, OreScanPayloadHandler::handle);
     }
 }

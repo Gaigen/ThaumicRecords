@@ -7,7 +7,9 @@ import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
@@ -20,10 +22,14 @@ import team.torka.thaumicrecords.block.ArcanePedestalBlock;
 import team.torka.thaumicrecords.block.ArcaneWorkbenchBlock;
 import team.torka.thaumicrecords.block.AuraNodeBlock;
 import team.torka.thaumicrecords.block.CrucibleBlock;
+import team.torka.thaumicrecords.block.DeconstructionTableBlock;
 import team.torka.thaumicrecords.block.JarBlock;
+import team.torka.thaumicrecords.block.PavingStoneOfTravelBlock;
+import team.torka.thaumicrecords.block.PavingStoneOfWardingBlock;
 import team.torka.thaumicrecords.block.ResearchTableBlock;
 import team.torka.thaumicrecords.block.TableBlock;
 import team.torka.thaumicrecords.block.ThaumatoriumBlock;
+import team.torka.thaumicrecords.block.WardingBarrierBlock;
 import team.torka.thaumicrecords.world.tree.TreeGrowers;
 
 
@@ -166,4 +172,104 @@ public class BlockRegistry {
             () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LOG)));
     public static final DeferredBlock<Block> GREATWOOD_LEAVES = REGISTRAR.register("greatwood_leaves",
             () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).lightLevel(state -> 7)));
+
+    public static final DeferredBlock<PavingStoneOfTravelBlock> PAVING_STONE_OF_TRAVEL = REGISTRAR.register("paving_stone_of_travel",
+            () -> new PavingStoneOfTravelBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(2.0F, 10.0F)
+                    .lightLevel(state -> 9)
+                    .sound(SoundType.STONE)));
+
+    public static final DeferredBlock<PavingStoneOfWardingBlock> PAVING_STONE_OF_WARDING = REGISTRAR.register("paving_stone_of_warding",
+            () -> new PavingStoneOfWardingBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(2.0F, 10.0F)
+                    .sound(SoundType.STONE)));
+
+    public static final DeferredBlock<WardingBarrierBlock> WARDING_BARRIER = REGISTRAR.register("warding_barrier",
+            () -> new WardingBarrierBlock(BlockBehaviour.Properties.of()
+                    .replaceable()
+                    .noCollission()
+                    .strength(-1.0F, 3600000.0F)
+                    .noLootTable()
+                    .pushReaction(PushReaction.BLOCK)));
+
+    // Metal Blocks
+    public static final DeferredBlock<Block> THAUMIUM_BLOCK = REGISTRAR.registerSimpleBlock("thaumium_block", BlockBehaviour.Properties.of().mapColor(
+            MapColor.METAL).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(4.0F, 10.0F).sound(SoundType.METAL));
+    public static final DeferredBlock<Block> VOID_BLOCK = REGISTRAR.registerSimpleBlock("void_block", BlockBehaviour.Properties.of().mapColor(
+            MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(4.0F, 10.0F).sound(SoundType.METAL));
+
+    // Amber Blocks
+    public static final DeferredBlock<Block> AMBER_BLOCK = REGISTRAR.registerSimpleBlock("amber_block", BlockBehaviour.Properties.of().mapColor(
+            MapColor.COLOR_YELLOW).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
+    public static final DeferredBlock<Block> AMBER_BRICK = REGISTRAR.registerSimpleBlock("amber_brick", BlockBehaviour.Properties.of().mapColor(
+            MapColor.COLOR_YELLOW).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F).sound(SoundType.STONE));
+
+    // Obsidian Tile
+    public static final DeferredBlock<Block> OBSIDIAN_TILE = REGISTRAR.registerSimpleBlock("obsidian_tile", BlockBehaviour.Properties.of().mapColor(
+            MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(30.0F, 999.0F).sound(SoundType.STONE));
+
+    // Tallow Block
+    public static final DeferredBlock<Block> TALLOW_BLOCK = REGISTRAR.registerSimpleBlock("tallow_block", BlockBehaviour.Properties.of().mapColor(
+            MapColor.COLOR_YELLOW).instrument(NoteBlockInstrument.BASEDRUM).strength(1.0F, 2.0F).sound(SoundType.STONE));
+
+    // Arcane Stone
+    public static final DeferredBlock<Block> ARCANE_STONE = REGISTRAR.registerSimpleBlock("arcane_stone", BlockBehaviour.Properties.of().mapColor(
+            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(4.0F, 10.0F).sound(SoundType.STONE));
+    public static final DeferredBlock<Block> ARCANE_STONE_BRICK = REGISTRAR.registerSimpleBlock("arcane_stone_brick", BlockBehaviour.Properties.of().mapColor(
+            MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(4.0F, 10.0F).sound(SoundType.STONE));
+
+    // Flesh Block (custom "gore" sound from TC4)
+    public static final DeferredBlock<Block> FLESH_BLOCK = REGISTRAR.register("flesh_block", () -> new Block(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.COLOR_RED)
+            .instrument(NoteBlockInstrument.BASEDRUM)
+            .strength(1.0F, 2.0F)
+            .sound(new SoundType(0.5F, 0.8F, SoundRegistry.GORE.get(), SoundRegistry.GORE.get(), SoundRegistry.GORE.get(), SoundRegistry.GORE.get(),
+                    SoundRegistry.GORE.get()))));
+
+    // Planks
+    public static final DeferredBlock<Block> GREATWOOD_PLANKS = REGISTRAR.registerSimpleBlock("greatwood_planks", BlockBehaviour.Properties.of().mapColor(
+            MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> SILVERWOOD_PLANKS = REGISTRAR.registerSimpleBlock("silverwood_planks", BlockBehaviour.Properties.of().mapColor(
+            MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+
+    // Stairs
+    public static final DeferredBlock<StairBlock> ARCANE_STONE_STAIRS = REGISTRAR.register("arcane_stone_stairs",
+            () -> new StairBlock(ARCANE_STONE_BRICK.get().defaultBlockState(), BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(4.0F, 10.0F)
+                    .sound(SoundType.STONE)));
+    public static final DeferredBlock<StairBlock> GREATWOOD_STAIRS = REGISTRAR.register("greatwood_stairs",
+            () -> new StairBlock(GREATWOOD_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)));
+    public static final DeferredBlock<StairBlock> SILVERWOOD_STAIRS = REGISTRAR.register("silverwood_stairs",
+            () -> new StairBlock(SILVERWOOD_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)));
+
+    // Slabs
+    public static final DeferredBlock<SlabBlock> ARCANE_STONE_SLAB = REGISTRAR.register("arcane_stone_slab", () -> new SlabBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.STONE)
+            .requiresCorrectToolForDrops()
+            .strength(4.0F, 10.0F)
+            .sound(SoundType.STONE)));
+    public static final DeferredBlock<SlabBlock> GREATWOOD_SLAB = REGISTRAR.register("greatwood_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final DeferredBlock<SlabBlock> SILVERWOOD_SLAB = REGISTRAR.register("silverwood_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+
+    // Deconstruction Table
+    public static final DeferredBlock<DeconstructionTableBlock> DECONSTRUCTION_TABLE = REGISTRAR.register("deconstruction_table",
+            () -> new DeconstructionTableBlock(BlockBehaviour.Properties.of()
+                    .strength(2.5F, 3.0F)
+                    .noOcclusion()
+                    .sound(SoundType.WOOD)
+                    .pushReaction(PushReaction.BLOCK)));
 }
