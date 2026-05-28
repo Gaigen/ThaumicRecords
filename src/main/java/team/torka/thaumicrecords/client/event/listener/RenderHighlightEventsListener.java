@@ -34,7 +34,7 @@ import team.torka.thaumicrecords.client.event.RenderThaumicVisionEvent;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 
 import java.awt.Color;
-import java.util.Objects;
+import java.util.Optional;
 
 @EventBusSubscriber(value = Dist.CLIENT)
 public class RenderHighlightEventsListener {
@@ -88,10 +88,8 @@ public class RenderHighlightEventsListener {
 
         for (var aspectRl : aspectList.keySet()) {
             Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(aspectRl);
-            if (Objects.isNull(aspect)) {
-                // TODO null handle  render unknown
-                continue;
-            }
+            Integer aspectColor = Optional.ofNullable(aspect).map(Aspect::getARGBColor).orElse(Color.GRAY.getRGB() | 0xFF000000);
+            ResourceLocation aspectTex = Optional.ofNullable(aspect).map(Aspect::getImage).orElse(Aspect.UNKNOWN_TEX);
             int div = Math.min(left, rowsize);
             if (current >= rowsize) {
                 current = 0;
@@ -104,7 +102,7 @@ public class RenderHighlightEventsListener {
 
             float shift = ((float) current - (float) div / 2.0F + 0.5F) * tagscale * 4.0F;
             shift *= tagscale;
-            Color color = new Color(aspect.getARGBColor());
+            Color color = new Color(aspectColor);
 
             poseStack.pushPose();
             double renderX = x - camX + 0.5D + (tagscale * 2.0F * (float) dir.getStepX());
@@ -122,7 +120,7 @@ public class RenderHighlightEventsListener {
 
             ResourceLocation texture = Aspect.UNKNOWN_TEX;
             if (AspectHelper.isAspectDiscovered(player, aspectRl)) {
-                texture = aspect.getImage();
+                texture = aspectTex;
             }
 
             VertexConsumer iconConsumer = bufferSource.getBuffer(getOverlayRenderType(texture));
