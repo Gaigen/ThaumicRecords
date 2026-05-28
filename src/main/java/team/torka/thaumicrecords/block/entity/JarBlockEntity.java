@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.aspect.IEssentiaContainerEntity;
+import team.torka.thaumicrecords.api.block.AspectRenderable;
 import team.torka.thaumicrecords.attachment.AspectListAttachment;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.AttachmentRegistry;
@@ -14,7 +15,7 @@ import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 
 import javax.annotation.Nullable;
 
-public class JarBlockEntity extends BlockEntity implements IEssentiaContainerEntity {
+public class JarBlockEntity extends BlockEntity implements IEssentiaContainerEntity, AspectRenderable {
 
     public JarBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityRegistry.JAR.get(), pos, state);
@@ -131,5 +132,15 @@ public class JarBlockEntity extends BlockEntity implements IEssentiaContainerEnt
             return aspect;
         }
         return null;
+    }
+
+    @Override
+    public AspectList getAspectRendered() {
+        return getAspects().copy();
+    }
+
+    @Override
+    public float getRenderYOffset() {
+        return 0;
     }
 }

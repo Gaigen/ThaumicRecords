@@ -109,7 +109,7 @@ public class AuraNodeBlockEntity extends BlockEntity implements AspectRenderable
         }
         ResourceLocation regenAspect = toRegenAspects.get(level.random.nextInt(toRegenAspects.size()));
         current.add(regenAspect, 1);
-        this.setChanged();
+        this.syncToClient();
     }
 
     public String getId() {
@@ -175,6 +175,12 @@ public class AuraNodeBlockEntity extends BlockEntity implements AspectRenderable
         }
     }
 
+    public void syncToClient() {
+        if (Objects.nonNull(level) && !level.isClientSide) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
+    }
+
     public ResourceLocation getNodeType() {
         return type;
     }
@@ -212,7 +218,7 @@ public class AuraNodeBlockEntity extends BlockEntity implements AspectRenderable
         }
         if (toDrain > 0) {
             this.current.add(aspectId, -toDrain);
-            this.setChanged();
+            this.syncToClient();
             return toDrain;
         }
         return 0;
@@ -220,7 +226,20 @@ public class AuraNodeBlockEntity extends BlockEntity implements AspectRenderable
 
     @Override
     public AspectList getAspectRendered() {
-        return getCurrentAspect();
+        AspectList temp = new AspectList();
+        limit.forEach((k, v) -> {
+            if (current.getOrZero(k) > 0) {
+                temp.put(k, v);
+            } else {
+                temp.put(k, 0);
+            }
+        });
+        current.forEach((k, v) -> {
+            if (!temp.containsKey(k)) {
+                temp.add(k, v);
+            }
+        });
+        return temp;
     }
 
     @Override

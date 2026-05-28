@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.api.ModTags;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.api.block.AspectRenderable;
 import team.torka.thaumicrecords.api.helper.AspectHelper;
 import team.torka.thaumicrecords.client.particle.CrucibleBubbleParticle;
 import team.torka.thaumicrecords.recipe.CrucibleRecipe;
@@ -35,7 +36,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.awt.Color;
 import java.util.Objects;
 
-public class CrucibleBlockEntity extends BlockEntity {
+public class CrucibleBlockEntity extends BlockEntity implements AspectRenderable {
 
     public static final int MAX_FLUID = 1000;
     public static final int BOTTLE_AMOUNT = 500;
@@ -600,5 +601,15 @@ public class CrucibleBlockEntity extends BlockEntity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public AspectList getAspectRendered() {
+        return aspects.copy();
+    }
+
+    @Override
+    public float getRenderYOffset() {
+        return 0;
     }
 }
