@@ -20,4 +20,8 @@ public interface IEssentiaContainerEntity extends IEssentiaContainer {
     ResourceLocation getStoredAspectResource();
 
     int storedAmount();
+
+    void onEmpty();
+
+    void wasPoured(ResourceLocation aspect, int amount);
 }

@@ -73,6 +73,14 @@ public class JarBlockItem extends BlockItem implements IEssentiaContainerItem {
     }
 
     @Override
+    public boolean addAspect(Player player, ItemStack stack, ResourceLocation aspect, int amount) {
+        if (canBePartiallyPoured()) {
+            return false;
+        }
+        return false;
+    }
+
+    @Override
     public void setAspects(ItemStack stack, AspectList paramAspectList) {
         stack.set(DataComponentRegistry.ASPECT_LIST.get(), new AspectListComponent(paramAspectList));
     }
@@ -160,7 +168,7 @@ public class JarBlockItem extends BlockItem implements IEssentiaContainerItem {
             }
             int jarsInStack = stack.getCount();
             if (jarsInStack == 1) {
-                aspectList.put(aspectResource, storedAmount - amount);
+                aspectList.take(aspectResource, amount);
                 item.setAspects(stack, aspectList);
                 return;
             } else {
@@ -168,7 +176,7 @@ public class JarBlockItem extends BlockItem implements IEssentiaContainerItem {
 
                 ItemStack emptyJar = ItemRegistry.JAR.toStack();
                 emptyJar.setCount(1);
-                aspectList.put(aspectResource, storedAmount - amount);
+                aspectList.take(aspectResource, amount);
                 item.setAspects(emptyJar, aspectList);
                 if (!player.getInventory().add(emptyJar)) {
                     player.drop(emptyJar, false);

@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
@@ -24,8 +25,9 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
             ByteBufCodecs.VAR_INT).map(AspectList::fromMap, aspectList -> aspectList);
 
     public static AspectList fromMap(Map<ResourceLocation, Integer> map) {
-        AspectList aspectList = new AspectList();
-        aspectList.putAll(map);
+        //filtering zeroes and negatieve components out of AspectList completely (with keys i mean)
+        AspectList aspectList = map.entrySet().stream().filter(resourceLocationIntegerEntry -> resourceLocationIntegerEntry.getValue() > 0).collect(
+                Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v1, AspectList::new));
         return aspectList;
     }
 
@@ -61,6 +63,16 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
         return this;
     }
 
+    public AspectList take(ResourceLocation aspect, int amount) {
+        int storedAmount = this.getOrZero(aspect);
+        if (storedAmount - amount <= 0) {
+            this.remove(aspect);
+        } else {
+            this.put(aspect, this.getOrZero(aspect) - amount);
+        }
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -90,7 +102,11 @@ public class AspectList extends LinkedHashMap<ResourceLocation, Integer> {
     }
 
     public AspectList multiply(int multiplier) {
-        this.forEach((aspect, amount) -> this.put(aspect, amount * multiplier));
+        if (multiplier <= 0) {
+            this.forEach((aspect, amount) -> this.remove(aspect));
+        } else {
+            this.forEach((aspect, amount) -> this.put(aspect, amount * multiplier));
+        }
         return this;
     }
 

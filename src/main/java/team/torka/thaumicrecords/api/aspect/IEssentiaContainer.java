@@ -1,8 +1,5 @@
 package team.torka.thaumicrecords.api.aspect;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-
 public interface IEssentiaContainer {
     //if true - aspect amount may change, false - aspect amount is constant for that item, like phials do
     boolean isVariable();
@@ -14,11 +11,7 @@ public interface IEssentiaContainer {
     int poursBy();
 
     int capacity();
-
-    void onEmpty(ItemStack stack, Player player);
-
-    void wasPoured(ItemStack stack, Player player, int amount);
-
+    
     boolean canBePartiallyPoured();
 
     boolean canHoldMultipleAspects();

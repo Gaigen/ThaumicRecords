@@ -2,8 +2,6 @@ package team.torka.thaumicrecords.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import team.torka.thaumicrecords.api.aspect.Aspect;
@@ -99,13 +97,20 @@ public class JarBlockEntity extends BlockEntity implements IEssentiaContainerEnt
     }
 
     @Override
-    public void onEmpty(ItemStack stack, Player player) {
+    public void onEmpty() {
 
     }
 
     @Override
-    public void wasPoured(ItemStack stack, Player player, int amount) {
-
+    public void wasPoured(ResourceLocation aspect, int amount) {
+        ResourceLocation storedAspect = getStoredAspectResource();
+        int storedAmount = storedAmount();
+        AspectList list = getAspects().copy();   // копируем текущий список
+        list.take(aspect, amount);
+        setAspects(list);
+        if (amount >= storedAmount) {
+            onEmpty();
+        }
     }
 
     @Override

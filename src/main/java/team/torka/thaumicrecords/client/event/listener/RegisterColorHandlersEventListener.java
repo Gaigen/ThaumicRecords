@@ -45,23 +45,7 @@ public class RegisterColorHandlersEventListener {
                 return AspectRegistry.ASPECT_REGISTRY.stream().skip(index).findFirst().map(Aspect::getARGBColor).orElse(-1);
             }
         }, ItemRegistry.WISP_ESSENCE.get());
-
-        event.register((stack, tintIndex) -> {
-            if (tintIndex != 1) {
-                return -1;
-            }
-            PhialItem item = (PhialItem) stack.getItem();
-            AspectList aspects = item.getAspects(stack);
-            if (!aspects.isEmpty()) {
-                Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(aspects.firstEntry().getKey());
-                if (Objects.isNull(aspect)) {
-                    return -1;
-                }
-                return aspect.getARGBColor();
-            } else {
-                return -1;
-            }
-        }, ItemRegistry.PHIAL.get());
+        
 
         event.register((stack, tintIndex) -> {
             if (tintIndex != 1) {
