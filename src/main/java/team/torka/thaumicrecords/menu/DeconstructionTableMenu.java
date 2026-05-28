@@ -3,11 +3,11 @@ package team.torka.thaumicrecords.menu;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +23,7 @@ public class DeconstructionTableMenu extends AbstractContainerMenu {
 
     public final DeconstructionTableBlockEntity blockEntity;
     private final ContainerData data;
+    public ItemStack cachedSlotStack = ItemStack.EMPTY;
 
     // Client constructor (from buf)
     public DeconstructionTableMenu(int id, Inventory inv, RegistryFriendlyByteBuf buf) {
@@ -33,15 +34,45 @@ public class DeconstructionTableMenu extends AbstractContainerMenu {
     public DeconstructionTableMenu(int id, Inventory inv, DeconstructionTableBlockEntity be) {
         super(MenuRegistry.DECONSTRUCTION_TABLE.get(), id);
         this.blockEntity = be;
-        this.data = new SimpleContainerData(1);
+        this.data = be;
+        this.cachedSlotStack = be.getInputStack().copy();
         this.addDataSlots(data);
 
-        // Input slot at (64, 16) — only accepts items that have aspects
+        // Input slot at (64, 16) — cached like thaumatorium to prevent flickering
         this.addSlot(new Slot(be, 0, 64, 16) {
+            @Override
+            public ItemStack getItem() {
+                return cachedSlotStack;
+            }
+
+            @Override
+            public void set(ItemStack stack) {
+                cachedSlotStack = stack.copy();
+                blockEntity.setItem(0, stack);
+            }
+
+            @Override
+            public ItemStack remove(int amount) {
+                if (cachedSlotStack.isEmpty()) {
+                    return ItemStack.EMPTY;
+                }
+                ItemStack result = cachedSlotStack.split(amount);
+                if (cachedSlotStack.isEmpty()) {
+                    cachedSlotStack = ItemStack.EMPTY;
+                }
+                blockEntity.setItem(0, cachedSlotStack);
+                return result;
+            }
+
             @Override
             public boolean mayPlace(ItemStack stack) {
                 AspectList aspects = AspectHelper.getAspects(stack);
                 return !aspects.isEmpty();
+            }
+
+            @Override
+            public int getMaxStackSize() {
+                return 64;
             }
         });
 
@@ -56,16 +87,6 @@ public class DeconstructionTableMenu extends AbstractContainerMenu {
         }
     }
 
-    /**
-     * Called by the block entity to sync breaktime before broadcastChanges.
-     */
-    public void syncBreaktime(int breaktime) {
-        data.set(0, breaktime);
-    }
-
-    /**
-     * Get synced breaktime from ContainerData (index 0).
-     */
     public int getBreaktime() {
         return data.get(0);
     }
@@ -126,6 +147,22 @@ public class DeconstructionTableMenu extends AbstractContainerMenu {
             slot.setChanged();
         }
         return original;
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public void slotsChanged(Container container) {
+        cachedSlotStack = blockEntity.getInputStack().copy();
+        super.slotsChanged(container);
+    }
+
+    @Override
+    public void broadcastChanges() {
+        ItemStack actual = blockEntity.getInputStack();
+        if (!ItemStack.matches(cachedSlotStack, actual)) {
+            cachedSlotStack = actual.copy();
+        }
+        super.broadcastChanges();
     }
 
     @Override

@@ -4,8 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.MenuProvider;
@@ -13,9 +13,9 @@ import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +24,7 @@ import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.helper.AspectHelper;
 import team.torka.thaumicrecords.menu.DeconstructionTableMenu;
+import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -91,10 +92,7 @@ public class DeconstructionTableBlockEntity extends BlockEntity implements MenuP
         if (changed) {
             be.setChanged();
             be.syncToClient();
-            // Sync breaktime to open menu for ContainerData broadcastChanges
-            if (be.eventHandler != null) {
-                be.eventHandler.syncBreaktime(be.breaktime);
-            }
+            // ContainerData broadcastChanges will sync breaktime automatically
         }
     }
 
@@ -108,14 +106,8 @@ public class DeconstructionTableBlockEntity extends BlockEntity implements MenuP
             return false;
         }
 
-        // Reduce to primals only
-        AspectList primals = AspectList.empty();
-        for (var entry : allAspects.entrySet()) {
-            if (Aspect.getPrimalList().contains(entry.getKey())) {
-                primals.put(entry.getKey(), entry.getValue());
-            }
-        }
-
+        // Reduce all aspects to primals (recursive decomposition)
+        AspectList primals = reduceToPrimals(allAspects);
         if (primals.isEmpty()) {
             return false;
         }
@@ -123,7 +115,6 @@ public class DeconstructionTableBlockEntity extends BlockEntity implements MenuP
         // Random chance: pick if random(80) < total vis size
         int totalVis = primals.values().stream().mapToInt(Integer::intValue).sum();
         if (random.nextInt(80) >= totalVis) {
-            // Failed the random check, still consume item
             inputStack.shrink(1);
             if (inputStack.isEmpty()) {
                 inputStack = ItemStack.EMPTY;
@@ -131,19 +122,9 @@ public class DeconstructionTableBlockEntity extends BlockEntity implements MenuP
             return true;
         }
 
-        // Pick a random primal aspect weighted by amount
-        List<ResourceLocation> pool = new ArrayList<>();
-        for (var entry : primals.entrySet()) {
-            for (int i = 0; i < entry.getValue(); i++) {
-                pool.add(entry.getKey());
-            }
-        }
-
-        if (pool.isEmpty()) {
-            return false;
-        }
-
-        currentAspect = pool.get(random.nextInt(pool.size()));
+        // Pick a random primal aspect from the list (not weighted — original picks random index)
+        List<ResourceLocation> primalKeys = new ArrayList<>(primals.keySet());
+        currentAspect = primalKeys.get(random.nextInt(primalKeys.size()));
 
         // Consume item
         inputStack.shrink(1);
@@ -152,6 +133,40 @@ public class DeconstructionTableBlockEntity extends BlockEntity implements MenuP
         }
 
         return true;
+    }
+
+    /**
+     * Recursively decompose compound aspects into their primal components.
+     * Original TC4: ResearchManager.reduceToPrimals(al)
+     */
+    private AspectList reduceToPrimals(AspectList aspects) {
+        AspectList result = AspectList.empty();
+        for (var entry : aspects.entrySet()) {
+            ResourceLocation key = entry.getKey();
+            int amount = entry.getValue();
+            Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(key);
+            if (aspect == null) {
+                continue;
+            }
+
+            if (aspect.isPrimal()) {
+                result.add(key, amount);
+            } else {
+                Aspect[] comps = aspect.getComponents();
+                if (comps != null && comps.length == 2) {
+                    ResourceLocation comp1 = AspectRegistry.ASPECT_REGISTRY.getResourceKey(comps[0]).map(k -> k.location()).orElse(null);
+                    ResourceLocation comp2 = AspectRegistry.ASPECT_REGISTRY.getResourceKey(comps[1]).map(k -> k.location()).orElse(null);
+                    if (comp1 != null && comp2 != null) {
+                        AspectList decomposed = AspectList.empty();
+                        decomposed.put(comp1, amount);
+                        decomposed.put(comp2, amount);
+                        AspectList reduced = reduceToPrimals(decomposed);
+                        result.merge(reduced);
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     // ========== NBT ==========
@@ -231,8 +246,7 @@ public class DeconstructionTableBlockEntity extends BlockEntity implements MenuP
             return;
         }
         if (!inputStack.isEmpty()) {
-            net.minecraft.world.Containers.dropItemStack(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5,
-                    worldPosition.getZ() + 0.5, inputStack);
+            net.minecraft.world.Containers.dropItemStack(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, inputStack);
             inputStack = ItemStack.EMPTY;
         }
     }

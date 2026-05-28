@@ -8,10 +8,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -41,16 +38,13 @@ public class DeconstructionTableRenderer implements BlockEntityRenderer<Deconstr
         VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entitySolid(TEXTURE));
         this.model.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, 0xFFFFFFFF);
         poseStack.popPose();
-
+        // Thaumometer — laying flat on table, centered
         ItemStack thaumometer = new ItemStack(ItemRegistry.THAUMOMETER.get());
-        if (!thaumometer.isEmpty()) {
-            poseStack.pushPose();
-            poseStack.translate(0.45D, 1.0625D, 0.45D);
-            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-            poseStack.mulPose(Axis.ZP.rotationDegrees(20.0F));
-            poseStack.scale(0.5F, 0.5F, 0.5F);
-            this.itemRenderer.renderStatic(thaumometer, ItemDisplayContext.FIXED, packedLight, packedOverlay, poseStack, bufferSource, be.getLevel(), 0);
-            poseStack.popPose();
-        }
+        poseStack.pushPose();
+        poseStack.translate(0.5D, 1.05D, 0.5D);
+        poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+        poseStack.scale(0.8F, 0.8F, 0.8F);
+        this.itemRenderer.renderStatic(thaumometer, ItemDisplayContext.FIXED, packedLight, packedOverlay, poseStack, bufferSource, be.getLevel(), 0);
+        poseStack.popPose();
     }
 }

@@ -2,17 +2,22 @@ package team.torka.thaumicrecords.block;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.torka.thaumicrecords.block.entity.DeconstructionTableBlockEntity;
@@ -62,6 +67,20 @@ public class DeconstructionTableBlock extends BaseEntityBlock {
             return null;
         }
         return createTickerHelper(type, BlockEntityRegistry.DECONSTRUCTION_TABLE.get(), DeconstructionTableBlockEntity::serverTick);
+    }
+
+    @NotNull
+    @Override
+    @ParametersAreNonnullByDefault
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (!level.isClientSide) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof DeconstructionTableBlockEntity decon) {
+                player.openMenu(new SimpleMenuProvider((id, inv, p) -> new team.torka.thaumicrecords.menu.DeconstructionTableMenu(id, inv, decon),
+                        Component.translatable("container.thaumicrecords.deconstruction_table")), pos);
+            }
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
