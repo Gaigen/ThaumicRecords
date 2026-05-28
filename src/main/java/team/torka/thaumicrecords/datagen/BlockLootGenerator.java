@@ -27,6 +27,8 @@ public class BlockLootGenerator extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
+        this.dropSelf(BlockRegistry.CINDERPEARL.get());
+        this.dropSelf(BlockRegistry.SHIMMERLEAF.get());
         this.dropSelf(BlockRegistry.ARCANE_WORKBENCH.get());
         this.dropSelf(BlockRegistry.TABLE.get());
         this.dropSelf(BlockRegistry.CINNABAR_ORE.get());
@@ -89,7 +91,7 @@ public class BlockLootGenerator extends BlockLootSubProvider {
         this.dropSelf(BlockRegistry.GREATWOOD_LOG.get());
         this.dropSelf(BlockRegistry.GREATWOOD_SAPLING.get());
         this.add(BlockRegistry.GREATWOOD_LEAVES.get(), block -> createLeavesDrops(block, BlockRegistry.SILVERWOOD_SAPLING.get(), 0.005F));
-        
+
 
     }
 
@@ -133,6 +135,8 @@ public class BlockLootGenerator extends BlockLootSubProvider {
         blocks.add(BlockRegistry.ARCANE_STONE_SLAB.get());
         blocks.add(BlockRegistry.GREATWOOD_SLAB.get());
         blocks.add(BlockRegistry.SILVERWOOD_SLAB.get());
+        blocks.add(BlockRegistry.SHIMMERLEAF.get());
+        blocks.add(BlockRegistry.CINDERPEARL.get());
         return blocks;
     }
 
