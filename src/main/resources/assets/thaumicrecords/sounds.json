@@ -98,5 +98,13 @@
       "thaumicrecords:gore1",
       "thaumicrecords:gore2"
     ]
+  },
+  "page": {
+    "category": "gui",
+    "subtitle": "sound.thaumicrecords.page",
+    "sounds": [
+      "thaumicrecords:page1",
+      "thaumicrecords:page2"
+    ]
   }
 }

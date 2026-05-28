@@ -51,4 +51,7 @@ public class SoundRegistry {
     public static final DeferredHolder<SoundEvent, SoundEvent> GORE = REGISTRAR.register("gore",
             () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("gore")));
 
+    public static final DeferredHolder<SoundEvent, SoundEvent> PAGE = REGISTRAR.register("page",
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("page")));
+
 }
