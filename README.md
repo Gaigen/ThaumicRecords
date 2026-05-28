@@ -21,21 +21,19 @@ Whenever my TC4 addiction kicks in (laughs).
 
 It is in a very early stage...
 
-* Aspects System
-* Research System (without Thaumonomicon)
+* Aspects
+* Research Table
 * Arcane Crafting
-* Some Basic Resources (ores, trees, no worldgen yet)
+* Natural Resources
 * Wands
 * Aura Nodes
+* Crucible Recipe
 
 **Next**
 
-* Some misc non-functional blocks (if I have no time)
-* Thaumometer Scanning
 * Thaumonomicon
-* Crucible Recipe
 * Infusion Recipe
-* World generation (after all natural resources are completed)
+* Aura Nodes worldgen
 
 There is really a long way to go.
 
@@ -43,3 +41,5 @@ There is really a long way to go.
 
 * **Azanor**, The original author of Thaumcraft
 * **[NeoForged](https://neoforged.net/)**, Modern minecraft modloader Team
+* **[Gaigen](https://github.com/Gaigen)** & **[Virg29](https://github.com/Virg29)**, Awesome contributors who helped
+  implement many features
