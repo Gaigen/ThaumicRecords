@@ -53,6 +53,8 @@ import team.torka.thaumicrecords.item.VoidShovelItem;
 import team.torka.thaumicrecords.item.VoidSwordItem;
 import team.torka.thaumicrecords.item.WandItem;
 import team.torka.thaumicrecords.item.WispEssenceItem;
+import team.torka.thaumicrecords.item.CurioItem;
+import team.torka.thaumicrecords.item.RunicCurioItem;
 
 public class ItemRegistry {
     public static final DeferredRegister.Items REGISTRAR = DeferredRegister.createItems(ThaumicRecords.MOD_ID);
@@ -238,6 +240,36 @@ public class ItemRegistry {
     public static final DeferredItem<ScribingToolsItem> SCRIBING_TOOLS=REGISTRAR.register("scribing_tools",ScribingToolsItem::new);
 
     public static final DeferredItem<ResearchNotesItem> RESEARCH_NOTES=REGISTRAR.register("research_notes",ResearchNotesItem::new);
+
+    // Curios - Mundane Baubles
+    public static final DeferredItem<CurioItem> MUNDANE_RING = REGISTRAR.register("mundane_ring",
+            () -> new CurioItem("ring"));
+    public static final DeferredItem<CurioItem> MUNDANE_AMULET = REGISTRAR.register("mundane_amulet",
+            () -> new CurioItem("necklace"));
+    public static final DeferredItem<CurioItem> MUNDANE_BELT = REGISTRAR.register("mundane_belt",
+            () -> new CurioItem("belt"));
+
+    // Runic Baubles - Rings
+    public static final DeferredItem<RunicCurioItem> RUNIC_RING_LESSER = REGISTRAR.register("runic_ring_lesser",
+            () -> new RunicCurioItem("ring", 1));
+    public static final DeferredItem<RunicCurioItem> RUNIC_RING = REGISTRAR.register("runic_ring",
+            () -> new RunicCurioItem("ring", 5));
+    public static final DeferredItem<RunicCurioItem> RUNIC_RING_CHARGED = REGISTRAR.register("runic_ring_charged",
+            () -> new RunicCurioItem("ring", 4));
+    public static final DeferredItem<RunicCurioItem> RUNIC_RING_REGEN = REGISTRAR.register("runic_ring_regen",
+            () -> new RunicCurioItem("ring", 4));
+
+    // Runic Baubles - Amulets
+    public static final DeferredItem<RunicCurioItem> RUNIC_AMULET = REGISTRAR.register("runic_amulet",
+            () -> new RunicCurioItem("necklace", 8));
+    public static final DeferredItem<RunicCurioItem> RUNIC_AMULET_EMERGENCY = REGISTRAR.register("runic_amulet_emergency",
+            () -> new RunicCurioItem("necklace", 7));
+
+    // Runic Baubles - Girdles
+    public static final DeferredItem<RunicCurioItem> RUNIC_GIRDLE = REGISTRAR.register("runic_girdle",
+            () -> new RunicCurioItem("belt", 10));
+    public static final DeferredItem<RunicCurioItem> RUNIC_GIRDLE_KINETIC = REGISTRAR.register("runic_girdle_kinetic",
+            () -> new RunicCurioItem("belt", 9));
 
     // Block Items
     public static final DeferredItem<BlockItem> PAVING_STONE_OF_TRAVEL = REGISTRAR.register("paving_stone_of_travel",
@@ -479,6 +511,17 @@ public class ItemRegistry {
         output.accept(SILVERWOOD_SLAB);
         output.accept(CINDERPEARL);
         output.accept(SHIMMERLEAF);
+        output.accept(MUNDANE_RING);
+        output.accept(MUNDANE_AMULET);
+        output.accept(MUNDANE_BELT);
+        output.accept(RUNIC_RING_LESSER);
+        output.accept(RUNIC_RING);
+        output.accept(RUNIC_RING_CHARGED);
+        output.accept(RUNIC_RING_REGEN);
+        output.accept(RUNIC_AMULET);
+        output.accept(RUNIC_AMULET_EMERGENCY);
+        output.accept(RUNIC_GIRDLE);
+        output.accept(RUNIC_GIRDLE_KINETIC);
     }
 
     public static void putInPhialCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
