@@ -37,6 +37,24 @@ public class SparkleParticle extends SingleQuadParticle {
         this.setSize(0.01F, 0.01F);
     }
 
+    private SparkleParticle(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, float scale, float r, float g, float b,
+                            int lifetime) {
+        super(level, x, y, z);
+        this.rCol = r;
+        this.gCol = g;
+        this.bCol = b;
+        this.gravity = 0;
+        this.xd = dx;
+        this.yd = dy;
+        this.zd = dz;
+        this.quadSize *= scale;
+        this.lifetime = 3 * lifetime;
+        this.multiplier = lifetime;
+        this.baseParticleIndex = 16;
+        this.hasPhysics = false;
+        this.setSize(0.01F, 0.01F);
+    }
+
     private SparkleParticle(ClientLevel level, double x, double y, double z, float scale, int colorType, int lifetime) {
         this(level, x, y, z, scale, 0, 0, 0, lifetime);
         switch (colorType) {
@@ -85,6 +103,14 @@ public class SparkleParticle extends SingleQuadParticle {
 
     public static SparkleParticle createDirect(ClientLevel level, double x, double y, double z, float scale, int colorType, int lifetime) {
         return new SparkleParticle(level, x, y, z, scale, colorType, lifetime);
+    }
+
+    public static SparkleParticle createDirect(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, float scale, int color,
+                                               int lifetime) {
+        float r = ((color >> 16) & 0xFF) / 255f;
+        float g = ((color >> 8) & 0xFF) / 255f;
+        float b = (color & 0xFF) / 255f;
+        return new SparkleParticle(level, x, y, z, dx, dy, dz, scale, r, g, b, lifetime);
     }
 
     public void setGravity(float value) {

@@ -22,9 +22,14 @@ import team.torka.thaumicrecords.item.CultistBootsItem;
 import team.torka.thaumicrecords.item.CultistLeaderArmorItem;
 import team.torka.thaumicrecords.item.CultistPlateArmorItem;
 import team.torka.thaumicrecords.item.CultistRobeArmorItem;
+import team.torka.thaumicrecords.item.ElementalAxeItem;
+import team.torka.thaumicrecords.item.ElementalHoeItem;
+import team.torka.thaumicrecords.item.ElementalPickaxeItem;
+import team.torka.thaumicrecords.item.ElementalShovelItem;
 import team.torka.thaumicrecords.item.FortressArmorItem;
 import team.torka.thaumicrecords.item.GogglesItem;
 import team.torka.thaumicrecords.item.JarBlockItem;
+import team.torka.thaumicrecords.item.KnowledgeFragmentItem;
 import team.torka.thaumicrecords.item.PhialItem;
 import team.torka.thaumicrecords.item.PrimalCrusherItem;
 import team.torka.thaumicrecords.item.PrimordialPearItem;
@@ -38,13 +43,6 @@ import team.torka.thaumicrecords.item.ThaumiumPickaxeItem;
 import team.torka.thaumicrecords.item.ThaumiumShovelItem;
 import team.torka.thaumicrecords.item.ThaumiumSwordItem;
 import team.torka.thaumicrecords.item.ThaumometerItem;
-import team.torka.thaumicrecords.item.CrimsonBladeItem;
-import team.torka.thaumicrecords.item.ElementalAxeItem;
-import team.torka.thaumicrecords.item.ElementalHoeItem;
-import team.torka.thaumicrecords.item.ElementalPickaxeItem;
-import team.torka.thaumicrecords.item.ElementalShovelItem;
-import team.torka.thaumicrecords.item.KnowledgeFragmentItem;
-import team.torka.thaumicrecords.item.PrimalCrusherItem;
 import team.torka.thaumicrecords.item.VoidArmorItem;
 import team.torka.thaumicrecords.item.VoidAxeItem;
 import team.torka.thaumicrecords.item.VoidHoeItem;
@@ -262,6 +260,8 @@ public class ItemRegistry {
             () -> new BlockItem(BlockRegistry.CINNABAR_ORE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> AURA_NODE = REGISTRAR.register("aura_node",
             () -> new BlockItem(BlockRegistry.AURA_NODE.get(), new Item.Properties()));
+    public static final DeferredItem<Item> CINDERPEARL = REGISTRAR.register("cinderpearl", ()-> new BlockItem(BlockRegistry.CINDERPEARL.get(), new Item.Properties()));
+    public static final DeferredItem<Item> SHIMMERLEAF = REGISTRAR.register("shimmerleaf", ()-> new BlockItem(BlockRegistry.SHIMMERLEAF.get(), new Item.Properties()));
 
     // Ore Clusters
     public static final DeferredItem<Item> CLUSTER_IRON = REGISTRAR.registerSimpleItem("cluster_iron");
@@ -474,6 +474,8 @@ public class ItemRegistry {
         output.accept(ARCANE_STONE_SLAB);
         output.accept(GREATWOOD_SLAB);
         output.accept(SILVERWOOD_SLAB);
+        output.accept(CINDERPEARL);
+        output.accept(SHIMMERLEAF);
     }
 
     public static void putInPhialCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {

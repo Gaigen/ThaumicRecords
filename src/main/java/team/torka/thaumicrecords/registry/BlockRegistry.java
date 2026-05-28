@@ -1,5 +1,6 @@
 package team.torka.thaumicrecords.registry;
 
+import net.minecraft.core.Holder;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -21,12 +22,14 @@ import team.torka.thaumicrecords.block.AlchemicalConstructBlock;
 import team.torka.thaumicrecords.block.ArcanePedestalBlock;
 import team.torka.thaumicrecords.block.ArcaneWorkbenchBlock;
 import team.torka.thaumicrecords.block.AuraNodeBlock;
+import team.torka.thaumicrecords.block.CinderpearlBlock;
 import team.torka.thaumicrecords.block.CrucibleBlock;
 import team.torka.thaumicrecords.block.DeconstructionTableBlock;
 import team.torka.thaumicrecords.block.JarBlock;
 import team.torka.thaumicrecords.block.PavingStoneOfTravelBlock;
 import team.torka.thaumicrecords.block.PavingStoneOfWardingBlock;
 import team.torka.thaumicrecords.block.ResearchTableBlock;
+import team.torka.thaumicrecords.block.ShimmerleafBlock;
 import team.torka.thaumicrecords.block.TableBlock;
 import team.torka.thaumicrecords.block.ThaumatoriumBlock;
 import team.torka.thaumicrecords.block.WardingBarrierBlock;
@@ -159,6 +162,11 @@ public class BlockRegistry {
             () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LOG)));
     public static final DeferredBlock<Block> SILVERWOOD_LEAVES = REGISTRAR.register("silverwood_leaves",
             () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES)));
+
+    public static final DeferredBlock<Block> CINDERPEARL = REGISTRAR.register("cinderpearl",
+            () -> new CinderpearlBlock(Holder.direct(null), 0, BlockBehaviour.Properties.ofFullCopy(Blocks.DANDELION).lightLevel(state -> 7)));
+    public static final DeferredBlock<Block> SHIMMERLEAF = REGISTRAR.register("shimmerleaf",
+            () -> new ShimmerleafBlock(Holder.direct(null), 0, BlockBehaviour.Properties.ofFullCopy(Blocks.DANDELION).lightLevel(state -> 7)));
 
     public static final DeferredBlock<SaplingBlock> GREATWOOD_SAPLING = REGISTRAR.register("greatwood_sapling",
             () -> new SaplingBlock(TreeGrowers.GREATWOOD_TREE, BlockBehaviour.Properties.of()
