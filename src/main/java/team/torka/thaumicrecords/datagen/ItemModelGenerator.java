@@ -49,6 +49,15 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.WAND_ROD_QUARTZ.get());
         basicItem(ItemRegistry.WAND_ROD_BONE.get());
         basicItem(ItemRegistry.WAND_ROD_REED.get());
+        basicItem(ItemRegistry.STAFF_ROD_GREATWOOD.get());
+        basicItem(ItemRegistry.STAFF_ROD_OBSIDIAN.get());
+        basicItem(ItemRegistry.STAFF_ROD_BLAZE.get());
+        basicItem(ItemRegistry.STAFF_ROD_ICE.get());
+        basicItem(ItemRegistry.STAFF_ROD_QUARTZ.get());
+        basicItem(ItemRegistry.STAFF_ROD_BONE.get());
+        basicItem(ItemRegistry.STAFF_ROD_REED.get());
+        basicItem(ItemRegistry.STAFF_ROD_SILVERWOOD.get());
+        basicItem(ItemRegistry.STAFF_ROD_PRIMAL.get());
         basicItem(ItemRegistry.GOGGLES.get());
         basicItem(ItemRegistry.FORTRESS_HELMET.get());
         basicItem(ItemRegistry.FORTRESS_CHESTPLATE.get());

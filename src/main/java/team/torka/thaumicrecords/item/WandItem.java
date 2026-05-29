@@ -30,6 +30,7 @@ import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
+import team.torka.thaumicrecords.api.item.StaffRod;
 import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.block.ThaumatoriumBlock;
@@ -134,11 +135,20 @@ public class WandItem extends Item {
             if (Objects.nonNull(wandRod) && Objects.nonNull(wandCap)) {
                 Component capPart = Component.translatable(wandCap.getTranslationKey());
                 Component rodPart = Component.translatable(wandRod.getTranslationKey());
-                String key = data.sceptre() ? "item.wand.sceptre" : "item.wand";
+                String key = data.sceptre() ? "item.wand.sceptre" : (isStaff(stack) ? "item.wand.staff" : "item.wand");
                 return Component.translatable(ThaumicRecords.createTranslationKey("item", key), capPart, rodPart);
             }
         }
         return Component.translatable(ThaumicRecords.createTranslationKey("item", "wand.default"));
+    }
+
+    public boolean isStaff(ItemStack stack) {
+        WandItemComponent data = stack.get(DataComponentRegistry.WAND_ITEM_DATA.get());
+        if (data == null) {
+            return false;
+        }
+        WandRod wandRod = WandRodRegistry.WAND_ROD_REGISTRY.get(data.getRod());
+        return wandRod instanceof StaffRod;
     }
 
     @NotNull
@@ -150,9 +160,6 @@ public class WandItem extends Item {
         return InteractionResultHolder.consume(itemstack);
     }
 
-    /**
-     *
-     */
     @Override
     @NotNull
     @ParametersAreNonnullByDefault
@@ -267,10 +274,7 @@ public class WandItem extends Item {
                 int useDuration = this.getUseDuration(stack, livingEntity) - remainingUseDuration;
                 if (useDuration % 5 == 0) {
                     int drainRate = 1;
-                    // TODO 研究增加吸取速率
                     boolean preserve = !player.isShiftKeyDown();
-                    // TODO 节点防护术
-                    // TODO 铁杖端木杖柄判断
                     List<ResourceLocation> notFull = wandItemComponent.getLackVisAspect();
                     List<ResourceLocation> randomPrimalList = nodeBE.getLimitAspect().getPrimalKey().stream().filter(notFull::contains).toList();
                     if (!randomPrimalList.isEmpty()) {

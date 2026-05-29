@@ -239,6 +239,15 @@ public class ItemRegistry {
     public static final DeferredItem<Item> WAND_ROD_QUARTZ = REGISTRAR.registerSimpleItem("wand_rod_quartz");
     public static final DeferredItem<Item> WAND_ROD_BONE = REGISTRAR.registerSimpleItem("wand_rod_bone");
     public static final DeferredItem<Item> WAND_ROD_REED = REGISTRAR.registerSimpleItem("wand_rod_reed");
+    public static final DeferredItem<Item> STAFF_ROD_GREATWOOD = REGISTRAR.registerSimpleItem("staff_rod_greatwood");
+    public static final DeferredItem<Item> STAFF_ROD_OBSIDIAN = REGISTRAR.registerSimpleItem("staff_rod_obsidian");
+    public static final DeferredItem<Item> STAFF_ROD_BLAZE = REGISTRAR.registerSimpleItem("staff_rod_blaze");
+    public static final DeferredItem<Item> STAFF_ROD_ICE = REGISTRAR.registerSimpleItem("staff_rod_ice");
+    public static final DeferredItem<Item> STAFF_ROD_QUARTZ = REGISTRAR.registerSimpleItem("staff_rod_quartz");
+    public static final DeferredItem<Item> STAFF_ROD_BONE = REGISTRAR.registerSimpleItem("staff_rod_bone");
+    public static final DeferredItem<Item> STAFF_ROD_REED = REGISTRAR.registerSimpleItem("staff_rod_reed");
+    public static final DeferredItem<Item> STAFF_ROD_SILVERWOOD = REGISTRAR.registerSimpleItem("staff_rod_silverwood");
+    public static final DeferredItem<Item> STAFF_ROD_PRIMAL = REGISTRAR.registerSimpleItem("staff_rod_primal");
 
 
     public static final DeferredItem<WandItem> WAND = REGISTRAR.register("wand", WandItem::new);
@@ -426,6 +435,15 @@ public class ItemRegistry {
         output.accept(WAND_ROD_QUARTZ);
         output.accept(WAND_ROD_BONE);
         output.accept(WAND_ROD_REED);
+        output.accept(STAFF_ROD_GREATWOOD);
+        output.accept(STAFF_ROD_OBSIDIAN);
+        output.accept(STAFF_ROD_BLAZE);
+        output.accept(STAFF_ROD_ICE);
+        output.accept(STAFF_ROD_QUARTZ);
+        output.accept(STAFF_ROD_BONE);
+        output.accept(STAFF_ROD_REED);
+        output.accept(STAFF_ROD_SILVERWOOD);
+        output.accept(STAFF_ROD_PRIMAL);
         output.accept(GOGGLES);
         output.accept(FORTRESS_HELMET);
         output.accept(FORTRESS_CHESTPLATE);

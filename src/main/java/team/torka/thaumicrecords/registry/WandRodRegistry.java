@@ -10,6 +10,7 @@ import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.RegistryKeys;
+import team.torka.thaumicrecords.api.item.StaffRod;
 import team.torka.thaumicrecords.api.item.WandRod;
 
 @EventBusSubscriber
@@ -24,6 +25,7 @@ public class WandRodRegistry {
     }
 
     /*@formatter:off*/
+    // Wand rods
     public static final DeferredHolder<WandRod, WandRod> WAND_ROD_WOOD =
             REGISTRAR.register("wood", () -> new WandRod("wood", 2500, 1, Items.STICK));
     public static final DeferredHolder<WandRod, WandRod> WAND_ROD_GREATWOOD =
@@ -46,5 +48,33 @@ public class WandRodRegistry {
             REGISTRAR.register("bone", () -> new WandRod("bone", 7500, 6, ItemRegistry.WAND_ROD_BONE.get()));
     public static final DeferredHolder<WandRod, WandRod> WAND_ROD_REED =
             REGISTRAR.register("reed", () -> new WandRod("reed", 7500, 6, ItemRegistry.WAND_ROD_REED.get()));
+
+    // Staff rods (same registry, StaffRod extends WandRod)
+    public static final DeferredHolder<WandRod, StaffRod> STAFF_ROD_GREATWOOD =
+            REGISTRAR.register("greatwood_staff", () -> new StaffRod("greatwood", 12500, 8, ItemRegistry.STAFF_ROD_GREATWOOD.get()));
+    public static final DeferredHolder<WandRod, StaffRod> STAFF_ROD_OBSIDIAN =
+            REGISTRAR.register("obsidian_staff", () -> new StaffRod("obsidian", 17500, 14, ItemRegistry.STAFF_ROD_OBSIDIAN.get()));
+    public static final DeferredHolder<WandRod, StaffRod> STAFF_ROD_BLAZE =
+            REGISTRAR.register("blaze_staff", () -> {
+                StaffRod rod = new StaffRod("blaze", 17500, 14, ItemRegistry.STAFF_ROD_BLAZE.get());
+                rod.setGlowing(true);
+                return rod;
+            });
+    public static final DeferredHolder<WandRod, StaffRod> STAFF_ROD_ICE =
+            REGISTRAR.register("ice_staff", () -> new StaffRod("ice", 17500, 14, ItemRegistry.STAFF_ROD_ICE.get()));
+    public static final DeferredHolder<WandRod, StaffRod> STAFF_ROD_QUARTZ =
+            REGISTRAR.register("quartz_staff", () -> new StaffRod("quartz", 17500, 14, ItemRegistry.STAFF_ROD_QUARTZ.get()));
+    public static final DeferredHolder<WandRod, StaffRod> STAFF_ROD_BONE =
+            REGISTRAR.register("bone_staff", () -> new StaffRod("bone", 17500, 14, ItemRegistry.STAFF_ROD_BONE.get()));
+    public static final DeferredHolder<WandRod, StaffRod> STAFF_ROD_REED =
+            REGISTRAR.register("reed_staff", () -> new StaffRod("reed", 17500, 14, ItemRegistry.STAFF_ROD_REED.get()));
+    public static final DeferredHolder<WandRod, StaffRod> STAFF_ROD_SILVERWOOD =
+            REGISTRAR.register("silverwood_staff", () -> new StaffRod("silverwood", 25000, 24, ItemRegistry.STAFF_ROD_SILVERWOOD.get()));
+    public static final DeferredHolder<WandRod, StaffRod> STAFF_ROD_PRIMAL =
+            REGISTRAR.register("primal_staff", () -> {
+                StaffRod rod = new StaffRod("primal", 25000, 32, ItemRegistry.STAFF_ROD_PRIMAL.get());
+                rod.setRunes(true);
+                return rod;
+            });
     /*@formatter:on*/
 }
