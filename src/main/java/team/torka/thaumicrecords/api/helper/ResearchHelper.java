@@ -4,15 +4,20 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.research.Research;
+import team.torka.thaumicrecords.api.research.ResearchCategory;
 import team.torka.thaumicrecords.attachment.ResearchPoint;
 import team.torka.thaumicrecords.attachment.ResearchUnlocked;
 import team.torka.thaumicrecords.attachment.ScanHistory;
 import team.torka.thaumicrecords.registry.AttachmentRegistry;
+import team.torka.thaumicrecords.registry.ResearchCategoryRegistry;
 import team.torka.thaumicrecords.registry.ResearchRegistry;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ResearchHelper {
     public static void modifyResearchPoint(ServerPlayer player, AspectList add) {
@@ -52,4 +57,13 @@ public class ResearchHelper {
         }
         return data.researches().contains(research);
     }
+
+    public static List<Research> getResearchesByCategory(ResearchCategory category) {
+        ResourceLocation categoryRl = ResearchCategoryRegistry.RESEARCH_REGISTRY.getKey(category);
+        if (Objects.isNull(categoryRl)) {
+            return Collections.emptyList();
+        }
+        return ResearchRegistry.RESEARCH_REGISTRY.stream().filter(research -> research.category.equals(categoryRl)).collect(Collectors.toList());
+    }
+
 }

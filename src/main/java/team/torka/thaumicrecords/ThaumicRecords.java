@@ -14,16 +14,17 @@ import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.CreativeTabRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.EntityRegistry;
-import team.torka.thaumicrecords.registry.OreClusterRegistry;
-import team.torka.thaumicrecords.integration.curios.CuriosIntegration;
 import team.torka.thaumicrecords.registry.FeatureRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 import team.torka.thaumicrecords.registry.MenuRegistry;
 import team.torka.thaumicrecords.registry.NodeModifierRegistry;
 import team.torka.thaumicrecords.registry.NodeTypeRegistry;
+import team.torka.thaumicrecords.registry.OreClusterRegistry;
 import team.torka.thaumicrecords.registry.ParticleRegistry;
 import team.torka.thaumicrecords.registry.RecipeSerializerRegistry;
 import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
+import team.torka.thaumicrecords.registry.ResearchCategoryRegistry;
+import team.torka.thaumicrecords.registry.ResearchRegistry;
 import team.torka.thaumicrecords.registry.SoundRegistry;
 import team.torka.thaumicrecords.registry.WandCapRegistry;
 import team.torka.thaumicrecords.registry.WandRodRegistry;
@@ -54,6 +55,8 @@ public class ThaumicRecords {
         AttachmentRegistry.REGISTRAR.register(modEventBus);
         FeatureRegistry.REGISTRAR.register(modEventBus);
         EntityRegistry.REGISTRAR.register(modEventBus);
+        ResearchCategoryRegistry.REGISTRAR.register(modEventBus);
+        ResearchRegistry.REGISTRAR.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
     }

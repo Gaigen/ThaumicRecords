@@ -3,11 +3,11 @@ package team.torka.thaumicrecords.integration.curios;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import top.theillusivec4.curios.api.CuriosApi;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.registry.ItemRegistry;
+import top.theillusivec4.curios.api.CuriosApi;
 
-@EventBusSubscriber(modid = ThaumicRecords.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber
 public class CuriosIntegration {
 
     @SubscribeEvent

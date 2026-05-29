@@ -12,7 +12,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.IRunicArmor;
 import team.torka.thaumicrecords.network.payload.RunicShieldPayload;
 import team.torka.thaumicrecords.network.payload.ShieldEffectPayload;
@@ -30,7 +29,7 @@ import java.util.UUID;
  * Handles charge calculation, recharge, damage absorption, and ability triggers.
  * In event/ package (not client/) so loaded on both sides.
  */
-@EventBusSubscriber(modid = ThaumicRecords.MOD_ID)
+@EventBusSubscriber
 public class ServerRunicHandler {
 
     private static final Map<UUID, Integer> runicCharge = new HashMap<>();

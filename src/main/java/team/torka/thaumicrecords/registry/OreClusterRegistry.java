@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class OreClusterRegistry {
-    public record ClusterMapping(Supplier<ItemStack> output, float baseChance) {}
+    public record ClusterMapping(Supplier<ItemStack> output, float baseChance) {
+    }
 
     private static final Map<Block, ClusterMapping> MAPPINGS = new HashMap<>();
 
@@ -23,7 +24,7 @@ public class OreClusterRegistry {
         register(() -> Blocks.COPPER_ORE, () -> new ItemStack(ItemRegistry.CLUSTER_COPPER.get()), 1.0F);
         register(() -> Blocks.DEEPSLATE_COPPER_ORE, () -> new ItemStack(ItemRegistry.CLUSTER_COPPER.get()), 1.0F);
 
-        register(() -> BlockRegistry.CINNABAR_ORE.get(), () -> new ItemStack(ItemRegistry.CLUSTER_CINNABAR.get()), 0.9F);
+        register(BlockRegistry.CINNABAR_ORE, () -> new ItemStack(ItemRegistry.CLUSTER_CINNABAR.get()), 0.9F);
     }
 
     private static void register(Supplier<Block> block, Supplier<ItemStack> output, float chance) {
