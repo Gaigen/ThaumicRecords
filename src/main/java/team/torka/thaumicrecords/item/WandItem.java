@@ -76,9 +76,10 @@ public class WandItem extends Item {
             tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "bad_component")).withStyle(ChatFormatting.GRAY));
             return;
         }
+        String capacityScaled = BigDecimal.valueOf(data.getEffectiveCapacity()).divide(new BigDecimal(100), RoundingMode.HALF_UP).setScale(2,
+                RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
         if (Screen.hasShiftDown()) {
-            tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand.capacity"), wandRod.getCapacityScaled())
-                    .withStyle(ChatFormatting.GOLD));
+            tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand.capacity"), capacityScaled).withStyle(ChatFormatting.GOLD));
             for (ResourceLocation rl : Aspect.getPrimalList()) {
                 Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
                 if (Objects.isNull(aspect)) {
@@ -98,10 +99,10 @@ public class WandItem extends Item {
             }
         } else {
             BigDecimal averageModifier = BigDecimal.valueOf(Aspect.getPrimalList().stream().map(wandCap::getAspectCostModifier).reduce(0.0, Double::sum))
-                    .divide(BigDecimal.valueOf(Aspect.getPrimalList().size()))
+                    .divide(BigDecimal.valueOf(Aspect.getPrimalList().size()), RoundingMode.HALF_UP)
                     .multiply(BigDecimal.valueOf(100))
                     .setScale(0, RoundingMode.HALF_UP);
-            tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand.capacity"), wandRod.getCapacityScaled())
+            tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand.capacity"), capacityScaled)
                     .withStyle(ChatFormatting.GOLD)
                     .append(" ")
                     .append(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand.average_modifier"), averageModifier.toPlainString())
@@ -133,7 +134,8 @@ public class WandItem extends Item {
             if (Objects.nonNull(wandRod) && Objects.nonNull(wandCap)) {
                 Component capPart = Component.translatable(wandCap.getTranslationKey());
                 Component rodPart = Component.translatable(wandRod.getTranslationKey());
-                return Component.translatable(ThaumicRecords.createTranslationKey("item", "wand"), capPart, rodPart);
+                String key = data.sceptre() ? "item.wand.sceptre" : "item.wand";
+                return Component.translatable(ThaumicRecords.createTranslationKey("item", key), capPart, rodPart);
             }
         }
         return Component.translatable(ThaumicRecords.createTranslationKey("item", "wand.default"));
@@ -273,7 +275,7 @@ public class WandItem extends Item {
                     List<ResourceLocation> randomPrimalList = nodeBE.getLimitAspect().getPrimalKey().stream().filter(notFull::contains).toList();
                     if (!randomPrimalList.isEmpty()) {
                         ResourceLocation randomAspect = randomPrimalList.get(level.random.nextInt(randomPrimalList.size()));
-                        int space = wandItemComponent.getCapacity() - wandItemComponent.getAspects().getOrZero(randomAspect);
+                        int space = wandItemComponent.getEffectiveCapacity() - wandItemComponent.getAspects().getOrZero(randomAspect);
                         int toDrain = Math.min(drainRate, space);
                         int drained = nodeBE.drainAspect(randomAspect, toDrain, preserve);
                         if (drained > 0) {

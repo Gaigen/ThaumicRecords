@@ -30,5 +30,17 @@ public class WandRodRegistry {
             REGISTRAR.register("greatwood", () -> new WandRod("greatwood", 5000, 3, ItemRegistry.WAND_ROD_GREATWOOD.get()));
     public static final DeferredHolder<WandRod, WandRod> WAND_ROD_SILVERWOOD =
             REGISTRAR.register("silverwood", () -> new WandRod("silverwood", 10000, 9, ItemRegistry.WAND_ROD_SILVERWOOD.get()));
+    public static final DeferredHolder<WandRod, WandRod> WAND_ROD_OBSIDIAN =
+            REGISTRAR.register("obsidian", () -> new WandRod("obsidian", 7500, 6, ItemRegistry.WAND_ROD_OBSIDIAN.get()));
+    public static final DeferredHolder<WandRod, WandRod> WAND_ROD_BLAZE =
+            REGISTRAR.register("blaze", () -> new WandRod("blaze", 7500, 6, ItemRegistry.WAND_ROD_BLAZE.get()));
+    public static final DeferredHolder<WandRod, WandRod> WAND_ROD_ICE =
+            REGISTRAR.register("ice", () -> new WandRod("ice", 7500, 6, ItemRegistry.WAND_ROD_ICE.get()));
+    public static final DeferredHolder<WandRod, WandRod> WAND_ROD_QUARTZ =
+            REGISTRAR.register("quartz", () -> new WandRod("quartz", 7500, 6, ItemRegistry.WAND_ROD_QUARTZ.get()));
+    public static final DeferredHolder<WandRod, WandRod> WAND_ROD_BONE =
+            REGISTRAR.register("bone", () -> new WandRod("bone", 7500, 6, ItemRegistry.WAND_ROD_BONE.get()));
+    public static final DeferredHolder<WandRod, WandRod> WAND_ROD_REED =
+            REGISTRAR.register("reed", () -> new WandRod("reed", 7500, 6, ItemRegistry.WAND_ROD_REED.get()));
     /*@formatter:on*/
 }

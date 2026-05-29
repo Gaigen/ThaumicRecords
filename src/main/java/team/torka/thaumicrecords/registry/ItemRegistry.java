@@ -226,8 +226,19 @@ public class ItemRegistry {
     public static final DeferredItem<Item> WAND_CAP_GOLD = REGISTRAR.registerSimpleItem("wand_cap_gold");
     public static final DeferredItem<Item> WAND_CAP_THAUMIUM = REGISTRAR.registerSimpleItem("wand_cap_thaumium");
     public static final DeferredItem<Item> WAND_CAP_THAUMIUM_INERT = REGISTRAR.registerSimpleItem("wand_cap_thaumium_inert");
+    public static final DeferredItem<Item> WAND_CAP_COPPER = REGISTRAR.registerSimpleItem("wand_cap_copper");
+    public static final DeferredItem<Item> WAND_CAP_SILVER = REGISTRAR.registerSimpleItem("wand_cap_silver");
+    public static final DeferredItem<Item> WAND_CAP_VOID = REGISTRAR.registerSimpleItem("wand_cap_void");
+    public static final DeferredItem<Item> WAND_CAP_SILVER_INERT = REGISTRAR.registerSimpleItem("wand_cap_silver_inert");
+    public static final DeferredItem<Item> WAND_CAP_VOID_INERT = REGISTRAR.registerSimpleItem("wand_cap_void_inert");
     public static final DeferredItem<Item> WAND_ROD_GREATWOOD = REGISTRAR.registerSimpleItem("wand_rod_greatwood");
     public static final DeferredItem<Item> WAND_ROD_SILVERWOOD = REGISTRAR.registerSimpleItem("wand_rod_silverwood");
+    public static final DeferredItem<Item> WAND_ROD_OBSIDIAN = REGISTRAR.registerSimpleItem("wand_rod_obsidian");
+    public static final DeferredItem<Item> WAND_ROD_BLAZE = REGISTRAR.registerSimpleItem("wand_rod_blaze");
+    public static final DeferredItem<Item> WAND_ROD_ICE = REGISTRAR.registerSimpleItem("wand_rod_ice");
+    public static final DeferredItem<Item> WAND_ROD_QUARTZ = REGISTRAR.registerSimpleItem("wand_rod_quartz");
+    public static final DeferredItem<Item> WAND_ROD_BONE = REGISTRAR.registerSimpleItem("wand_rod_bone");
+    public static final DeferredItem<Item> WAND_ROD_REED = REGISTRAR.registerSimpleItem("wand_rod_reed");
 
 
     public static final DeferredItem<WandItem> WAND = REGISTRAR.register("wand", WandItem::new);
@@ -371,6 +382,7 @@ public class ItemRegistry {
         output.accept(ironCappedWoodWand());
         output.accept(goldCappedGreatwoodWand());
         output.accept(thaumiumCappedSilverwoodWand());
+        output.accept(thaumiumCappedSilverwoodSceptre());
         output.accept(THAUMOMETER);
         output.accept(THAUMONOMICON);
         output.accept(AER_INFUSED_STONE);
@@ -399,10 +411,21 @@ public class ItemRegistry {
         output.accept(SALIS_MUNDUS);
         output.accept(WAND_CAP_IRON);
         output.accept(WAND_CAP_GOLD);
-        output.accept(WAND_CAP_THAUMIUM);
+        output.accept(WAND_CAP_COPPER);
+        output.accept(WAND_CAP_SILVER_INERT);
+        output.accept(WAND_CAP_SILVER);
         output.accept(WAND_CAP_THAUMIUM_INERT);
+        output.accept(WAND_CAP_THAUMIUM);
+        output.accept(WAND_CAP_VOID_INERT);
+        output.accept(WAND_CAP_VOID);
         output.accept(WAND_ROD_GREATWOOD);
         output.accept(WAND_ROD_SILVERWOOD);
+        output.accept(WAND_ROD_OBSIDIAN);
+        output.accept(WAND_ROD_BLAZE);
+        output.accept(WAND_ROD_ICE);
+        output.accept(WAND_ROD_QUARTZ);
+        output.accept(WAND_ROD_BONE);
+        output.accept(WAND_ROD_REED);
         output.accept(GOGGLES);
         output.accept(FORTRESS_HELMET);
         output.accept(FORTRESS_CHESTPLATE);
@@ -586,6 +609,19 @@ public class ItemRegistry {
                 initialAspects);
         initialWand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
         return initialWand;
+    }
+
+    private static ItemStack thaumiumCappedSilverwoodSceptre() {
+        ItemStack sceptre = new ItemStack(WAND.get());
+        AspectList initialAspects = new AspectList();
+        int effectiveCapacity = (int) (WandRodRegistry.WAND_ROD_SILVERWOOD.get().getCapacity() * 1.5);
+        for (ResourceLocation aspect : Aspect.getPrimalList()) {
+            initialAspects.put(aspect, effectiveCapacity);
+        }
+        WandItemComponent initialData = new WandItemComponent(WandRodRegistry.WAND_ROD_SILVERWOOD.getId(), WandCapRegistry.WAND_CAP_THAUMIUM.getId(),
+                initialAspects, true);
+        sceptre.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
+        return sceptre;
     }
 
     private static Item.Properties itemProp(int stackSize) {

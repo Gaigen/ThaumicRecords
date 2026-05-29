@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingWandRecipe;
+import team.torka.thaumicrecords.recipe.ArcaneSceptreRecipe;
 import team.torka.thaumicrecords.recipe.AspectRecipe;
 import team.torka.thaumicrecords.recipe.CrucibleRecipe;
 
@@ -24,5 +25,8 @@ public class RecipeTypeRegistry {
             });
     public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleRecipe>> CRUCIBLE = REGISTRAR.register("crucible", () -> new RecipeType<>() {
     });
+    public static final DeferredHolder<RecipeType<?>, RecipeType<ArcaneSceptreRecipe>> ARCANE_SCEPTRE = REGISTRAR.register("arcane_sceptre",
+            () -> new RecipeType<>() {
+            });
 
 }

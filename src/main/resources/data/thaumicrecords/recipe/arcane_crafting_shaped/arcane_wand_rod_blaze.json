@@ -1,0 +1,20 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    " G",
+    "G "
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:blaze_rod"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:wand_rod_blaze",
+    "count": 1
+  },
+  "baseVisCost": {
+    "thaumicrecords:ignis": 60
+  },
+  "requiredResearch": []
+}

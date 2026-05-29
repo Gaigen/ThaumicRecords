@@ -1,0 +1,22 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    "NNN",
+    "N N"
+  ],
+  "key": {
+    "N": {
+      "tag": "c:nuggets/copper"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:wand_cap_copper",
+    "count": 1
+  },
+  "baseVisCost": {
+    "thaumicrecords:aer": 2,
+    "thaumicrecords:ignis": 2,
+    "thaumicrecords:ordo": 2
+  },
+  "requiredResearch": []
+}
