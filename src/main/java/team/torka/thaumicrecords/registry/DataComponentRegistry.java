@@ -36,4 +36,8 @@ public class DataComponentRegistry {
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> FORTRESS_GOGGLES = REGISTRAR.register("fortress_goggles",
             () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
+
+    // Runic Shield augmentation — bonus charge from RS.HARDEN enchant
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> RUNIC_HARDEN = REGISTRAR.register("runic_harden",
+            () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 }

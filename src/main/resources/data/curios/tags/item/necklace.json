@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "thaumicrecords:mundane_amulet",
+    "thaumicrecords:runic_amulet",
+    "thaumicrecords:runic_amulet_emergency"
+  ]
+}

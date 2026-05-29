@@ -8,6 +8,7 @@ import team.torka.thaumicrecords.client.particle.AuraNodeBreakParticle;
 import team.torka.thaumicrecords.client.particle.CrucibleBubbleParticle;
 import team.torka.thaumicrecords.client.particle.SparkleParticle;
 import team.torka.thaumicrecords.client.particle.RuneParticle;
+import team.torka.thaumicrecords.client.particle.ShieldRunesParticle;
 import team.torka.thaumicrecords.registry.ParticleRegistry;
 
 @EventBusSubscriber(Dist.CLIENT)
@@ -19,5 +20,6 @@ public class RegisterParticleProvidersEventListener {
         event.registerSpriteSet(ParticleRegistry.CRUCIBLE_BUBBLE.get(), CrucibleBubbleParticle.Provider::new);
         event.registerSpriteSet(ParticleRegistry.SPARKLE.get(), SparkleParticle.Provider::new);
         event.registerSpriteSet(ParticleRegistry.RUNE.get(), RuneParticle.Provider::new);
+        event.registerSpriteSet(ParticleRegistry.SHIELD_RUNES.get(), ShieldRunesParticle.Provider::new);
     }
 }

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "thaumicrecords:mundane_ring",
+    "thaumicrecords:runic_ring_lesser",
+    "thaumicrecords:runic_ring",
+    "thaumicrecords:runic_ring_charged",
+    "thaumicrecords:runic_ring_regen"
+  ]
+}

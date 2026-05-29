@@ -15,6 +15,7 @@ import team.torka.thaumicrecords.registry.CreativeTabRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.EntityRegistry;
 import team.torka.thaumicrecords.registry.OreClusterRegistry;
+import team.torka.thaumicrecords.integration.curios.CuriosIntegration;
 import team.torka.thaumicrecords.registry.FeatureRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 import team.torka.thaumicrecords.registry.MenuRegistry;

@@ -7,7 +7,7 @@
     ]
   },
   "button_click": {
-    "category": "gui",
+    "category": "master",
     "subtitle": "sound.thaumicrecords.button_click",
     "sounds": [
       "thaumicrecords:button_click1",
@@ -16,21 +16,21 @@
     ]
   },
   "hhon": {
-    "category": "gui",
+    "category": "master",
     "subtitle": "sound.thaumicrecords.hhon",
     "sounds": [
       "thaumicrecords:hhon"
     ]
   },
   "hhoff": {
-    "category": "gui",
+    "category": "master",
     "subtitle": "sound.thaumicrecords.hhoff",
     "sounds": [
       "thaumicrecords:hhoff"
     ]
   },
   "write": {
-    "category": "gui",
+    "category": "master",
     "subtitle": "sound.thaumicrecords.write",
     "sounds": [
       "thaumicrecords:write1",
@@ -38,14 +38,14 @@
     ]
   },
   "erase": {
-    "category": "gui",
+    "category": "master",
     "subtitle": "sound.thaumicrecords.erase",
     "sounds": [
       "thaumicrecords:erase"
     ]
   },
   "camera_ticks": {
-    "category": "item",
+    "category": "master",
     "subtitle": "sound.thaumicrecords.camera_ticks",
     "sounds": [
       "thaumicrecords:camera_ticks"
@@ -97,6 +97,20 @@
     "sounds": [
       "thaumicrecords:gore1",
       "thaumicrecords:gore2"
+    ]
+  },
+  "runic_shield_effect": {
+    "category": "master",
+    "subtitle": "sound.thaumicrecords.runic_shield_effect",
+    "sounds": [
+      "thaumicrecords:runicshieldeffect"
+    ]
+  },
+  "runic_shield_charge": {
+    "category": "master",
+    "subtitle": "sound.thaumicrecords.runic_shield_charge",
+    "sounds": [
+      "thaumicrecords:runicshieldcharge"
     ]
   },
   "page": {
