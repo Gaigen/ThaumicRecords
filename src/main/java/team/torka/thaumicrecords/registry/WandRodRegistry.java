@@ -33,7 +33,11 @@ public class WandRodRegistry {
     public static final DeferredHolder<WandRod, WandRod> WAND_ROD_OBSIDIAN =
             REGISTRAR.register("obsidian", () -> new WandRod("obsidian", 7500, 6, ItemRegistry.WAND_ROD_OBSIDIAN.get()));
     public static final DeferredHolder<WandRod, WandRod> WAND_ROD_BLAZE =
-            REGISTRAR.register("blaze", () -> new WandRod("blaze", 7500, 6, ItemRegistry.WAND_ROD_BLAZE.get()));
+            REGISTRAR.register("blaze", () -> {
+                WandRod rod = new WandRod("blaze", 7500, 6, ItemRegistry.WAND_ROD_BLAZE.get());
+                rod.setGlowing(true);
+                return rod;
+            });
     public static final DeferredHolder<WandRod, WandRod> WAND_ROD_ICE =
             REGISTRAR.register("ice", () -> new WandRod("ice", 7500, 6, ItemRegistry.WAND_ROD_ICE.get()));
     public static final DeferredHolder<WandRod, WandRod> WAND_ROD_QUARTZ =

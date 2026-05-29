@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -48,6 +49,10 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
         WandRod wandRod = Optional.ofNullable(WandRodRegistry.WAND_ROD_REGISTRY.get(data.getRod())).orElse(WandRodRegistry.WAND_ROD_WOOD.get());
         WandCap wandCap = Optional.ofNullable(WandCapRegistry.WAND_CAP_REGISTRY.get(data.getCap())).orElse(WandCapRegistry.WAND_CAP_IRON.get());
         boolean sceptre = data.sceptre();
+        boolean glowing = wandRod.isGlowing();
+
+        // Fullbright for glowing rods
+        int rodLight = glowing ? LightTexture.FULL_BRIGHT : packedLight;
 
         poseStack.translate(0.5, 0.5, 0.5);
         poseStack.mulPose(Axis.ZP.rotationDegrees(180));
@@ -56,7 +61,7 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
         ResourceLocation rodTex = wandRod.getModelTexture();
         VertexConsumer rodBuf = buffer.getBuffer(RenderType.entityCutout(rodTex));
         poseStack.pushPose();
-        model.rod.render(poseStack, rodBuf, packedLight, packedOverlay);
+        model.rod.render(poseStack, rodBuf, rodLight, packedOverlay);
         poseStack.popPose();
 
         // Cap
