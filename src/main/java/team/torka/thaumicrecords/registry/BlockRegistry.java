@@ -1,6 +1,7 @@
 package team.torka.thaumicrecords.registry;
 
 import net.minecraft.core.Holder;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -164,9 +165,9 @@ public class BlockRegistry {
             () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES)));
 
     public static final DeferredBlock<Block> CINDERPEARL = REGISTRAR.register("cinderpearl",
-            () -> new CinderpearlBlock(Holder.direct(null), 0, BlockBehaviour.Properties.ofFullCopy(Blocks.DANDELION).lightLevel(state -> 7)));
+            () -> new CinderpearlBlock(MobEffects.FIRE_RESISTANCE, 5.0f, BlockBehaviour.Properties.ofFullCopy(Blocks.DANDELION).lightLevel(state -> 7)));
     public static final DeferredBlock<Block> SHIMMERLEAF = REGISTRAR.register("shimmerleaf",
-            () -> new ShimmerleafBlock(Holder.direct(null), 0, BlockBehaviour.Properties.ofFullCopy(Blocks.DANDELION).lightLevel(state -> 7)));
+            () -> new ShimmerleafBlock(MobEffects.REGENERATION, 5.0f, BlockBehaviour.Properties.ofFullCopy(Blocks.DANDELION).lightLevel(state -> 7)));
 
     public static final DeferredBlock<SaplingBlock> GREATWOOD_SAPLING = REGISTRAR.register("greatwood_sapling",
             () -> new SaplingBlock(TreeGrowers.GREATWOOD_TREE, BlockBehaviour.Properties.of()

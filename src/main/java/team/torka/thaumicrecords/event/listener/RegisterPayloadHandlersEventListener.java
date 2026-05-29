@@ -8,10 +8,14 @@ import team.torka.thaumicrecords.network.handler.OreScanPayloadHandler;
 import team.torka.thaumicrecords.network.handler.PlayerCombineAspectHandler;
 import team.torka.thaumicrecords.network.handler.PlayerEraseNoteHandler;
 import team.torka.thaumicrecords.network.handler.PlayerWriteNoteHandler;
+import team.torka.thaumicrecords.network.handler.RunicShieldPayloadHandler;
+import team.torka.thaumicrecords.network.handler.ShieldEffectPayloadHandler;
 import team.torka.thaumicrecords.network.payload.OreScanPayload;
 import team.torka.thaumicrecords.network.payload.PlayerCombineAspectPayload;
 import team.torka.thaumicrecords.network.payload.PlayerEraseNotePayload;
 import team.torka.thaumicrecords.network.payload.PlayerWriteNotePayload;
+import team.torka.thaumicrecords.network.payload.RunicShieldPayload;
+import team.torka.thaumicrecords.network.payload.ShieldEffectPayload;
 
 @EventBusSubscriber
 public class RegisterPayloadHandlersEventListener {
@@ -23,5 +27,7 @@ public class RegisterPayloadHandlersEventListener {
         registrar.playToServer(PlayerWriteNotePayload.TYPE, PlayerWriteNotePayload.STREAM_CODEC, PlayerWriteNoteHandler::handle);
         registrar.playToServer(PlayerEraseNotePayload.TYPE, PlayerEraseNotePayload.STREAM_CODEC, PlayerEraseNoteHandler::handle);
         registrar.playToClient(OreScanPayload.TYPE, OreScanPayload.STREAM_CODEC, OreScanPayloadHandler::handle);
+        registrar.playToClient(RunicShieldPayload.TYPE, RunicShieldPayload.STREAM_CODEC, RunicShieldPayloadHandler::handle);
+        registrar.playToClient(ShieldEffectPayload.TYPE, ShieldEffectPayload.STREAM_CODEC, ShieldEffectPayloadHandler::handle);
     }
 }

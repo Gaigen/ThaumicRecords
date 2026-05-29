@@ -51,4 +51,11 @@ public class SoundRegistry {
     public static final DeferredHolder<SoundEvent, SoundEvent> GORE = REGISTRAR.register("gore",
             () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("gore")));
 
+    // Runic Shield sounds
+    public static final DeferredHolder<SoundEvent, SoundEvent> RUNIC_SHIELD_EFFECT = REGISTRAR.register("runic_shield_effect",
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("runic_shield_effect")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> RUNIC_SHIELD_CHARGE = REGISTRAR.register("runic_shield_charge",
+            () -> SoundEvent.createVariableRangeEvent(ThaumicRecords.createRl("runic_shield_charge")));
+
 }

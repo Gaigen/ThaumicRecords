@@ -18,4 +18,7 @@ public class ParticleRegistry {
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SPARKLE = REGISTRAR.register("sparkle", () -> new SimpleParticleType(false));
 
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> RUNE = REGISTRAR.register("rune", () -> new SimpleParticleType(false));
+
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SHIELD_RUNES = REGISTRAR.register("shield_runes",
+            () -> new SimpleParticleType(false));
 }
