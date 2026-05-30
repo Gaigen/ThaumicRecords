@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "thaumicrecords:block/hungry_chest"
+    },
+    "facing=south": {
+      "model": "thaumicrecords:block/hungry_chest",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "thaumicrecords:block/hungry_chest",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "thaumicrecords:block/hungry_chest",
+      "y": 90
+    }
+  }
+}

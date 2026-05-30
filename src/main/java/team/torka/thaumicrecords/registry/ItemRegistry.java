@@ -332,6 +332,8 @@ public class ItemRegistry {
             () -> new BlockItem(BlockRegistry.TABLE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> DECONSTRUCTION_TABLE = REGISTRAR.register("deconstruction_table",
             () -> new BlockItem(BlockRegistry.DECONSTRUCTION_TABLE.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> HUNGRY_CHEST = REGISTRAR.register("hungry_chest",
+            () -> new BlockItem(BlockRegistry.HUNGRY_CHEST.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> ARCANE_PEDESTAL = REGISTRAR.register("arcane_pedestal",
             () -> new BlockItem(BlockRegistry.ARCANE_PEDESTAL.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> CRUCIBLE = REGISTRAR.register("crucible",
@@ -509,6 +511,7 @@ public class ItemRegistry {
         output.accept(BOOTS_TRAVELLER);
         output.accept(TABLE);
         output.accept(DECONSTRUCTION_TABLE);
+        output.accept(HUNGRY_CHEST);
         output.accept(SCRIBING_TOOLS);
         output.accept(ARCANE_WORKBENCH);
         output.accept(SILVERWOOD_SAPLING);

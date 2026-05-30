@@ -26,6 +26,7 @@ import team.torka.thaumicrecords.block.AuraNodeBlock;
 import team.torka.thaumicrecords.block.CinderpearlBlock;
 import team.torka.thaumicrecords.block.CrucibleBlock;
 import team.torka.thaumicrecords.block.DeconstructionTableBlock;
+import team.torka.thaumicrecords.block.HungryChestBlock;
 import team.torka.thaumicrecords.block.JarBlock;
 import team.torka.thaumicrecords.block.PavingStoneOfTravelBlock;
 import team.torka.thaumicrecords.block.PavingStoneOfWardingBlock;
@@ -278,6 +279,15 @@ public class BlockRegistry {
     public static final DeferredBlock<DeconstructionTableBlock> DECONSTRUCTION_TABLE = REGISTRAR.register("deconstruction_table",
             () -> new DeconstructionTableBlock(BlockBehaviour.Properties.of()
                     .strength(2.5F, 3.0F)
+                    .noOcclusion()
+                    .sound(SoundType.WOOD)
+                    .pushReaction(PushReaction.BLOCK)));
+
+    // Hungry Chest
+    public static final DeferredBlock<HungryChestBlock> HUNGRY_CHEST = REGISTRAR.register("hungry_chest",
+            () -> new HungryChestBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.5F)
                     .noOcclusion()
                     .sound(SoundType.WOOD)
                     .pushReaction(PushReaction.BLOCK)));

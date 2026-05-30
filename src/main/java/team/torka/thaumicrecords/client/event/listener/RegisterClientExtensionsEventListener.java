@@ -13,6 +13,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import team.torka.thaumicrecords.client.renderer.item.ArcaneWorkbenchItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.DeconstructionTableItemRenderer;
+import team.torka.thaumicrecords.client.renderer.item.HungryChestItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.AuraNodeItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.JarItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.TableItemRenderer;
@@ -47,6 +48,7 @@ public class RegisterClientExtensionsEventListener {
         event.registerItem(DeconstructionTableItemRenderer.INSTANCE.getExtensions(), ItemRegistry.DECONSTRUCTION_TABLE.get());
         event.registerItem(ThaumometerItemRenderer.INSTANCE.getExtensions(), ItemRegistry.THAUMOMETER.get());
         event.registerItem(JarItemRenderer.INSTANCE.getExtensions(), ItemRegistry.JAR.get());
+        event.registerItem(HungryChestItemRenderer.INSTANCE.getExtensions(), ItemRegistry.HUNGRY_CHEST.get());
         event.registerItem(FortressArmorItem.getExtensions(), ItemRegistry.FORTRESS_HELMET.get());
         event.registerItem(FortressArmorItem.getExtensions(), ItemRegistry.FORTRESS_CHESTPLATE.get());
         event.registerItem(FortressArmorItem.getExtensions(), ItemRegistry.FORTRESS_LEGGINGS.get());

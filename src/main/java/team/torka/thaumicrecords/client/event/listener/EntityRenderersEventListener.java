@@ -7,6 +7,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import team.torka.thaumicrecords.client.model.ArcaneWorkbenchModel;
 import team.torka.thaumicrecords.client.model.FortressArmorModel;
+import team.torka.thaumicrecords.client.model.HungryChestModel;
 import team.torka.thaumicrecords.client.model.JarModel;
 import team.torka.thaumicrecords.client.model.KnightArmorModel;
 import team.torka.thaumicrecords.client.model.LeaderArmorModel;
@@ -19,6 +20,7 @@ import team.torka.thaumicrecords.client.renderer.blockentity.ArcaneWorkbenchRend
 import team.torka.thaumicrecords.client.renderer.blockentity.AuraNodeRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.CrucibleRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.DeconstructionTableRenderer;
+import team.torka.thaumicrecords.client.renderer.blockentity.HungryChestRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.JarBlockEntityRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ResearchTableRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.TableRenderer;
@@ -40,6 +42,7 @@ public class EntityRenderersEventListener {
         event.registerBlockEntityRenderer(BlockEntityRegistry.THAUMATORIUM.get(), ThaumatoriumRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.JAR.get(), JarBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.DECONSTRUCTION_TABLE.get(), DeconstructionTableRenderer::new);
+        event.registerBlockEntityRenderer(BlockEntityRegistry.HUNGRY_CHEST.get(), HungryChestRenderer::new);
         event.registerEntityRenderer(EntityRegistry.FOLLOWING_ITEM.get(), ItemEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.SPECIAL_ITEM.get(), SpecialItemRenderer::new);
     }
@@ -54,5 +57,6 @@ public class EntityRenderersEventListener {
         event.registerLayerDefinition(CustomModelLayer.KNIGHT_ARMOR, KnightArmorModel::createBodyLayer);
         event.registerLayerDefinition(CustomModelLayer.ROBE_ARMOR, RobeArmorModel::createBodyLayer);
         event.registerLayerDefinition(CustomModelLayer.LEADER_ARMOR, LeaderArmorModel::createBodyLayer);
+        event.registerLayerDefinition(CustomModelLayer.HUNGRY_CHEST, HungryChestModel::createLayerDefinition);
     }
 }

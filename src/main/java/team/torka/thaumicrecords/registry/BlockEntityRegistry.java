@@ -10,11 +10,11 @@ import team.torka.thaumicrecords.block.entity.ArcaneWorkbenchBlockEntity;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.block.entity.CrucibleBlockEntity;
 import team.torka.thaumicrecords.block.entity.DeconstructionTableBlockEntity;
+import team.torka.thaumicrecords.block.entity.HungryChestBlockEntity;
 import team.torka.thaumicrecords.block.entity.JarBlockEntity;
 import team.torka.thaumicrecords.block.entity.ResearchTableBlockEntity;
 import team.torka.thaumicrecords.block.entity.TableBlockEntity;
 import team.torka.thaumicrecords.block.entity.ThaumatoriumBlockEntity;
-import team.torka.thaumicrecords.block.entity.WardingStoneBlockEntity;
 import team.torka.thaumicrecords.block.entity.WardingStoneBlockEntity;
 
 public class BlockEntityRegistry {
@@ -51,4 +51,7 @@ public class BlockEntityRegistry {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DeconstructionTableBlockEntity>> DECONSTRUCTION_TABLE = REGISTRAR.register(
             "deconstruction_table",
             () -> BlockEntityType.Builder.of(DeconstructionTableBlockEntity::new, BlockRegistry.DECONSTRUCTION_TABLE.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HungryChestBlockEntity>> HUNGRY_CHEST = REGISTRAR.register("hungry_chest",
+            () -> BlockEntityType.Builder.of(HungryChestBlockEntity::new, BlockRegistry.HUNGRY_CHEST.get()).build(null));
 }

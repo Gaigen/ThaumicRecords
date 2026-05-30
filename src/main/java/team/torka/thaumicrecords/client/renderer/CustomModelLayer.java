@@ -12,4 +12,5 @@ public class CustomModelLayer {
     public static final ModelLayerLocation KNIGHT_ARMOR = new ModelLayerLocation(ThaumicRecords.createRl("knight_armor"), "main");
     public static final ModelLayerLocation ROBE_ARMOR = new ModelLayerLocation(ThaumicRecords.createRl("robe_armor"), "main");
     public static final ModelLayerLocation LEADER_ARMOR = new ModelLayerLocation(ThaumicRecords.createRl("leader_armor"), "main");
+    public static final ModelLayerLocation HUNGRY_CHEST = new ModelLayerLocation(ThaumicRecords.createRl("hungry_chest"), "main");
 }
