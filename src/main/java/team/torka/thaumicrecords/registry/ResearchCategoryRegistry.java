@@ -1,7 +1,6 @@
 package team.torka.thaumicrecords.registry;
 
 import net.minecraft.core.Registry;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -17,9 +16,35 @@ public class ResearchCategoryRegistry {
     public static final DeferredRegister<ResearchCategory> REGISTRAR = DeferredRegister.create(RegistryKeys.RESEARCH_CATEGORIES, ThaumicRecords.MOD_ID);
     public static Registry<ResearchCategory> RESEARCH_REGISTRY = null;
 
-    public static final DeferredHolder<ResearchCategory, ResearchCategory> TEST = REGISTRAR.register("test",
-            () -> new ResearchCategory("test", null, new ItemStack(ItemRegistry.WAND.get(), 1),
+    public static final DeferredHolder<ResearchCategory, ResearchCategory> BASIC = REGISTRAR.register("basic",
+            () -> new ResearchCategory(ThaumicRecords.createTranslationKey("research_category", "basic"),
+                    ThaumicRecords.createRl("textures/research/icon/thaumonomiconcheat.png"), null,
                     ThaumicRecords.createRl("textures/research/background/researchback.png")));
+
+    public static final DeferredHolder<ResearchCategory, ResearchCategory> THAUMATURGY = REGISTRAR.register("thaumaturgy",
+            () -> new ResearchCategory(ThaumicRecords.createTranslationKey("research_category", "thaumaturgy"),
+                    ThaumicRecords.createRl("textures/research/icon/thaumaturgy.png"), null,
+                    ThaumicRecords.createRl("textures/research/background/researchback.png")));
+
+    public static final DeferredHolder<ResearchCategory, ResearchCategory> ALCHEMY = REGISTRAR.register("alchemy",
+            () -> new ResearchCategory(ThaumicRecords.createTranslationKey("research_category", "alchemy"),
+                    ThaumicRecords.createRl("textures/research/icon/crucible.png"), null,
+                    ThaumicRecords.createRl("textures/research/background/researchback.png")));
+
+    public static final DeferredHolder<ResearchCategory, ResearchCategory> ARTIFICE = REGISTRAR.register("artifice",
+            () -> new ResearchCategory(ThaumicRecords.createTranslationKey("research_category", "artifice"),
+                    ThaumicRecords.createRl("textures/research/icon/artifice.png"), null,
+                    ThaumicRecords.createRl("textures/research/background/researchback.png")));
+
+    public static final DeferredHolder<ResearchCategory, ResearchCategory> GOLEMANCY = REGISTRAR.register("golemancy",
+            () -> new ResearchCategory(ThaumicRecords.createTranslationKey("research_category", "golemancy"),
+                    ThaumicRecords.createRl("textures/research/icon/golemancy.png"), null,
+                    ThaumicRecords.createRl("textures/research/background/researchback.png")));
+
+    public static final DeferredHolder<ResearchCategory, ResearchCategory> ELDRITCH = REGISTRAR.register("eldritch",
+            () -> new ResearchCategory(ThaumicRecords.createTranslationKey("research_category", "eldritch"),
+                    ThaumicRecords.createRl("textures/research/icon/eldritch.png"), null,
+                    ThaumicRecords.createRl("textures/research/background/eldritch.png")));
 
     @SubscribeEvent
     public static void onNewRegistryEvent(NewRegistryEvent event) {

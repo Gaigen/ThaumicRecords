@@ -20,7 +20,7 @@ public class ResearchRegistry {
     public static Registry<Research> RESEARCH_REGISTRY = null;
 
     public static final DeferredHolder<Research, Research> TEST = REGISTRAR.register("test",
-            () -> Research.createNormal("test", "testdesc", ResearchCategoryRegistry.TEST.getId(), AspectList.empty(), null, new ItemStack(Items.NAME_TAG),
+            () -> Research.createNormal("test", "testdesc", ResearchCategoryRegistry.BASIC.getId(), AspectList.empty(), null, new ItemStack(Items.NAME_TAG),
                     null, 10, 10, 3));
 
     @SubscribeEvent
