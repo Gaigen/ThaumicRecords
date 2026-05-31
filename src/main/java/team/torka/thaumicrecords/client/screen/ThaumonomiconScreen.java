@@ -108,23 +108,13 @@ public class ThaumonomiconScreen extends Screen {
         guiMapBottom = maxCol * 24 - 112;
         guiMapRight = maxRow * 24 - 61;
 
-        if (guiMapBottom - guiMapTop < 288) {
-            int center = (minCol + maxCol) * 12;
-            guiMapTop = center - 144;
-            guiMapBottom = center + 144;
-        }
-        if (guiMapRight - guiMapLeft < 316) {
-            int center = (minRow + maxRow) * 12;
-            guiMapLeft = center - 158;
-            guiMapRight = center + 158;
-        }
     }
 
     private void centerViewport() {
         int contentWidth = BORDER_TEXTURE_WIDTH - 2 * BORDER_WIDTH;   // 224
         int contentHeight = BORDER_TEXTURE_HEIGHT - 2 * BORDER_HEIGHT; // 196
-        this.guiMapX = this.targetMapX = this.prevMapX = (guiMapTop + guiMapBottom) / 2.0 - contentWidth / 2.0;
-        this.guiMapY = this.targetMapY = this.prevMapY = (guiMapLeft + guiMapRight) / 2.0 - contentHeight / 2.0;
+        this.guiMapX = this.targetMapX = this.prevMapX = -contentWidth / 2.0;
+        this.guiMapY = this.targetMapY = this.prevMapY = -contentHeight / 2.0;
     }
 
     @Override
@@ -152,8 +142,8 @@ public class ThaumonomiconScreen extends Screen {
     @ParametersAreNonnullByDefault
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
-        double smoothMapX = this.prevMapX + (this.guiMapX - this.prevMapX) * partialTick;
-        double smoothMapY = this.prevMapY + (this.guiMapY - this.prevMapY) * partialTick;
+        int smoothMapX = Mth.floor(this.prevMapX + (this.guiMapX - this.prevMapX) * partialTick);
+        int smoothMapY = Mth.floor(this.prevMapY + (this.guiMapY - this.prevMapY) * partialTick);
 
         smoothMapX = Mth.clamp(smoothMapX, guiMapTop, guiMapBottom);
         smoothMapY = Mth.clamp(smoothMapY, guiMapLeft, guiMapRight);
@@ -278,8 +268,8 @@ public class ThaumonomiconScreen extends Screen {
 
     @Override
     public void onClose() {
-        lastX = (int) ((this.guiMapX + 141 / 2.0 + 12.0) / 24.0);
-        lastY = (int) ((this.guiMapY + 141 / 2.0) / 24.0);
+        lastX = (int) ((this.guiMapX + 112.0) / 24.0);
+        lastY = (int) ((this.guiMapY + 98.0) / 24.0);
         lastCategory = this.selectedCategory;
         super.onClose();
     }
@@ -293,10 +283,11 @@ public class ThaumonomiconScreen extends Screen {
         PoseStack poseStack = guiGraphics.pose();
         int contentWidth = BORDER_TEXTURE_WIDTH - 2 * BORDER_WIDTH;   // 224
         int contentHeight = BORDER_TEXTURE_HEIGHT - 2 * BORDER_HEIGHT; // 196
-
+        int offsetX = (int) viewOffsetX;
+        int offsetY = (int) viewOffsetY;
         for (Research research : researchList) {
-            double researchX = research.col * 24.0 - viewOffsetX + contentX1;
-            double researchY = research.row * 24.0 - viewOffsetY + contentY1;
+            int researchX = research.col * 24 - offsetX + contentX1;
+            int researchY = research.row * 24 - offsetY + contentY1;
 
             if (researchX + 24 < contentX1 || researchY + 24 < contentY1 || researchX - 2 > contentX1 + contentWidth || researchY - 2 > contentY1 + contentHeight) {
                 continue;
@@ -306,7 +297,7 @@ public class ThaumonomiconScreen extends Screen {
 
             if (research.iconItem != null) {
                 guiGraphics.flush();
-                guiGraphics.renderFakeItem(research.iconItem, Math.round((float) researchX + 3), Math.round((float) researchY + 3));
+                guiGraphics.renderFakeItem(research.iconItem, researchX + 3, researchY + 3);
                 guiGraphics.flush();
             } else if (research.icon != null) {
                 drawRectTextured(poseStack, research.icon, researchX + 3, researchX + 19, researchY + 3, researchY + 19, 0, 256, 0, 256, 0);
@@ -314,8 +305,7 @@ public class ThaumonomiconScreen extends Screen {
         }
     }
 
-
-    private void drawResearchShape(PoseStack poseStack, double x, double y, Research.RenderStrategy strategy) {
+    private void drawResearchShape(PoseStack poseStack, int x, int y, Research.RenderStrategy strategy) {
         if (strategy == Research.RenderStrategy.SPIKY) {
             drawRectTextured(poseStack, GUI_TEXTURE, x - 2, x + 24, y - 2, y + 24, 54.0, 80.0, 230.0, 256.0, 0);
             drawRectTextured(poseStack, GUI_TEXTURE, x - 2, x + 24, y - 2, y + 24, 26.0, 52.0, 230.0, 256.0, 0);
@@ -330,7 +320,6 @@ public class ThaumonomiconScreen extends Screen {
         }
         drawRectTextured(poseStack, GUI_TEXTURE, x - 2, x + 24, y - 2, y + 24, u, u + 26, v, v + 26, 0);
     }
-
 
     private void drawCategoryTags(GuiGraphics guiGraphics, int renderStartX, int renderStartY) {
         // TODO 获取玩家解锁研究
