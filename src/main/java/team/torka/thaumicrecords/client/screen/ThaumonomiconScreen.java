@@ -725,13 +725,13 @@ public class ThaumonomiconScreen extends Screen {
 
         if (!canUnlock) {
             // 不能获取笔记的
-            List<Component> lines = new java.util.ArrayList<>();
+            List<Component> lines = new ArrayList<>();
             lines.add(name.copy().withColor(nameColor));
             lines.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.missing_parent")).withColor(missingParentColor));
             guiGraphics.renderComponentTooltip(this.font, lines, mouseX, mouseY);
         } else if (!isCompleted) {
             // 可以获取笔记的
-            List<Component> lines = new java.util.ArrayList<>();
+            List<Component> lines = new ArrayList<>();
             lines.add(name.copy().withColor(nameColor));
             lines.add(Component.translatable(hoveredResearch.descTranslationKey).withColor(descColor));
             if (hoveredResearch.warp > 0) {
