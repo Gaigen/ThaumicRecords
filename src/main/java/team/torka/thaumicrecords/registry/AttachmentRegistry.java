@@ -28,7 +28,7 @@ public class AttachmentRegistry {
             () -> AttachmentType.builder(() -> ResearchPoint.DEFAULT).serialize(ResearchPoint.CODEC).sync(ResearchPoint.STREAM_CODEC).copyOnDeath().build());
 
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<ResearchUnlocked>> RESEARCH_UNLOCKED = REGISTRAR.register("research_unlocked",
-            () -> AttachmentType.builder(() -> ResearchUnlocked.DEFAULT)
+            () -> AttachmentType.builder(ResearchUnlocked::createDefault)
                     .serialize(ResearchUnlocked.CODEC)
                     .sync(ResearchUnlocked.STREAM_CODEC)
                     .copyOnDeath()
