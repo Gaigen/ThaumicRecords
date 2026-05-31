@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -30,6 +31,7 @@ import team.torka.thaumicrecords.registry.ResearchRegistry;
 import team.torka.thaumicrecords.registry.SoundRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -182,6 +184,7 @@ public class ThaumonomiconScreen extends Screen {
         drawBorders(guiGraphics, renderStartX, renderStartY, BORDER_TEXTURE_WIDTH, BORDER_TEXTURE_HEIGHT);
 
         drawCategoryTooltip(guiGraphics, mouseX, mouseY, renderStartX, renderStartY);
+        drawResearchTooltip(guiGraphics, mouseX, mouseY, smoothMapX, smoothMapY, contentX1, contentY1);
     }
 
     @Override
@@ -624,6 +627,141 @@ public class ThaumonomiconScreen extends Screen {
             }
             ++count;
         }
+    }
+
+    private void drawCategoryTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY, int renderStartX, int renderStartY) {
+        var player = Minecraft.getInstance().player;
+        ResearchUnlocked researchUnlocked = player != null ? player.getData(AttachmentRegistry.RESEARCH_UNLOCKED) : ResearchUnlocked.EMPTY;
+
+        List<ResearchCategory> categories = ResearchCategoryRegistry.RESEARCH_REGISTRY.stream().filter(cat -> {
+            ResourceLocation key = ResearchCategoryRegistry.RESEARCH_REGISTRY.getKey(cat);
+            return key != null && researchUnlocked.isCategoryDiscovered(key);
+        }).toList();
+
+        int count = 0;
+        boolean mirror = false;
+        int tabPerSide = 9;
+        int tabDistance = 264;
+
+        for (ResearchCategory category : categories) {
+            if (count == tabPerSide) {
+                count = 0;
+                mirror = true;
+            }
+
+            int s0 = !mirror ? 0 : tabDistance;
+            double xStart = mirror ? (renderStartX + s0 - 8) : (renderStartX - 24 + s0);
+            double yStart = renderStartY + count * 24;
+
+            if (mouseX >= xStart && mouseX < xStart + 24 && mouseY >= yStart && mouseY < yStart + 24) {
+                guiGraphics.drawString(this.font, Component.translatable(category.nameTranslateKey), mouseX, mouseY - 8, 0xFFFFFF, true);
+                return;
+            }
+            ++count;
+        }
+    }
+
+
+    private void drawResearchTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY, int offsetX, int offsetY, int contentX1, int contentY1) {
+        var player = Minecraft.getInstance().player;
+        if (player == null) {
+            return;
+        }
+        ResearchUnlocked researchUnlocked = player.getData(AttachmentRegistry.RESEARCH_UNLOCKED);
+
+        List<Research> researchList = ResearchHelper.getResearchesByCategory(selectedCategory);
+        if (researchList.isEmpty()) {
+            return;
+        }
+
+        int contentWidth = BORDER_TEXTURE_WIDTH - 2 * BORDER_WIDTH;
+        int contentHeight = BORDER_TEXTURE_HEIGHT - 2 * BORDER_HEIGHT;
+
+        if (mouseX < contentX1 || mouseX >= contentX1 + contentWidth || mouseY < contentY1 || mouseY >= contentY1 + contentHeight) {
+            return;
+        }
+
+        Research hoveredResearch = null;
+        for (Research research : researchList) {
+            ResourceLocation researchKey = ResearchRegistry.RESEARCH_REGISTRY.getKey(research);
+            if (researchKey == null || !researchUnlocked.isResearchDiscovered(researchKey)) {
+                continue;
+            }
+
+            int researchX = research.col * 24 - offsetX + contentX1;
+            int researchY = research.row * 24 - offsetY + contentY1;
+
+            if (mouseX >= researchX && mouseX <= researchX + 22 && mouseY >= researchY && mouseY <= researchY + 22) {
+                hoveredResearch = research;
+                break;
+            }
+        }
+
+        if (hoveredResearch == null) {
+            return;
+        }
+
+        ResourceLocation researchKey = ResearchRegistry.RESEARCH_REGISTRY.getKey(hoveredResearch);
+        boolean isCompleted = researchUnlocked.isResearchCompleted(researchKey);
+        boolean parentsCompleted = ResearchUnlocked.areParentsCompleted(hoveredResearch, researchUnlocked.completedResearches());
+        boolean canUnlock = isCompleted || parentsCompleted;
+        boolean isSpecial = hoveredResearch.renderStrategy == Research.RenderStrategy.SPIKY;
+
+        int nameColor;
+        if (canUnlock) {
+            nameColor = isSpecial ? 0xFFFF80 : ChatFormatting.WHITE.getColor();
+        } else {
+            nameColor = isSpecial ? 0x808040 : ChatFormatting.GRAY.getColor();
+        }
+        int descColor = 0x9090FF;
+        int missingParentColor = 0x705050;
+        int warpColor = 0xAA00AA;
+        int hasNoteColor = 0xFFA500;
+        int insufficientRpColor = 0xDC143C;
+        int unlockWithRpColor = 0x87CEEB;
+        int noScribingTool = 0xDC143C;
+
+        Component name = Component.translatable(hoveredResearch.nameTranslationKey);
+
+        if (!canUnlock) {
+            // 不能获取笔记的
+            List<Component> lines = new java.util.ArrayList<>();
+            lines.add(name.copy().withColor(nameColor));
+            lines.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.missing_parent")).withColor(missingParentColor));
+            guiGraphics.renderComponentTooltip(this.font, lines, mouseX, mouseY);
+        } else if (!isCompleted) {
+            // 可以获取笔记的
+            List<Component> lines = new java.util.ArrayList<>();
+            lines.add(name.copy().withColor(nameColor));
+            lines.add(Component.translatable(hoveredResearch.descTranslationKey).withColor(descColor));
+            if (hoveredResearch.warp > 0) {
+                lines.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.forbidden"), getWarpLevel(hoveredResearch.warp))
+                        .withColor(warpColor));
+            }
+            if (hoveredResearch.unlockStrategy == Research.UnlockStrategy.POINTS) {
+                // TODO 判断要素够不够  够->unlockWithRpColor 不够->insufficientRpColor
+                lines.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.unlock_with_points")).withColor(unlockWithRpColor));
+            } else if (hoveredResearch.unlockStrategy == Research.UnlockStrategy.RESEARCH) {
+                // TODO 判断有没有笔与墨还有纸 有笔记->hasNoteColor 有笔墨纸->0x87C384 没有->noScribingTool
+            }
+            guiGraphics.renderComponentTooltip(this.font, lines, mouseX, mouseY);
+        } else {
+            // 已完成的研究
+            List<Component> lines = new ArrayList<>();
+            lines.add(name.copy().withColor(nameColor));
+            lines.add(Component.translatable(hoveredResearch.descTranslationKey).withColor(descColor));
+            if (hoveredResearch.warp > 0) {
+                lines.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.forbidden"), getWarpLevel(hoveredResearch.warp))
+                        .withColor(warpColor));
+            }
+            guiGraphics.renderComponentTooltip(this.font, lines, mouseX, mouseY);
+        }
+    }
+
+
+    private static Component getWarpLevel(int warp) {
+        int level = Math.min(warp, 5);
+        return Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.forbidden.level." + level));
     }
 
     private void drawBorders(GuiGraphics guiGraphics, int x, int y, int width, int height) {
