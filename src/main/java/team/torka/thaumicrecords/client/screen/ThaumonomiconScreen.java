@@ -175,7 +175,7 @@ public class ThaumonomiconScreen extends Screen {
 
         enableContentScissor(contentX1, contentY1, contentWidth, contentHeight);
         drawBackground(guiGraphics, selectedCategory.background, smoothMapX, smoothMapY);
-        drawResearchNodes(guiGraphics, smoothMapX, smoothMapY, contentX1, contentY1);
+        drawResearchNodes(guiGraphics, smoothMapX, smoothMapY, contentX1, contentY1, partialTick);
         RenderSystem.disableScissor();
         drawCategoryTags(guiGraphics, renderStartX, renderStartY);
 
@@ -302,7 +302,7 @@ public class ThaumonomiconScreen extends Screen {
         super.onClose();
     }
 
-    private void drawResearchNodes(GuiGraphics guiGraphics, double viewOffsetX, double viewOffsetY, int contentX1, int contentY1) {
+    private void drawResearchNodes(GuiGraphics guiGraphics, double viewOffsetX, double viewOffsetY, int contentX1, int contentY1, float partialTick) {
         List<Research> researchList = ResearchHelper.getResearchesByCategory(selectedCategory);
         if (researchList.isEmpty()) {
             return;
@@ -316,6 +316,9 @@ public class ThaumonomiconScreen extends Screen {
         int contentHeight = BORDER_TEXTURE_HEIGHT - 2 * BORDER_HEIGHT; // 196
         int offsetX = (int) viewOffsetX;
         int offsetY = (int) viewOffsetY;
+
+        guiGraphics.flush();
+        drawResearchConnections(poseStack, researchList, researchUnlocked, offsetX, offsetY, contentX1, contentY1, partialTick);
 
         for (Research research : researchList) {
             ResourceLocation researchKey = ResearchRegistry.RESEARCH_REGISTRY.getKey(research);
@@ -365,6 +368,140 @@ public class ThaumonomiconScreen extends Screen {
                 }
             }
         }
+    }
+
+    private void drawResearchConnections(PoseStack poseStack, List<Research> researchList, ResearchUnlocked researchUnlocked, int offsetX, int offsetY,
+                                         int contentX1, int contentY1, float partialTick) {
+        for (Research research : researchList) {
+            ResourceLocation researchKey = ResearchRegistry.RESEARCH_REGISTRY.getKey(research);
+            if (researchKey == null || !researchUnlocked.isResearchDiscovered(researchKey)) {
+                continue;
+            }
+            if (research.parents == null || research.parents.length == 0) {
+                continue;
+            }
+
+            boolean childCompleted = researchUnlocked.isResearchCompleted(researchKey);
+            int childCenterX = research.col * 24 - offsetX + contentX1 + 11;
+            int childCenterY = research.row * 24 - offsetY + contentY1 + 11;
+
+            for (ResourceLocation parentKey : research.parents) {
+                if (parentKey == null) {
+                    continue;
+                }
+                Research parent = ResearchRegistry.RESEARCH_REGISTRY.get(parentKey);
+                if (parent == null || !parent.category.equals(ResearchCategoryRegistry.RESEARCH_REGISTRY.getKey(selectedCategory))) {
+                    continue;
+                }
+                if (!researchUnlocked.isResearchDiscovered(parentKey)) {
+                    continue;
+                }
+
+                int parentCenterX = parent.col * 24 - offsetX + contentX1 + 11;
+                int parentCenterY = parent.row * 24 - offsetY + contentY1 + 11;
+
+                boolean parentCompleted = researchUnlocked.isResearchCompleted(parentKey);
+
+                if (childCompleted) {
+                    drawConnectionLine(poseStack, childCenterX, childCenterY, parentCenterX, parentCenterY, 0.1F, 0.1F, 0.1F, partialTick, false);
+                } else {
+                    if (parentCompleted) {
+                        drawConnectionLine(poseStack, childCenterX, childCenterY, parentCenterX, parentCenterY, 0.0F, 1.0F, 0.0F, partialTick, true);
+                    } else {
+                        drawConnectionLine(poseStack, childCenterX, childCenterY, parentCenterX, parentCenterY, 0.0F, 0.0F, 1.0F, partialTick, true);
+                    }
+                }
+            }
+        }
+    }
+
+    private void drawConnectionLine(PoseStack poseStack, int x1, int y1, int x2, int y2, float r, float g, float b, float partialTick, boolean wiggle) {
+        float count = (float) (Minecraft.getInstance().player != null ? Minecraft.getInstance().player.tickCount : 0) + partialTick;
+
+        double dx = x1 - x2;
+        double dy = y1 - y2;
+        float dist = Mth.sqrt((float) (dx * dx + dy * dy));
+        int inc = Math.max(1, (int) (dist / 2.0F));
+        float stepX = (float) (dx / inc);
+        float stepY = (float) (dy / inc);
+        if (Math.abs(dx) > Math.abs(dy)) {
+            stepX *= 2.0F;
+        } else {
+            stepY *= 2.0F;
+        }
+
+        float[] positionsX = new float[inc + 1];
+        float[] positionsY = new float[inc + 1];
+        float[] colorsR = new float[inc + 1];
+        float[] colorsG = new float[inc + 1];
+        float[] colorsB = new float[inc + 1];
+        float[] colorsA = new float[inc + 1];
+
+        float curStepX = stepX;
+        float curStepY = stepY;
+
+        for (int a = 0; a <= inc; ++a) {
+            float r2 = r;
+            float g2 = g;
+            float b2 = b;
+            float mx = 0.0F;
+            float my = 0.0F;
+            float op = 0.6F;
+
+            if (wiggle) {
+                float phase = (float) a / (float) inc;
+                mx = Mth.sin((count + a) / 7.0F) * 5.0F * (1.0F - phase);
+                my = Mth.sin((count + a) / 5.0F) * 5.0F * (1.0F - phase);
+                r2 = r * (1.0F - phase);
+                g2 = g * (1.0F - phase);
+                b2 = b * (1.0F - phase);
+                op *= phase;
+            }
+
+            positionsX[a] = x1 - curStepX * a + mx;
+            positionsY[a] = y1 - curStepY * a + my;
+            colorsR[a] = r2;
+            colorsG[a] = g2;
+            colorsB[a] = b2;
+            colorsA[a] = op;
+
+            if (Math.abs(dx) > Math.abs(dy)) {
+                curStepX *= 1.0F - 1.0F / (inc * 3.0F / 2.0F);
+            } else {
+                curStepY *= 1.0F - 1.0F / (inc * 3.0F / 2.0F);
+            }
+        }
+
+        float halfWidth = 0.75F;
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableDepthTest();
+        RenderSystem.disableCull();
+
+        Matrix4f matrix = poseStack.last().pose();
+        BufferBuilder bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+
+        for (int a = 0; a < inc; ++a) {
+            float segDx = positionsX[a + 1] - positionsX[a];
+            float segDy = positionsY[a + 1] - positionsY[a];
+            float segLen = Mth.sqrt(segDx * segDx + segDy * segDy);
+            float nx = segLen > 0.001F ? -segDy / segLen * halfWidth : 0.0F;
+            float ny = segLen > 0.001F ? segDx / segLen * halfWidth : halfWidth;
+
+            bufferBuilder.addVertex(matrix, positionsX[a] + nx, positionsY[a] + ny, 0.0F).setColor(colorsR[a], colorsG[a], colorsB[a], colorsA[a]);
+            bufferBuilder.addVertex(matrix, positionsX[a] - nx, positionsY[a] - ny, 0.0F).setColor(colorsR[a], colorsG[a], colorsB[a], colorsA[a]);
+            bufferBuilder.addVertex(matrix, positionsX[a + 1] - nx, positionsY[a + 1] - ny, 0.0F).setColor(colorsR[a + 1], colorsG[a + 1], colorsB[a + 1],
+                    colorsA[a + 1]);
+            bufferBuilder.addVertex(matrix, positionsX[a + 1] + nx, positionsY[a + 1] + ny, 0.0F).setColor(colorsR[a + 1], colorsG[a + 1], colorsB[a + 1],
+                    colorsA[a + 1]);
+        }
+
+        BufferUploader.drawWithShader(bufferBuilder.buildOrThrow());
+
+        RenderSystem.enableCull();
+        RenderSystem.enableDepthTest();
+        RenderSystem.disableBlend();
     }
 
     private void drawResearchShape(PoseStack poseStack, int x, int y, Research.RenderStrategy strategy, int renderState) {
