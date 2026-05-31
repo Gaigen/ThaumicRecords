@@ -19,7 +19,8 @@ public record ResearchUnlocked(Set<ResourceLocation> discoveredCategories, Set<R
     public static final ResearchUnlocked EMPTY = new ResearchUnlocked(new HashSet<>(), new HashSet<>(), new HashSet<>());
 
     /**
-     * 从注册表计算默认初始值：initialDiscovered类别、ALWAYS发现策略的研究、INITIAL解锁策略的研究
+     * 从注册表计算默认初始值：initialDiscovered类别、ALWAYS发现策略的研究、INITIAL解锁策略的研究，
+     * 并级联发现PARENT策略的研究（当前置研究全部已完成时）
      */
     public static ResearchUnlocked createDefault() {
         Set<ResourceLocation> categories = new HashSet<>();
@@ -47,7 +48,34 @@ public record ResearchUnlocked(Set<ResourceLocation> discoveredCategories, Set<R
             }
         });
 
+        boolean changed = true;
+        while (changed) {
+            changed = false;
+            for (Research research : ResearchRegistry.RESEARCH_REGISTRY) {
+                ResourceLocation key = ResearchRegistry.RESEARCH_REGISTRY.getKey(research);
+                if (key == null || discovered.contains(key) || completed.contains(key)) {
+                    continue;
+                }
+                if (research.discoveryStrategy.contains(Research.DiscoveryStrategy.PARENT) && areParentsCompleted(research, completed)) {
+                    discovered.add(key);
+                    changed = true;
+                }
+            }
+        }
+
         return new ResearchUnlocked(categories, discovered, completed);
+    }
+
+    /**
+     * 检查研究的所有前置研究是否全部已完成
+     */
+    public static boolean areParentsCompleted(Research research, Set<ResourceLocation> completed) {
+        for (ResourceLocation parent : research.parents) {
+            if (!completed.contains(parent)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static final Codec<ResearchUnlocked> CODEC = RecordCodecBuilder.create(instance -> instance.group(ResourceLocation.CODEC.listOf().xmap(HashSet::new,

@@ -81,7 +81,7 @@ public class ResearchRegistry {
                     ThaumicRecords.createTranslationKey("research_desc", "nodetapper1"), CAT_BASIC, new AspectList().add(AspectRegistry.AURAM.getId(), 3).add(
                     AspectRegistry.PRAECANTATIO.getId(), 3).add(AspectRegistry.MOTUS.getId(), 3).add(AspectRegistry.PERMUTATIO.getId(), 3),
                     ThaumicRecords.createRl("textures/research/icon/nodetapper1.png"), null, new ResourceLocation[]{NODES.getId()}, 1, -4, 2,
-                    Research.RenderStrategy.ROUND, Research.UnlockStrategy.RESEARCH, List.of(Research.DiscoveryStrategy.PARENT), 0));
+                    Research.RenderStrategy.ROUND, Research.UnlockStrategy.RESEARCH, List.of(Research.DiscoveryStrategy.ALWAYS), 0));
 
     public static final DeferredHolder<Research, Research> RESEARCHER1 = REGISTRAR.register("researcher1",
             () -> new Research(ThaumicRecords.createTranslationKey("research", "researcher1"),
@@ -89,7 +89,7 @@ public class ResearchRegistry {
                     .add(AspectRegistry.SENSUS.getId(), 3)
                     .add(AspectRegistry.ORDO.getId(), 3), ThaumicRecords.createRl("textures/research/icon/researcher1.png"), null,
                     new ResourceLocation[]{RESEARCH.getId()}, 1, 4, 1, Research.RenderStrategy.ROUND, Research.UnlockStrategy.RESEARCH,
-                    List.of(Research.DiscoveryStrategy.PARENT), 0));
+                    List.of(Research.DiscoveryStrategy.ALWAYS), 0));
 
     public static final DeferredHolder<Research, Research> NODEPRESERVE = REGISTRAR.register("nodepreserve",
             () -> new Research(ThaumicRecords.createTranslationKey("research", "nodepreserve"),
@@ -97,14 +97,14 @@ public class ResearchRegistry {
                     .add(AspectRegistry.LUCRUM.getId(), 3)
                     .add(AspectRegistry.SENSUS.getId(), 3), ThaumicRecords.createRl("textures/research/icon/nodepreserve.png"), null,
                     new ResourceLocation[]{NODETAPPER1.getId()}, 2, -6, 2, Research.RenderStrategy.ROUND, Research.UnlockStrategy.RESEARCH,
-                    List.of(Research.DiscoveryStrategy.PARENT), 0));
+                    List.of(Research.DiscoveryStrategy.ALWAYS), 0));
 
     public static final DeferredHolder<Research, Research> NODETAPPER2 = REGISTRAR.register("nodetapper2",
             () -> new Research(ThaumicRecords.createTranslationKey("research", "nodetapper2"),
                     ThaumicRecords.createTranslationKey("research_desc", "nodetapper2"), CAT_BASIC, new AspectList().add(AspectRegistry.AURAM.getId(), 6).add(
                     AspectRegistry.PRAECANTATIO.getId(), 3).add(AspectRegistry.MOTUS.getId(), 3).add(AspectRegistry.PERMUTATIO.getId(), 3),
                     ThaumicRecords.createRl("textures/research/icon/nodetapper2.png"), null, new ResourceLocation[]{NODETAPPER1.getId()}, 3, -3, 2,
-                    Research.RenderStrategy.SPIKY, Research.UnlockStrategy.RESEARCH, List.of(Research.DiscoveryStrategy.PARENT), 0));
+                    Research.RenderStrategy.SPIKY, Research.UnlockStrategy.RESEARCH, List.of(Research.DiscoveryStrategy.ALWAYS), 0));
 
     public static final DeferredHolder<Research, Research> DECONSTRUCTOR = REGISTRAR.register("deconstructor",
             () -> new Research(ThaumicRecords.createTranslationKey("research", "deconstructor"),
@@ -112,7 +112,7 @@ public class ResearchRegistry {
                     .add(AspectRegistry.FABRICO.getId(), 3)
                     .add(AspectRegistry.PERDITIO.getId(), 3), null, new ItemStack(ItemRegistry.DECONSTRUCTION_TABLE.get()),
                     new ResourceLocation[]{RESEARCHER1.getId()}, 2, 6, 1, Research.RenderStrategy.ROUND, Research.UnlockStrategy.RESEARCH,
-                    List.of(Research.DiscoveryStrategy.PARENT), 0));
+                    List.of(Research.DiscoveryStrategy.ALWAYS), 0));
 
     public static final DeferredHolder<Research, Research> RESEARCHER2 = REGISTRAR.register("researcher2",
             () -> new Research(ThaumicRecords.createTranslationKey("research", "researcher2"),
@@ -140,13 +140,13 @@ public class ResearchRegistry {
                     .add(AspectRegistry.LUCRUM.getId(), 3)
                     .add(AspectRegistry.FABRICO.getId(), 3), ThaumicRecords.createRl("textures/research/icon/researchdupe.png"), null,
                     new ResourceLocation[]{RESEARCHER2.getId()}, 5, 4, 3, Research.RenderStrategy.ROUND, Research.UnlockStrategy.RESEARCH,
-                    List.of(Research.DiscoveryStrategy.PARENT), 0));
+                    List.of(Research.DiscoveryStrategy.ALWAYS), 0));
 
     public static final DeferredHolder<Research, Research> CRIMSON = REGISTRAR.register("crimson",
             () -> new Research(ThaumicRecords.createTranslationKey("research", "crimson"), ThaumicRecords.createTranslationKey("research_desc", "crimson"),
                     CAT_BASIC, AspectList.empty(), null, new ItemStack(ItemRegistry.CRIMSON_RITES.get()), new ResourceLocation[0], 4, 0, 0,
                     Research.RenderStrategy.SPIKY, Research.UnlockStrategy.RESEARCH,
-                    List.of(Research.DiscoveryStrategy.SCAN, Research.DiscoveryStrategy.FRAGMENT), 3));
+                    List.of(Research.DiscoveryStrategy.SCAN, Research.DiscoveryStrategy.SPECIAL), 3));
 
     @SubscribeEvent
     public static void onNewRegistryEvent(NewRegistryEvent event) {

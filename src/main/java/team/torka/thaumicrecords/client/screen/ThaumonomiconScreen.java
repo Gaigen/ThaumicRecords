@@ -22,12 +22,18 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.helper.ResearchHelper;
 import team.torka.thaumicrecords.api.research.Research;
 import team.torka.thaumicrecords.api.research.ResearchCategory;
+import team.torka.thaumicrecords.attachment.ResearchUnlocked;
+import team.torka.thaumicrecords.registry.AttachmentRegistry;
 import team.torka.thaumicrecords.registry.ResearchCategoryRegistry;
+import team.torka.thaumicrecords.registry.ResearchRegistry;
 import team.torka.thaumicrecords.registry.SoundRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class ThaumonomiconScreen extends Screen {
     private static final ResourceLocation GUI_TEXTURE = ThaumicRecords.createRl("textures/gui/thaumonomicon_gui.png");
@@ -44,6 +50,7 @@ public class ThaumonomiconScreen extends Screen {
     private static ResearchCategory lastCategory = null;
     private static int lastX = -5;
     private static int lastY = -6;
+    private static Set<ResourceLocation> lastCompletedResearches = null;
 
     private double guiMapX;
     private double guiMapY;
@@ -64,7 +71,7 @@ public class ThaumonomiconScreen extends Screen {
 
     private ResearchCategory selectedCategory = ResearchCategoryRegistry.BASIC.get();
 
-    private List<Research> highlightedResearch = List.of();
+    private Set<ResourceLocation> highlightedResearches = Collections.emptySet();
 
     public ThaumonomiconScreen() {
         super(Component.empty());
@@ -82,6 +89,16 @@ public class ThaumonomiconScreen extends Screen {
         updateScrollBounds();
         if (lastX == -5 && lastY == -6) {
             centerViewport();
+        }
+        var player = Minecraft.getInstance().player;
+        ResearchUnlocked researchUnlocked = player != null ? player.getData(AttachmentRegistry.RESEARCH_UNLOCKED) : ResearchUnlocked.EMPTY;
+        if (lastCompletedResearches != null) {
+            Set<ResourceLocation> current = researchUnlocked.completedResearches();
+            Set<ResourceLocation> diff = new HashSet<>(current);
+            diff.removeAll(lastCompletedResearches);
+            this.highlightedResearches = diff;
+        } else {
+            this.highlightedResearches = Collections.emptySet();
         }
     }
 
@@ -199,7 +216,14 @@ public class ThaumonomiconScreen extends Screen {
 
     @Nullable
     private ResearchCategory getCategoryAtPosition(double mouseX, double mouseY, int renderStartX, int renderStartY) {
-        List<ResearchCategory> categories = ResearchCategoryRegistry.RESEARCH_REGISTRY.stream().toList();
+        var player = Minecraft.getInstance().player;
+        ResearchUnlocked researchUnlocked = player != null ? player.getData(AttachmentRegistry.RESEARCH_UNLOCKED) : ResearchUnlocked.EMPTY;
+
+        List<ResearchCategory> categories = ResearchCategoryRegistry.RESEARCH_REGISTRY.stream().filter(cat -> {
+            ResourceLocation key = ResearchCategoryRegistry.RESEARCH_REGISTRY.getKey(cat);
+            return key != null && researchUnlocked.isCategoryDiscovered(key);
+        }).toList();
+
         int count = 0;
         boolean mirror = false;
         int tabPerSide = 9;
@@ -271,6 +295,10 @@ public class ThaumonomiconScreen extends Screen {
         lastX = (int) ((this.guiMapX + 112.0) / 24.0);
         lastY = (int) ((this.guiMapY + 98.0) / 24.0);
         lastCategory = this.selectedCategory;
+        var player = Minecraft.getInstance().player;
+        if (player != null) {
+            lastCompletedResearches = new HashSet<>(player.getData(AttachmentRegistry.RESEARCH_UNLOCKED).completedResearches());
+        }
         super.onClose();
     }
 
@@ -280,12 +308,22 @@ public class ThaumonomiconScreen extends Screen {
             return;
         }
 
+        var player = Minecraft.getInstance().player;
+        ResearchUnlocked researchUnlocked = player != null ? player.getData(AttachmentRegistry.RESEARCH_UNLOCKED) : ResearchUnlocked.EMPTY;
+
         PoseStack poseStack = guiGraphics.pose();
         int contentWidth = BORDER_TEXTURE_WIDTH - 2 * BORDER_WIDTH;   // 224
         int contentHeight = BORDER_TEXTURE_HEIGHT - 2 * BORDER_HEIGHT; // 196
         int offsetX = (int) viewOffsetX;
         int offsetY = (int) viewOffsetY;
+        long gameTime = Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getGameTime() : 0L;
+
         for (Research research : researchList) {
+            ResourceLocation researchKey = ResearchRegistry.RESEARCH_REGISTRY.getKey(research);
+            if (researchKey == null || !researchUnlocked.isResearchDiscovered(researchKey)) {
+                continue; // 未发现的研究不渲染
+            }
+
             int researchX = research.col * 24 - offsetX + contentX1;
             int researchY = research.row * 24 - offsetY + contentY1;
 
@@ -293,42 +331,80 @@ public class ThaumonomiconScreen extends Screen {
                 continue;
             }
 
-            drawResearchShape(poseStack, researchX, researchY, research.renderStrategy);
+            boolean isCompleted = researchUnlocked.isResearchCompleted(researchKey);
+            boolean isHighlighted = highlightedResearches.contains(researchKey);
+
+            drawResearchShape(poseStack, researchX, researchY, research.renderStrategy, isCompleted, isHighlighted);
 
             if (research.iconItem != null) {
                 guiGraphics.flush();
+                if (!isCompleted) {
+                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.6F);
+                }
                 guiGraphics.renderFakeItem(research.iconItem, researchX + 3, researchY + 3);
+                if (!isCompleted) {
+                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                }
                 guiGraphics.flush();
             } else if (research.icon != null) {
                 drawRectTextured(poseStack, research.icon, researchX + 3, researchX + 19, researchY + 3, researchY + 19, 0, 256, 0, 256, 0);
             }
+
+            if (isHighlighted) {
+                int px = (int) (16L * (gameTime % 16L));
+                drawRectTextured(poseStack, PARTICLE_TEXTURE, researchX - 2, researchX + 14, researchY - 2, researchY + 14, px, px + 16, 80, 96, 0);
+            }
         }
     }
 
-    private void drawResearchShape(PoseStack poseStack, int x, int y, Research.RenderStrategy strategy) {
-        if (strategy == Research.RenderStrategy.SPIKY) {
-            drawRectTextured(poseStack, GUI_TEXTURE, x - 2, x + 24, y - 2, y + 24, 54.0, 80.0, 230.0, 256.0, 0);
-            drawRectTextured(poseStack, GUI_TEXTURE, x - 2, x + 24, y - 2, y + 24, 26.0, 52.0, 230.0, 256.0, 0);
-            return;
-        }
+    private void drawResearchShape(PoseStack poseStack, int x, int y, Research.RenderStrategy strategy, boolean isCompleted, boolean isHighlighted) {
         double u;
         double v = 230.0;
+
         switch (strategy) {
+            case SPIKY -> {
+                drawRectTextured(poseStack, GUI_TEXTURE, x - 2, x + 24, y - 2, y + 24, 54.0, 80.0, v, v + 26, 0);
+                drawRectTextured(poseStack, GUI_TEXTURE, x - 2, x + 24, y - 2, y + 24, 26.0, 52.0, v, v + 26, 0);
+                return;
+            }
             case ROUND -> u = 54.0;
             case HEXAGON -> u = 110.0;
             default -> u = 0.0;
         }
+
+        // 已完成：正常渲染 | 已发现但未完成：半透明 | 高亮：正常但带粒子
+        if (!isCompleted && !isHighlighted) {
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.6F);
+        }
         drawRectTextured(poseStack, GUI_TEXTURE, x - 2, x + 24, y - 2, y + 24, u, u + 26, v, v + 26, 0);
+        if (!isCompleted && !isHighlighted) {
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        }
     }
 
     private void drawCategoryTags(GuiGraphics guiGraphics, int renderStartX, int renderStartY) {
-        // TODO 获取玩家解锁研究
-        List<ResearchCategory> categories = (ResearchCategoryRegistry.RESEARCH_REGISTRY.stream().toList());
+        var player = Minecraft.getInstance().player;
+        ResearchUnlocked researchUnlocked = player != null ? player.getData(AttachmentRegistry.RESEARCH_UNLOCKED) : ResearchUnlocked.EMPTY;
+
+        // 只渲染已发现的类别
+        List<ResearchCategory> categories = ResearchCategoryRegistry.RESEARCH_REGISTRY.stream().filter(cat -> {
+            ResourceLocation key = ResearchCategoryRegistry.RESEARCH_REGISTRY.getKey(cat);
+            return key != null && researchUnlocked.isCategoryDiscovered(key);
+        }).toList();
+
+        // 计算含有高亮研究的类别（新完成的研究所属类别）
+        Set<ResourceLocation> highlightedCategories = new HashSet<>();
+        for (ResourceLocation researchKey : highlightedResearches) {
+            Research r = ResearchRegistry.RESEARCH_REGISTRY.get(researchKey);
+            if (r != null) {
+                highlightedCategories.add(r.category);
+            }
+        }
 
         int count = 0;
-        boolean mirror = false; // 按钮是否放到另外一边
-        int tabPerSide = 9;     // 单侧最多放9个标签
-        int tabDistance = 264;  // 右侧标签栏的横向偏移量
+        boolean mirror = false;
+        int tabPerSide = 9;
+        int tabDistance = 264;
 
         PoseStack poseStack = guiGraphics.pose();
         long gameTime = Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getGameTime() : 0L;
@@ -390,8 +466,9 @@ public class ThaumonomiconScreen extends Screen {
                 }
             }
 
-            // 新研究的发光图标
-            if (highlightedResearch.contains(category)) {
+            // 有已发现但未完成的研究时，显示发光粒子图标
+            ResourceLocation catKey = ResearchCategoryRegistry.RESEARCH_REGISTRY.getKey(category);
+            if (catKey != null && highlightedCategories.contains(catKey)) {
                 int px = (int) (16L * (gameTime % 16L));
                 double pX1 = renderStartX - 27 + s2 + s0;
                 double pY1 = renderStartY - 4 + count * 24;

@@ -48,9 +48,29 @@ public class ResearchHelper {
     public static void completeResearch(ServerPlayer player, ResourceLocation research) {
         ResearchUnlocked oldData = player.getData(AttachmentRegistry.RESEARCH_UNLOCKED);
         ResearchUnlocked newData = oldData.completeResearch(research);
+        newData = cascadeDiscoverChildren(newData, research);
         if (!newData.equals(oldData)) {
             player.setData(AttachmentRegistry.RESEARCH_UNLOCKED, newData);
         }
+    }
+
+    private static ResearchUnlocked cascadeDiscoverChildren(ResearchUnlocked data, ResourceLocation completedResearch) {
+        boolean changed = true;
+        while (changed) {
+            changed = false;
+            for (Research research : ResearchRegistry.RESEARCH_REGISTRY) {
+                ResourceLocation key = ResearchRegistry.RESEARCH_REGISTRY.getKey(research);
+                if (key == null || data.isResearchDiscovered(key)) {
+                    continue;
+                }
+                if (research.discoveryStrategy.contains(Research.DiscoveryStrategy.PARENT) && ResearchUnlocked.areParentsCompleted(research,
+                        data.completedResearches())) {
+                    data = data.discoverResearch(key);
+                    changed = true;
+                }
+            }
+        }
+        return data;
     }
 
     public static void discoverCategory(ServerPlayer player, ResourceLocation category) {

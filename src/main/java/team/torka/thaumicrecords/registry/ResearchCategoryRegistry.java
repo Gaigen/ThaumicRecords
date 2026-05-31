@@ -38,8 +38,8 @@ public class ResearchCategoryRegistry {
 
     public static final DeferredHolder<ResearchCategory, ResearchCategory> ELDRITCH = REGISTRAR.register("eldritch",
             () -> new ResearchCategory(ThaumicRecords.createTranslationKey("research_category", "eldritch"),
-                    ThaumicRecords.createRl("textures/research/icon/eldritch.png"), null,
-                    ThaumicRecords.createRl("textures/research/background/eldritch.png")));
+                    ThaumicRecords.createRl("textures/research/icon/eldritch.png"), null, ThaumicRecords.createRl("textures/research/background/eldritch.png"),
+                    false));
 
     @SubscribeEvent
     public static void onNewRegistryEvent(NewRegistryEvent event) {

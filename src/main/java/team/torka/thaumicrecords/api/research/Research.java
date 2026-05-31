@@ -151,9 +151,9 @@ public class Research {
          */
         SCAN("SCAN"),
         /**
-         * 从知识碎片拼成的笔记揭晓
+         * 从知识碎片拼成的笔记 或者特定方式解锁
          */
-        FRAGMENT("FRAGMENT"),
+        SPECIAL("SPECIAL"),
         ;
 
         private final String name;
