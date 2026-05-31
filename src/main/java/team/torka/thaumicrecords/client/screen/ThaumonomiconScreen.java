@@ -16,16 +16,23 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.helper.ResearchHelper;
+import team.torka.thaumicrecords.api.item.ScribingTool;
 import team.torka.thaumicrecords.api.research.Research;
 import team.torka.thaumicrecords.api.research.ResearchCategory;
+import team.torka.thaumicrecords.attachment.ResearchPoint;
 import team.torka.thaumicrecords.attachment.ResearchUnlocked;
+import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
 import team.torka.thaumicrecords.registry.AttachmentRegistry;
+import team.torka.thaumicrecords.registry.DataComponentRegistry;
+import team.torka.thaumicrecords.registry.ItemRegistry;
 import team.torka.thaumicrecords.registry.ResearchCategoryRegistry;
 import team.torka.thaumicrecords.registry.ResearchRegistry;
 import team.torka.thaumicrecords.registry.SoundRegistry;
@@ -719,6 +726,7 @@ public class ThaumonomiconScreen extends Screen {
         int hasNoteColor = 0xFFA500;
         int insufficientRpColor = 0xDC143C;
         int unlockWithRpColor = 0x87CEEB;
+        int getNoteColor = 0x87CEEB;
         int noScribingTool = 0xDC143C;
 
         Component name = Component.translatable(hoveredResearch.nameTranslationKey);
@@ -739,10 +747,39 @@ public class ThaumonomiconScreen extends Screen {
                         .withColor(warpColor));
             }
             if (hoveredResearch.unlockStrategy == Research.UnlockStrategy.POINTS) {
-                // TODO 判断要素够不够  够->unlockWithRpColor 不够->insufficientRpColor
-                lines.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.unlock_with_points")).withColor(unlockWithRpColor));
+                ResearchPoint rp = this.minecraft.player.getData(AttachmentRegistry.RESEARCH_POINT);
+                boolean hasEnoughPoints = hoveredResearch.aspects.entrySet().stream().allMatch(
+                        entry -> rp.points().getOrZero(entry.getKey()) >= entry.getValue());
+                lines.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.complete_with_points"))
+                        .withColor(hasEnoughPoints ? unlockWithRpColor : insufficientRpColor));
             } else if (hoveredResearch.unlockStrategy == Research.UnlockStrategy.RESEARCH) {
-                // TODO 判断有没有笔与墨还有纸 有笔记->hasNoteColor 有笔墨纸->0x87C384 没有->noScribingTool
+                boolean hasScribingTool = false;
+                boolean hasPaper = false;
+                for (ItemStack stack : this.minecraft.player.getInventory().items) {
+                    if (!hasScribingTool && stack.getItem() instanceof ScribingTool scribingTool && scribingTool.canScribe(stack, this.minecraft.player)) {
+                        hasScribingTool = true;
+                    }
+                    if (!hasPaper && stack.is(Items.PAPER)) {
+                        hasPaper = true;
+                    }
+                }
+                boolean hasNote = false;
+                for (ItemStack stack : this.minecraft.player.getInventory().items) {
+                    if (stack.is(ItemRegistry.RESEARCH_NOTES.get())) {
+                        ResearchNoteComponent noteData = stack.get(DataComponentRegistry.RESEARCH_NOTE);
+                        if (noteData != null && noteData.research().equals(researchKey)) {
+                            hasNote = true;
+                            break;
+                        }
+                    }
+                }
+                if (hasNote) {
+                    lines.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.has_note")).withColor(hasNoteColor));
+                } else if (hasScribingTool && hasPaper) {
+                    lines.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.get_research_note")).withColor(getNoteColor));
+                } else {
+                    lines.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.cant_get_note")).withColor(noScribingTool));
+                }
             }
             guiGraphics.renderComponentTooltip(this.font, lines, mouseX, mouseY);
         } else {
