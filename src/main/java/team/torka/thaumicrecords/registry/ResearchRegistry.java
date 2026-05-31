@@ -121,7 +121,7 @@ public class ResearchRegistry {
                     .add(AspectRegistry.SENSUS.getId(), 3)
                     .add(AspectRegistry.PRAECANTATIO.getId(), 3), ThaumicRecords.createRl("textures/research/icon/researcher2.png"), null,
                     new ResourceLocation[]{RESEARCHER1.getId()}, 3, 3, 2, Research.RenderStrategy.SPIKY, Research.UnlockStrategy.RESEARCH,
-                    List.of(Research.DiscoveryStrategy.PARENT), 1));
+                    List.of(Research.DiscoveryStrategy.ALWAYS), 1));
 
     public static final DeferredHolder<Research, Research> NODEJAR = REGISTRAR.register("nodejar",
             () -> new Research(ThaumicRecords.createTranslationKey("research", "nodejar"), ThaumicRecords.createTranslationKey("research_desc", "nodejar"),
