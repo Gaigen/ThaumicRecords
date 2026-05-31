@@ -30,6 +30,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.SALIS_MUNDUS.get());
         basicItem(ItemRegistry.PRIMORDIAL_PEARL.get());
         basicItem(ItemRegistry.THAUMONOMICON.get());
+        basicItem(ItemRegistry.CRIMSON_RITES.get());
         withExistingParent("phial_filled", "item/generated").texture("layer0", modLoc("item/phial")).texture("layer1", "item/essence");
 
         basicItem(ItemRegistry.WAND_CAP_IRON.get());

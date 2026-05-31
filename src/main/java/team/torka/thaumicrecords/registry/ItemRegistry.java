@@ -18,10 +18,12 @@ import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.item.BootsTravellerItem;
 import team.torka.thaumicrecords.item.CrimsonBladeItem;
+import team.torka.thaumicrecords.item.CrimsonRitesItem;
 import team.torka.thaumicrecords.item.CultistBootsItem;
 import team.torka.thaumicrecords.item.CultistLeaderArmorItem;
 import team.torka.thaumicrecords.item.CultistPlateArmorItem;
 import team.torka.thaumicrecords.item.CultistRobeArmorItem;
+import team.torka.thaumicrecords.item.CurioItem;
 import team.torka.thaumicrecords.item.ElementalAxeItem;
 import team.torka.thaumicrecords.item.ElementalHoeItem;
 import team.torka.thaumicrecords.item.ElementalPickaxeItem;
@@ -35,6 +37,7 @@ import team.torka.thaumicrecords.item.PrimalCrusherItem;
 import team.torka.thaumicrecords.item.PrimordialPearItem;
 import team.torka.thaumicrecords.item.ResearchNotesItem;
 import team.torka.thaumicrecords.item.RobeArmorItem;
+import team.torka.thaumicrecords.item.RunicCurioItem;
 import team.torka.thaumicrecords.item.ScribingToolsItem;
 import team.torka.thaumicrecords.item.ThaumiumArmorItem;
 import team.torka.thaumicrecords.item.ThaumiumAxeItem;
@@ -53,8 +56,6 @@ import team.torka.thaumicrecords.item.VoidShovelItem;
 import team.torka.thaumicrecords.item.VoidSwordItem;
 import team.torka.thaumicrecords.item.WandItem;
 import team.torka.thaumicrecords.item.WispEssenceItem;
-import team.torka.thaumicrecords.item.CurioItem;
-import team.torka.thaumicrecords.item.RunicCurioItem;
 
 public class ItemRegistry {
     public static final DeferredRegister.Items REGISTRAR = DeferredRegister.createItems(ThaumicRecords.MOD_ID);
@@ -76,7 +77,8 @@ public class ItemRegistry {
     public static final DeferredItem<Item> PERDITIO_SHARD = REGISTRAR.registerSimpleItem("perditio_shard");
     public static final DeferredItem<Item> BALANCED_SHARD = REGISTRAR.registerSimpleItem("balanced_shard");
     public static final DeferredItem<Item> SALIS_MUNDUS = REGISTRAR.registerSimpleItem("salis_mundus");
-    public static final DeferredItem<Item> PRIMORDIAL_PEARL = REGISTRAR.registerItem("primordial_pearl", PrimordialPearItem::new, itemProp(1));
+    public static final DeferredItem<CrimsonRitesItem> CRIMSON_RITES = REGISTRAR.register("crimson_rites",CrimsonRitesItem::new);
+    public static final DeferredItem<PrimordialPearItem> PRIMORDIAL_PEARL = REGISTRAR.register("primordial_pearl", PrimordialPearItem::new);
     public static final DeferredItem<GogglesItem> GOGGLES = REGISTRAR.register("goggles",GogglesItem::new);
     public static final DeferredItem<ThaumonomiconItem> THAUMONOMICON = REGISTRAR.register("thaumonomicon",ThaumonomiconItem::new);
 
@@ -388,6 +390,7 @@ public class ItemRegistry {
         output.accept(ENCHANTED_FABRIC);
         output.accept(COIN);
         output.accept(PRIMORDIAL_PEARL);
+        output.accept(CRIMSON_RITES);
         output.accept(AURA_NODE);
         output.accept(AER_SHARD);
         output.accept(IGNIS_SHARD);
@@ -586,9 +589,5 @@ public class ItemRegistry {
                 initialAspects);
         initialWand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
         return initialWand;
-    }
-
-    private static Item.Properties itemProp(int stackSize) {
-        return new Item.Properties().stacksTo(stackSize);
     }
 }
