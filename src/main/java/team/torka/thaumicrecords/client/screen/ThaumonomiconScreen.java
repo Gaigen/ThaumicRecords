@@ -19,6 +19,7 @@ import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.api.helper.ResearchHelper;
 import team.torka.thaumicrecords.api.research.Research;
 import team.torka.thaumicrecords.api.research.ResearchCategory;
 import team.torka.thaumicrecords.registry.ResearchCategoryRegistry;
@@ -56,10 +57,10 @@ public class ThaumonomiconScreen extends Screen {
 
     private boolean isDragging = false;
 
-    private int guiMapTop = -200;
-    private int guiMapLeft = -200;
-    private int guiMapBottom = 200;
-    private int guiMapRight = 200;
+    private int guiMapTop = 0;
+    private int guiMapLeft = 0;
+    private int guiMapBottom = 0;
+    private int guiMapRight = 0;
 
     private ResearchCategory selectedCategory = ResearchCategoryRegistry.BASIC.get();
 
@@ -67,17 +68,63 @@ public class ThaumonomiconScreen extends Screen {
 
     public ThaumonomiconScreen() {
         super(Component.empty());
-        this.guiMapX = this.targetMapX = this.prevMapX = lastX * 24 - 141 / 2.0 - 12;
-        this.guiMapY = this.targetMapY = this.prevMapY = lastY * 24 - 141 / 2.0;
         if (lastCategory != null) {
             this.selectedCategory = lastCategory;
         }
+        this.guiMapX = this.targetMapX = this.prevMapX = lastX * 24 - 112;
+        this.guiMapY = this.targetMapY = this.prevMapY = lastY * 24 - 98;
     }
 
 
     @Override
     protected void init() {
         super.init();
+        updateScrollBounds();
+        if (lastX == -5 && lastY == -6) {
+            centerViewport();
+        }
+    }
+
+    private void updateScrollBounds() {
+        List<Research> researchList = ResearchHelper.getResearchesByCategory(selectedCategory);
+        if (researchList.isEmpty()) {
+            guiMapTop = -144;
+            guiMapLeft = -158;
+            guiMapBottom = 144;
+            guiMapRight = 158;
+            return;
+        }
+        int minCol = Integer.MAX_VALUE, maxCol = Integer.MIN_VALUE;
+        int minRow = Integer.MAX_VALUE, maxRow = Integer.MIN_VALUE;
+        for (Research r : researchList) {
+            minCol = Math.min(minCol, r.col);
+            maxCol = Math.max(maxCol, r.col);
+            minRow = Math.min(minRow, r.row);
+            maxRow = Math.max(maxRow, r.row);
+        }
+
+        guiMapTop = minCol * 24 - 85;
+        guiMapLeft = minRow * 24 - 112;
+        guiMapBottom = maxCol * 24 - 112;
+        guiMapRight = maxRow * 24 - 61;
+
+        if (guiMapBottom - guiMapTop < 288) {
+            int center = (minCol + maxCol) * 12;
+            guiMapTop = center - 144;
+            guiMapBottom = center + 144;
+        }
+        if (guiMapRight - guiMapLeft < 316) {
+            int center = (minRow + maxRow) * 12;
+            guiMapLeft = center - 158;
+            guiMapRight = center + 158;
+        }
+    }
+
+    private void centerViewport() {
+        int contentWidth = BORDER_TEXTURE_WIDTH - 2 * BORDER_WIDTH;   // 224
+        int contentHeight = BORDER_TEXTURE_HEIGHT - 2 * BORDER_HEIGHT; // 196
+        this.guiMapX = this.targetMapX = this.prevMapX = (guiMapTop + guiMapBottom) / 2.0 - contentWidth / 2.0;
+        this.guiMapY = this.targetMapY = this.prevMapY = (guiMapLeft + guiMapRight) / 2.0 - contentHeight / 2.0;
     }
 
     @Override
@@ -114,9 +161,15 @@ public class ThaumonomiconScreen extends Screen {
         int renderStartX = (this.width - BORDER_TEXTURE_WIDTH) / 2;
         int renderStartY = (this.height - BORDER_TEXTURE_HEIGHT) / 2;
 
+        int contentX1 = renderStartX + BORDER_WIDTH;
+        int contentY1 = renderStartY + BORDER_HEIGHT;
+        int contentWidth = BORDER_TEXTURE_WIDTH - 2 * BORDER_WIDTH;
+        int contentHeight = BORDER_TEXTURE_HEIGHT - 2 * BORDER_HEIGHT;
 
+        enableContentScissor(contentX1, contentY1, contentWidth, contentHeight);
         drawBackground(guiGraphics, selectedCategory.background, smoothMapX, smoothMapY);
-
+        drawResearchNodes(guiGraphics, smoothMapX, smoothMapY, contentX1, contentY1);
+        RenderSystem.disableScissor();
         drawCategoryTags(guiGraphics, renderStartX, renderStartY);
 
         drawBorders(guiGraphics, renderStartX, renderStartY, BORDER_TEXTURE_WIDTH, BORDER_TEXTURE_HEIGHT);
@@ -134,10 +187,13 @@ public class ThaumonomiconScreen extends Screen {
             double contentY2 = renderStartY + BORDER_TEXTURE_HEIGHT - BORDER_HEIGHT;
 
             ResearchCategory clickedCategory = getCategoryAtPosition(mouseX, mouseY, renderStartX, renderStartY);
-            if (clickedCategory != null && !clickedCategory.equals(selectedCategory)) {
+            if (Objects.nonNull(clickedCategory) && !clickedCategory.equals(selectedCategory)) {
                 selectedCategory = clickedCategory;
-                Minecraft.getInstance().player.playSound(SoundRegistry.CAMERA_TICKS.get(), 0.4F, 1.0F);
-                // TODO: 切换分类后重新计算滚动边界和重新加载研究列表
+                updateScrollBounds();
+                centerViewport();
+                if (Objects.nonNull(Minecraft.getInstance().player)) {
+                    Minecraft.getInstance().player.playSound(SoundRegistry.CAMERA_TICKS.get(), 0.4F, 1.0F);
+                }
                 return true;
             }
 
@@ -227,6 +283,50 @@ public class ThaumonomiconScreen extends Screen {
         lastCategory = this.selectedCategory;
         super.onClose();
     }
+
+    private void drawResearchNodes(GuiGraphics guiGraphics, double viewOffsetX, double viewOffsetY, int contentX1, int contentY1) {
+        List<Research> researchList = ResearchHelper.getResearchesByCategory(selectedCategory);
+        if (researchList.isEmpty()) {
+            return;
+        }
+
+        PoseStack poseStack = guiGraphics.pose();
+        int contentWidth = BORDER_TEXTURE_WIDTH - 2 * BORDER_WIDTH;   // 224
+        int contentHeight = BORDER_TEXTURE_HEIGHT - 2 * BORDER_HEIGHT; // 196
+
+        for (Research research : researchList) {
+            double researchX = research.col * 24.0 - viewOffsetX + contentX1;
+            double researchY = research.row * 24.0 - viewOffsetY + contentY1;
+
+            if (researchX + 24 < contentX1 || researchY + 24 < contentY1 || researchX - 2 > contentX1 + contentWidth || researchY - 2 > contentY1 + contentHeight) {
+                continue;
+            }
+
+            drawResearchShape(poseStack, researchX, researchY, research.renderStrategy);
+
+            if (research.iconItem != null) {
+                guiGraphics.flush();
+                guiGraphics.renderFakeItem(research.iconItem, (int) researchX + 3, (int) researchY + 3);
+                guiGraphics.flush();
+            } else if (research.icon != null) {
+                drawRectTextured(poseStack, research.icon, researchX + 3, researchX + 19, researchY + 3, researchY + 19, 0, 256, 0, 256, 0);
+            }
+        }
+    }
+
+
+    private void drawResearchShape(PoseStack poseStack, double x, double y, Research.RenderStrategy strategy) {
+        double u;
+        double v = 230.0;
+        switch (strategy) {
+            case ROUND -> u = 54.0;
+            case SPIKY -> u = 26.0;
+            case HEXAGON -> u = 110.0;
+            default -> u = 0.0;
+        }
+        drawRectTextured(poseStack, GUI_TEXTURE, x - 2, x + 24, y - 2, y + 24, u, u + 26, v, v + 26, 0);
+    }
+
 
     private void drawCategoryTags(GuiGraphics guiGraphics, int renderStartX, int renderStartY) {
         // TODO 获取玩家解锁研究
@@ -352,11 +452,12 @@ public class ThaumonomiconScreen extends Screen {
         double canvasHeight = BORDER_TEXTURE_HEIGHT - 2 * BORDER_HEIGHT;
 
 
-        double scrollRangeX = Math.abs(guiMapTop - guiMapBottom);
-        double scrollRangeY = Math.abs(guiMapLeft - guiMapRight);
+        double scrollRangeX = guiMapBottom - guiMapTop;
+        double scrollRangeY = guiMapRight - guiMapLeft;
 
         double uOffset = scrollRangeX > 0 ? (viewOffsetX - guiMapTop) / scrollRangeX * 288.0 : 0;
         double vOffset = scrollRangeY > 0 ? (viewOffsetY - guiMapLeft) / scrollRangeY * 316.0 : 0;
+
 
         guiGraphics.flush();
         PoseStack poseStack = guiGraphics.pose();
@@ -403,5 +504,14 @@ public class ThaumonomiconScreen extends Screen {
         BufferUploader.drawWithShader(bufferBuilder.buildOrThrow());
 
         RenderSystem.disableBlend();
+    }
+
+    private void enableContentScissor(int x, int y, int width, int height) {
+        double scale = Minecraft.getInstance().getWindow().getGuiScale();
+        int scissorX = (int) Math.round(x * scale);
+        int scissorY = (int) Math.round((this.height - y - height) * scale);
+        int scissorWidth = (int) Math.round(width * scale);
+        int scissorHeight = (int) Math.round(height * scale);
+        RenderSystem.enableScissor(scissorX, scissorY, scissorWidth, scissorHeight);
     }
 }

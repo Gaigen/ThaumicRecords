@@ -1,8 +1,6 @@
 package team.torka.thaumicrecords.registry;
 
 import net.minecraft.core.Registry;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -14,14 +12,17 @@ import team.torka.thaumicrecords.api.RegistryKeys;
 import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.research.Research;
 
+import java.util.List;
+
 @EventBusSubscriber
 public class ResearchRegistry {
     public static final DeferredRegister<Research> REGISTRAR = DeferredRegister.create(RegistryKeys.RESEARCHES, ThaumicRecords.MOD_ID);
     public static Registry<Research> RESEARCH_REGISTRY = null;
 
-    public static final DeferredHolder<Research, Research> TEST = REGISTRAR.register("test",
-            () -> Research.createNormal("test", "testdesc", ResearchCategoryRegistry.BASIC.getId(), AspectList.empty(), null, new ItemStack(Items.NAME_TAG),
-                    null, 10, 10, 3));
+    public static final DeferredHolder<Research, Research> ASPECTS = REGISTRAR.register("aspects",
+            () -> new Research(ThaumicRecords.createTranslationKey("research", "aspects"), ThaumicRecords.createTranslationKey("research_desc", "aspects"),
+                    ResearchCategoryRegistry.BASIC.getId(), AspectList.empty(), ThaumicRecords.createRl("textures/research/icon/aspects.png"), null, null, 0, 0,
+                    0, Research.RenderStrategy.ROUND, Research.UnlockStrategy.INITIAL, List.of(Research.DiscoveryStrategy.ALWAYS), 0));
 
     @SubscribeEvent
     public static void onNewRegistryEvent(NewRegistryEvent event) {
