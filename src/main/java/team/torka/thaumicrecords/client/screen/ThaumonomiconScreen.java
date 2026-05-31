@@ -306,7 +306,7 @@ public class ThaumonomiconScreen extends Screen {
 
             if (research.iconItem != null) {
                 guiGraphics.flush();
-                guiGraphics.renderFakeItem(research.iconItem, (int) researchX + 3, (int) researchY + 3);
+                guiGraphics.renderFakeItem(research.iconItem, Math.round((float) researchX + 3), Math.round((float) researchY + 3));
                 guiGraphics.flush();
             } else if (research.icon != null) {
                 drawRectTextured(poseStack, research.icon, researchX + 3, researchX + 19, researchY + 3, researchY + 19, 0, 256, 0, 256, 0);
@@ -316,11 +316,15 @@ public class ThaumonomiconScreen extends Screen {
 
 
     private void drawResearchShape(PoseStack poseStack, double x, double y, Research.RenderStrategy strategy) {
+        if (strategy == Research.RenderStrategy.SPIKY) {
+            drawRectTextured(poseStack, GUI_TEXTURE, x - 2, x + 24, y - 2, y + 24, 54.0, 80.0, 230.0, 256.0, 0);
+            drawRectTextured(poseStack, GUI_TEXTURE, x - 2, x + 24, y - 2, y + 24, 26.0, 52.0, 230.0, 256.0, 0);
+            return;
+        }
         double u;
         double v = 230.0;
         switch (strategy) {
             case ROUND -> u = 54.0;
-            case SPIKY -> u = 26.0;
             case HEXAGON -> u = 110.0;
             default -> u = 0.0;
         }
