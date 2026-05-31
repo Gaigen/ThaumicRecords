@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -37,7 +38,6 @@ import java.util.Set;
 
 public class ThaumonomiconScreen extends Screen {
     private static final ResourceLocation GUI_TEXTURE = ThaumicRecords.createRl("textures/gui/thaumonomicon_gui.png");
-    private static final ResourceLocation PARTICLE_TEXTURE = ResourceLocation.withDefaultNamespace("textures/particle/particles.png");
     // from tc4tweaks
     private static final int BORDER_TEXTURE_WIDTH = 256;
     private static final int BORDER_TEXTURE_HEIGHT = 230;
@@ -316,12 +316,11 @@ public class ThaumonomiconScreen extends Screen {
         int contentHeight = BORDER_TEXTURE_HEIGHT - 2 * BORDER_HEIGHT; // 196
         int offsetX = (int) viewOffsetX;
         int offsetY = (int) viewOffsetY;
-        long gameTime = Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getGameTime() : 0L;
 
         for (Research research : researchList) {
             ResourceLocation researchKey = ResearchRegistry.RESEARCH_REGISTRY.getKey(research);
             if (researchKey == null || !researchUnlocked.isResearchDiscovered(researchKey)) {
-                continue; // 未发现的研究不渲染
+                continue;
             }
 
             int researchX = research.col * 24 - offsetX + contentX1;
@@ -332,39 +331,59 @@ public class ThaumonomiconScreen extends Screen {
             }
 
             boolean isCompleted = researchUnlocked.isResearchCompleted(researchKey);
-            boolean isHighlighted = highlightedResearches.contains(researchKey);
+            boolean parentsCompleted = ResearchUnlocked.areParentsCompleted(research, researchUnlocked.completedResearches());
 
-            drawResearchShape(poseStack, researchX, researchY, research.renderStrategy, isCompleted, isHighlighted);
+            // 三种渲染状态：0=已完成 1=parents已完成但当前未完成 2=parents未完成
+            int renderState = isCompleted ? 0 : (parentsCompleted ? 1 : 2);
 
+            drawResearchShape(poseStack, researchX, researchY, research.renderStrategy, renderState);
+
+            // 图标渲染
             if (research.iconItem != null) {
                 guiGraphics.flush();
-                if (!isCompleted) {
-                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.6F);
+                if (renderState == 1) {
+                    float brightness = (float) (Math.sin((double) (Util.getMillis() % 600L) / 600.0 * Math.PI * 2.0) * 0.25 + 0.75);
+                    RenderSystem.setShaderColor(brightness, brightness, brightness, 1.0F);
+                } else if (renderState == 2) {
+                    RenderSystem.setShaderColor(0.1F, 0.1F, 0.1F, 1.0F);
                 }
                 guiGraphics.renderFakeItem(research.iconItem, researchX + 3, researchY + 3);
-                if (!isCompleted) {
+                if (renderState != 0) {
                     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                 }
                 guiGraphics.flush();
             } else if (research.icon != null) {
+                if (renderState == 1) {
+                    float brightness = (float) (Math.sin((double) (Util.getMillis() % 600L) / 600.0 * Math.PI * 2.0) * 0.25 + 0.75);
+                    RenderSystem.setShaderColor(brightness, brightness, brightness, 1.0F);
+                } else if (renderState == 2) {
+                    RenderSystem.setShaderColor(0.1F, 0.1F, 0.1F, 1.0F);
+                }
                 drawRectTextured(poseStack, research.icon, researchX + 3, researchX + 19, researchY + 3, researchY + 19, 0, 256, 0, 256, 0);
-            }
-
-            if (isHighlighted) {
-                int px = (int) (16L * (gameTime % 16L));
-                drawRectTextured(poseStack, PARTICLE_TEXTURE, researchX - 2, researchX + 14, researchY - 2, researchY + 14, px, px + 16, 80, 96, 0);
+                if (renderState != 0) {
+                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                }
             }
         }
     }
 
-    private void drawResearchShape(PoseStack poseStack, int x, int y, Research.RenderStrategy strategy, boolean isCompleted, boolean isHighlighted) {
+    private void drawResearchShape(PoseStack poseStack, int x, int y, Research.RenderStrategy strategy, int renderState) {
         double u;
         double v = 230.0;
 
         switch (strategy) {
             case SPIKY -> {
+                if (renderState == 1) {
+                    float brightness = (float) (Math.sin((double) (Util.getMillis() % 600L) / 600.0 * Math.PI * 2.0) * 0.25 + 0.75);
+                    RenderSystem.setShaderColor(brightness, brightness, brightness, 1.0F);
+                } else if (renderState == 2) {
+                    RenderSystem.setShaderColor(0.3F, 0.3F, 0.3F, 1.0F);
+                }
                 drawRectTextured(poseStack, GUI_TEXTURE, x - 2, x + 24, y - 2, y + 24, 54.0, 80.0, v, v + 26, 0);
                 drawRectTextured(poseStack, GUI_TEXTURE, x - 2, x + 24, y - 2, y + 24, 26.0, 52.0, v, v + 26, 0);
+                if (renderState != 0) {
+                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                }
                 return;
             }
             case ROUND -> u = 54.0;
@@ -372,12 +391,14 @@ public class ThaumonomiconScreen extends Screen {
             default -> u = 0.0;
         }
 
-        // 已完成：正常渲染 | 已发现但未完成：半透明 | 高亮：正常但带粒子
-        if (!isCompleted && !isHighlighted) {
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.6F);
+        if (renderState == 1) {
+            float brightness = (float) (Math.sin((double) (Util.getMillis() % 600L) / 600.0 * Math.PI * 2.0) * 0.25 + 0.75);
+            RenderSystem.setShaderColor(brightness, brightness, brightness, 1.0F);
+        } else if (renderState == 2) {
+            RenderSystem.setShaderColor(0.3F, 0.3F, 0.3F, 1.0F);
         }
         drawRectTextured(poseStack, GUI_TEXTURE, x - 2, x + 24, y - 2, y + 24, u, u + 26, v, v + 26, 0);
-        if (!isCompleted && !isHighlighted) {
+        if (renderState != 0) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
@@ -392,22 +413,12 @@ public class ThaumonomiconScreen extends Screen {
             return key != null && researchUnlocked.isCategoryDiscovered(key);
         }).toList();
 
-        // 计算含有高亮研究的类别（新完成的研究所属类别）
-        Set<ResourceLocation> highlightedCategories = new HashSet<>();
-        for (ResourceLocation researchKey : highlightedResearches) {
-            Research r = ResearchRegistry.RESEARCH_REGISTRY.get(researchKey);
-            if (r != null) {
-                highlightedCategories.add(r.category);
-            }
-        }
-
         int count = 0;
         boolean mirror = false;
         int tabPerSide = 9;
         int tabDistance = 264;
 
         PoseStack poseStack = guiGraphics.pose();
-        long gameTime = Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getGameTime() : 0L;
 
         for (ResearchCategory category : categories) {
             if (count == tabPerSide) {
@@ -464,15 +475,6 @@ public class ThaumonomiconScreen extends Screen {
 
                     drawRectTextured(poseStack, category.icon, iX1, iX2, iY1, iY2, 0.0, 256.0, 0.0, 256.0, BACKGROUND_ZLEVEL);
                 }
-            }
-
-            // 有已发现但未完成的研究时，显示发光粒子图标
-            ResourceLocation catKey = ResearchCategoryRegistry.RESEARCH_REGISTRY.getKey(category);
-            if (catKey != null && highlightedCategories.contains(catKey)) {
-                int px = (int) (16L * (gameTime % 16L));
-                double pX1 = renderStartX - 27 + s2 + s0;
-                double pY1 = renderStartY - 4 + count * 24;
-                drawRectTextured(poseStack, PARTICLE_TEXTURE, pX1, pX1 + 16, pY1, pY1 + 16, px, px + 16, 80, 96, BACKGROUND_ZLEVEL);
             }
 
             // 未选择时候的阴影
