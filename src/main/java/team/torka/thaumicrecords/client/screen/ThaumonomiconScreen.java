@@ -1,5 +1,6 @@
 package team.torka.thaumicrecords.client.screen;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferUploader;
@@ -47,6 +48,8 @@ import java.util.Set;
 
 public class ThaumonomiconScreen extends Screen {
     private static final ResourceLocation GUI_TEXTURE = ThaumicRecords.createRl("textures/gui/thaumonomicon_gui.png");
+    // 好tm震惊这玩意居然是和污染节点用的同一个材质
+    private static final ResourceLocation FORBIDDEN_TEXTURE = ThaumicRecords.createRl("textures/misc/node/tainted.png");
     // from tc4tweaks
     private static final int BORDER_TEXTURE_WIDTH = 256;
     private static final int BORDER_TEXTURE_HEIGHT = 230;
@@ -349,6 +352,11 @@ public class ThaumonomiconScreen extends Screen {
 
             // 三种渲染状态：0=已完成 1=parents已完成但当前未完成 2=parents未完成
             int renderState = isCompleted ? 0 : (parentsCompleted ? 1 : 2);
+
+            // 禁忌研究光晕（在形状下面渲染）
+            if (research.warp > 0) {
+                drawForbiddenGlow(poseStack, researchX + 11, researchY + 11);
+            }
 
             drawResearchShape(poseStack, researchX, researchY, research.renderStrategy, renderState);
 
@@ -668,7 +676,6 @@ public class ThaumonomiconScreen extends Screen {
         }
     }
 
-
     private void drawResearchTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY, int offsetX, int offsetY, int contentX1, int contentY1) {
         var player = Minecraft.getInstance().player;
         if (player == null) {
@@ -795,7 +802,6 @@ public class ThaumonomiconScreen extends Screen {
         }
     }
 
-
     private static Component getWarpLevel(int warp) {
         int level = Math.min(warp, 5);
         return Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.forbidden.level." + level));
@@ -889,6 +895,48 @@ public class ThaumonomiconScreen extends Screen {
         BufferUploader.drawWithShader(bufferBuilder.buildOrThrow());
 
         RenderSystem.disableBlend();
+    }
+
+    private void drawForbiddenGlow(PoseStack poseStack, double x, double y) {
+        int ticks = Minecraft.getInstance().player != null ? Minecraft.getInstance().player.tickCount : 0;
+        int frames = 32;
+        int part = ticks % frames;
+        int currentFrame = frames - 1 - part;
+
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        RenderSystem.disableDepthTest();
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, FORBIDDEN_TEXTURE);
+        int color = 0x200080; // TODO i cannot find the exact color to mix
+        float r = ((color >> 16) & 0xFF) / 255.0F;
+        float g = ((color >> 8) & 0xFF) / 255.0F;
+        float b = (color & 0xFF) / 255.0F;
+        float alpha = 0.8F;
+        RenderSystem.setShaderColor(r, g, b, alpha);
+
+        float scale = 40.0F;
+
+        float minU = (float) currentFrame / frames;
+        float maxU = (float) (currentFrame + 1) / frames;
+        float minV = 0.0F;
+        float maxV = 1.0F;
+
+        Matrix4f matrix = poseStack.last().pose();
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder bufferBuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+
+        bufferBuilder.addVertex(matrix, (float) (x - scale), (float) (y + scale), 0.0F).setUv(minU, maxV);
+        bufferBuilder.addVertex(matrix, (float) (x + scale), (float) (y + scale), 0.0F).setUv(maxU, maxV);
+        bufferBuilder.addVertex(matrix, (float) (x + scale), (float) (y - scale), 0.0F).setUv(maxU, minV);
+        bufferBuilder.addVertex(matrix, (float) (x - scale), (float) (y - scale), 0.0F).setUv(minU, minV);
+
+        BufferUploader.drawWithShader(bufferBuilder.buildOrThrow());
+
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.enableDepthTest();
+        RenderSystem.disableBlend();
+        RenderSystem.defaultBlendFunc();
     }
 
     private void enableContentScissor(int x, int y, int width, int height) {
