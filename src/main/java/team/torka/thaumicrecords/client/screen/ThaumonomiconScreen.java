@@ -181,6 +181,7 @@ public class ThaumonomiconScreen extends Screen {
 
         drawBorders(guiGraphics, renderStartX, renderStartY, BORDER_TEXTURE_WIDTH, BORDER_TEXTURE_HEIGHT);
 
+        drawCategoryTooltip(guiGraphics, mouseX, mouseY, renderStartX, renderStartY);
     }
 
     @Override
