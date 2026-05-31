@@ -345,7 +345,7 @@ public class ThaumonomiconScreen extends Screen {
                     float brightness = (float) (Math.sin((double) (Util.getMillis() % 600L) / 600.0 * Math.PI * 2.0) * 0.25 + 0.75);
                     RenderSystem.setShaderColor(brightness, brightness, brightness, 1.0F);
                 } else if (renderState == 2) {
-                    RenderSystem.setShaderColor(0.1F, 0.1F, 0.1F, 1.0F);
+                    RenderSystem.setShaderColor(0.2F, 0.2F, 0.2F, 1.0F);
                 }
                 guiGraphics.renderFakeItem(research.iconItem, researchX + 3, researchY + 3);
                 if (renderState != 0) {
@@ -357,7 +357,7 @@ public class ThaumonomiconScreen extends Screen {
                     float brightness = (float) (Math.sin((double) (Util.getMillis() % 600L) / 600.0 * Math.PI * 2.0) * 0.25 + 0.75);
                     RenderSystem.setShaderColor(brightness, brightness, brightness, 1.0F);
                 } else if (renderState == 2) {
-                    RenderSystem.setShaderColor(0.1F, 0.1F, 0.1F, 1.0F);
+                    RenderSystem.setShaderColor(0.2F, 0.2F, 0.2F, 1.0F);
                 }
                 drawRectTextured(poseStack, research.icon, researchX + 3, researchX + 19, researchY + 3, researchY + 19, 0, 256, 0, 256, 0);
                 if (renderState != 0) {
