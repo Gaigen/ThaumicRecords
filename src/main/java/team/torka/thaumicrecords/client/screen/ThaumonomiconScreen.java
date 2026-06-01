@@ -15,6 +15,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -86,6 +87,9 @@ public class ThaumonomiconScreen extends Screen {
     private ResearchCategory selectedCategory = ResearchCategoryRegistry.BASIC.get();
 
     private Set<ResourceLocation> highlightedResearches = Collections.emptySet();
+
+    private long popupEndTime = 0;
+    private String popupMessage = "";
 
     public ThaumonomiconScreen() {
         super(Component.empty());
@@ -197,6 +201,7 @@ public class ThaumonomiconScreen extends Screen {
 
         drawCategoryTooltip(guiGraphics, mouseX, mouseY, renderStartX, renderStartY);
         drawResearchTooltip(guiGraphics, mouseX, mouseY, smoothMapX, smoothMapY, contentX1, contentY1);
+        drawPopup(guiGraphics);
     }
 
     @Override
@@ -224,7 +229,25 @@ public class ThaumonomiconScreen extends Screen {
                 int offsetY = Mth.floor(this.guiMapY);
                 ResourceLocation clickedResearch = getResearchAtPosition(mouseX, mouseY, offsetX, offsetY, (int) contentX1, (int) contentY1);
                 if (clickedResearch != null) {
-                    PacketDistributor.sendToServer(new PlayerUnlockResearchPayload(clickedResearch));
+                    boolean hasNote = false;
+                    for (ItemStack stack : this.minecraft.player.getInventory().items) {
+                        if (stack.is(ItemRegistry.RESEARCH_NOTES.get())) {
+                            ResearchNoteComponent noteData = stack.get(DataComponentRegistry.RESEARCH_NOTE);
+                            if (noteData != null && noteData.research().equals(clickedResearch)) {
+                                hasNote = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!hasNote) {
+                        Research research = ResearchRegistry.RESEARCH_REGISTRY.get(clickedResearch);
+                        if (research != null) {
+                            this.popupEndTime = System.currentTimeMillis() + 3000L;
+                            this.popupMessage = Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.get_not_popup"),
+                                    Component.translatable(research.nameTranslationKey)).getString();
+                        }
+                        PacketDistributor.sendToServer(new PlayerUnlockResearchPayload(clickedResearch));
+                    }
                 }
                 this.isDragging = true;
                 this.targetMapX = this.guiMapX;
@@ -980,5 +1003,17 @@ public class ThaumonomiconScreen extends Screen {
         int scissorWidth = (int) Math.round(width * scale);
         int scissorHeight = (int) Math.round(height * scale);
         RenderSystem.enableScissor(scissorX, scissorY, scissorWidth, scissorHeight);
+    }
+
+    private void drawPopup(GuiGraphics guiGraphics) {
+        if (this.popupEndTime <= System.currentTimeMillis()) {
+            return;
+        }
+
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+        int halfHeight = this.font.getSplitter().splitLines(this.popupMessage, 150, Style.EMPTY).size() * 9 / 2;
+        guiGraphics.fill(centerX - 78, centerY - halfHeight - 3, centerX + 78, centerY + halfHeight + 3, 0xC0000000);
+        guiGraphics.drawWordWrap(this.font, Component.literal(this.popupMessage), centerX - 75, centerY - halfHeight, 150, 0x9090FF);
     }
 }
