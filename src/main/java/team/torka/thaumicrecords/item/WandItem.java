@@ -234,8 +234,14 @@ public class WandItem extends Item {
         if (state.is(BlockRegistry.INFUSION_MATRIX.get())) {
             if (!level.isClientSide) {
                 if (level.getBlockEntity(pos) instanceof InfusionMatrixBlockEntity matrix) {
-                    matrix.activate();
-                    level.playSound(null, pos, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
+                    if (!matrix.active) {
+                        if (matrix.checkStructure()) {
+                            matrix.activate();
+                        } else {
+                            // Structure invalid — play fail sound
+                            level.playSound(null, pos, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.25F, 0.5F);
+                        }
+                    }
                 }
             }
             return InteractionResult.SUCCESS;
