@@ -14,6 +14,7 @@ public class ModelEventsListener {
         event.register(ModelResourceLocation.standalone(ThaumicRecords.createRl("item/thaumometer_obj")));
         event.register(ModelResourceLocation.standalone(ThaumicRecords.createRl("block/thaumatorium_obj")));
         event.register(ModelResourceLocation.standalone(ThaumicRecords.createRl("block/pillar_obj")));
+        event.register(ModelResourceLocation.standalone(ThaumicRecords.createRl("block/infuser_obj")));
         event.register(ModelResourceLocation.standalone(ThaumicRecords.createRl("block/animated_glow")));
         event.register(ModelResourceLocation.standalone(ThaumicRecords.createRl("item/phial_empty")));
         event.register(ModelResourceLocation.standalone(ThaumicRecords.createRl("item/phial_filled")));

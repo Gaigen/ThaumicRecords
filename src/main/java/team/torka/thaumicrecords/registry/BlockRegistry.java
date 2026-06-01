@@ -27,6 +27,7 @@ import team.torka.thaumicrecords.block.CinderpearlBlock;
 import team.torka.thaumicrecords.block.CrucibleBlock;
 import team.torka.thaumicrecords.block.DeconstructionTableBlock;
 import team.torka.thaumicrecords.block.HungryChestBlock;
+import team.torka.thaumicrecords.block.InfusionMatrixBlock;
 import team.torka.thaumicrecords.block.InfusionPillarBlock;
 import team.torka.thaumicrecords.block.JarBlock;
 import team.torka.thaumicrecords.block.PavingStoneOfTravelBlock;
@@ -287,6 +288,15 @@ public class BlockRegistry {
     // Infusion Pillar
     public static final DeferredBlock<InfusionPillarBlock> INFUSION_PILLAR = REGISTRAR.register("infusion_pillar",
             () -> new InfusionPillarBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .strength(3.0F, 6.0F)
+                    .noOcclusion()
+                    .sound(SoundType.STONE)
+                    .pushReaction(PushReaction.BLOCK)));
+
+    // Infusion Matrix (Runic Matrix)
+    public static final DeferredBlock<InfusionMatrixBlock> INFUSION_MATRIX = REGISTRAR.register("infusion_matrix",
+            () -> new InfusionMatrixBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.STONE)
                     .strength(3.0F, 6.0F)
                     .noOcclusion()

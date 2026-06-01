@@ -21,6 +21,7 @@ import team.torka.thaumicrecords.client.renderer.blockentity.AuraNodeRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.CrucibleRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.DeconstructionTableRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.HungryChestRenderer;
+import team.torka.thaumicrecords.client.renderer.blockentity.InfusionMatrixRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.InfusionPillarRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.JarBlockEntityRenderer;
 import team.torka.thaumicrecords.client.renderer.blockentity.ResearchTableRenderer;
@@ -45,6 +46,7 @@ public class EntityRenderersEventListener {
         event.registerBlockEntityRenderer(BlockEntityRegistry.DECONSTRUCTION_TABLE.get(), DeconstructionTableRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.HUNGRY_CHEST.get(), HungryChestRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.INFUSION_PILLAR.get(), InfusionPillarRenderer::new);
+        event.registerBlockEntityRenderer(BlockEntityRegistry.INFUSION_MATRIX.get(), InfusionMatrixRenderer::new);
         event.registerEntityRenderer(EntityRegistry.FOLLOWING_ITEM.get(), ItemEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.SPECIAL_ITEM.get(), SpecialItemRenderer::new);
     }

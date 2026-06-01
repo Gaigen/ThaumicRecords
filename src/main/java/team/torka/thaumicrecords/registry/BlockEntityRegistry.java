@@ -11,6 +11,7 @@ import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.block.entity.CrucibleBlockEntity;
 import team.torka.thaumicrecords.block.entity.DeconstructionTableBlockEntity;
 import team.torka.thaumicrecords.block.entity.HungryChestBlockEntity;
+import team.torka.thaumicrecords.block.entity.InfusionMatrixBlockEntity;
 import team.torka.thaumicrecords.block.entity.InfusionPillarBlockEntity;
 import team.torka.thaumicrecords.block.entity.JarBlockEntity;
 import team.torka.thaumicrecords.block.entity.ResearchTableBlockEntity;
@@ -58,4 +59,7 @@ public class BlockEntityRegistry {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfusionPillarBlockEntity>> INFUSION_PILLAR = REGISTRAR.register("infusion_pillar",
             () -> BlockEntityType.Builder.of(InfusionPillarBlockEntity::new, BlockRegistry.INFUSION_PILLAR.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfusionMatrixBlockEntity>> INFUSION_MATRIX = REGISTRAR.register("infusion_matrix",
+            () -> BlockEntityType.Builder.of(InfusionMatrixBlockEntity::new, BlockRegistry.INFUSION_MATRIX.get()).build(null));
 }
