@@ -27,6 +27,7 @@ import team.torka.thaumicrecords.block.CinderpearlBlock;
 import team.torka.thaumicrecords.block.CrucibleBlock;
 import team.torka.thaumicrecords.block.DeconstructionTableBlock;
 import team.torka.thaumicrecords.block.HungryChestBlock;
+import team.torka.thaumicrecords.block.InfusionPillarBlock;
 import team.torka.thaumicrecords.block.JarBlock;
 import team.torka.thaumicrecords.block.PavingStoneOfTravelBlock;
 import team.torka.thaumicrecords.block.PavingStoneOfWardingBlock;
@@ -281,6 +282,15 @@ public class BlockRegistry {
                     .strength(2.5F, 3.0F)
                     .noOcclusion()
                     .sound(SoundType.WOOD)
+                    .pushReaction(PushReaction.BLOCK)));
+
+    // Infusion Pillar
+    public static final DeferredBlock<InfusionPillarBlock> INFUSION_PILLAR = REGISTRAR.register("infusion_pillar",
+            () -> new InfusionPillarBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .strength(3.0F, 6.0F)
+                    .noOcclusion()
+                    .sound(SoundType.STONE)
                     .pushReaction(PushReaction.BLOCK)));
 
     // Hungry Chest
