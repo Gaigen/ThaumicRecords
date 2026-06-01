@@ -39,7 +39,7 @@ public class Research {
     public final int col;
 
     /**
-     * 数值->研究笔记的格子宽度 1->3 2->4, 3->5
+     * 数值->研究笔记的格子圈数为 1+gridSize
      */
     public final int gridSize;
 

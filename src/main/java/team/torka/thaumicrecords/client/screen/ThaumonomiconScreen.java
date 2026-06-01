@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
@@ -31,6 +32,7 @@ import team.torka.thaumicrecords.api.research.ResearchCategory;
 import team.torka.thaumicrecords.attachment.ResearchPoint;
 import team.torka.thaumicrecords.attachment.ResearchUnlocked;
 import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
+import team.torka.thaumicrecords.network.payload.PlayerUnlockResearchPayload;
 import team.torka.thaumicrecords.registry.AttachmentRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
@@ -217,8 +219,13 @@ public class ThaumonomiconScreen extends Screen {
                 }
                 return true;
             }
-
             if (mouseX >= contentX1 && mouseX < contentX2 && mouseY >= contentY1 && mouseY < contentY2) {
+                int offsetX = Mth.floor(this.guiMapX);
+                int offsetY = Mth.floor(this.guiMapY);
+                ResourceLocation clickedResearch = getResearchAtPosition(mouseX, mouseY, offsetX, offsetY, (int) contentX1, (int) contentY1);
+                if (clickedResearch != null) {
+                    PacketDistributor.sendToServer(new PlayerUnlockResearchPayload(clickedResearch));
+                }
                 this.isDragging = true;
                 this.targetMapX = this.guiMapX;
                 this.targetMapY = this.guiMapY;
@@ -226,6 +233,33 @@ public class ThaumonomiconScreen extends Screen {
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Nullable
+    private ResourceLocation getResearchAtPosition(double mouseX, double mouseY, int offsetX, int offsetY, int contentX1, int contentY1) {
+        var player = Minecraft.getInstance().player;
+        if (player == null) {
+            return null;
+        }
+        ResearchUnlocked researchUnlocked = player.getData(AttachmentRegistry.RESEARCH_UNLOCKED);
+        List<Research> researchList = ResearchHelper.getResearchesByCategory(selectedCategory);
+        for (Research research : researchList) {
+            ResourceLocation researchKey = ResearchRegistry.RESEARCH_REGISTRY.getKey(research);
+            if (researchKey == null || !researchUnlocked.isResearchDiscovered(researchKey)) {
+                continue;
+            }
+            int researchX = research.col * 24 - offsetX + contentX1;
+            int researchY = research.row * 24 - offsetY + contentY1;
+            if (mouseX >= researchX && mouseX <= researchX + 22 && mouseY >= researchY && mouseY <= researchY + 22) {
+                boolean isCompleted = researchUnlocked.isResearchCompleted(researchKey);
+                boolean parentsCompleted = ResearchUnlocked.areParentsCompleted(research, researchUnlocked.completedResearches());
+                if (!isCompleted && parentsCompleted) {
+                    return researchKey;
+                }
+                return null;
+            }
+        }
+        return null;
     }
 
     @Nullable

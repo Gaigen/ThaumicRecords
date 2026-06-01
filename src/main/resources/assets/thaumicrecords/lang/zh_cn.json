@@ -177,6 +177,7 @@
   "research_category.thaumicrecords.eldritch": "邪术学",
   "research.thaumicrecords.aspects": "魔力要素",
   "research_desc.thaumicrecords.aspects": "万物构造之源",
+  "tooltip.thaumicrecords.research.unknown_research": "未知研究!",
   "tooltip.thaumicrecords.research.missing_parent": "缺失前置研究!",
   "tooltip.thaumicrecords.research.complete_with_points": "点击以取得此项研究.",
   "tooltip.thaumicrecords.research.get_research_note": "点击以获取此项研究的研究笔记.",

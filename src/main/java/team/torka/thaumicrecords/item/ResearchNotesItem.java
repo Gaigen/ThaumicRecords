@@ -1,5 +1,6 @@
 package team.torka.thaumicrecords.item;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,8 +13,12 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.api.helper.ResearchHelper;
+import team.torka.thaumicrecords.api.research.Research;
 import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
+import team.torka.thaumicrecords.registry.ResearchRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -28,11 +33,13 @@ public class ResearchNotesItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (!level.isClientSide && player instanceof ServerPlayer) {
+        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
             ResearchNoteComponent data = stack.get(DataComponentRegistry.RESEARCH_NOTE.get());
             if (Objects.nonNull(data) && data.complete()) {
                 ResourceLocation researchKey = data.research();
-                // TODO 研究完成
+                ResearchHelper.completeResearch(serverPlayer, researchKey);
+                stack.consume(1, player);
+                return InteractionResultHolder.sidedSuccess(stack, false);
             }
         }
         return InteractionResultHolder.pass(stack);
@@ -45,6 +52,18 @@ public class ResearchNotesItem extends Item {
         if (Objects.isNull(data)) {
             return;
         }
-        // TODO 显示金色研究名称 灰色斜体研究描述，扭曲等级
+
+        Research research = ResearchRegistry.RESEARCH_REGISTRY.get(data.research());
+        if (Objects.isNull(research)) {
+            tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.unknown_research")).withStyle(ChatFormatting.GRAY));
+            return;
+        }
+        tooltip.add(Component.translatable(research.nameTranslationKey).withColor(0xFFAA00));
+        tooltip.add(Component.translatable(research.descTranslationKey).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+        if (research.warp > 0) {
+            int level = Math.min(research.warp, 5);
+            tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.forbidden"),
+                    Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.forbidden.level." + level))).withColor(0xAA00AA));
+        }
     }
 }
