@@ -245,6 +245,7 @@ public class ThaumonomiconScreen extends Screen {
                             this.popupEndTime = System.currentTimeMillis() + 3000L;
                             this.popupMessage = Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.get_not_popup"),
                                     Component.translatable(research.nameTranslationKey)).getString();
+                            this.minecraft.player.playSound(SoundRegistry.LEARN.get(), 0.75F, 1.0F);
                         }
                         PacketDistributor.sendToServer(new PlayerUnlockResearchPayload(clickedResearch));
                     }
@@ -1013,7 +1014,16 @@ public class ThaumonomiconScreen extends Screen {
         int centerX = this.width / 2;
         int centerY = this.height / 2;
         int halfHeight = this.font.getSplitter().splitLines(this.popupMessage, 150, Style.EMPTY).size() * 9 / 2;
+
+        PoseStack poseStack = guiGraphics.pose();
+        poseStack.pushPose();
+        poseStack.translate(0, 0, 400);
+        RenderSystem.disableDepthTest();
+        RenderSystem.depthMask(false);
         guiGraphics.fill(centerX - 78, centerY - halfHeight - 3, centerX + 78, centerY + halfHeight + 3, 0xC0000000);
         guiGraphics.drawWordWrap(this.font, Component.literal(this.popupMessage), centerX - 75, centerY - halfHeight, 150, 0x9090FF);
+        RenderSystem.depthMask(true);
+        RenderSystem.enableDepthTest();
+        poseStack.popPose();
     }
 }
