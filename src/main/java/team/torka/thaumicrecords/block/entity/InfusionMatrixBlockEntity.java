@@ -5,7 +5,9 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
@@ -15,15 +17,35 @@ import java.util.Objects;
 
 public class InfusionMatrixBlockEntity extends BlockEntity {
 
-    // Rendering state — synced to client for BER animation
-    public boolean active = true;
+    public boolean active = false;
     public boolean crafting = false;
     public int craftCount = 0;
-    public float startUp = 1.0F;
+    public float startUp = 0.0F;
     public int instability = 0;
 
     public InfusionMatrixBlockEntity(BlockPos pos, BlockState blockState) {
         super(BlockEntityRegistry.INFUSION_MATRIX.get(), pos, blockState);
+    }
+
+    public void activate() {
+        if (!active) {
+            active = true;
+            setChanged();
+            if (level != null && !level.isClientSide) {
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+            }
+        }
+    }
+
+    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T blockEntity) {
+        if (blockEntity instanceof InfusionMatrixBlockEntity be) {
+            if (be.active && be.startUp < 1.0F) {
+                be.startUp = Math.min(1.0F, be.startUp + 0.02F);
+                if (!level.isClientSide) {
+                    be.setChanged();
+                }
+            }
+        }
     }
 
     @Override

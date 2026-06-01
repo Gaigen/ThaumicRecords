@@ -36,6 +36,7 @@ import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.block.ThaumatoriumBlock;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.block.entity.CrucibleBlockEntity;
+import team.torka.thaumicrecords.block.entity.InfusionMatrixBlockEntity;
 import team.torka.thaumicrecords.block.entity.ThaumatoriumBlockEntity;
 import team.torka.thaumicrecords.block.part.ThaumatoriumPart;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
@@ -228,6 +229,16 @@ public class WandItem extends Item {
                 return InteractionResult.SUCCESS;
             }
             return InteractionResult.PASS;
+        }
+
+        if (state.is(BlockRegistry.INFUSION_MATRIX.get())) {
+            if (!level.isClientSide) {
+                if (level.getBlockEntity(pos) instanceof InfusionMatrixBlockEntity matrix) {
+                    matrix.activate();
+                    level.playSound(null, pos, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
+                }
+            }
+            return InteractionResult.SUCCESS;
         }
 
         if (state.is(Tags.Blocks.BOOKSHELVES)) {
