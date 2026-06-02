@@ -238,7 +238,14 @@ public class WandItem extends Item {
                         if (matrix.checkStructure()) {
                             matrix.activate();
                         } else {
-                            // Structure invalid — play fail sound
+                            level.playSound(null, pos, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.25F, 0.5F);
+                        }
+                    } else if (!matrix.crafting) {
+                        // Matrix is active and not crafting — try to find and start recipe
+                        var recipe = matrix.findMatchingRecipe();
+                        if (recipe != null) {
+                            matrix.startInfusion(recipe);
+                        } else {
                             level.playSound(null, pos, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.25F, 0.5F);
                         }
                     }

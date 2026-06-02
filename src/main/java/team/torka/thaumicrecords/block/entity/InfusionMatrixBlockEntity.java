@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,13 +15,17 @@ import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.api.aspect.Aspect;
 import team.torka.thaumicrecords.api.helper.EssentiaHandler;
 import team.torka.thaumicrecords.block.InfusionPillarBlock;
+import team.torka.thaumicrecords.recipe.InfusionRecipe;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 import team.torka.thaumicrecords.registry.BlockRegistry;
+import team.torka.thaumicrecords.registry.RecipeTypeRegistry;
 import team.torka.thaumicrecords.registry.SoundRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -34,7 +39,6 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     public boolean checkSurroundings = true;
 
     // Remaining essentia to drain — mirrors TC4's recipeEssentia
-    // LinkedHashMap preserves insertion order for consistent iteration
     private final LinkedHashMap<Aspect, Integer> recipeEssentia = new LinkedHashMap<>();
 
     // Tick counter and delay — mirrors TC4's count / countDelay
@@ -44,16 +48,274 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     // Recipe instability — used for instability chance calculations
     private int recipeInstability = 0;
 
+    // Current recipe tracking
+    private InfusionRecipe currentRecipe = null;
+    private List<BlockPos> pedestalPositions = new ArrayList<>();
+    private boolean[] consumedComponents = null;
+
     private static final int DRAIN_RANGE = 12;
+    private static final int PEDESTAL_SCAN_RANGE = 5;
 
     public InfusionMatrixBlockEntity(BlockPos pos, BlockState blockState) {
         super(BlockEntityRegistry.INFUSION_MATRIX.get(), pos, blockState);
     }
 
+    // --- Recipe matching ---
+
     /**
-     * Set the essentia requirements for a craft session.
-     * Call this when starting a craft (equivalent to TC4's recipe setup).
+     * Scan pedestals around the matrix and find a matching InfusionRecipe.
+     * Returns null if no recipe matches.
      */
+    public InfusionRecipe findMatchingRecipe() {
+        if (level == null) {
+            return null;
+        }
+
+        // Scan for pedestals with items
+        List<BlockPos> foundPedestals = new ArrayList<>();
+        List<ItemStack> pedestalItems = new ArrayList<>();
+        BlockPos centralPos = worldPosition.below(2);
+        ItemStack centralItem = ItemStack.EMPTY;
+
+        // Get central pedestal item
+        BlockEntity centralBE = level.getBlockEntity(centralPos);
+        if (centralBE instanceof ArcanePedestalBlockEntity centralPedestal) {
+            centralItem = centralPedestal.getItem();
+        }
+
+        // Scan for surrounding pedestals (within range, excluding center)
+        for (int dx = -PEDESTAL_SCAN_RANGE; dx <= PEDESTAL_SCAN_RANGE; dx++) {
+            for (int dz = -PEDESTAL_SCAN_RANGE; dz <= PEDESTAL_SCAN_RANGE; dz++) {
+                for (int dy = -PEDESTAL_SCAN_RANGE; dy <= 0; dy++) {
+                    if (dx == 0 && dy == 0 && dz == 0) {
+                        continue; // skip center
+                    }
+                    BlockPos checkPos = worldPosition.offset(dx, dy, dz);
+                    BlockEntity be = level.getBlockEntity(checkPos);
+                    if (be instanceof ArcanePedestalBlockEntity pedestal && pedestal.hasItem()) {
+                        foundPedestals.add(checkPos);
+                        pedestalItems.add(pedestal.getItem());
+                    }
+                }
+            }
+        }
+
+        // Try to match recipes
+        var recipeManager = level.getRecipeManager();
+        var allRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegistry.INFUSION.get());
+
+        for (var recipeHolder : allRecipes) {
+            InfusionRecipe recipe = recipeHolder.value();
+            if (recipe.matches(pedestalItems, centralItem)) {
+                // Store matched pedestals for later use
+                this.pedestalPositions = foundPedestals;
+                return recipe;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Start infusion crafting with the given recipe.
+     * Called from WandItem after recipe matching succeeds.
+     */
+    public void startInfusion(InfusionRecipe recipe) {
+        if (level == null || crafting) {
+            return;
+        }
+
+        this.currentRecipe = recipe;
+        this.crafting = true;
+        this.craftCount = 0;
+        this.consumedComponents = new boolean[recipe.components().size()];
+        this.recipeInstability = recipe.instability();
+
+        // Set up essentia requirements
+        recipeEssentia.clear();
+        for (var entry : recipe.aspects().entrySet()) {
+            Aspect aspect = AspectRegistry.getByName(entry.getKey().getPath());
+            if (aspect != null) {
+                recipeEssentia.put(aspect, entry.getValue());
+            }
+        }
+
+        this.checkSurroundings = true;
+        setChanged();
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        level.playSound(null, worldPosition, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
+    }
+
+    // --- Craft cycle ---
+
+    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T blockEntity) {
+        if (!(blockEntity instanceof InfusionMatrixBlockEntity be)) {
+            return;
+        }
+
+        // Startup animation — runs every tick client+server
+        if (be.active && be.startUp < 1.0F) {
+            be.startUp = Math.min(1.0F, be.startUp + 0.02F);
+            if (!level.isClientSide) {
+                be.setChanged();
+            }
+        }
+
+        // Server-side crafting logic
+        if (level.isClientSide) {
+            return;
+        }
+
+        be.count++;
+
+        // checkSurroundings — triggers source cache rescan (TC4 line 208-211)
+        if (be.checkSurroundings) {
+            be.checkSurroundings = false;
+            EssentiaHandler.refreshSources(pos);
+        }
+
+        // Craft cycle — every countDelay ticks (TC4 line 223-225)
+        if (be.active && be.crafting && be.count % be.countDelay == 0) {
+            be.craftCount++;
+            be.craftCycle();
+            be.setChanged();
+        }
+    }
+
+    /**
+     * Core craft cycle — mirrors TC4's craftCycle().
+     * Phase 1: drain essentia from jars
+     * Phase 2: consume ingredients from pedestals
+     * Phase 3: place result on central pedestal
+     */
+    private void craftCycle() {
+        // Phase 1: Essentia drain
+        if (recipeEssentiaVisSize() > 0) {
+            for (Map.Entry<Aspect, Integer> entry : recipeEssentia.entrySet()) {
+                Aspect aspect = entry.getKey();
+                int remaining = entry.getValue();
+
+                if (remaining > 0) {
+                    if (EssentiaHandler.drainEssentia(level, worldPosition, aspect, DRAIN_RANGE)) {
+                        entry.setValue(remaining - 1);
+
+                        if (isEssentiaComplete()) {
+                            // Essentia phase done — will transition to ingredient phase next cycle
+                        }
+
+                        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+                        setChanged();
+                        return;
+                    }
+
+                    // Failed drain — instability chance (TC4 line 441-442)
+                    if (level.random.nextInt(100 - recipeInstability * 3) == 0) {
+                        this.instability++;
+                    }
+                    if (this.instability > 25) {
+                        this.instability = 25;
+                    }
+                    level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+                    setChanged();
+                }
+            }
+
+            // All aspects tried, none drained — rescan
+            this.checkSurroundings = true;
+            return;
+        }
+
+        // Phase 2: Consume ingredients from pedestals
+        if (currentRecipe != null && !allComponentsConsumed()) {
+            consumeNextIngredient();
+            return;
+        }
+
+        // Phase 3: All ingredients consumed — finish crafting
+        if (currentRecipe != null && allComponentsConsumed()) {
+            finishCrafting();
+        }
+    }
+
+    /**
+     * Consume one ingredient from a pedestal per cycle (TC4 behavior).
+     * Checks ALL remaining components.
+     */
+    private void consumeNextIngredient() {
+        if (level == null || currentRecipe == null || consumedComponents == null) {
+            return;
+        }
+
+        for (BlockPos pedestalPos : pedestalPositions) {
+            BlockEntity be = level.getBlockEntity(pedestalPos);
+            if (be instanceof ArcanePedestalBlockEntity pedestal && pedestal.hasItem()) {
+                ItemStack pedestalItem = pedestal.getItem();
+
+                for (int i = 0; i < currentRecipe.components().size(); i++) {
+                    if (!consumedComponents[i] && currentRecipe.components().get(i).test(pedestalItem)) {
+                        pedestal.setItem(ItemStack.EMPTY);
+                        consumedComponents[i] = true;
+
+                        if (level.random.nextInt(100 - recipeInstability * 3) == 0) {
+                            this.instability++;
+                        }
+                        if (this.instability > 25) {
+                            this.instability = 25;
+                        }
+
+                        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+                        setChanged();
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean allComponentsConsumed() {
+        if (consumedComponents == null) {
+            return false;
+        }
+        for (boolean c : consumedComponents) {
+            if (!c) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Finish crafting — place result on central pedestal.
+     */
+    private void finishCrafting() {
+        if (level == null || currentRecipe == null) {
+            return;
+        }
+
+        BlockPos centralPos = worldPosition.below(2);
+        BlockEntity centralBE = level.getBlockEntity(centralPos);
+
+        if (centralBE instanceof ArcanePedestalBlockEntity centralPedestal) {
+            // Replace central item with result
+            ItemStack result = currentRecipe.result().copy();
+            centralPedestal.setItem(result);
+        }
+
+        // Reset crafting state
+        this.crafting = false;
+        this.currentRecipe = null;
+        this.consumedComponents = null;
+        this.pedestalPositions.clear();
+        this.instability = 0;
+        this.recipeInstability = 0;
+
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        level.playSound(null, worldPosition, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
+        setChanged();
+    }
+
+    // --- Essentia helpers (for debug/manual setup) ---
+
     public void setRecipeEssentia(LinkedHashMap<Aspect, Integer> essentia, int recipeInstability) {
         this.recipeEssentia.clear();
         this.recipeEssentia.putAll(essentia);
@@ -66,16 +328,10 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         }
     }
 
-    /**
-     * Add essentia requirements (for debug / incremental setup).
-     */
     public void addRecipeEssentia(Aspect aspect, int amount) {
         this.recipeEssentia.merge(aspect, amount, Integer::sum);
     }
 
-    /**
-     * Start the essentia absorption phase — sets crafting=true.
-     */
     public void startCrafting() {
         if (!recipeEssentia.isEmpty()) {
             this.crafting = true;
@@ -87,16 +343,10 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         }
     }
 
-    /**
-     * Get remaining recipe essentia (read-only view for debug/display).
-     */
     public Map<Aspect, Integer> getRecipeEssentia() {
         return java.util.Collections.unmodifiableMap(recipeEssentia);
     }
 
-    /**
-     * Check if all essentia has been drained.
-     */
     public boolean isEssentiaComplete() {
         for (int amount : recipeEssentia.values()) {
             if (amount > 0) {
@@ -106,12 +356,20 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         return true;
     }
 
-    /**
-     * Checks if the Mystical Construct structure is valid:
-     * Level 1 (y-2): 3x3 grid, corners = Arcane Stone Brick, center = Arcane Pedestal
-     * Level 2 (y-1): 4 Arcane Stone Block on top of the bricks (at corners)
-     * Level 3 (y):   Runic Matrix at center (this block)
-     */
+    private int recipeEssentiaVisSize() {
+        int total = 0;
+        for (int amount : recipeEssentia.values()) {
+            total += amount;
+        }
+        return total;
+    }
+
+    // --- Accessors ---
+
+    public InfusionRecipe getCurrentRecipe() {
+        return currentRecipe;
+    }
+
     public boolean checkStructure() {
         if (level == null) {
             return false;
@@ -202,98 +460,6 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
             return Direction.EAST;
         }
         return Direction.NORTH;
-    }
-
-    // --- TC4-accurate tick logic ---
-
-    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T blockEntity) {
-        if (!(blockEntity instanceof InfusionMatrixBlockEntity be)) {
-            return;
-        }
-
-        // Startup animation — runs every tick client+server
-        if (be.active && be.startUp < 1.0F) {
-            be.startUp = Math.min(1.0F, be.startUp + 0.02F);
-            if (!level.isClientSide) {
-                be.setChanged();
-            }
-        }
-
-        // Server-side crafting logic
-        if (level.isClientSide) {
-            return;
-        }
-
-        be.count++;
-
-        // checkSurroundings — triggers source cache rescan (TC4 line 208-211)
-        if (be.checkSurroundings) {
-            be.checkSurroundings = false;
-            EssentiaHandler.refreshSources(pos);
-        }
-
-        // Craft cycle — every countDelay ticks (TC4 line 223-225)
-        if (be.active && be.crafting && be.count % be.countDelay == 0) {
-            be.craftCycle();
-            be.setChanged();
-        }
-    }
-
-    /**
-     * Core craft cycle — mirrors TC4's craftCycle() for essentia phase only.
-     * Processes one essentia drain per call, then returns.
-     */
-    private void craftCycle() {
-        // Essentia phase (TC4 lines 430-449)
-        if (recipeEssentiaVisSize() > 0) {
-            for (Map.Entry<Aspect, Integer> entry : recipeEssentia.entrySet()) {
-                Aspect aspect = entry.getKey();
-                int remaining = entry.getValue();
-
-                if (remaining > 0) {
-                    if (EssentiaHandler.drainEssentia(level, worldPosition, aspect, DRAIN_RANGE)) {
-                        // Successfully drained 1 essentia
-                        entry.setValue(remaining - 1);
-
-                        // Check if all essentia done
-                        if (isEssentiaComplete()) {
-                            // TODO: transition to ingredient phase (TC4 line 451+)
-                            // For now — stop crafting
-                            this.crafting = false;
-                        }
-
-                        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
-                        setChanged();
-                        return; // Only 1 drain per cycle
-                    }
-
-                    // Failed to drain this aspect — chance for instability (TC4 line 441-442)
-                    if (level.random.nextInt(100 - recipeInstability * 3) == 0) {
-                        this.instability++;
-                    }
-                    if (this.instability > 25) {
-                        this.instability = 25;
-                    }
-                    level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
-                    setChanged();
-                }
-            }
-
-            // All aspects tried, none drained — rescan sources (TC4 line 447)
-            this.checkSurroundings = true;
-            return;
-        }
-    }
-
-    /**
-     * Sum of all remaining essentia amounts — mirrors AspectList.visSize().
-     */
-    private int recipeEssentiaVisSize() {
-        int total = 0;
-        for (int amount : recipeEssentia.values()) {
-            total += amount;
-        }
-        return total;
     }
 
     // --- NBT ---
