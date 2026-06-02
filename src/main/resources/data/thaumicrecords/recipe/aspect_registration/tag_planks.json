@@ -1,9 +1,0 @@
-{
-  "type": "thaumicrecords:aspect_registration",
-  "ingredient": {
-    "tag": "minecraft:planks"
-  },
-  "aspects": {
-    "thaumicrecords:arbor": 1
-  }
-}
