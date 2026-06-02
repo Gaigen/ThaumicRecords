@@ -4,12 +4,14 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import team.torka.thaumicrecords.network.handler.EssentiaSourcePayloadHandler;
 import team.torka.thaumicrecords.network.handler.OreScanPayloadHandler;
 import team.torka.thaumicrecords.network.handler.PlayerCombineAspectHandler;
 import team.torka.thaumicrecords.network.handler.PlayerEraseNoteHandler;
 import team.torka.thaumicrecords.network.handler.PlayerWriteNoteHandler;
 import team.torka.thaumicrecords.network.handler.RunicShieldPayloadHandler;
 import team.torka.thaumicrecords.network.handler.ShieldEffectPayloadHandler;
+import team.torka.thaumicrecords.network.payload.EssentiaSourcePayload;
 import team.torka.thaumicrecords.network.payload.OreScanPayload;
 import team.torka.thaumicrecords.network.payload.PlayerCombineAspectPayload;
 import team.torka.thaumicrecords.network.payload.PlayerEraseNotePayload;
@@ -29,5 +31,6 @@ public class RegisterPayloadHandlersEventListener {
         registrar.playToClient(OreScanPayload.TYPE, OreScanPayload.STREAM_CODEC, OreScanPayloadHandler::handle);
         registrar.playToClient(RunicShieldPayload.TYPE, RunicShieldPayload.STREAM_CODEC, RunicShieldPayloadHandler::handle);
         registrar.playToClient(ShieldEffectPayload.TYPE, ShieldEffectPayload.STREAM_CODEC, ShieldEffectPayloadHandler::handle);
+        registrar.playToClient(EssentiaSourcePayload.TYPE, EssentiaSourcePayload.STREAM_CODEC, EssentiaSourcePayloadHandler::handle);
     }
 }

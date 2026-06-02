@@ -18,6 +18,22 @@ public class AspectRegistry {
 
     public static Registry<Aspect> ASPECT_REGISTRY = null;
 
+    /**
+     * Find an aspect by its internal name (e.g. "aer", "ignis").
+     * Returns null if not found.
+     */
+    public static Aspect getByName(String name) {
+        if (ASPECT_REGISTRY == null) {
+            return null;
+        }
+        for (Aspect aspect : ASPECT_REGISTRY) {
+            if (aspect.getName().equals(name)) {
+                return aspect;
+            }
+        }
+        return null;
+    }
+
     @SubscribeEvent
     public static void onNewRegistryEvent(NewRegistryEvent event) {
         ASPECT_REGISTRY = event.create(new RegistryBuilder<>(RegistryKeys.ASPECTS));
