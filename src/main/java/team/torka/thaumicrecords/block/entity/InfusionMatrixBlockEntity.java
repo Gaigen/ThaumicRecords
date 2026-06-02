@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -56,11 +57,15 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
 
     // Current recipe tracking
     private InfusionRecipe currentRecipe = null;
+    private ResourceLocation currentRecipeId = null; // persisted for chunk reload
+    private ItemStack currentRecipeInput = ItemStack.EMPTY; // persisted — central item pattern
+    private ItemStack currentRecipeOutput = ItemStack.EMPTY; // persisted — result
     private List<BlockPos> pedestalPositions = new ArrayList<>();
     private boolean[] consumedComponents = null;
     private List<ItemStack> syncedComponents = new ArrayList<>(); // synced to client for rendering
     private int itemCount = 0; // delay before consuming ingredient (TC4: 5 ticks)
     private BlockPos absorbingPedestal = null; // pedestal being absorbed from
+    private boolean recipeRestored = false; // false until we restore from RecipeManager after load
 
     private static final int DRAIN_RANGE = 12;
     private static final int PEDESTAL_SCAN_RANGE = 5;
@@ -135,6 +140,16 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
         }
 
         this.currentRecipe = recipe;
+        this.currentRecipeId = level.getRecipeManager()
+                .getAllRecipesFor(RecipeTypeRegistry.INFUSION.get())
+                .stream()
+                .filter(h -> h.value() == recipe)
+                .findFirst()
+                .map(RecipeHolder::id)
+                .orElse(null);
+        this.currentRecipeInput = recipe.input().getItems().length > 0 ? recipe.input().getItems()[0].copy() : ItemStack.EMPTY;
+        this.currentRecipeOutput = recipe.result().copy();
+        this.recipeRestored = true;
         this.crafting = true;
         this.craftCount = 0;
         this.consumedComponents = new boolean[recipe.components().size()];
@@ -185,10 +200,31 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
 
         be.count++;
 
-        // checkSurroundings — triggers source cache rescan (TC4 line 208-211)
+        // Restore recipe from RecipeManager after chunk reload
+        if (be.crafting && !be.recipeRestored && be.currentRecipeId != null) {
+            be.restoreRecipe(level);
+        }
+
+        // Structure validation — TC4: every 20 ticks when crafting, 100 when idle
+        if (be.active && be.count % (be.crafting ? 20 : 100) == 0) {
+            if (!be.validLocation()) {
+                be.active = false;
+                if (be.crafting) {
+                    be.cancelCrafting("Structure broken");
+                }
+                be.setChanged();
+                level.sendBlockUpdated(pos, be.getBlockState(), be.getBlockState(), 3);
+                return;
+            }
+        }
+
+        // checkSurroundings — triggers source cache rescan + pedestal rescan (TC4 line 208-211)
         if (be.checkSurroundings) {
             be.checkSurroundings = false;
             EssentiaHandler.refreshSources(pos);
+            if (be.crafting) {
+                be.rescanPedestals();
+            }
         }
 
         // Craft cycle — every countDelay ticks (TC4 line 223-225)
@@ -366,6 +402,10 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
     public void cancelCrafting(String reason) {
         this.crafting = false;
         this.currentRecipe = null;
+        this.currentRecipeId = null;
+        this.currentRecipeInput = ItemStack.EMPTY;
+        this.currentRecipeOutput = ItemStack.EMPTY;
+        this.recipeRestored = false;
         this.consumedComponents = null;
         this.syncedComponents.clear();
         this.pedestalPositions.clear();
@@ -403,6 +443,10 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
         // Reset crafting state
         this.crafting = false;
         this.currentRecipe = null;
+        this.currentRecipeId = null;
+        this.currentRecipeInput = ItemStack.EMPTY;
+        this.currentRecipeOutput = ItemStack.EMPTY;
+        this.recipeRestored = false;
         this.consumedComponents = null;
         this.syncedComponents.clear();
         this.pedestalPositions.clear();
@@ -593,6 +637,96 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
         return Direction.NORTH;
     }
 
+    // --- Chunk reload: restore recipe from RecipeManager ---
+
+    /**
+     * Restore currentRecipe from RecipeManager after chunk reload.
+     * Called once on first tick after load when crafting=true.
+     */
+    private void restoreRecipe(Level level) {
+        recipeRestored = true;
+        if (currentRecipeId == null) {
+            cancelCrafting("No recipe ID saved");
+            return;
+        }
+
+        var holder = level.getRecipeManager()
+                .getAllRecipesFor(RecipeTypeRegistry.INFUSION.get())
+                .stream()
+                .filter(h -> h.id().equals(currentRecipeId))
+                .findFirst()
+                .orElse(null);
+
+        if (holder == null) {
+            cancelCrafting("Recipe not found: " + currentRecipeId);
+            return;
+        }
+
+        currentRecipe = holder.value();
+        // Rescan pedestals on next tick
+        checkSurroundings = true;
+        rescanPedestals();
+    }
+
+    /**
+     * Rescan surrounding pedestals and rebuild pedestalPositions.
+     * Called after recipe restore and when checkSurroundings triggers.
+     */
+    private void rescanPedestals() {
+        if (level == null) {
+            return;
+        }
+        pedestalPositions.clear();
+        for (int dx = -PEDESTAL_SCAN_RANGE; dx <= PEDESTAL_SCAN_RANGE; dx++) {
+            for (int dz = -PEDESTAL_SCAN_RANGE; dz <= PEDESTAL_SCAN_RANGE; dz++) {
+                for (int dy = -PEDESTAL_SCAN_RANGE; dy <= 0; dy++) {
+                    if (dx == 0 && dy == 0 && dz == 0) {
+                        continue;
+                    }
+                    BlockPos checkPos = worldPosition.offset(dx, dy, dz);
+                    BlockEntity be = level.getBlockEntity(checkPos);
+                    if (be instanceof ArcanePedestalBlockEntity pedestal && pedestal.hasItem()) {
+                        pedestalPositions.add(checkPos);
+                    }
+                }
+            }
+        }
+    }
+
+    // --- Structure validation (TC4: validLocation) ---
+
+    /**
+     * Check if the altar structure is still intact:
+     * - Central pedestal at y-2
+     * - 4 pillars at corners of y-2
+     */
+    private boolean validLocation() {
+        if (level == null) {
+            return false;
+        }
+
+        BlockPos center = worldPosition;
+        BlockPos level1Center = center.below(2);
+
+        // Central pedestal
+        BlockEntity te = level.getBlockEntity(level1Center);
+        if (!(te instanceof ArcanePedestalBlockEntity)) {
+            return false;
+        }
+
+        // 4 pillars at corners
+        for (int dx = -1; dx <= 1; dx += 2) {
+            for (int dz = -1; dz <= 1; dz += 2) {
+                te = level.getBlockEntity(level1Center.offset(dx, 0, dz));
+                if (!(te instanceof InfusionPillarBlockEntity)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     // --- NBT ---
 
     @Override
@@ -628,6 +762,17 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
             essentiaTag.putInt(entry.getKey().getName(), entry.getValue());
         }
         tag.put("recipeEssentia", essentiaTag);
+
+        // Save recipe reference for chunk reload
+        if (currentRecipeId != null) {
+            tag.putString("recipeId", currentRecipeId.toString());
+        }
+        if (!currentRecipeInput.isEmpty()) {
+            tag.put("recipeInput", currentRecipeInput.saveOptional(registries));
+        }
+        if (!currentRecipeOutput.isEmpty()) {
+            tag.put("recipeOutput", currentRecipeOutput.saveOptional(registries));
+        }
     }
 
     @Override
@@ -672,6 +817,17 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
                 }
             }
         }
+
+        // Load recipe reference — will be restored from RecipeManager on first tick
+        recipeRestored = false;
+        currentRecipe = null;
+        if (tag.contains("recipeId")) {
+            currentRecipeId = ResourceLocation.tryParse(tag.getString("recipeId"));
+        } else {
+            currentRecipeId = null;
+        }
+        currentRecipeInput = tag.contains("recipeInput") ? ItemStack.parseOptional(registries, tag.getCompound("recipeInput")) : ItemStack.EMPTY;
+        currentRecipeOutput = tag.contains("recipeOutput") ? ItemStack.parseOptional(registries, tag.getCompound("recipeOutput")) : ItemStack.EMPTY;
     }
 
     @Override
