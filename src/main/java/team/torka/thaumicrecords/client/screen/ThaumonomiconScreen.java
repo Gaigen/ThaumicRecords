@@ -172,7 +172,6 @@ public class ThaumonomiconScreen extends Screen {
         this.guiMapY = Mth.clamp(this.guiMapY, guiMapLeft, guiMapRight);
     }
 
-
     @Override
     @ParametersAreNonnullByDefault
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -227,27 +226,32 @@ public class ThaumonomiconScreen extends Screen {
             if (mouseX >= contentX1 && mouseX < contentX2 && mouseY >= contentY1 && mouseY < contentY2) {
                 int offsetX = Mth.floor(this.guiMapX);
                 int offsetY = Mth.floor(this.guiMapY);
-                ResourceLocation clickedResearch = getResearchAtPosition(mouseX, mouseY, offsetX, offsetY, (int) contentX1, (int) contentY1);
+                Research clickedResearch = getResearchAtPosition(mouseX, mouseY, offsetX, offsetY, (int) contentX1, (int) contentY1);
                 if (clickedResearch != null) {
+                    ResearchUnlocked researchUnlocked = this.minecraft.player.getData(AttachmentRegistry.RESEARCH_UNLOCKED);
+                    ResourceLocation researchKey = ResearchRegistry.RESEARCH_REGISTRY.getKey(clickedResearch);
+                    boolean isCompleted = researchUnlocked.isResearchCompleted(researchKey);
+                    boolean parentsCompleted = ResearchUnlocked.areParentsCompleted(clickedResearch, researchUnlocked.completedResearches());
+                    if (isCompleted) {
+                        this.minecraft.pushGuiLayer(new ResearchDetailScreen(researchKey));
+                        return true;
+                    }
                     boolean hasNote = false;
                     for (ItemStack stack : this.minecraft.player.getInventory().items) {
                         if (stack.is(ItemRegistry.RESEARCH_NOTES.get())) {
                             ResearchNoteComponent noteData = stack.get(DataComponentRegistry.RESEARCH_NOTE);
-                            if (noteData != null && noteData.research().equals(clickedResearch)) {
+                            if (noteData != null && noteData.research().equals(researchKey)) {
                                 hasNote = true;
                                 break;
                             }
                         }
                     }
-                    if (!hasNote) {
-                        Research research = ResearchRegistry.RESEARCH_REGISTRY.get(clickedResearch);
-                        if (research != null) {
-                            this.popupEndTime = System.currentTimeMillis() + 3000L;
-                            this.popupMessage = Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.get_not_popup"),
-                                    Component.translatable(research.nameTranslationKey)).getString();
-                            this.minecraft.player.playSound(SoundRegistry.LEARN.get(), 0.75F, 1.0F);
-                        }
-                        PacketDistributor.sendToServer(new PlayerUnlockResearchPayload(clickedResearch));
+                    if (parentsCompleted && !hasNote) {
+                        this.popupEndTime = System.currentTimeMillis() + 3000L;
+                        this.popupMessage = Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "research.get_not_popup"),
+                                Component.translatable(clickedResearch.nameTranslationKey)).getString();
+                        this.minecraft.player.playSound(SoundRegistry.LEARN.get(), 0.75F, 1.0F);
+                        PacketDistributor.sendToServer(new PlayerUnlockResearchPayload(researchKey));
                     }
                 }
                 this.isDragging = true;
@@ -260,7 +264,7 @@ public class ThaumonomiconScreen extends Screen {
     }
 
     @Nullable
-    private ResourceLocation getResearchAtPosition(double mouseX, double mouseY, int offsetX, int offsetY, int contentX1, int contentY1) {
+    private Research getResearchAtPosition(double mouseX, double mouseY, int offsetX, int offsetY, int contentX1, int contentY1) {
         var player = Minecraft.getInstance().player;
         if (player == null) {
             return null;
@@ -275,12 +279,7 @@ public class ThaumonomiconScreen extends Screen {
             int researchX = research.col * 24 - offsetX + contentX1;
             int researchY = research.row * 24 - offsetY + contentY1;
             if (mouseX >= researchX && mouseX <= researchX + 22 && mouseY >= researchY && mouseY <= researchY + 22) {
-                boolean isCompleted = researchUnlocked.isResearchCompleted(researchKey);
-                boolean parentsCompleted = ResearchUnlocked.areParentsCompleted(research, researchUnlocked.completedResearches());
-                if (!isCompleted && parentsCompleted) {
-                    return researchKey;
-                }
-                return null;
+                return research;
             }
         }
         return null;
@@ -327,7 +326,6 @@ public class ThaumonomiconScreen extends Screen {
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
-
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
         if (this.isDragging && button == 0) {
@@ -346,7 +344,6 @@ public class ThaumonomiconScreen extends Screen {
         }
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
-
 
     @Override
     public boolean isPauseScreen() {
