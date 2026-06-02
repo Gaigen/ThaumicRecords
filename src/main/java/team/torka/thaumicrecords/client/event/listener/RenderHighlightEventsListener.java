@@ -15,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,10 +31,12 @@ import team.torka.thaumicrecords.api.aspect.AspectList;
 import team.torka.thaumicrecords.api.block.AspectRenderable;
 import team.torka.thaumicrecords.api.helper.AspectHelper;
 import team.torka.thaumicrecords.block.AuraNodeBlock;
+import team.torka.thaumicrecords.block.entity.InfusionMatrixBlockEntity;
 import team.torka.thaumicrecords.client.event.RenderThaumicVisionEvent;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 
 import java.awt.Color;
+import java.util.List;
 import java.util.Optional;
 
 @EventBusSubscriber(value = Dist.CLIENT)
@@ -69,6 +72,88 @@ public class RenderHighlightEventsListener {
         Direction renderDir = spaceAbove ? Direction.UP : hitResult.getDirection();
         drawTagsOnContainer(player, poseStack, bufferSource, camera, pos.getX(), pos.getY() + (spaceAbove ? 0.4F : 0.0F) + renderable.getRenderYOffset(),
                 pos.getZ(), renderable.getAspectRendered(), 15728880, renderDir);
+
+        // Render remaining ingredients for InfusionMatrix
+        if (renderable instanceof InfusionMatrixBlockEntity matrix && matrix.crafting) {
+            renderInfusionItems(player, poseStack, bufferSource, camera, pos, matrix, renderDir);
+        }
+    }
+
+    /**
+     * Render remaining recipe ingredients as item icons below the aspect tags.
+     * Uses the same rendering approach as aspect icons (textured quads).
+     */
+    private static void renderInfusionItems(Player player, PoseStack poseStack, MultiBufferSource bufferSource, Camera camera, BlockPos pos,
+                                            InfusionMatrixBlockEntity matrix, Direction dir) {
+        List<ItemStack> components = matrix.getSyncedComponents();
+        boolean[] consumed = matrix.getConsumedComponents();
+        if (components.isEmpty() || consumed == null) {
+            return;
+        }
+
+        double camX = camera.getPosition().x;
+        double camY = camera.getPosition().y;
+        double camZ = camera.getPosition().z;
+
+        float tagscale = 0.25F;
+        int rowsize = 5;
+        int current = 0;
+        float shifty = 1.2F;
+        int remaining = 0;
+        for (boolean c : consumed) {
+            if (!c) {
+                remaining++;
+            }
+        }
+        int left = remaining;
+
+        for (int i = 0; i < components.size(); i++) {
+            if (consumed[i]) {
+                continue;
+            }
+
+            ItemStack displayStack = components.get(i);
+            if (displayStack.isEmpty()) {
+                current++;
+                continue;
+            }
+
+            int div = Math.min(left, rowsize);
+            if (current >= rowsize) {
+                current = 0;
+                shifty -= tagscale * 1.05F;
+                left -= rowsize;
+                if (left < rowsize) {
+                    div = left % rowsize;
+                }
+            }
+
+            float shift = ((float) current - (float) div / 2.0F + 0.5F) * tagscale * 4.0F;
+            shift *= tagscale;
+
+            poseStack.pushPose();
+            double renderX = pos.getX() - camX + 0.5D + (tagscale * 2.0F * (float) dir.getStepX());
+            double renderY = pos.getY() - camY + shifty + 0.5D + (tagscale * 2.0F * (float) dir.getStepY()) + matrix.getRenderYOffset();
+            double renderZ = pos.getZ() - camZ + 0.5D + (tagscale * 2.0F * (float) dir.getStepZ());
+            poseStack.translate(renderX, renderY, renderZ);
+            float xd = (float) (camX - (pos.getX() + 0.5D));
+            float zd = (float) (camZ - (pos.getZ() + 0.5D));
+            float rotYaw = (float) (Math.atan2(xd, zd) * 180.0D / Math.PI);
+            poseStack.mulPose(Axis.YP.rotationDegrees(rotYaw + 180.0F));
+            poseStack.translate(shift, 0.0F, 0.0F);
+            poseStack.scale(tagscale, tagscale, tagscale);
+
+            // Render item icon
+            Minecraft mc = Minecraft.getInstance();
+            mc.getItemRenderer().renderStatic(displayStack, net.minecraft.world.item.ItemDisplayContext.GUI, 15728880,
+                    net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, poseStack, bufferSource, player.level(), 0);
+
+            // Count label (if > 1)
+            // Count is always 1 per component slot, so skip for now
+
+            poseStack.popPose();
+            current++;
+        }
     }
 
     public static void drawTagsOnContainer(Player player, PoseStack poseStack, MultiBufferSource bufferSource, Camera camera, double x, double y, double z,

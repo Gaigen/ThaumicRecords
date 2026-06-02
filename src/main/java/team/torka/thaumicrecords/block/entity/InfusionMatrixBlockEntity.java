@@ -6,15 +6,21 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.api.aspect.Aspect;
+import team.torka.thaumicrecords.api.aspect.AspectList;
+import team.torka.thaumicrecords.api.block.AspectRenderable;
 import team.torka.thaumicrecords.api.helper.EssentiaHandler;
 import team.torka.thaumicrecords.block.InfusionPillarBlock;
+import team.torka.thaumicrecords.network.payload.InfusionSourcePayload;
 import team.torka.thaumicrecords.recipe.InfusionRecipe;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
@@ -29,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class InfusionMatrixBlockEntity extends BlockEntity {
+public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRenderable {
 
     public boolean active = false;
     public boolean crafting = false;
@@ -52,6 +58,9 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     private InfusionRecipe currentRecipe = null;
     private List<BlockPos> pedestalPositions = new ArrayList<>();
     private boolean[] consumedComponents = null;
+    private List<ItemStack> syncedComponents = new ArrayList<>(); // synced to client for rendering
+    private int itemCount = 0; // delay before consuming ingredient (TC4: 5 ticks)
+    private BlockPos absorbingPedestal = null; // pedestal being absorbed from
 
     private static final int DRAIN_RANGE = 12;
     private static final int PEDESTAL_SCAN_RANGE = 5;
@@ -130,6 +139,14 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         this.craftCount = 0;
         this.consumedComponents = new boolean[recipe.components().size()];
         this.recipeInstability = recipe.instability();
+        this.countDelay = 10;
+
+        // Sync component items to client for rendering
+        this.syncedComponents = new ArrayList<>();
+        for (var component : recipe.components()) {
+            var items = component.getItems();
+            this.syncedComponents.add(items.length > 0 ? items[0].copy() : ItemStack.EMPTY);
+        }
 
         // Set up essentia requirements
         recipeEssentia.clear();
@@ -176,6 +193,14 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
 
         // Craft cycle — every countDelay ticks (TC4 line 223-225)
         if (be.active && be.crafting && be.count % be.countDelay == 0) {
+            // Cancel if central item was removed
+            BlockPos centralPos = pos.below(2);
+            BlockEntity centralBE = level.getBlockEntity(centralPos);
+            if (!(centralBE instanceof ArcanePedestalBlockEntity centralPed) || !centralPed.hasItem()) {
+                be.cancelCrafting("Central item removed");
+                return;
+            }
+
             be.craftCount++;
             be.craftCycle();
             be.setChanged();
@@ -227,6 +252,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
 
         // Phase 2: Consume ingredients from pedestals
         if (currentRecipe != null && !allComponentsConsumed()) {
+            this.countDelay = 20; // TC4: slower during ingredient phase
             consumeNextIngredient();
             return;
         }
@@ -239,13 +265,37 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
 
     /**
      * Consume one ingredient from a pedestal per cycle (TC4 behavior).
-     * Checks ALL remaining components.
+     * Phase 1: Send particle effect, start delay (itemCount = 5)
+     * Phase 2: After delay, actually remove the item
      */
     private void consumeNextIngredient() {
         if (level == null || currentRecipe == null || consumedComponents == null) {
             return;
         }
 
+        // Phase 2: delay expired — actually consume the item
+        if (itemCount > 0) {
+            itemCount--;
+            if (itemCount <= 0 && absorbingPedestal != null) {
+                BlockEntity be = level.getBlockEntity(absorbingPedestal);
+                if (be instanceof ArcanePedestalBlockEntity pedestal && pedestal.hasItem()) {
+                    ItemStack pedestalItem = pedestal.getItem();
+                    for (int i = 0; i < currentRecipe.components().size(); i++) {
+                        if (!consumedComponents[i] && currentRecipe.components().get(i).test(pedestalItem)) {
+                            pedestal.setItem(ItemStack.EMPTY);
+                            consumedComponents[i] = true;
+                            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+                            setChanged();
+                            break;
+                        }
+                    }
+                }
+                absorbingPedestal = null;
+            }
+            return;
+        }
+
+        // Phase 1: find next ingredient to absorb — send animation, start delay
         for (BlockPos pedestalPos : pedestalPositions) {
             BlockEntity be = level.getBlockEntity(pedestalPos);
             if (be instanceof ArcanePedestalBlockEntity pedestal && pedestal.hasItem()) {
@@ -253,8 +303,10 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
 
                 for (int i = 0; i < currentRecipe.components().size(); i++) {
                     if (!consumedComponents[i] && currentRecipe.components().get(i).test(pedestalItem)) {
-                        pedestal.setItem(ItemStack.EMPTY);
-                        consumedComponents[i] = true;
+                        // Start absorption animation
+                        sendPedestalConsumeFX(pedestalPos);
+                        this.itemCount = 5; // TC4: 5 tick delay
+                        this.absorbingPedestal = pedestalPos;
 
                         if (level.random.nextInt(100 - recipeInstability * 3) == 0) {
                             this.instability++;
@@ -285,6 +337,53 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     }
 
     /**
+     * Send sparkle/item particle effect from pedestal to matrix when consuming an ingredient.
+     * Uses TC4's drawInfusionParticles1/3 (33% purple sparkle, 67% item texture).
+     */
+    private void sendPedestalConsumeFX(BlockPos pedestalPos) {
+        if (!(level instanceof net.minecraft.server.level.ServerLevel serverLevel)) {
+            return;
+        }
+
+        // Get the item on the pedestal for texture particles
+        ItemStack itemStack = ItemStack.EMPTY;
+        BlockEntity be = level.getBlockEntity(pedestalPos);
+        if (be instanceof ArcanePedestalBlockEntity pedestal) {
+            itemStack = pedestal.getItem();
+        }
+
+        InfusionSourcePayload payload = new InfusionSourcePayload(worldPosition, pedestalPos, itemStack.copy());
+        for (ServerPlayer player : serverLevel.players()) {
+            if (player.blockPosition().closerThan(worldPosition, 32)) {
+                PacketDistributor.sendToPlayer(player, payload);
+            }
+        }
+    }
+
+    /**
+     * Cancel the current craft — reset all state.
+     */
+    public void cancelCrafting(String reason) {
+        this.crafting = false;
+        this.currentRecipe = null;
+        this.consumedComponents = null;
+        this.syncedComponents.clear();
+        this.pedestalPositions.clear();
+        this.itemCount = 0;
+        this.absorbingPedestal = null;
+        this.recipeEssentia.clear();
+        this.instability = 0;
+        this.recipeInstability = 0;
+        this.countDelay = 10;
+
+        if (level != null) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+            level.playSound(null, worldPosition, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.25F, 0.5F);
+        }
+        setChanged();
+    }
+
+    /**
      * Finish crafting — place result on central pedestal.
      */
     private void finishCrafting() {
@@ -305,9 +404,13 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         this.crafting = false;
         this.currentRecipe = null;
         this.consumedComponents = null;
+        this.syncedComponents.clear();
         this.pedestalPositions.clear();
+        this.itemCount = 0;
+        this.absorbingPedestal = null;
         this.instability = 0;
         this.recipeInstability = 0;
+        this.countDelay = 10;
 
         level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         level.playSound(null, worldPosition, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
@@ -368,6 +471,34 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
 
     public InfusionRecipe getCurrentRecipe() {
         return currentRecipe;
+    }
+
+    public boolean[] getConsumedComponents() {
+        return consumedComponents;
+    }
+
+    public List<ItemStack> getSyncedComponents() {
+        return syncedComponents;
+    }
+
+    @Override
+    public AspectList getAspectRendered() {
+        // Show remaining recipe essentia when looking at the matrix
+        if (!crafting || recipeEssentia.isEmpty()) {
+            return AspectList.empty();
+        }
+        AspectList list = new AspectList();
+        for (Map.Entry<Aspect, Integer> entry : recipeEssentia.entrySet()) {
+            if (entry.getValue() > 0) {
+                list.add(ResourceLocation.fromNamespaceAndPath("thaumicrecords", entry.getKey().getName()), entry.getValue());
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public float getRenderYOffset() {
+        return 0.5F;
     }
 
     public boolean checkStructure() {
@@ -473,6 +604,23 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         tag.putFloat("startUp", startUp);
         tag.putInt("instability", instability);
         tag.putInt("recipeInstability", recipeInstability);
+        tag.putInt("itemCount", itemCount);
+
+        // Save consumedComponents
+        if (consumedComponents != null) {
+            int[] intArr = new int[consumedComponents.length];
+            for (int i = 0; i < consumedComponents.length; i++) {
+                intArr[i] = consumedComponents[i] ? 1 : 0;
+            }
+            tag.putIntArray("consumedComponents", intArr);
+        }
+
+        // Save syncedComponents (for client rendering)
+        net.minecraft.nbt.ListTag componentsTag = new net.minecraft.nbt.ListTag();
+        for (ItemStack stack : syncedComponents) {
+            componentsTag.add(stack.saveOptional(registries));
+        }
+        tag.put("syncedComponents", componentsTag);
 
         // Save recipeEssentia
         CompoundTag essentiaTag = new CompoundTag();
@@ -491,6 +639,27 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         startUp = tag.getFloat("startUp");
         instability = tag.getInt("instability");
         recipeInstability = tag.getInt("recipeInstability");
+        itemCount = tag.getInt("itemCount");
+
+        // Load consumedComponents
+        if (tag.contains("consumedComponents")) {
+            int[] intArr = tag.getIntArray("consumedComponents");
+            consumedComponents = new boolean[intArr.length];
+            for (int i = 0; i < intArr.length; i++) {
+                consumedComponents[i] = intArr[i] != 0;
+            }
+        } else {
+            consumedComponents = null;
+        }
+
+        // Load syncedComponents
+        syncedComponents.clear();
+        if (tag.contains("syncedComponents")) {
+            net.minecraft.nbt.ListTag componentsTag = tag.getList("syncedComponents", 10);
+            for (int i = 0; i < componentsTag.size(); i++) {
+                syncedComponents.add(ItemStack.parseOptional(registries, componentsTag.getCompound(i)));
+            }
+        }
 
         // Load recipeEssentia
         recipeEssentia.clear();
