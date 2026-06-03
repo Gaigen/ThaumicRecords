@@ -247,8 +247,7 @@ public class ServerRunicHandler {
     }
 
     public static void onPlayerDisconnect(UUID uuid) {
-        runicCharge.remove(uuid);
-        runicInfo.remove(uuid);
+        // Keep runicCharge and runicInfo — persist across reconnects
         nextCycle.remove(uuid);
         lastCharge.remove(uuid);
     }
