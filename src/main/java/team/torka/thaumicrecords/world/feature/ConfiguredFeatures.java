@@ -18,6 +18,9 @@ import team.torka.thaumicrecords.registry.FeatureRegistry;
 import java.util.List;
 
 public class ConfiguredFeatures {
+    public static final ResourceKey<ConfiguredFeature<?, ?>> AURA_NODE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
+            ThaumicRecords.createRl("aura_node"));
+
     public static final ResourceKey<ConfiguredFeature<?, ?>> SILVERWOOD_TREE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
             ThaumicRecords.createRl("silverwood_tree"));
 
