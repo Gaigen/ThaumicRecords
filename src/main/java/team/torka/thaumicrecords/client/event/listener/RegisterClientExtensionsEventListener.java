@@ -10,7 +10,9 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.client.renderer.item.ArcaneWorkbenchItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.DeconstructionTableItemRenderer;
 import team.torka.thaumicrecords.client.renderer.item.HungryChestItemRenderer;
@@ -25,6 +27,7 @@ import team.torka.thaumicrecords.item.CultistRobeArmorItem;
 import team.torka.thaumicrecords.item.FortressArmorItem;
 import team.torka.thaumicrecords.item.VoidRobeArmorItem;
 import team.torka.thaumicrecords.registry.BlockRegistry;
+import team.torka.thaumicrecords.registry.FluidTypeRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 import team.torka.thaumicrecords.registry.ParticleRegistry;
 import team.torka.thaumicrecords.registry.SoundRegistry;
@@ -38,6 +41,26 @@ public class RegisterClientExtensionsEventListener {
     public static void onEvent(RegisterClientExtensionsEvent event) {
         registerItemExtensions(event);
         registerBlockExtensions(event);
+        registerFluidExtensions(event);
+    }
+
+    private static void registerFluidExtensions(RegisterClientExtensionsEvent event) {
+        event.registerFluidType(new IClientFluidTypeExtensions() {
+            @Override
+            public net.minecraft.resources.ResourceLocation getStillTexture() {
+                return ThaumicRecords.createRl("block/flux_goo_still");
+            }
+
+            @Override
+            public net.minecraft.resources.ResourceLocation getFlowingTexture() {
+                return ThaumicRecords.createRl("block/flux_goo_flowing");
+            }
+
+            @Override
+            public int getTintColor() {
+                return 0xCC800080;
+            }
+        }, FluidTypeRegistry.FLUX_GOO_TYPE.get());
     }
 
     private static void registerItemExtensions(RegisterClientExtensionsEvent event) {

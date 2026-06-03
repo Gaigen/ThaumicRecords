@@ -1,0 +1,6 @@
+{
+  "textures": {
+    "particle": "thaumicrecords:block/flux_goo_still"
+  },
+  "render_type": "translucent"
+}

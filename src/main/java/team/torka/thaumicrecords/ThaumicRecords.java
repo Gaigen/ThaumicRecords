@@ -15,6 +15,8 @@ import team.torka.thaumicrecords.registry.CreativeTabRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.EntityRegistry;
 import team.torka.thaumicrecords.registry.FeatureRegistry;
+import team.torka.thaumicrecords.registry.FluidRegistry;
+import team.torka.thaumicrecords.registry.FluidTypeRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 import team.torka.thaumicrecords.registry.MenuRegistry;
 import team.torka.thaumicrecords.registry.NodeModifierRegistry;
@@ -36,6 +38,8 @@ public class ThaumicRecords {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public ThaumicRecords(IEventBus modEventBus) {
+        FluidTypeRegistry.REGISTRAR.register(modEventBus);
+        FluidRegistry.REGISTRAR.register(modEventBus);
         BlockRegistry.REGISTRAR.register(modEventBus);
         BlockEntityRegistry.REGISTRAR.register(modEventBus);
         DataComponentRegistry.REGISTRAR.register(modEventBus);

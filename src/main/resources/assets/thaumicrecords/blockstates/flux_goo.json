@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "level=0": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=1": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=2": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=3": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=4": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=5": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=6": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=7": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=8": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=9": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=10": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=11": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=12": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=13": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=14": {
+      "model": "thaumicrecords:block/flux_goo"
+    },
+    "level=15": {
+      "model": "thaumicrecords:block/flux_goo"
+    }
+  }
+}

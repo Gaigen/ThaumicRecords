@@ -26,6 +26,7 @@ import team.torka.thaumicrecords.block.AuraNodeBlock;
 import team.torka.thaumicrecords.block.CinderpearlBlock;
 import team.torka.thaumicrecords.block.CrucibleBlock;
 import team.torka.thaumicrecords.block.DeconstructionTableBlock;
+import team.torka.thaumicrecords.block.FluxGooBlock;
 import team.torka.thaumicrecords.block.HungryChestBlock;
 import team.torka.thaumicrecords.block.InfusionMatrixBlock;
 import team.torka.thaumicrecords.block.InfusionPillarBlock;
@@ -311,4 +312,8 @@ public class BlockRegistry {
                     .noOcclusion()
                     .sound(SoundType.WOOD)
                     .pushReaction(PushReaction.BLOCK)));
+
+    // Flux Goo (finite fluid block)
+    public static final DeferredBlock<FluxGooBlock> FLUX_GOO = REGISTRAR.register("flux_goo",
+            () -> new FluxGooBlock(() -> team.torka.thaumicrecords.block.FiniteFluid.class.cast(FluidRegistry.FLUX_GOO.get())));
 }

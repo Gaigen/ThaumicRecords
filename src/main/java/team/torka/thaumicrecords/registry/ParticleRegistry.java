@@ -21,4 +21,7 @@ public class ParticleRegistry {
 
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SHIELD_RUNES = REGISTRAR.register("shield_runes",
             () -> new SimpleParticleType(false));
+
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> FLUX_GOO_BUBBLE = REGISTRAR.register("flux_goo_bubble",
+            () -> new SimpleParticleType(false));
 }
