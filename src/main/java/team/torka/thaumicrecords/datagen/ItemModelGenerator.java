@@ -80,7 +80,6 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemRegistry.MIRROR_GLASS.get());
         basicItem(ItemRegistry.TAINT_SLIME.get());
         basicItem(ItemRegistry.TAINT_TENDRIL.get());
-        withExistingParent(ItemRegistry.FLUX_GOO_BUCKET.getId().getPath(), mcLoc("item/bucket"));
         withExistingParent(ItemRegistry.FLUX_GOO.getId().getPath(), mcLoc("item/generated")).texture("layer0", modLoc("block/flux_goo_still"));
         basicItem(ItemRegistry.THAUMIUM_HELMET.get());
         basicItem(ItemRegistry.THAUMIUM_CHESTPLATE.get());

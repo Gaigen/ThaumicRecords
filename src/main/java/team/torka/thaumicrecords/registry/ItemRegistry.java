@@ -6,7 +6,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -149,10 +148,6 @@ public class ItemRegistry {
     public static final DeferredItem<Item> MIRROR_GLASS = REGISTRAR.registerSimpleItem("mirror_glass");
     public static final DeferredItem<Item> TAINT_SLIME = REGISTRAR.registerSimpleItem("taint_slime");
     public static final DeferredItem<Item> TAINT_TENDRIL = REGISTRAR.registerSimpleItem("taint_tendril");
-
-    // Flux Goo Bucket
-    public static final DeferredItem<Item> FLUX_GOO_BUCKET = REGISTRAR.register("flux_goo_bucket",
-            () -> new BucketItem(FluidRegistry.FLUX_GOO.get(), new Item.Properties().stacksTo(1)));
 
     // Flux Goo BlockItem (for creative tab and direct placement)
     public static final DeferredItem<BlockItem> FLUX_GOO = REGISTRAR.register("flux_goo",
@@ -581,7 +576,6 @@ public class ItemRegistry {
         output.accept(RUNIC_AMULET_EMERGENCY);
         output.accept(RUNIC_GIRDLE);
         output.accept(RUNIC_GIRDLE_KINETIC);
-        output.accept(FLUX_GOO_BUCKET);
         output.accept(FLUX_GOO);
     }
 

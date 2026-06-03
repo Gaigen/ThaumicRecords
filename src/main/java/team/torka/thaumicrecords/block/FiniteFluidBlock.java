@@ -3,18 +3,15 @@ package team.torka.thaumicrecords.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,11 +25,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -41,7 +36,7 @@ import java.util.function.Supplier;
  * <p>
  * Block LEVEL 0 = 16 quanta (full), LEVEL 15 = 1 quanta.
  */
-public class FiniteFluidBlock extends Block implements BucketPickup {
+public class FiniteFluidBlock extends Block {
 
     public static final int Q = 16;
     public static final IntegerProperty LEVEL = BlockStateProperties.LEVEL;
@@ -309,19 +304,4 @@ public class FiniteFluidBlock extends Block implements BucketPickup {
         return false;
     }
 
-    // --- Bucket pickup ---
-
-    @Override
-    public ItemStack pickupBlock(@Nullable Player player, LevelAccessor level, BlockPos pos, BlockState state) {
-        if (state.getValue(LEVEL) == 0) {
-            level.setBlock(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 11);
-            return new ItemStack(getFiniteFluid().getBucket());
-        }
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public Optional<SoundEvent> getPickupSound() {
-        return Optional.empty();
-    }
 }

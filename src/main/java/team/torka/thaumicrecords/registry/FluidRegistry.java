@@ -11,8 +11,6 @@ import team.torka.thaumicrecords.block.FluxGooBlock;
 public class FluidRegistry {
     public static final DeferredRegister<Fluid> REGISTRAR = DeferredRegister.create(BuiltInRegistries.FLUID, ThaumicRecords.MOD_ID);
 
-    // Single fluid instance (not source + flowing)
     public static final DeferredHolder<Fluid, FiniteFluid> FLUX_GOO = REGISTRAR.register("flux_goo",
-            () -> new FiniteFluid(FluidTypeRegistry.FLUX_GOO_TYPE::get, () -> ItemRegistry.FLUX_GOO_BUCKET.get(),
-                    () -> (FluxGooBlock) BlockRegistry.FLUX_GOO.get()));
+            () -> new FiniteFluid(FluidTypeRegistry.FLUX_GOO_TYPE::get, () -> null, () -> (FluxGooBlock) BlockRegistry.FLUX_GOO.get()));
 }

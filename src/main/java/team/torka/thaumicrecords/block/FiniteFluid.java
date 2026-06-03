@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -52,7 +53,7 @@ public class FiniteFluid extends Fluid {
 
     @Override
     public Item getBucket() {
-        return bucket.get();
+        return bucket != null ? bucket.get() : Items.AIR;
     }
 
     @Override
