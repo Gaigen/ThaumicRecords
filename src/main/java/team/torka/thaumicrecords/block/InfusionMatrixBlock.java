@@ -71,9 +71,20 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
         }
 
         if (level.getBlockEntity(pos) instanceof InfusionMatrixBlockEntity matrix) {
+            // Force refresh symmetry from current surroundings
+            matrix.getSurroundings();
+
+            // Always show stability info
+            player.sendSystemMessage(Component.literal("§d[STABILITY] §7Symmetry: §e" + matrix.symmetry));
+            player.sendSystemMessage(Component.literal("§d[STABILITY] §7Pedestals: §e" + matrix.getPedestalPositions().size()));
+            player.sendSystemMessage(Component.literal("§d[STABILITY] §7Stabilizers: §e" + matrix.getStabilizerCount()));
+
             if (matrix.crafting) {
                 // Show remaining essentia
                 player.sendSystemMessage(Component.literal("§b[INFUSION] §eCrafting in progress..."));
+                player.sendSystemMessage(Component.literal("§d[STABILITY] §7Instability: §c" + matrix.instability + "§7/25"));
+                player.sendSystemMessage(Component.literal("§d[STABILITY] §7Recipe instability: §e" + matrix.getCurrentRecipe().instability()));
+                player.sendSystemMessage(Component.literal("§d[STABILITY] §7Event chance: §e" + (matrix.instability * 100 / 500) + "%§7 per cycle"));
                 player.sendSystemMessage(Component.literal("§b[INFUSION] §7Remaining essentia:"));
                 for (var entry : matrix.getRecipeEssentia().entrySet()) {
                     String status = entry.getValue() > 0 ? "§e" + entry.getValue() : "§a✓";
@@ -120,7 +131,8 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
                 var recipe = matrix.findMatchingRecipe();
                 if (recipe != null) {
                     player.sendSystemMessage(Component.literal("§a[INFUSION] §aRecipe matched! §f" + recipe.result().getHoverName().getString()));
-                    player.sendSystemMessage(Component.literal("§a[INFUSION] §7Instability: §e" + recipe.instability()));
+                    player.sendSystemMessage(Component.literal("§a[INFUSION] §7Recipe instability: §e" + recipe.instability()));
+                    player.sendSystemMessage(Component.literal("§d[STABILITY] §7Predicted instability: §e" + (matrix.symmetry + recipe.instability())));
                     player.sendSystemMessage(Component.literal("§a[INFUSION] §7Required essentia:"));
                     for (var entry : recipe.aspects().entrySet()) {
                         player.sendSystemMessage(Component.literal("§a[INFUSION] §f  " + entry.getKey().getPath() + " x" + entry.getValue()));

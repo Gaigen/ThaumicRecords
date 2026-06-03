@@ -9,9 +9,11 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -43,6 +45,8 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
     public int craftCount = 0;
     public float startUp = 0.0F;
     public int instability = 0;
+    public int symmetry = 0; // calculated from pedestal/stabilizer mirror pairs
+    public int stabilizerCount = 0; // number of stabilizers found in last scan
     public boolean checkSurroundings = true;
 
     // Remaining essentia to drain — mirrors TC4's recipeEssentia
@@ -69,6 +73,8 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
 
     private static final int DRAIN_RANGE = 12;
     private static final int PEDESTAL_SCAN_RANGE = 5;
+    private static final TagKey<Block> STABILIZERS_TAG = TagKey.create(net.minecraft.core.registries.Registries.BLOCK,
+            ResourceLocation.fromNamespaceAndPath("thaumicrecords", "infusion_stabilizers"));
 
     public InfusionMatrixBlockEntity(BlockPos pos, BlockState blockState) {
         super(BlockEntityRegistry.INFUSION_MATRIX.get(), pos, blockState);
@@ -156,6 +162,10 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
         this.recipeInstability = recipe.instability();
         this.countDelay = 10;
 
+        // Calculate initial instability: symmetry + recipeInstability (TC4)
+        this.checkSurroundings = true; // triggers getSurroundings() on next tick
+        this.instability = this.symmetry + this.recipeInstability;
+
         // Sync component items to client for rendering
         this.syncedComponents = new ArrayList<>();
         for (var component : recipe.components()) {
@@ -172,7 +182,6 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
             }
         }
 
-        this.checkSurroundings = true;
         setChanged();
         level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         level.playSound(null, worldPosition, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
@@ -218,13 +227,11 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
             }
         }
 
-        // checkSurroundings — triggers source cache rescan + pedestal rescan (TC4 line 208-211)
+        // checkSurroundings — triggers full surroundings scan (TC4 line 208-211)
         if (be.checkSurroundings) {
             be.checkSurroundings = false;
             EssentiaHandler.refreshSources(pos);
-            if (be.crafting) {
-                be.rescanPedestals();
-            }
+            be.getSurroundings();
         }
 
         // Craft cycle — every countDelay ticks (TC4 line 223-225)
@@ -250,6 +257,25 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
      * Phase 3: place result on central pedestal
      */
     private void craftCycle() {
+        // TODO: Instability event check (TC4 line 366-395)
+        // Each cycle: chance = instability / 500 of triggering a random bad event
+        // 21 possible outcomes via switch(random.nextInt(21)):
+        //   case 0,2,10,13 (19%):  inEvEjectItem(0) — drop item from random pedestal
+        //   case 6,17     (9.5%):  inEvEjectItem(1) — drop item + flux goo
+        //   case 1,11     (9.5%):  inEvEjectItem(2) — drop item + flux gas
+        //   case 3,8,14   (14.3%): inEvZap(false) — zap ONE entity (4-7 magic damage)
+        //   case 5,16     (9.5%):  inEvHarm(false) — harm ONE entity (taint/vis exhaustion)
+        //   case 12       (4.8%):  inEvZap(true) — zap ALL entities
+        //   case 19       (4.8%):  inEvEjectItem(3) — DESTROY item + flux goo
+        //   case 7        (4.8%):  inEvEjectItem(4) — DESTROY item + flux gas
+        //   case 4,15     (9.5%):  inEvEjectItem(5) — drop item + explosion at pedestal
+        //   case 18       (4.8%):  inEvHarm(true) — harm ALL entities
+        //   case 9        (4.8%):  explosion at matrix center (1.5 + rand radius)
+        //   case 20       (4.8%):  inEvWarp() — give warp to random nearby player
+        //
+        // If event fires AND central item is still valid → return (continue crafting)
+        // If event fires AND central item is gone → cancel crafting
+
         // Phase 1: Essentia drain
         if (recipeEssentiaVisSize() > 0) {
             for (Map.Entry<Aspect, Integer> entry : recipeEssentia.entrySet()) {
@@ -461,6 +487,59 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
         setChanged();
     }
 
+    // --- Instability events (TODO: implement) ---
+
+    /**
+     * Eject item from a random pedestal.
+     *
+     * @param type 0=drop, 1=drop+goo, 2=drop+gas, 3=destroy+goo, 4=destroy+gas, 5=drop+explosion
+     */
+    private void inEvEjectItem(int type) {
+        // TODO: Pick random pedestal from pedestalPositions
+        // type 0: drop item as entity (InventoryUtils.dropItems equivalent)
+        // type 1: drop + place flux goo block above pedestal (level 7)
+        // type 2: drop + place flux gas block above pedestal (level 7)
+        // type 3: destroy item (setItem EMPTY) + flux goo
+        // type 4: destroy item + flux gas
+        // type 5: drop + explosion at pedestal (radius 1.0)
+        // Visual: zap effect from matrix to pedestal
+    }
+
+    /**
+     * Zap entities with magic damage (4-7 per target).
+     *
+     * @param all true=hit ALL entities in 10-block radius, false=hit only one
+     */
+    private void inEvZap(boolean all) {
+        // TODO: Find EntityLivingBase within 10 blocks of matrix
+        // Deal 4 + rand(4) magic damage
+        // If !all, only hit first entity
+        // Visual: lightning bolt FX from matrix to target
+    }
+
+    /**
+     * Apply harmful potion effects to entities.
+     *
+     * @param all true=hit ALL, false=hit one
+     */
+    private void inEvHarm(boolean all) {
+        // TODO: Find EntityLivingBase within 10 blocks
+        // 50% chance: Taint Poison (6 seconds, no particles)
+        // 50% chance: Vis Exhaustion (2 minutes, NOT curable by milk)
+        // If !all, only hit first entity
+    }
+
+    /**
+     * Give warp to a random nearby player.
+     */
+    private void inEvWarp() {
+        // TODO: Find players within 10 blocks
+        // Pick random player
+        // 25% chance: 1 sticky warp
+        // 75% chance: 1-5 temporary warp
+        // (Requires warp system to be implemented first)
+    }
+
     // --- Essentia helpers (for debug/manual setup) ---
 
     public void setRecipeEssentia(LinkedHashMap<Aspect, Integer> essentia, int recipeInstability) {
@@ -543,6 +622,14 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
     @Override
     public float getRenderYOffset() {
         return 0.5F;
+    }
+
+    public List<BlockPos> getPedestalPositions() {
+        return pedestalPositions;
+    }
+
+    public int getStabilizerCount() {
+        return stabilizerCount;
     }
 
     public boolean checkStructure() {
@@ -663,34 +750,111 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
         }
 
         currentRecipe = holder.value();
-        // Rescan pedestals on next tick
+        // Full rescan on next tick
         checkSurroundings = true;
-        rescanPedestals();
+        getSurroundings(); // immediate rescan for pedestals + symmetry
     }
 
     /**
-     * Rescan surrounding pedestals and rebuild pedestalPositions.
-     * Called after recipe restore and when checkSurroundings triggers.
+     * Full surroundings scan — mirrors TC4's getSurroundings().
+     * Scans for pedestals + stabilizers, calculates symmetry from mirror pairs.
+     * Called when checkSurroundings triggers.
      */
-    private void rescanPedestals() {
+    public void getSurroundings() {
         if (level == null) {
             return;
         }
-        pedestalPositions.clear();
-        for (int dx = -PEDESTAL_SCAN_RANGE; dx <= PEDESTAL_SCAN_RANGE; dx++) {
-            for (int dz = -PEDESTAL_SCAN_RANGE; dz <= PEDESTAL_SCAN_RANGE; dz++) {
-                for (int dy = -PEDESTAL_SCAN_RANGE; dy <= 0; dy++) {
-                    if (dx == 0 && dy == 0 && dz == 0) {
+
+        List<BlockPos> foundPedestals = new ArrayList<>();
+        List<BlockPos> foundStabilizers = new ArrayList<>();
+
+        // Scan range: X/Z ±12, Y from +5 to -10 relative to matrix
+        for (int xx = -12; xx <= 12; xx++) {
+            for (int zz = -12; zz <= 12; zz++) {
+                boolean skipPedestal = false;
+                for (int yy = -5; yy <= 10; yy++) {
+                    if (xx == 0 && zz == 0) {
                         continue;
                     }
-                    BlockPos checkPos = worldPosition.offset(dx, dy, dz);
-                    BlockEntity be = level.getBlockEntity(checkPos);
-                    if (be instanceof ArcanePedestalBlockEntity pedestal && pedestal.hasItem()) {
-                        pedestalPositions.add(checkPos);
+
+                    int x = worldPosition.getX() + xx;
+                    int y = worldPosition.getY() - yy; // TC4: y - yy (scans downward)
+                    int z = worldPosition.getZ() + zz;
+                    BlockPos checkPos = new BlockPos(x, y, z);
+
+                    BlockEntity te = level.getBlockEntity(checkPos);
+
+                    // Pedestals: only within ±8 X/Z, below matrix (yy > 0), one per column
+                    if (!skipPedestal && yy > 0 && Math.abs(xx) <= 8 && Math.abs(zz) <= 8 && te instanceof ArcanePedestalBlockEntity) {
+                        foundPedestals.add(checkPos);
+                        skipPedestal = true; // only first pedestal per column
+                    } else {
+                        // Stabilizers: check tag
+                        BlockState state = level.getBlockState(checkPos);
+                        if (state.is(STABILIZERS_TAG)) {
+                            foundStabilizers.add(checkPos);
+                        }
                     }
                 }
             }
         }
+
+        // Update pedestalPositions for ingredient consumption
+        pedestalPositions.clear();
+        pedestalPositions.addAll(foundPedestals);
+
+        // Calculate symmetry
+        symmetry = 0;
+
+        // Pedestal symmetry (integer arithmetic)
+        int pedSym = 0;
+        for (BlockPos pedPos : foundPedestals) {
+            int offsetX = worldPosition.getX() - pedPos.getX();
+            int offsetZ = worldPosition.getZ() - pedPos.getZ();
+
+            boolean hasItem = false;
+            BlockEntity pedBE = level.getBlockEntity(pedPos);
+            if (pedBE instanceof ArcanePedestalBlockEntity ped && ped.hasItem()) {
+                hasItem = true;
+            }
+
+            // +2 for having a pedestal
+            pedSym += 2;
+            // +1 if pedestal has an item
+            if (hasItem) {
+                pedSym += 1;
+            }
+
+            // Check mirror position
+            BlockPos mirrorPos = new BlockPos(worldPosition.getX() + offsetX, pedPos.getY(), worldPosition.getZ() + offsetZ);
+            BlockEntity mirrorBE = level.getBlockEntity(mirrorPos);
+            if (mirrorBE instanceof ArcanePedestalBlockEntity) {
+                pedSym -= 2; // -2 if mirror also has pedestal
+                if (((ArcanePedestalBlockEntity) mirrorBE).hasItem() && hasItem) {
+                    pedSym -= 1; // -1 if BOTH have items
+                }
+            } else {
+                // No mirror found — this is an unmatched pedestal
+            }
+        }
+
+        // Stabilizer symmetry (float, cast to int at end)
+        float stabSym = 0.0F;
+        stabilizerCount = foundStabilizers.size();
+        for (BlockPos stabPos : foundStabilizers) {
+            int offsetX = worldPosition.getX() - stabPos.getX();
+            int offsetZ = worldPosition.getZ() - stabPos.getZ();
+
+            stabSym += 0.1F;
+
+            // Check mirror position
+            BlockPos mirrorPos = new BlockPos(worldPosition.getX() + offsetX, stabPos.getY(), worldPosition.getZ() + offsetZ);
+            if (level.getBlockState(mirrorPos).is(STABILIZERS_TAG)) {
+                stabSym -= 0.2F; // matched pair: net -0.1
+            }
+        }
+
+        symmetry = (int) (pedSym + stabSym);
     }
 
     // --- Structure validation (TC4: validLocation) ---
@@ -737,6 +901,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
         tag.putInt("craftCount", craftCount);
         tag.putFloat("startUp", startUp);
         tag.putInt("instability", instability);
+        tag.putInt("symmetry", symmetry);
         tag.putInt("recipeInstability", recipeInstability);
         tag.putInt("itemCount", itemCount);
 
@@ -783,6 +948,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity implements AspectRend
         craftCount = tag.getInt("craftCount");
         startUp = tag.getFloat("startUp");
         instability = tag.getInt("instability");
+        symmetry = tag.getInt("symmetry");
         recipeInstability = tag.getInt("recipeInstability");
         itemCount = tag.getInt("itemCount");
 
