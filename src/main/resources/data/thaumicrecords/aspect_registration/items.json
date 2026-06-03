@@ -1,0 +1,75 @@
+{
+  "values": [
+    {
+      "type": "item",
+      "key": {
+        "tag": "minecraft:stairs"
+      },
+      "aspects": {
+        "thaumicrecords:arbor": 1
+      },
+      "replace": false
+    },
+    {
+      "type": "item",
+      "key": {
+        "tag": "minecraft:slabs"
+      },
+      "aspects": {
+        "thaumicrecords:arbor": 1
+      },
+      "replace": false
+    },
+    {
+      "type": "item",
+      "key": {
+        "tag": "minecraft:leaves"
+      },
+      "aspects": {
+        "thaumicrecords:herba": 1
+      },
+      "replace": false
+    },
+    {
+      "type": "item",
+      "key": {
+        "tag": "minecraft:planks"
+      },
+      "aspects": {
+        "thaumicrecords:arbor": 1
+      },
+      "replace": false
+    },
+    {
+      "type": "item",
+      "key": {
+        "tag": "minecraft:logs"
+      },
+      "aspects": {
+        "thaumicrecords:arbor": 4
+      },
+      "replace": false
+    },
+    {
+      "type": "item",
+      "key": {
+        "tag": "c:dyes"
+      },
+      "aspects": {
+        "thaumicrecords:sensus": 1
+      },
+      "replace": false
+    },
+    {
+      "type": "item",
+      "key": {
+        "tag": "minecraft:saplings"
+      },
+      "aspects": {
+        "thaumicrecords:arbor": 1,
+        "thaumicrecords:herba": 1
+      },
+      "replace": false
+    }
+  ]
+}
