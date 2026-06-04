@@ -25,10 +25,18 @@ public class ResearchCategory {
 
     public final ResourceLocation background;
 
-    public ResearchCategory(String nameTranslateKey, @Nullable ResourceLocation icon, @Nullable ItemStack iconItem, ResourceLocation background) {
+    public final boolean initialDiscovered;
+
+    public ResearchCategory(String nameTranslateKey, @Nullable ResourceLocation icon, @Nullable ItemStack iconItem, ResourceLocation background,
+                            boolean initialDiscovered) {
         this.nameTranslateKey = nameTranslateKey;
         this.icon = icon;
         this.iconItem = iconItem;
         this.background = background;
+        this.initialDiscovered = initialDiscovered;
+    }
+
+    public ResearchCategory(String nameTranslateKey, @Nullable ResourceLocation icon, @Nullable ItemStack iconItem, ResourceLocation background) {
+        this(nameTranslateKey, icon, iconItem, background, true);
     }
 }

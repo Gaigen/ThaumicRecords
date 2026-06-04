@@ -20,6 +20,7 @@ import java.util.List;
 
 public class PlacedFeatures {
 
+    public static final ResourceKey<PlacedFeature> PLACED_AURA_NODE = ResourceKey.create(Registries.PLACED_FEATURE, ThaumicRecords.createRl(("aura_node")));
     public static final ResourceKey<PlacedFeature> PLACED_AER_INFUSED_STONE = ResourceKey.create(Registries.PLACED_FEATURE,
             ThaumicRecords.createRl(("aer_infused_stone")));
     public static final ResourceKey<PlacedFeature> PLACED_IGNIS_INFUSED_STONE = ResourceKey.create(Registries.PLACED_FEATURE,

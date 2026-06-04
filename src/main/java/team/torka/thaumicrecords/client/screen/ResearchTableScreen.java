@@ -119,7 +119,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 alpha = 1.0F - progress;
             }
             double renderX = (double) (x + 169) + pix.x();
-            double renderY = (double) (y + 83) - pix.y();
+            double renderY = (double) (y + 83) + pix.y();
             this.drawRune(graphics, renderX, renderY, rune.rune, alpha * 0.66F);
         }
 
@@ -618,7 +618,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             var random = this.minecraft.level.random;
             int k = random.nextInt(120) - 60;
             int l = random.nextInt(120) - 60;
-            CubeCoordinateHelper.CubeHex hex = CubeCoordinateHelper.pixelToCube(k, -l, 9.0f);
+            CubeCoordinateHelper.CubeHex hex = CubeCoordinateHelper.pixelToCube(k, l, 9.0f);
             String hexKey = hex.toString();
             if (!this.runes.containsKey(hexKey) && !isCoordinateInNote(hex)) {
                 long decayTime = this.lastRuneCheck + 15000L + (long) random.nextInt(10000);

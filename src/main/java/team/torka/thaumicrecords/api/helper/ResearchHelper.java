@@ -13,10 +13,8 @@ import team.torka.thaumicrecords.registry.ResearchCategoryRegistry;
 import team.torka.thaumicrecords.registry.ResearchRegistry;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ResearchHelper {
@@ -39,23 +37,63 @@ public class ResearchHelper {
         player.setData(AttachmentRegistry.SCAN_HISTORY, scanHistory);
     }
 
-    public static void unlockResearch(ServerPlayer player, ResourceLocation research) {
+    public static void discoverResearch(ServerPlayer player, ResourceLocation research) {
         ResearchUnlocked oldData = player.getData(AttachmentRegistry.RESEARCH_UNLOCKED);
-        if (!oldData.researches().contains(research)) {
-            Set<ResourceLocation> oldSet = oldData.researches();
-            HashSet<ResourceLocation> newSet = new HashSet<>(oldSet);
-            newSet.add(research);
-            player.setData(AttachmentRegistry.RESEARCH_UNLOCKED, new ResearchUnlocked(newSet));
+        ResearchUnlocked newData = oldData.discoverResearch(research);
+        if (newData != oldData) {
+            player.setData(AttachmentRegistry.RESEARCH_UNLOCKED, newData);
         }
     }
 
-    public static boolean isResearchUnlocked(ServerPlayer player, ResourceLocation research) {
-        ResearchUnlocked data = player.getData(AttachmentRegistry.RESEARCH_UNLOCKED);
-        Research research1 = ResearchRegistry.RESEARCH_REGISTRY.get(research);
-        if (Objects.isNull(research1)) {
-            return false;
+    public static void completeResearch(ServerPlayer player, ResourceLocation research) {
+        ResearchUnlocked oldData = player.getData(AttachmentRegistry.RESEARCH_UNLOCKED);
+        ResearchUnlocked newData = oldData.completeResearch(research);
+        newData = cascadeDiscoverChildren(newData, research);
+        if (!newData.equals(oldData)) {
+            player.setData(AttachmentRegistry.RESEARCH_UNLOCKED, newData);
         }
-        return data.researches().contains(research);
+    }
+
+    private static ResearchUnlocked cascadeDiscoverChildren(ResearchUnlocked data, ResourceLocation completedResearch) {
+        boolean changed = true;
+        while (changed) {
+            changed = false;
+            for (Research research : ResearchRegistry.RESEARCH_REGISTRY) {
+                ResourceLocation key = ResearchRegistry.RESEARCH_REGISTRY.getKey(research);
+                if (key == null || data.isResearchDiscovered(key)) {
+                    continue;
+                }
+                if (research.discoveryStrategy.contains(Research.DiscoveryStrategy.PARENT) && ResearchUnlocked.areParentsCompleted(research,
+                        data.completedResearches())) {
+                    data = data.discoverResearch(key);
+                    changed = true;
+                }
+            }
+        }
+        return data;
+    }
+
+    public static void discoverCategory(ServerPlayer player, ResourceLocation category) {
+        ResearchUnlocked oldData = player.getData(AttachmentRegistry.RESEARCH_UNLOCKED);
+        ResearchUnlocked newData = oldData.discoverCategory(category);
+        if (newData != oldData) {
+            player.setData(AttachmentRegistry.RESEARCH_UNLOCKED, newData);
+        }
+    }
+
+    public static boolean isResearchDiscovered(ServerPlayer player, ResourceLocation research) {
+        ResearchUnlocked data = player.getData(AttachmentRegistry.RESEARCH_UNLOCKED);
+        return data.isResearchDiscovered(research);
+    }
+
+    public static boolean isResearchCompleted(ServerPlayer player, ResourceLocation research) {
+        ResearchUnlocked data = player.getData(AttachmentRegistry.RESEARCH_UNLOCKED);
+        return data.isResearchCompleted(research);
+    }
+
+    public static boolean isCategoryDiscovered(ServerPlayer player, ResourceLocation category) {
+        ResearchUnlocked data = player.getData(AttachmentRegistry.RESEARCH_UNLOCKED);
+        return data.isCategoryDiscovered(category);
     }
 
     public static List<Research> getResearchesByCategory(ResearchCategory category) {

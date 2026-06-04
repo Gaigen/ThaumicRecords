@@ -39,11 +39,14 @@ public class Research {
     public final int col;
 
     /**
-     * 数值->研究笔记的格子宽度 1->3 2->4, 3->5
+     * 数值->研究笔记的格子圈数为 1+gridSize
      */
     public final int gridSize;
 
-    public final boolean forbidden;
+    /**
+     * 禁忌研究,0为无害,正数为增加的扭曲值
+     */
+    public final int warp;
 
     public final RenderStrategy renderStrategy;
     public final UnlockStrategy unlockStrategy;
@@ -51,7 +54,7 @@ public class Research {
 
     public Research(String nameTranslationKey, String descTranslationKey, ResourceLocation category, AspectList aspects, @Nullable ResourceLocation icon,
                     @Nullable ItemStack iconItem, ResourceLocation[] parents, int row, int col, int gridSize, RenderStrategy renderStrategy,
-                    UnlockStrategy unlockStrategy, List<DiscoveryStrategy> discoveryStrategy, boolean forbidden) {
+                    UnlockStrategy unlockStrategy, List<DiscoveryStrategy> discoveryStrategy, int warp) {
         this.nameTranslationKey = nameTranslationKey;
         this.descTranslationKey = descTranslationKey;
         this.category = category;
@@ -65,14 +68,14 @@ public class Research {
         this.renderStrategy = renderStrategy;
         this.unlockStrategy = unlockStrategy;
         this.discoveryStrategy = discoveryStrategy;
-        this.forbidden = forbidden;
+        this.warp = warp;
     }
 
     public static Research createNormal(String nameTranslationKey, String descTranslationKey, ResourceLocation category, AspectList aspects,
                                         @Nullable ResourceLocation icon, @Nullable ItemStack iconItem, ResourceLocation[] parents, int row, int col,
                                         int gridSize) {
         return new Research(nameTranslationKey, descTranslationKey, category, aspects, icon, iconItem, parents, row, col, gridSize, RenderStrategy.NORMAL,
-                UnlockStrategy.RESEARCH, List.of(DiscoveryStrategy.PARENT), false);
+                UnlockStrategy.RESEARCH, List.of(DiscoveryStrategy.PARENT), 0);
     }
 
     public enum RenderStrategy implements StringRepresentable {
@@ -148,9 +151,9 @@ public class Research {
          */
         SCAN("SCAN"),
         /**
-         * 从知识碎片拼成的笔记揭晓
+         * 从知识碎片拼成的笔记 或者特定方式解锁
          */
-        FRAGMENT("FRAGMENT"),
+        SPECIAL("SPECIAL"),
         ;
 
         private final String name;

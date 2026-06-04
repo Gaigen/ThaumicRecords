@@ -1,9 +1,0 @@
-{
-  "type": "thaumicrecords:aspect_registration",
-  "ingredient": {
-    "tag": "minecraft:leaves"
-  },
-  "aspects": {
-    "thaumicrecords:herba": 1
-  }
-}

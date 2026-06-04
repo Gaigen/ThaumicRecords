@@ -120,5 +120,12 @@
       "thaumicrecords:page1",
       "thaumicrecords:page2"
     ]
+  },
+  "learn": {
+    "category": "master",
+    "subtitle": "sound.thaumicrecords.learn",
+    "sounds": [
+      "thaumicrecords:learn"
+    ]
   }
 }

@@ -19,9 +19,6 @@ public class RecipeSerializerRegistry {
 
     public static final DeferredRegister<RecipeSerializer<?>> REGISTRAR = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, ThaumicRecords.MOD_ID);
 
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AspectRecipe>> ASPECT_REGISTRATION = REGISTRAR.register("aspect_registration",
-            AspectRecipeSerializer::new);
-
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ArcaneCraftingShapedRecipe>> ARCANE_CRAFTING_SHAPED = REGISTRAR.register(
             "arcane_crafting_shaped", ShapedArcaneCraftingRecipeSerializer::new);
 
