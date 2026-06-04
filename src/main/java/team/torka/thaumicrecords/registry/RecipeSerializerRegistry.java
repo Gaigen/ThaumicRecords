@@ -8,7 +8,11 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingWandRecipe;
+import team.torka.thaumicrecords.recipe.ArcaneSceptreRecipe;
+import team.torka.thaumicrecords.recipe.AspectRecipe;
+import team.torka.thaumicrecords.recipe.serializer.AspectRecipeSerializer;
 import team.torka.thaumicrecords.recipe.serializer.CrucibleRecipeSerializer;
+import team.torka.thaumicrecords.recipe.serializer.InfusionRecipeSerializer;
 import team.torka.thaumicrecords.recipe.serializer.ShapedArcaneCraftingRecipeSerializer;
 
 public class RecipeSerializerRegistry {
@@ -20,6 +24,10 @@ public class RecipeSerializerRegistry {
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ArcaneCraftingWandRecipe>> ARCANE_CRAFTING_WAND = REGISTRAR.register(
             "arcane_crafting_wand", () -> new SimpleCraftingRecipeSerializer<>(ArcaneCraftingWandRecipe::new));
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ArcaneSceptreRecipe>> ARCANE_SCEPTRE = REGISTRAR.register("arcane_sceptre",
+            () -> new SimpleCraftingRecipeSerializer<>(ArcaneSceptreRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<team.torka.thaumicrecords.recipe.CrucibleRecipe>> CRUCIBLE = REGISTRAR.register(
             "crucible", CrucibleRecipeSerializer::new);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<team.torka.thaumicrecords.recipe.InfusionRecipe>> INFUSION = REGISTRAR.register(
+            "infusion", InfusionRecipeSerializer::new);
 }

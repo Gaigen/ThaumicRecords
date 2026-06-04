@@ -30,11 +30,13 @@ import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.api.aspect.Aspect;
+import team.torka.thaumicrecords.api.item.StaffRod;
 import team.torka.thaumicrecords.api.item.WandCap;
 import team.torka.thaumicrecords.api.item.WandRod;
 import team.torka.thaumicrecords.block.ThaumatoriumBlock;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.block.entity.CrucibleBlockEntity;
+import team.torka.thaumicrecords.block.entity.InfusionMatrixBlockEntity;
 import team.torka.thaumicrecords.block.entity.ThaumatoriumBlockEntity;
 import team.torka.thaumicrecords.block.part.ThaumatoriumPart;
 import team.torka.thaumicrecords.data.component.WandItemComponent;
@@ -76,9 +78,10 @@ public class WandItem extends Item {
             tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "bad_component")).withStyle(ChatFormatting.GRAY));
             return;
         }
+        String capacityScaled = BigDecimal.valueOf(data.getEffectiveCapacity()).divide(new BigDecimal(100), RoundingMode.HALF_UP).setScale(2,
+                RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
         if (Screen.hasShiftDown()) {
-            tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand.capacity"), wandRod.getCapacityScaled())
-                    .withStyle(ChatFormatting.GOLD));
+            tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand.capacity"), capacityScaled).withStyle(ChatFormatting.GOLD));
             for (ResourceLocation rl : Aspect.getPrimalList()) {
                 Aspect aspect = AspectRegistry.ASPECT_REGISTRY.get(rl);
                 if (Objects.isNull(aspect)) {
@@ -98,10 +101,10 @@ public class WandItem extends Item {
             }
         } else {
             BigDecimal averageModifier = BigDecimal.valueOf(Aspect.getPrimalList().stream().map(wandCap::getAspectCostModifier).reduce(0.0, Double::sum))
-                    .divide(BigDecimal.valueOf(Aspect.getPrimalList().size()))
+                    .divide(BigDecimal.valueOf(Aspect.getPrimalList().size()), RoundingMode.HALF_UP)
                     .multiply(BigDecimal.valueOf(100))
                     .setScale(0, RoundingMode.HALF_UP);
-            tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand.capacity"), wandRod.getCapacityScaled())
+            tooltip.add(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand.capacity"), capacityScaled)
                     .withStyle(ChatFormatting.GOLD)
                     .append(" ")
                     .append(Component.translatable(ThaumicRecords.createTranslationKey("tooltip", "wand.average_modifier"), averageModifier.toPlainString())
@@ -133,10 +136,20 @@ public class WandItem extends Item {
             if (Objects.nonNull(wandRod) && Objects.nonNull(wandCap)) {
                 Component capPart = Component.translatable(wandCap.getTranslationKey());
                 Component rodPart = Component.translatable(wandRod.getTranslationKey());
-                return Component.translatable(ThaumicRecords.createTranslationKey("item", "wand"), capPart, rodPart);
+                String key = data.sceptre() ? "item.wand.sceptre" : (isStaff(stack) ? "item.wand.staff" : "item.wand");
+                return Component.translatable(ThaumicRecords.createTranslationKey("item", key), capPart, rodPart);
             }
         }
         return Component.translatable(ThaumicRecords.createTranslationKey("item", "wand.default"));
+    }
+
+    public boolean isStaff(ItemStack stack) {
+        WandItemComponent data = stack.get(DataComponentRegistry.WAND_ITEM_DATA.get());
+        if (data == null) {
+            return false;
+        }
+        WandRod wandRod = WandRodRegistry.WAND_ROD_REGISTRY.get(data.getRod());
+        return wandRod instanceof StaffRod;
     }
 
     @NotNull
@@ -148,9 +161,6 @@ public class WandItem extends Item {
         return InteractionResultHolder.consume(itemstack);
     }
 
-    /**
-     *
-     */
     @Override
     @NotNull
     @ParametersAreNonnullByDefault
@@ -221,6 +231,29 @@ public class WandItem extends Item {
             return InteractionResult.PASS;
         }
 
+        if (state.is(BlockRegistry.INFUSION_MATRIX.get())) {
+            if (!level.isClientSide) {
+                if (level.getBlockEntity(pos) instanceof InfusionMatrixBlockEntity matrix) {
+                    if (!matrix.active) {
+                        if (matrix.checkStructure()) {
+                            matrix.activate();
+                        } else {
+                            level.playSound(null, pos, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.25F, 0.5F);
+                        }
+                    } else if (!matrix.crafting) {
+                        // Matrix is active and not crafting — try to find and start recipe
+                        var recipe = matrix.findMatchingRecipe();
+                        if (recipe != null) {
+                            matrix.startInfusion(recipe);
+                        } else {
+                            level.playSound(null, pos, SoundRegistry.WAND.get(), SoundSource.BLOCKS, 0.25F, 0.5F);
+                        }
+                    }
+                }
+            }
+            return InteractionResult.SUCCESS;
+        }
+
         if (state.is(Tags.Blocks.BOOKSHELVES)) {
             level.removeBlock(pos, false);
             ItemStack itemStack = new ItemStack(ItemRegistry.THAUMONOMICON.get(), 1);
@@ -265,15 +298,12 @@ public class WandItem extends Item {
                 int useDuration = this.getUseDuration(stack, livingEntity) - remainingUseDuration;
                 if (useDuration % 5 == 0) {
                     int drainRate = 1;
-                    // TODO 研究增加吸取速率
                     boolean preserve = !player.isShiftKeyDown();
-                    // TODO 节点防护术
-                    // TODO 铁杖端木杖柄判断
                     List<ResourceLocation> notFull = wandItemComponent.getLackVisAspect();
                     List<ResourceLocation> randomPrimalList = nodeBE.getLimitAspect().getPrimalKey().stream().filter(notFull::contains).toList();
                     if (!randomPrimalList.isEmpty()) {
                         ResourceLocation randomAspect = randomPrimalList.get(level.random.nextInt(randomPrimalList.size()));
-                        int space = wandItemComponent.getCapacity() - wandItemComponent.getAspects().getOrZero(randomAspect);
+                        int space = wandItemComponent.getEffectiveCapacity() - wandItemComponent.getAspects().getOrZero(randomAspect);
                         int toDrain = Math.min(drainRate, space);
                         int drained = nodeBE.drainAspect(randomAspect, toDrain, preserve);
                         if (drained > 0) {

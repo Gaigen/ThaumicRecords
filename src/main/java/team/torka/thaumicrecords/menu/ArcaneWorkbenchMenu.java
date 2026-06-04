@@ -21,6 +21,7 @@ import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.menu.slot.ArcaneWorkbenchResultSlot;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingWandRecipe;
+import team.torka.thaumicrecords.recipe.ArcaneSceptreRecipe;
 import team.torka.thaumicrecords.registry.AspectRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
@@ -169,6 +170,11 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
                     .map(RecipeHolder::value);
             if (wandRecipe.isPresent()) {
                 return wandRecipe.get().getVisCost(input, level);
+            }
+            Optional<ArcaneSceptreRecipe> sceptreRecipe = level.getRecipeManager().getRecipeFor(RecipeTypeRegistry.ARCANE_SCEPTRE.get(), input, level).map(
+                    RecipeHolder::value);
+            if (sceptreRecipe.isPresent()) {
+                return sceptreRecipe.get().getVisCost(input, level);
             }
             Optional<ArcaneCraftingShapedRecipe> arcaneCraftingShapedRecipe = level.getRecipeManager().getRecipeFor(
                     RecipeTypeRegistry.ARCANE_CRAFTING_SHAPED.get(), input, level).map(RecipeHolder::value);

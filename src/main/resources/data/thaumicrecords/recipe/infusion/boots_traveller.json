@@ -1,0 +1,36 @@
+{
+  "type": "thaumicrecords:infusion",
+  "research": "thaumicrecords:boots_traveller",
+  "input": {
+    "item": "minecraft:leather_boots"
+  },
+  "aspects": {
+    "thaumicrecords:volatus": 25,
+    "thaumicrecords:iter": 25
+  },
+  "instability": 1,
+  "components": [
+    {
+      "item": "thaumicrecords:aer_shard"
+    },
+    {
+      "item": "thaumicrecords:aer_shard"
+    },
+    {
+      "item": "minecraft:spider_eye"
+    },
+    {
+      "item": "minecraft:spider_eye"
+    },
+    {
+      "item": "minecraft:feather"
+    },
+    {
+      "item": "minecraft:feather"
+    }
+  ],
+  "result": {
+    "id": "thaumicrecords:boots_traveller",
+    "count": 1
+  }
+}

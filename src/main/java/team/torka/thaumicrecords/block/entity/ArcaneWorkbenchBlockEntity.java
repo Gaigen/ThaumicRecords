@@ -28,6 +28,7 @@ import team.torka.thaumicrecords.data.component.WandItemComponent;
 import team.torka.thaumicrecords.menu.ArcaneWorkbenchMenu;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingWandRecipe;
+import team.torka.thaumicrecords.recipe.ArcaneSceptreRecipe;
 import team.torka.thaumicrecords.registry.BlockEntityRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
@@ -74,6 +75,18 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
                 input, this.level);
         if (wandRecipe.isPresent()) {
             ArcaneCraftingWandRecipe recipe = wandRecipe.get().value();
+            ItemStack wand = this.inventory.getStackInSlot(10);
+            if (canCraftArcane(recipe.getVisCost(input, this.level), wand, Collections.emptyList())) {
+                ItemStack result = recipe.assemble(input, this.level.registryAccess());
+                this.inventory.setStackInSlot(ArcaneWorkbenchMenu.SLOT_CRAFT_RESULT, result);
+                return;
+            }
+        }
+
+        Optional<RecipeHolder<ArcaneSceptreRecipe>> sceptreRecipe = this.level.getRecipeManager().getRecipeFor(RecipeTypeRegistry.ARCANE_SCEPTRE.get(), input,
+                this.level);
+        if (sceptreRecipe.isPresent()) {
+            ArcaneSceptreRecipe recipe = sceptreRecipe.get().value();
             ItemStack wand = this.inventory.getStackInSlot(10);
             if (canCraftArcane(recipe.getVisCost(input, this.level), wand, Collections.emptyList())) {
                 ItemStack result = recipe.assemble(input, this.level.registryAccess());

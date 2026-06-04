@@ -4,13 +4,17 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
 import team.torka.thaumicrecords.registry.BlockRegistry;
@@ -92,7 +96,16 @@ public class BlockLootGenerator extends BlockLootSubProvider {
         this.dropSelf(BlockRegistry.GREATWOOD_SAPLING.get());
         this.add(BlockRegistry.GREATWOOD_LEAVES.get(), block -> createLeavesDrops(block, BlockRegistry.SILVERWOOD_SAPLING.get(), 0.005F));
 
-
+        // Infusion Altar
+        this.dropSelf(BlockRegistry.INFUSION_MATRIX.get());
+        // Pillar drops 1 brick + 1 stone block
+        this.add(BlockRegistry.INFUSION_PILLAR.get(), block -> LootTable.lootTable()
+                .withPool(this.applyExplosionCondition(block, LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(ItemRegistry.ARCANE_STONE_BRICK.get()))))
+                .withPool(this.applyExplosionCondition(block, LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(ItemRegistry.ARCANE_STONE.get())))));
     }
 
     @NotNull
@@ -137,6 +150,8 @@ public class BlockLootGenerator extends BlockLootSubProvider {
         blocks.add(BlockRegistry.SILVERWOOD_SLAB.get());
         blocks.add(BlockRegistry.SHIMMERLEAF.get());
         blocks.add(BlockRegistry.CINDERPEARL.get());
+        blocks.add(BlockRegistry.INFUSION_MATRIX.get());
+        blocks.add(BlockRegistry.INFUSION_PILLAR.get());
         return blocks;
     }
 

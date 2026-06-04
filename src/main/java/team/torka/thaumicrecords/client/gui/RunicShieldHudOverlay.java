@@ -32,8 +32,13 @@ public class RunicShieldHudOverlay {
             return;
         }
 
-        // Don't render in creative mode — hearts are hidden
-        if (mc.player.getAbilities().instabuild) {
+        // Don't render in creative/spectator mode — hearts are hidden
+        if (mc.player.getAbilities().instabuild || mc.player.isSpectator()) {
+            return;
+        }
+
+        // Don't render during pause
+        if (mc.isPaused()) {
             return;
         }
 

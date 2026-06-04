@@ -151,6 +151,10 @@ public class ItemRegistry {
     public static final DeferredItem<Item> TAINT_SLIME = REGISTRAR.registerSimpleItem("taint_slime");
     public static final DeferredItem<Item> TAINT_TENDRIL = REGISTRAR.registerSimpleItem("taint_tendril");
 
+    // Flux Goo BlockItem (for creative tab and direct placement)
+    public static final DeferredItem<BlockItem> FLUX_GOO = REGISTRAR.register("flux_goo",
+            () -> new BlockItem(BlockRegistry.FLUX_GOO.get(), new Item.Properties()));
+
     // Edible Nuggets (food: 1 nutrition, 0.3 saturation)
     private static final FoodProperties NUGGET_FOOD = new FoodProperties.Builder().nutrition(1).saturationModifier(0.3f).build();
     public static final DeferredItem<Item> NUGGET_CHICKEN = REGISTRAR.register("nugget_chicken",
@@ -228,8 +232,28 @@ public class ItemRegistry {
     public static final DeferredItem<Item> WAND_CAP_GOLD = REGISTRAR.registerSimpleItem("wand_cap_gold");
     public static final DeferredItem<Item> WAND_CAP_THAUMIUM = REGISTRAR.registerSimpleItem("wand_cap_thaumium");
     public static final DeferredItem<Item> WAND_CAP_THAUMIUM_INERT = REGISTRAR.registerSimpleItem("wand_cap_thaumium_inert");
+    public static final DeferredItem<Item> WAND_CAP_COPPER = REGISTRAR.registerSimpleItem("wand_cap_copper");
+    public static final DeferredItem<Item> WAND_CAP_SILVER = REGISTRAR.registerSimpleItem("wand_cap_silver");
+    public static final DeferredItem<Item> WAND_CAP_VOID = REGISTRAR.registerSimpleItem("wand_cap_void");
+    public static final DeferredItem<Item> WAND_CAP_SILVER_INERT = REGISTRAR.registerSimpleItem("wand_cap_silver_inert");
+    public static final DeferredItem<Item> WAND_CAP_VOID_INERT = REGISTRAR.registerSimpleItem("wand_cap_void_inert");
     public static final DeferredItem<Item> WAND_ROD_GREATWOOD = REGISTRAR.registerSimpleItem("wand_rod_greatwood");
     public static final DeferredItem<Item> WAND_ROD_SILVERWOOD = REGISTRAR.registerSimpleItem("wand_rod_silverwood");
+    public static final DeferredItem<Item> WAND_ROD_OBSIDIAN = REGISTRAR.registerSimpleItem("wand_rod_obsidian");
+    public static final DeferredItem<Item> WAND_ROD_BLAZE = REGISTRAR.registerSimpleItem("wand_rod_blaze");
+    public static final DeferredItem<Item> WAND_ROD_ICE = REGISTRAR.registerSimpleItem("wand_rod_ice");
+    public static final DeferredItem<Item> WAND_ROD_QUARTZ = REGISTRAR.registerSimpleItem("wand_rod_quartz");
+    public static final DeferredItem<Item> WAND_ROD_BONE = REGISTRAR.registerSimpleItem("wand_rod_bone");
+    public static final DeferredItem<Item> WAND_ROD_REED = REGISTRAR.registerSimpleItem("wand_rod_reed");
+    public static final DeferredItem<Item> STAFF_ROD_GREATWOOD = REGISTRAR.registerSimpleItem("staff_rod_greatwood");
+    public static final DeferredItem<Item> STAFF_ROD_OBSIDIAN = REGISTRAR.registerSimpleItem("staff_rod_obsidian");
+    public static final DeferredItem<Item> STAFF_ROD_BLAZE = REGISTRAR.registerSimpleItem("staff_rod_blaze");
+    public static final DeferredItem<Item> STAFF_ROD_ICE = REGISTRAR.registerSimpleItem("staff_rod_ice");
+    public static final DeferredItem<Item> STAFF_ROD_QUARTZ = REGISTRAR.registerSimpleItem("staff_rod_quartz");
+    public static final DeferredItem<Item> STAFF_ROD_BONE = REGISTRAR.registerSimpleItem("staff_rod_bone");
+    public static final DeferredItem<Item> STAFF_ROD_REED = REGISTRAR.registerSimpleItem("staff_rod_reed");
+    public static final DeferredItem<Item> STAFF_ROD_SILVERWOOD = REGISTRAR.registerSimpleItem("staff_rod_silverwood");
+    public static final DeferredItem<Item> STAFF_ROD_PRIMAL = REGISTRAR.registerSimpleItem("staff_rod_primal");
 
 
     public static final DeferredItem<WandItem> WAND = REGISTRAR.register("wand", WandItem::new);
@@ -314,6 +338,12 @@ public class ItemRegistry {
             () -> new BlockItem(BlockRegistry.TABLE.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> DECONSTRUCTION_TABLE = REGISTRAR.register("deconstruction_table",
             () -> new BlockItem(BlockRegistry.DECONSTRUCTION_TABLE.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> HUNGRY_CHEST = REGISTRAR.register("hungry_chest",
+            () -> new BlockItem(BlockRegistry.HUNGRY_CHEST.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> INFUSION_PILLAR = REGISTRAR.register("infusion_pillar",
+            () -> new BlockItem(BlockRegistry.INFUSION_PILLAR.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> INFUSION_MATRIX = REGISTRAR.register("infusion_matrix",
+            () -> new BlockItem(BlockRegistry.INFUSION_MATRIX.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> ARCANE_PEDESTAL = REGISTRAR.register("arcane_pedestal",
             () -> new BlockItem(BlockRegistry.ARCANE_PEDESTAL.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> CRUCIBLE = REGISTRAR.register("crucible",
@@ -373,6 +403,7 @@ public class ItemRegistry {
         output.accept(ironCappedWoodWand());
         output.accept(goldCappedGreatwoodWand());
         output.accept(thaumiumCappedSilverwoodWand());
+        output.accept(thaumiumCappedSilverwoodSceptre());
         output.accept(THAUMOMETER);
         output.accept(THAUMONOMICON);
         output.accept(AER_INFUSED_STONE);
@@ -402,10 +433,30 @@ public class ItemRegistry {
         output.accept(SALIS_MUNDUS);
         output.accept(WAND_CAP_IRON);
         output.accept(WAND_CAP_GOLD);
-        output.accept(WAND_CAP_THAUMIUM);
+        output.accept(WAND_CAP_COPPER);
+        output.accept(WAND_CAP_SILVER_INERT);
+        output.accept(WAND_CAP_SILVER);
         output.accept(WAND_CAP_THAUMIUM_INERT);
+        output.accept(WAND_CAP_THAUMIUM);
+        output.accept(WAND_CAP_VOID_INERT);
+        output.accept(WAND_CAP_VOID);
         output.accept(WAND_ROD_GREATWOOD);
         output.accept(WAND_ROD_SILVERWOOD);
+        output.accept(WAND_ROD_OBSIDIAN);
+        output.accept(WAND_ROD_BLAZE);
+        output.accept(WAND_ROD_ICE);
+        output.accept(WAND_ROD_QUARTZ);
+        output.accept(WAND_ROD_BONE);
+        output.accept(WAND_ROD_REED);
+        output.accept(STAFF_ROD_GREATWOOD);
+        output.accept(STAFF_ROD_OBSIDIAN);
+        output.accept(STAFF_ROD_BLAZE);
+        output.accept(STAFF_ROD_ICE);
+        output.accept(STAFF_ROD_QUARTZ);
+        output.accept(STAFF_ROD_BONE);
+        output.accept(STAFF_ROD_REED);
+        output.accept(STAFF_ROD_SILVERWOOD);
+        output.accept(STAFF_ROD_PRIMAL);
         output.accept(GOGGLES);
         output.accept(FORTRESS_HELMET);
         output.accept(FORTRESS_CHESTPLATE);
@@ -471,6 +522,9 @@ public class ItemRegistry {
         output.accept(BOOTS_TRAVELLER);
         output.accept(TABLE);
         output.accept(DECONSTRUCTION_TABLE);
+        output.accept(HUNGRY_CHEST);
+        output.accept(INFUSION_PILLAR);
+        output.accept(INFUSION_MATRIX);
         output.accept(SCRIBING_TOOLS);
         output.accept(ARCANE_WORKBENCH);
         output.accept(SILVERWOOD_SAPLING);
@@ -525,6 +579,7 @@ public class ItemRegistry {
         output.accept(RUNIC_AMULET_EMERGENCY);
         output.accept(RUNIC_GIRDLE);
         output.accept(RUNIC_GIRDLE_KINETIC);
+        output.accept(FLUX_GOO);
     }
 
     public static void putInPhialCreativeTab(CreativeModeTab.ItemDisplayParameters p, CreativeModeTab.Output output) {
@@ -589,5 +644,22 @@ public class ItemRegistry {
                 initialAspects);
         initialWand.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
         return initialWand;
+    }
+
+    private static ItemStack thaumiumCappedSilverwoodSceptre() {
+        ItemStack sceptre = new ItemStack(WAND.get());
+        AspectList initialAspects = new AspectList();
+        int effectiveCapacity = (int) (WandRodRegistry.WAND_ROD_SILVERWOOD.get().getCapacity() * 1.5);
+        for (ResourceLocation aspect : Aspect.getPrimalList()) {
+            initialAspects.put(aspect, effectiveCapacity);
+        }
+        WandItemComponent initialData = new WandItemComponent(WandRodRegistry.WAND_ROD_SILVERWOOD.getId(), WandCapRegistry.WAND_CAP_THAUMIUM.getId(),
+                initialAspects, true);
+        sceptre.set(DataComponentRegistry.WAND_ITEM_DATA.get(), initialData);
+        return sceptre;
+    }
+
+    private static Item.Properties itemProp(int stackSize) {
+        return new Item.Properties().stacksTo(stackSize);
     }
 }

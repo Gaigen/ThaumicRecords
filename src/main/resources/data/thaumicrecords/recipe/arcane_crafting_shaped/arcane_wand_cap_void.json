@@ -1,0 +1,23 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    "NNN",
+    "N N"
+  ],
+  "key": {
+    "N": {
+      "item": "thaumicrecords:nugget_void"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:wand_cap_void",
+    "count": 1
+  },
+  "baseVisCost": {
+    "thaumicrecords:perditio": 27,
+    "thaumicrecords:ordo": 27,
+    "thaumicrecords:ignis": 18,
+    "thaumicrecords:aer": 18
+  },
+  "requiredResearch": []
+}

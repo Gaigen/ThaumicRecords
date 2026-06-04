@@ -26,6 +26,10 @@ import team.torka.thaumicrecords.block.AuraNodeBlock;
 import team.torka.thaumicrecords.block.CinderpearlBlock;
 import team.torka.thaumicrecords.block.CrucibleBlock;
 import team.torka.thaumicrecords.block.DeconstructionTableBlock;
+import team.torka.thaumicrecords.block.FluxGooBlock;
+import team.torka.thaumicrecords.block.HungryChestBlock;
+import team.torka.thaumicrecords.block.InfusionMatrixBlock;
+import team.torka.thaumicrecords.block.InfusionPillarBlock;
 import team.torka.thaumicrecords.block.JarBlock;
 import team.torka.thaumicrecords.block.PavingStoneOfTravelBlock;
 import team.torka.thaumicrecords.block.PavingStoneOfWardingBlock;
@@ -281,4 +285,35 @@ public class BlockRegistry {
                     .noOcclusion()
                     .sound(SoundType.WOOD)
                     .pushReaction(PushReaction.BLOCK)));
+
+    // Infusion Pillar
+    public static final DeferredBlock<InfusionPillarBlock> INFUSION_PILLAR = REGISTRAR.register("infusion_pillar",
+            () -> new InfusionPillarBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .strength(3.0F, 6.0F)
+                    .noOcclusion()
+                    .sound(SoundType.STONE)
+                    .pushReaction(PushReaction.BLOCK)));
+
+    // Infusion Matrix (Runic Matrix)
+    public static final DeferredBlock<InfusionMatrixBlock> INFUSION_MATRIX = REGISTRAR.register("infusion_matrix",
+            () -> new InfusionMatrixBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .strength(3.0F, 6.0F)
+                    .noOcclusion()
+                    .sound(SoundType.STONE)
+                    .pushReaction(PushReaction.BLOCK)));
+
+    // Hungry Chest
+    public static final DeferredBlock<HungryChestBlock> HUNGRY_CHEST = REGISTRAR.register("hungry_chest",
+            () -> new HungryChestBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.5F)
+                    .noOcclusion()
+                    .sound(SoundType.WOOD)
+                    .pushReaction(PushReaction.BLOCK)));
+
+    // Flux Goo (finite fluid block)
+    public static final DeferredBlock<FluxGooBlock> FLUX_GOO = REGISTRAR.register("flux_goo",
+            () -> new FluxGooBlock(() -> team.torka.thaumicrecords.block.FiniteFluid.class.cast(FluidRegistry.FLUX_GOO.get())));
 }

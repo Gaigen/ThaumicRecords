@@ -26,6 +26,8 @@ public class WandRod {
 
     private final String translationKey;
 
+    private boolean glow = false;
+
     public WandRod(String name, int capacity, int craftCost, Item item, ResourceLocation modelTexture, String translationKey) {
         this.name = name;
         this.capacity = capacity;
@@ -76,5 +78,13 @@ public class WandRod {
 
     public String getTranslationKey() {
         return translationKey;
+    }
+
+    public boolean isGlowing() {
+        return this.glow;
+    }
+
+    public void setGlowing(boolean hasGlow) {
+        this.glow = hasGlow;
     }
 }

@@ -1,0 +1,9 @@
+{
+  "flip_v": true,
+  "loader": "neoforge:obj",
+  "model": "thaumicrecords:models/block/pillar.obj",
+  "textures": {
+    "particle": "thaumicrecords:block/pillar",
+    "pillar": "thaumicrecords:block/pillar"
+  }
+}

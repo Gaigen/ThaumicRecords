@@ -1,0 +1,20 @@
+{
+  "type": "thaumicrecords:arcane_crafting_shaped",
+  "pattern": [
+    " G",
+    "G "
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:bone"
+    }
+  },
+  "result": {
+    "id": "thaumicrecords:wand_rod_bone",
+    "count": 1
+  },
+  "baseVisCost": {
+    "thaumicrecords:perditio": 60
+  },
+  "requiredResearch": []
+}

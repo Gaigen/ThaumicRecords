@@ -10,11 +10,13 @@ import team.torka.thaumicrecords.block.entity.ArcaneWorkbenchBlockEntity;
 import team.torka.thaumicrecords.block.entity.AuraNodeBlockEntity;
 import team.torka.thaumicrecords.block.entity.CrucibleBlockEntity;
 import team.torka.thaumicrecords.block.entity.DeconstructionTableBlockEntity;
+import team.torka.thaumicrecords.block.entity.HungryChestBlockEntity;
+import team.torka.thaumicrecords.block.entity.InfusionMatrixBlockEntity;
+import team.torka.thaumicrecords.block.entity.InfusionPillarBlockEntity;
 import team.torka.thaumicrecords.block.entity.JarBlockEntity;
 import team.torka.thaumicrecords.block.entity.ResearchTableBlockEntity;
 import team.torka.thaumicrecords.block.entity.TableBlockEntity;
 import team.torka.thaumicrecords.block.entity.ThaumatoriumBlockEntity;
-import team.torka.thaumicrecords.block.entity.WardingStoneBlockEntity;
 import team.torka.thaumicrecords.block.entity.WardingStoneBlockEntity;
 
 public class BlockEntityRegistry {
@@ -51,4 +53,13 @@ public class BlockEntityRegistry {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DeconstructionTableBlockEntity>> DECONSTRUCTION_TABLE = REGISTRAR.register(
             "deconstruction_table",
             () -> BlockEntityType.Builder.of(DeconstructionTableBlockEntity::new, BlockRegistry.DECONSTRUCTION_TABLE.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HungryChestBlockEntity>> HUNGRY_CHEST = REGISTRAR.register("hungry_chest",
+            () -> BlockEntityType.Builder.of(HungryChestBlockEntity::new, BlockRegistry.HUNGRY_CHEST.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfusionPillarBlockEntity>> INFUSION_PILLAR = REGISTRAR.register("infusion_pillar",
+            () -> BlockEntityType.Builder.of(InfusionPillarBlockEntity::new, BlockRegistry.INFUSION_PILLAR.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfusionMatrixBlockEntity>> INFUSION_MATRIX = REGISTRAR.register("infusion_matrix",
+            () -> BlockEntityType.Builder.of(InfusionMatrixBlockEntity::new, BlockRegistry.INFUSION_MATRIX.get()).build(null));
 }

@@ -1,5 +1,7 @@
 package team.torka.thaumicrecords.client.event.listener;
 
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
@@ -11,6 +13,7 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.data.component.ResearchNoteComponent;
 import team.torka.thaumicrecords.registry.BlockRegistry;
 import team.torka.thaumicrecords.registry.DataComponentRegistry;
+import team.torka.thaumicrecords.registry.FluidRegistry;
 import team.torka.thaumicrecords.registry.ItemRegistry;
 
 import java.util.Objects;
@@ -39,5 +42,6 @@ public class FMLClientSetupEventListener {
                     }
                     return 0.0F;
                 }));
+        event.enqueueWork(() -> ItemBlockRenderTypes.setRenderLayer(FluidRegistry.FLUX_GOO.get(), RenderType.translucent()));
     }
 }

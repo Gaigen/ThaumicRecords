@@ -7,7 +7,10 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingWandRecipe;
+import team.torka.thaumicrecords.recipe.ArcaneSceptreRecipe;
+import team.torka.thaumicrecords.recipe.AspectRecipe;
 import team.torka.thaumicrecords.recipe.CrucibleRecipe;
+import team.torka.thaumicrecords.recipe.InfusionRecipe;
 
 public class RecipeTypeRegistry {
     public static final DeferredRegister<RecipeType<?>> REGISTRAR = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, ThaumicRecords.MOD_ID);
@@ -19,6 +22,11 @@ public class RecipeTypeRegistry {
             () -> new RecipeType<>() {
             });
     public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleRecipe>> CRUCIBLE = REGISTRAR.register("crucible", () -> new RecipeType<>() {
+    });
+    public static final DeferredHolder<RecipeType<?>, RecipeType<ArcaneSceptreRecipe>> ARCANE_SCEPTRE = REGISTRAR.register("arcane_sceptre",
+            () -> new RecipeType<>() {
+            });
+    public static final DeferredHolder<RecipeType<?>, RecipeType<InfusionRecipe>> INFUSION = REGISTRAR.register("infusion", () -> new RecipeType<>() {
     });
 
 }

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "thaumicrecords:block/infusion_pillar_empty" },
+    "facing=south": { "model": "thaumicrecords:block/infusion_pillar_empty" },
+    "facing=east":  { "model": "thaumicrecords:block/infusion_pillar_empty" },
+    "facing=west":  { "model": "thaumicrecords:block/infusion_pillar_empty" }
+  }
+}
