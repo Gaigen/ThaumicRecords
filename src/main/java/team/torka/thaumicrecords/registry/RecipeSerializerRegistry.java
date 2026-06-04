@@ -9,8 +9,6 @@ import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingShapedRecipe;
 import team.torka.thaumicrecords.recipe.ArcaneCraftingWandRecipe;
 import team.torka.thaumicrecords.recipe.ArcaneSceptreRecipe;
-import team.torka.thaumicrecords.recipe.AspectRecipe;
-import team.torka.thaumicrecords.recipe.serializer.AspectRecipeSerializer;
 import team.torka.thaumicrecords.recipe.serializer.CrucibleRecipeSerializer;
 import team.torka.thaumicrecords.recipe.serializer.InfusionRecipeSerializer;
 import team.torka.thaumicrecords.recipe.serializer.ShapedArcaneCraftingRecipeSerializer;
