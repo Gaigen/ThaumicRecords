@@ -13,6 +13,8 @@ import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.RarityFilter;
+import net.minecraft.world.level.levelgen.placement.SurfaceWaterDepthFilter;
 import team.torka.thaumicrecords.ThaumicRecords;
 
 import java.util.List;
@@ -37,6 +39,16 @@ public class PlacedFeatures {
     public static final ResourceKey<PlacedFeature> PLACED_CINNABAR_ORE = ResourceKey.create(Registries.PLACED_FEATURE,
             ThaumicRecords.createRl(("cinnabar_ore")));
 
+    // Magical Forest biome features
+    public static final ResourceKey<PlacedFeature> PLACED_SILVERWOOD_TREE_MAGICAL_FOREST = ResourceKey.create(
+            Registries.PLACED_FEATURE, ThaumicRecords.createRl("silverwood_tree_magical_forest"));
+    public static final ResourceKey<PlacedFeature> PLACED_GREATWOOD_TREE_MAGICAL_FOREST = ResourceKey.create(
+            Registries.PLACED_FEATURE, ThaumicRecords.createRl("greatwood_tree_magical_forest"));
+    public static final ResourceKey<PlacedFeature> PLACED_MAGICAL_OAK = ResourceKey.create(
+            Registries.PLACED_FEATURE, ThaumicRecords.createRl("magical_oak"));
+    public static final ResourceKey<PlacedFeature> PLACED_AURA_NODE_MAGICAL_FOREST = ResourceKey.create(
+            Registries.PLACED_FEATURE, ThaumicRecords.createRl("aura_node_magical_forest"));
+
     public static void bootstrap(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> holdergetter = context.lookup(Registries.CONFIGURED_FEATURE);
 
@@ -59,10 +71,38 @@ public class PlacedFeatures {
                 commonOrePlacement(8, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
 
         PlacementUtils.register(context, PLACED_AMBER_ORE, holdergetter.getOrThrow(ConfiguredFeatures.AMBER_ORE),
-                commonOrePlacement(2, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
+                commonOrePlacement(16, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
 
         PlacementUtils.register(context, PLACED_CINNABAR_ORE, holdergetter.getOrThrow(ConfiguredFeatures.CINNABAR_ORE),
-                commonOrePlacement(2, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
+                commonOrePlacement(16, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
+
+        // Magical Forest trees - silverwood (1 per 14 chunks, same as original TC4)
+        PlacementUtils.register(context, PLACED_SILVERWOOD_TREE_MAGICAL_FOREST,
+                holdergetter.getOrThrow(ConfiguredFeatures.SILVERWOOD_TREE),
+                List.of(RarityFilter.onAverageOnceEvery(14), InSquarePlacement.spread(),
+                        PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, SurfaceWaterDepthFilter.forMaxDepth(0),
+                        BiomeFilter.biome()));
+
+        // Magical Forest trees - greatwood (1 per 10 chunks, same as original TC4)
+        PlacementUtils.register(context, PLACED_GREATWOOD_TREE_MAGICAL_FOREST,
+                holdergetter.getOrThrow(ConfiguredFeatures.GREATWOOD_TREE),
+                List.of(RarityFilter.onAverageOnceEvery(10), InSquarePlacement.spread(),
+                        PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, SurfaceWaterDepthFilter.forMaxDepth(0),
+                        BiomeFilter.biome()));
+
+        // Magical Forest trees - big magic oak (2 per chunk, same as original TC4 treesPerChunk)
+        PlacementUtils.register(context, PLACED_MAGICAL_OAK,
+                holdergetter.getOrThrow(ConfiguredFeatures.MAGICAL_OAK),
+                List.of(CountPlacement.of(2), InSquarePlacement.spread(),
+                        PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, SurfaceWaterDepthFilter.forMaxDepth(0),
+                        BiomeFilter.biome()));
+
+        // Magical Forest aura nodes (1 per 3 chunks)
+        PlacementUtils.register(context, PLACED_AURA_NODE_MAGICAL_FOREST,
+                holdergetter.getOrThrow(ConfiguredFeatures.AURA_NODE),
+                List.of(RarityFilter.onAverageOnceEvery(3), InSquarePlacement.spread(),
+                        PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, SurfaceWaterDepthFilter.forMaxDepth(0),
+                        BiomeFilter.biome()));
     }
 
     private static List<PlacementModifier> commonOrePlacement(int count, PlacementModifier modifier) {

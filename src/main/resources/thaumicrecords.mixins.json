@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "team.torka.thaumicrecords.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MultiNoiseBiomeSourceParameterListMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

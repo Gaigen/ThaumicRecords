@@ -19,12 +19,14 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DataPackRegistriesHooks;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.datagen.BiomeTagsGenerator;
 import team.torka.thaumicrecords.datagen.BlockLootGenerator;
 import team.torka.thaumicrecords.datagen.BlockStateGenerator;
 import team.torka.thaumicrecords.datagen.BlockTagsGenerator;
 import team.torka.thaumicrecords.datagen.ItemModelGenerator;
 import team.torka.thaumicrecords.datagen.ItemTagsGenerator;
 import team.torka.thaumicrecords.datagen.RecipeGenerator;
+import team.torka.thaumicrecords.world.biome.BiomeRegistry;
 import team.torka.thaumicrecords.world.feature.BiomeModifiers;
 import team.torka.thaumicrecords.world.feature.ConfiguredFeatures;
 import team.torka.thaumicrecords.world.feature.PlacedFeatures;
@@ -74,6 +76,7 @@ public class GatherDataEventListener {
         final RegistrySetBuilder registryBuilder = new RegistrySetBuilder();
         registryBuilder.add(Registries.CONFIGURED_FEATURE, ConfiguredFeatures::bootstrap);
         registryBuilder.add(Registries.PLACED_FEATURE, PlacedFeatures::bootstrap);
+        registryBuilder.add(Registries.BIOME, BiomeRegistry::bootstrap);
         registryBuilder.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, BiomeModifiers::bootstrap);
 
 

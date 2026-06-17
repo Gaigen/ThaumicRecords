@@ -6,12 +6,17 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import team.torka.thaumicrecords.ThaumicRecords;
+import team.torka.thaumicrecords.world.biome.BiomeRegistry;
+
+import java.util.List;
 
 public class BiomeModifiers {
 
@@ -31,6 +36,13 @@ public class BiomeModifiers {
             ThaumicRecords.createRl("add_amber_ore"));
     protected static final ResourceKey<BiomeModifier> ADD_CINNABAR_ORE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
             ThaumicRecords.createRl("add_cinnabar_ore"));
+
+    // This modifier serves as a datagen anchor for the magical forest biome.
+    // The biome is added to worldgen via MultiNoiseBiomeSourceParameterListMixin at runtime,
+    // but during datagen it needs a registry entry that references it (biomes.getOrThrow).
+    // Without this, RegistrySetBuilder.reportNotCollectedHolders() would flag it as unreferenced.
+    protected static final ResourceKey<BiomeModifier> MAGICAL_FOREST_SPAWNS = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+            ThaumicRecords.createRl("magical_forest_spawns"));
 
     public static void bootstrap(BootstrapContext<BiomeModifier> context) {
         HolderGetter<Biome> biomeGetter = context.lookup(Registries.BIOME);
@@ -61,5 +73,18 @@ public class BiomeModifiers {
 
         context.register(ADD_CINNABAR_ORE, new net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier(overworldHolder,
                 HolderSet.direct(placedGetter.getOrThrow(PlacedFeatures.PLACED_CINNABAR_ORE)), GenerationStep.Decoration.UNDERGROUND_ORES));
+
+        // Magical forest mob spawns — also serves as datagen anchor so the biome is "collected"
+        HolderSet.Direct<Biome> magicalForestHolder = HolderSet.direct(biomeGetter.getOrThrow(BiomeRegistry.MAGICAL_FOREST));
+        context.register(MAGICAL_FOREST_SPAWNS, new net.neoforged.neoforge.common.world.BiomeModifiers.AddSpawnsBiomeModifier(
+                magicalForestHolder,
+                List.of(
+                        new MobSpawnSettings.SpawnerData(EntityType.WOLF, 2, 1, 3),
+                        new MobSpawnSettings.SpawnerData(EntityType.HORSE, 2, 1, 3),
+                        new MobSpawnSettings.SpawnerData(EntityType.WITCH, 3, 1, 1),
+                        new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 3, 1, 1)
+                        // TODO: add Pech and Wisp when entities are implemented
+                )
+        ));
     }
 }

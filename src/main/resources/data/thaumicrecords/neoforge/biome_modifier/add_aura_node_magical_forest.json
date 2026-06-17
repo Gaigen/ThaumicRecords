@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "thaumicrecords:magical_forest",
+  "features": "thaumicrecords:aura_node_magical_forest",
+  "step": "vegetal_decoration"
+}

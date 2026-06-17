@@ -27,6 +27,10 @@ public class ConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> GREATWOOD_TREE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
             ThaumicRecords.createRl("greatwood_tree"));
 
+    // BigMagicTree — large oak tree for magical forest (avoids vanilla feature ordering cycles)
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MAGICAL_OAK = ResourceKey.create(Registries.CONFIGURED_FEATURE,
+            ThaumicRecords.createRl("magical_oak"));
+
     public static final ResourceKey<ConfiguredFeature<?, ?>> AER_INFUSED_STONE = ResourceKey.create(Registries.CONFIGURED_FEATURE,
             ThaumicRecords.createRl("aer_infused_stone"));
 
@@ -54,6 +58,10 @@ public class ConfiguredFeatures {
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(SILVERWOOD_TREE, new ConfiguredFeature<>(FeatureRegistry.SILVERWOOD_TREE.get(), NoneFeatureConfiguration.INSTANCE));
         context.register(GREATWOOD_TREE, new ConfiguredFeature<>(FeatureRegistry.GREATWOOD_TREE.get(), NoneFeatureConfiguration.INSTANCE));
+
+        // BigMagicTree — large fancy oak for magical forest (custom feature with dirt validation)
+        context.register(MAGICAL_OAK, new ConfiguredFeature<>(FeatureRegistry.MAGICAL_OAK_TREE.get(),
+                NoneFeatureConfiguration.INSTANCE));
 
         RuleTest stoneRuleTest = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
         RuleTest deepslateRuleTest = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);

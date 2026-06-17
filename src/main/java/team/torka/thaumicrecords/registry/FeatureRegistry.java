@@ -8,6 +8,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import team.torka.thaumicrecords.ThaumicRecords;
 import team.torka.thaumicrecords.world.feature.AuraNodeFeature;
 import team.torka.thaumicrecords.world.feature.GreatwoodTreeFeature;
+import team.torka.thaumicrecords.world.feature.MagicalOakTreeFeature;
 import team.torka.thaumicrecords.world.feature.SilverwoodTreeFeature;
 
 public class FeatureRegistry {
@@ -22,4 +23,7 @@ public class FeatureRegistry {
 
     public static final DeferredHolder<Feature<?>, GreatwoodTreeFeature> GREATWOOD_TREE = REGISTRAR.register("greatwood_tree",
             () -> new GreatwoodTreeFeature(NoneFeatureConfiguration.CODEC));
+
+    public static final DeferredHolder<Feature<?>, MagicalOakTreeFeature> MAGICAL_OAK_TREE = REGISTRAR.register("magical_oak_tree",
+            () -> new MagicalOakTreeFeature(NoneFeatureConfiguration.CODEC));
 }
